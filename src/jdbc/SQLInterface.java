@@ -4,7 +4,9 @@ import java.sql.*;
 
 public interface SQLInterface {
 	
-	public void connect(Connection c);
-	public void create();
+	public void connect();
+	public void create(Connection c) throws SQLException;
+	public void delete();
+	public void drop();
 
 }
