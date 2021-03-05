@@ -41,19 +41,19 @@ public class Patient {
 		if(bloodType.equalsIgnoreCase("A+")){
 
 		} else if (bloodType.equalsIgnoreCase("A-")){
-			this.bloodType
+			this.bloodType = bloodType;
 		} else if (bloodType.equalsIgnoreCase("B+")) {
-			
+			this.bloodType = bloodType;
 		} else if (bloodType.equalsIgnoreCase("B-")) {
-			
+			this.bloodType = bloodType;
 		} else if (bloodType.equalsIgnoreCase("AB+")) {
-
+			this.bloodType = bloodType;
 		} else if (bloodType.equalsIgnoreCase("AB-")) {
-
+			this.bloodType = bloodType;
 		} else if (bloodType.equalsIgnoreCase("O+") || bloodType.equalsIgnoreCase("0+")) {
-
+			this.bloodType = bloodType;
 		} else if (bloodType.equalsIgnoreCase("O-") || bloodType.equalsIgnoreCase("0-")) {
-			
+			this.bloodType = bloodType;
 		} else {
 			
 		}
