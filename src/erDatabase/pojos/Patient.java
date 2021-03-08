@@ -9,8 +9,8 @@ public class Patient {
 
 	private int medicalCardId;
 		//Unique for each patient - cannot be repeated for another patient.
-	
 
+		
 	private String patientName;
 	private String patientSurename;
 	private String gender;
@@ -217,8 +217,9 @@ public class Patient {
 	 * @param bdat - Birthday of the patient (SQL Date)
 	 * @param cIndat - Check in date of the patient (SQL Date)
 	 * @param hosp - Is the patient hospitalized? (boolean)
+	 * @throws NotBoundException - if Gender or Blood type provided isnt one of the prevoius mentioned.
 	 */
-	public Patient( String pnam, String psnam, String pgen, String btype, String allerg, String paddress, Date bdat, Date cIndat, boolean hosp ){
+	public Patient( String pnam, String psnam, String pgen, String btype, String allerg, String paddress, Date bdat, Date cIndat, boolean hosp ) throws NotBoundException{
 		this.setAllergieType( allerg);
 		this.setBdate(bdat);
 		this.setBloodType(btype);
