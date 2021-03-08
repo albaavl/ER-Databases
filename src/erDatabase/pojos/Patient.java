@@ -1,45 +1,106 @@
 package erDatabase.pojos;
 
-import java.sql.*;
+import java.rmi.*;
+import java.sql.Date;
 
 public class Patient {
 
 //Attributes
+
+	private int medicalCardId;
+		//Unique for each patient - cannot be repeated for another patient.
 	
+
 	private String patientName;
+	private String patientSurename;
 	private String gender;
+		//Can be either Male or female, nothing else.
 	private String bloodType;
+		//Can be A+,A-,B+,B-,AB+,AB-,O+,O-
 	private String allergieType;
 	private Date bDate; 
-	private dateHour checkInDate; // No 100% seguro ser� basura 
+		//Birthday of the patient.
+	private Date checkInDate; 
+		//Date and hour when patient got in the ER.
 	private String patientAddress;
+		//Home address of the patient.
 	private boolean hospitalized;
+		//Whether the patient is hospitalized or not.
 	
+
 //Getters + Setters
-	//NAME
+
+	/**
+	 * Used to get the name of the patient
+	 * @return [String] The patient name
+	 */
 	public String getPatientName() {
 		return patientName;
 	}
+	
+	/**
+	 * Used to set the patient's name
+	 * @param patientName - The name of the patient.
+	 */
 	public void setPatientName(String patientName) {
 		this.patientName = patientName;
 	}
 	
-	//GENDER
+	/**
+	 * Used to get the surename of the patient.
+	 * @return [String] The patient surename
+	 */
+	public String getPatientSurename() {
+		return patientSurename;
+	}
+	/**
+	 * Used to set the patient's surename.
+	 * @param patientSurename - The surename of the patient
+	 */
+	public void setPatientSurename(String patientSurename) {
+		this.patientSurename = patientSurename;
+	}
+	
+
+	/**
+	 * Used to get the gender of the patient.
+	 *  @return the gender of the patient (Male / Female)
+	 */ 
 	public String getGender() {
 		return gender;
 	}
-	public void setGender(String gender) {
-		this.gender = gender;
+	/**
+	 * Sets the gender of the patient.
+	 * 
+	 * @param gender - Must be Male or Female.
+ 	 * @throws NotBoundException if not a corret gender
+	 */
+	public void setGender(String gender) throws NotBoundException {
+		if(gender.equalsIgnoreCase("Male")) {
+			this.gender = gender;
+		} else if(gender.equalsIgnoreCase("Female")){
+			this.gender = gender;		
+		} else {
+			throw new NotBoundException("Not a gender.") ;
+		}
 	}
-	
-	//BLOOD TYPE
+
+	/**
+	 * Returns the patient blood type as a string.
+	 */
 	public String getBloodType() {
 		return bloodType;
 	}
-	public void setBloodType(String bloodType) {
-		//A+-B+-AB+-
-		if(bloodType.equalsIgnoreCase("A+")){
+	/**
+	 * Sets the blood type of the patient.
+	 * 
+	 * @param bloodType Must be one of the following: 
+	 * @throws NotBoundException if blood type doesnt exist
+	 */
+	public void setBloodType(String bloodType) throws NotBoundException {
 
+		if(bloodType.equalsIgnoreCase("A+")){
+			this.bloodType = bloodType;
 		} else if (bloodType.equalsIgnoreCase("A-")){
 			this.bloodType = bloodType;
 		} else if (bloodType.equalsIgnoreCase("B+")) {
@@ -55,56 +116,117 @@ public class Patient {
 		} else if (bloodType.equalsIgnoreCase("O-") || bloodType.equalsIgnoreCase("0-")) {
 			this.bloodType = bloodType;
 		} else {
-			
+			throw new NotBoundException("Incorrect blood type");
 		}
 		
 	}
 	
-	//TYPE OF ALLERGIES 
+	/**
+	 * Used to get the patient allergies
+	 * @return A string with all of the patient allergies.
+	 */
 	public String getAllergieType() {
 		return allergieType;
 	}
+	/**
+	 * Used to set the patient allergies.
+	 * @param allergieType - String that contains all of the patient allergies.
+	 */
 	public void setAllergieType(String allergieType) {
 		this.allergieType = allergieType;
 	}
 	
-	//BIRTHDAY
+	/**
+	 * Used to get the birth date of the patient
+	 * @return Birth date of the patient (sql Date)
+	 */
 	public Date getBdate() {
 		return bDate;
 	}
+	/**
+	 * Used to set the birth date of the patient.
+	 * @param bdate - the birthdate of the patient (sql Date)
+	 */
 	public void setBdate(Date bdate) {
 		this.bDate = bdate;
 	}
 	
-	//CHECKINDATE
-	public dateHour getCheckInDate() {
+	/**
+	 * Used to get the check in date of the patient into the ER.
+	 * @return Date of check in (SQL Date)
+	 */
+	public Date getCheckInDate() {
 		return checkInDate;
 	}
-	public void setCheckInDate(dateHour checkInDate) {
+	/**
+	 * Used to set the check in date of the patient
+	 * @param checkInDate - The check in date of the patient in the ER (SQL Date)
+	 */
+	public void setCheckInDate(Date checkInDate) {
 		this.checkInDate = checkInDate;
 	}
 	
-	//PATIENT ADDRESS
+	/**
+	 * Used to get the home address of the patient.
+	 * @return - String with the address
+	 */
 	public String getPatientAddress() {
 		return patientAddress;
 	}
+	/**
+	 * Used to set the patient address
+	 * @param patientAddress - String with the home address of the patient.
+	 */
 	public void setPatientAddress(String patientAddress) {
 		this.patientAddress = patientAddress;
 	}
 
-	//HOSPITALIZED�
+	/**
+	 * Used to know if the patient is hospitalized
+	 * @return True/False
+	 */
 	public boolean isHospitalized() {
 		return hospitalized;
 	}
+	/**
+	 * Used to set the 
+	 */
 	public void setHospitalized(boolean hospitalized) {
 		this.hospitalized = hospitalized;
 	}	
 
 	
-	
-	
 //builder
+
+	/**
+	 * Empty builder - shouldn't be used for anything.
+	 */
+	public Patient() {
+	}
 	
-	
+	//name gender bloodtype allergies patientAddress (strings) bDate checkInDate(date) hospitalized (boolean)
+	/**
+	 * Full builder for a patient.
+	 * 
+	 * @param pnam - Name of the patient (String)
+	 * @param psnam - Surename of the patient (String)
+	 * @param pgen - Gender of the patient [Must be Male or Female] (String)
+	 * @param btype - Blood type of the patient [Must be: A+,A-,B+,B-,AB+,AB-,O+,O-] (String)
+	 * @param allerg - String with the allergies of the patient. 
+	 * @param paddress - String with the home address of the patient.
+	 * @param bdat - Birthday of the patient (SQL Date)
+	 * @param cIndat - Check in date of the patient (SQL Date)
+	 * @param hosp - Is the patient hospitalized? (boolean)
+	 */
+	public Patient( String pnam, String psnam, String pgen, String btype, String allerg, String paddress, Date bdat, Date cIndat, boolean hosp ){
+		this.setAllergieType( allerg);
+		this.setBdate(bdat);
+		this.setBloodType(btype);
+		this.setCheckInDate(cIndat);
+		this.setGender(pgen);
+		this.setHospitalized(hosp); 
+		this.setPatientName(pnam);
+		this.setPatientSurename(psnam);
+	}
 	
 }
