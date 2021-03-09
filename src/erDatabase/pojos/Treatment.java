@@ -1,16 +1,31 @@
 package erDatabase.pojos;
 
+import java.rmi.NotBoundException;
 import java.sql.Date;
 import java.util.Calendar;
 
 public class Treatment {
 
+	private int treatmentId;
+	//Unique for each treatment for each patient - can be repeated
+	
 	private String diagnosis;
 	private String recommendation;
 	private Date startDate;
+	//Date when the patient starts the treatment
 	private String medication;
-	private Integer duration; //in days
+	private Integer duration; 
+	//Duration of the treatment in days
 	
+	/**
+	 * Full builder for a treatment.
+	 * 
+	 * @param diagnosis - Diagnosis of the patient (String)
+	 * @param recommendation - Recommendations from the doctor (String)
+	 * @param startDate - Start date of the treatment (SQL Date)
+	 * @param medication - Medication prescribed to the patient (String)
+	 * @param duration - How many days is the treatment going to last (Integer)
+	 */
 	public Treatment(String diagnosis, String recommendation, Date startDate, String medication, Integer duration) {
 		super();
 		this.diagnosis = diagnosis;
@@ -21,27 +36,48 @@ public class Treatment {
 	}
 
 	//Getters + Setters
-	//DIAGNOSIS
+
+	/**
+	 * Used to get the diagnosis of the patient.
+	 *  @return the diagnosis of the patient
+	 */ 
 	public String getDiagnosis() {
 		return diagnosis;
 	}
-
+	/**
+	 * Used to set the diagnosis of the patient.
+	 * @param diagnosis - String that contains the diagnosis of the patient.
+	 */
 	public void setDiagnosis(String diagnosis) {
 		this.diagnosis = diagnosis;
 	}
-	//DOCTOR'S RECOMMENDATION
+
+	/**
+	 * Used to get the doctor's recommendations for the patient.
+	 *  @return the doctor's recommendations for the patient.
+	 */ 
 	public String getRecommendation() {
 		return recommendation;
 	}
-	
+	/**
+	 * Used to set the doctor's recommendations for the patient.
+	 * @param recommendation - String that contains all of the doctor's recommendations for the patient.
+	 */
 	public void setRecommendation(String recommendation) {
 		this.recommendation = recommendation;
 	}
 	//START DATE 
+	/**
+	 * Used to get the start date of the treatment
+	 * @return Date of the start day (SQL Date)
+	 */
 	public Date getStartDate() {
 			return startDate;
 	}
-
+	/**
+	 * Used to set the start date of the treatment
+	 * @param startDate - The start date of the patient's treatment (SQL Date)
+	 */
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 		if(startDate.compareTo()>0) {
@@ -50,20 +86,32 @@ public class Treatment {
 			throw new Exception("Not valid Date");
 		}
 	}
-	//MEDICATION
+	/**
+	 * Used to get the medication prescribed to the patient 
+	 *  @return the medication prescribed to the patient
+	 */ 
 	public String getMedication() {
 		return medication;
 	}
-
+	/**
+	 * Used to prescribe the medication to the patient 
+	 * @param medication - String that contains all the medication prescribed to the patient.
+	 */
 	public void setMedication(String medication) {
 		this.medication = medication;
 	}
-
+	/**
+	 * Used to get the duration of the treatment in days 
+	 *  @return the duration of the treatment.
+	 */ 
 	public Integer getDuration() {
 		return duration;
 	}
-
-	public void setDuration(Integer duration) {
+	/**
+	 * Used to set the treatment's duration in days
+	 * @param duration - Integer that contains how long is going to last the treatment
+	 */
+	public void setDuration(Integer duration) throws Exception {
 		if(duration>0) {
 			this.duration = duration;
 		} else if(duration==0){ 
@@ -121,7 +169,4 @@ public class Treatment {
 			return false;
 		return true;
 	}
-	
-	
-	
 }
