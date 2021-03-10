@@ -1,4 +1,6 @@
 package jdbc;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.sql.*;
 
 public class SQL implements SQLInterface{
@@ -128,7 +130,75 @@ public class SQL implements SQLInterface{
 		stmt4.executeUpdate(sql4);
 		stmt4.close();
 	}
-	
+	public void insert (Connection c) throws SQLException {
+		try {
+		// Get the employee info from the command prompt
+				System.out.println("Please, input the patient info:");
+				BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+				System.out.print("Name: ");
+				String name = reader.readLine();
+				System.out.print("Surname: ");
+				String surname = reader.readLine();
+				System.out.print("Medical card number: ");
+				Integer medCardNumber = reader.read();
+				System.out.print("Gender: ");
+				String gender = reader.readLine();
+				System.out.print("Blood type: ");
+				String bloodType = reader.readLine();
+				System.out.print("Allergies: ");
+				String allergie = reader.readLine();
+				System.out.print("Date of birth: ");
+				String bDate = reader.readLine(); //should it be a date here
+				System.out.print("Check in date: ");
+				String checkInDate = reader.readLine(); //should it be a date here
+				System.out.print("Address: ");				
+				String address = reader.readLine();
+				System.out.print("Hospitalization [YES/NO]: ");
+				Boolean hospitalized = reader.ready();
 
-	
+				// Insert new record: begin
+				Statement stmt1 = c.createStatement();
+				String sql = "INSERT INTO patient (name, surname, medical card number, gender, blood type, allergies, date of birth, check in date, address, hospitalization) "
+							+ "VALUES ('" + name + "', '" + surname	+ "', '" + medCardNumber +"', '" + gender	+ "', '" + bloodType	+ "', '" + allergie	+ "', '" + bDate	+ "', '" + checkInDate	+ "', '" + address	+ "', '" + hospitalized	+ "');";
+				stmt1.executeUpdate(sql);
+				stmt1.close();
+				System.out.println("Patient info processed");
+				System.out.println("Records inserted.");
+
+				// Get the worker info from the command prompt
+				System.out.print("Name: ");
+				String nameW = reader.readLine();
+				System.out.print("Surname: ");
+				String surnameW = reader.readLine();
+				System.out.print("Specialty: ");
+				String specialty = reader.readLine();
+				System.out.print("Room assigned: ");
+				Integer room = reader.read();
+				System.out.print("Type of worker: ");
+				String tyoeW = reader.readLine();
+				System.out.print("Shift: ");
+				String shift = reader.readLine();
+
+				// Insert new record: begin
+				Statement stmt2 = c.createStatement();
+				String sq2 = "INSERT INTO departments (name, address) "
+						+ "VALUES ('" + nameW + "', '" + surnameW	+ "', '" + specialty +"', '" + room	+ "', '" + tyoeW + "', '" + shift + "');";
+				stmt2.executeUpdate(sq2);
+				stmt2.close();
+				System.out.println("Worker info processed");
+				System.out.println("Records inserted.");
+				
+				// Close database connection
+				c.close();
+				System.out.println("Database connection closed.");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	}
+
+	@Override
+	public void drop() {
+		// TODO Auto-generated method stub
+		
+	}
 }
