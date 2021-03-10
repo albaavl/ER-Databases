@@ -2,6 +2,8 @@ package erDatabase.pojos;
 
 import java.rmi.*;
 import java.sql.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Patient {
 
@@ -9,8 +11,9 @@ public class Patient {
 
 	private int medicalCardId;
 		//Unique for each patient - cannot be repeated for another patient.
-
-		
+	private static List <Integer> medicalCardIds = new LinkedList<Integer>(); //WIP para comprobar que no hay dos ids iguales, ir añadiendo ids e ir comparando para q no haya 2 iguales.
+	
+	
 	private String patientName;
 	private String patientSurename;
 	private String gender;
@@ -195,7 +198,13 @@ public class Patient {
 		this.hospitalized = hospitalized;
 	}	
 
-	
+	/**
+	 * Used to obtain the medical card id of the patient
+	 * @return - the medical card id of the patient [int]
+	 */
+	public int getMedicalCardId() {
+		return medicalCardId;
+	}
 //builder
 
 	/**
@@ -217,9 +226,10 @@ public class Patient {
 	 * @param bdat - Birthday of the patient (SQL Date)
 	 * @param cIndat - Check in date of the patient (SQL Date)
 	 * @param hosp - Is the patient hospitalized? (boolean)
-	 * @throws NotBoundException - if Gender or Blood type provided isnt one of the prevoius mentioned.
+	 * @param medCardId - The medical card id of the patient (int) [Cannot be changed once it's created]
+	 * @throws NotBoundException if Gender or Blood type provided isnt one of the previous mentioned.
 	 */
-	public Patient( String pnam, String psnam, String pgen, String btype, String allerg, String paddress, Date bdat, Date cIndat, boolean hosp ) throws NotBoundException{
+	public Patient( String pnam, String psnam, String pgen, String btype, String allerg, String paddress, Date bdat, Date cIndat, boolean hosp, int medCardId ) throws NotBoundException{
 		this.setAllergieType( allerg);
 		this.setBdate(bdat);
 		this.setBloodType(btype);
@@ -228,6 +238,17 @@ public class Patient {
 		this.setHospitalized(hosp); 
 		this.setPatientName(pnam);
 		this.setPatientSurename(psnam);
+		this.setPatientAddress(paddress);
+		this.medicalCardId = medCardId;
 	}
 	
+
+	//Methods
+/*
+	@Override
+	public String toString() {
+		return "Name: " + this.patientName + ", Surename: " + this.patientSurename + ", Gender: " + this.gender + ", Blood type: " + this.bloodType
+		+ ", Check in date: " + this.checkInDate.toString() + ", Allergies: " +  this.allergieType + ", ";
+	}
+*/
 }
