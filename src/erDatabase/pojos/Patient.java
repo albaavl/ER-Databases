@@ -15,7 +15,7 @@ public class Patient {
 	
 	
 	private String patientName;
-	private String patientSurename;
+	private String patientSurname;
 	private String gender;
 		//Can be either Male or female, nothing else.
 	private String bloodType;
@@ -50,18 +50,18 @@ public class Patient {
 	}
 	
 	/**
-	 * Used to get the surename of the patient.
-	 * @return [String] The patient surename
+	 * Used to get the surname of the patient.
+	 * @return [String] The patient surname
 	 */
-	public String getPatientSurename() {
-		return patientSurename;
+	public String getPatientSurname() {
+		return patientSurname;
 	}
 	/**
-	 * Used to set the patient's surename.
-	 * @param patientSurename - The surename of the patient
+	 * Used to set the patient's surname.
+	 * @param patientSurename - The surname of the patient
 	 */
-	public void setPatientSurename(String patientSurename) {
-		this.patientSurename = patientSurename;
+	public void setPatientSurename(String patientSurname) {
+		this.patientSurname = patientSurname;
 	}
 	
 
@@ -148,7 +148,7 @@ public class Patient {
 	}
 	/**
 	 * Used to set the birth date of the patient.
-	 * @param bdate - the birthdate of the patient (sql Date)
+	 * @param bdate - the birth date of the patient (sql Date)
 	 */
 	public void setBdate(Date bdate) {
 		this.bDate = bdate;
@@ -213,12 +213,12 @@ public class Patient {
 	public Patient() {
 	}
 	
-	//name gender bloodtype allergies patientAddress (strings) bDate checkInDate(date) hospitalized (boolean)
+	//name gender blood type allergies patientAddress (strings) bDate checkInDate(date) hospitalized (boolean)
 	/**
 	 * Full builder for a patient.
 	 * 
 	 * @param pnam - Name of the patient (String)
-	 * @param psnam - Surename of the patient (String)
+	 * @param psnam - Surname of the patient (String)
 	 * @param pgen - Gender of the patient [Must be Male or Female] (String)
 	 * @param btype - Blood type of the patient [Must be: A+,A-,B+,B-,AB+,AB-,O+,O-] (String)
 	 * @param allerg - String with the allergies of the patient. 
