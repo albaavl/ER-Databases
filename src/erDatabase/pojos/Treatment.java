@@ -1,8 +1,7 @@
 package erDatabase.pojos;
 
-import java.rmi.NotBoundException;
 import java.sql.Date;
-import java.util.Calendar;
+import java.time.LocalDate;
 
 public class Treatment {
 
@@ -77,10 +76,11 @@ public class Treatment {
 	/**
 	 * Used to set the start date of the treatment
 	 * @param startDate - The start date of the patient's treatment (SQL Date)
+	 * @throws Exception If the start date is after the local time.
 	 */
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-		if(startDate.compareTo()>0) {
+	public void setStartDate(Date startDate) throws Exception {
+		
+		if(startDate.toLocalDate().isAfter(LocalDate.now())) {
 			this.startDate = startDate;
 		} else {
 			throw new Exception("Not valid Date");
