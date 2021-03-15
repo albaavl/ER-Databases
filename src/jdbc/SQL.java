@@ -114,21 +114,33 @@ public class SQL implements SQLInterface{
 	public void drop (Connection c) throws SQLException {
 		// TODO Auto-generated method stub
 		Statement stmt1 = c.createStatement();
-		String sql1 = "DROP TABLE worker";
+		String sql1 = "DROP TABLE patients";
 		stmt1.executeUpdate(sql1);
 		stmt1.close();
 		Statement stmt2 = c.createStatement();
-		String sql2 = "DROP TABLE patient";
+		String sql2 = "DROP TABLE employees_types";
 		stmt2.executeUpdate(sql2);
 		stmt2.close();
 		Statement stmt3 = c.createStatement();
-		String sql3 = "DROP TABLE ambulance";
+		String sql3 = "DROP TABLE employees";
 		stmt3.executeUpdate(sql3);
 		stmt3.close();
 		Statement stmt4 = c.createStatement();
-		String sql4 = "DROP TABLE medicalTest";
+		String sql4 = "DROP TABLE doctor-Patient";
 		stmt4.executeUpdate(sql4);
 		stmt4.close();
+		Statement stmt5 = c.createStatement();
+		String sql5 = "DROP TABLE medical_test";
+		stmt5.executeUpdate(sql5);
+		stmt5.close();
+		Statement stmt6 = c.createStatement();
+		String sql6 = "DROP TABLE treatment";
+		stmt6.executeUpdate(sql6);
+		stmt6.close();
+		Statement stmt7 = c.createStatement();
+		String sql7 = "DROP TABLE ambulance";
+		stmt7.executeUpdate(sql7);
+		stmt7.close();
 	}
 	public void insert (Connection c) throws SQLException {
 		try {
