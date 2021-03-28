@@ -193,7 +193,7 @@ public class SQL implements SQLInterface{
 
 				// Insert new record: begin
 				Statement stmt2 = c.createStatement();
-				String sq2 = "INSERT INTO departments (name, address) "
+				String sq2 = "INSERT INTO workers (name, surname, speciality, room assigned, type, shift) "
 						+ "VALUES ('" + nameW + "', '" + surnameW	+ "', '" + specialty +"', '" + room	+ "', '" + tyoeW + "', '" + shift + "');";
 				stmt2.executeUpdate(sq2);
 				stmt2.close();
