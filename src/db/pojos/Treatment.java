@@ -1,4 +1,4 @@
-package pojos;
+package db.pojos;
 
 import java.sql.Date;
 import java.time.LocalDate;

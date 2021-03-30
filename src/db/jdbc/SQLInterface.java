@@ -1,4 +1,4 @@
-package jdbc;
+package db.jdbc;
 
 import java.sql.*;
 

@@ -1,4 +1,4 @@
-package jdbc;
+package db.menu;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package pojos;
+package db.pojos;
 
 import java.rmi.*;
 import java.sql.Date;

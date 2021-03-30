@@ -1,4 +1,4 @@
-package pojos;
+package db.pojos;
 
 public class Ambulance {
 
