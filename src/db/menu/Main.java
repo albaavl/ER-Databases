@@ -6,22 +6,14 @@ import java.rmi.NotBoundException;
 import java.sql.Date;
 import java.util.*;
 import db.jdbc.*;
-<<<<<<< HEAD
 import db.pojos.*;
-=======
-import db.pojos.Patient;
->>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
 
 public class Main {
 	static String username;
 	static String password;
-<<<<<<< HEAD
-	static int option;
+	static int option = 1;
 	
 	static Scanner sc = new Scanner(System.in);
-=======
-	static int option = 1;
->>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
 
 	public static void main(String[] args) {
 		try {
@@ -75,26 +67,19 @@ public class Main {
 			}
 			
 		}if(username.equalsIgnoreCase("p")&&password.equalsIgnoreCase("p")) {
-<<<<<<< HEAD
 			System.out.println("Consult my tratment");
 			System.out.println("Here you can see all your treatments ordered by date");
 			ShowPatientsTreatments();			
-		}else {			
-=======
-			System.out.println("Choose an option[1-]:");
-			System.out.println("1.");
 			
 		}else {
-			
->>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
 		}
 		
-sc.close();
+		sc.close();
 	} catch (Exception e) {
 		// TODO: handle exception
 	}
-<<<<<<< HEAD
-	}
+		}
+	
 	public static Patient createPatient () throws NotBoundException {
 		System.out.println("Please, input the patient info:");
 		System.out.print("Name: ");
@@ -147,8 +132,6 @@ sc.close();
 		treatment = l.toString();	
 		System.out.println(treatment);
 	}
-	
-=======
 
 	private static void accessToAPatientsProfile() {
 		List<Patient> patientList = new ArrayList<Patient>();
@@ -202,8 +185,5 @@ sc.close();
 
 	private static void accessToClinicalHistory(Patient patient) {
 		// TODO Auto-generated method stub
-		
 	}
-
->>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
 }
