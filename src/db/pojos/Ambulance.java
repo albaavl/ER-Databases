@@ -2,6 +2,9 @@ package db.pojos;
 
 public class Ambulance {
 
+	private Integer licensePlateNumber;
+	private String licensePlateLetters;
+	private String licensePlate;
 	private short typeId;
 	//Can be either 1 (SVB) or 2 (SVA), nothing else.
 	private boolean availability;
@@ -13,8 +16,10 @@ public class Ambulance {
 	 * @param typeId - Type of ambulance (short)
 	 * @param availability - Is the ambulance available? (boolean)
 	 */
-	public Ambulance(short typeId, boolean availability) {
+	public Ambulance(Integer licensePlateNumber, String licensePlateLetters, short typeId, boolean availability) {
 		super();
+		this.licensePlateNumber = licensePlateNumber;
+		this.licensePlateLetters = licensePlateLetters;
 		this.typeId = typeId;
 		this.availability = availability;
 	}
@@ -41,6 +46,59 @@ public class Ambulance {
 			this.typeId = typeId;
 		} else {
 			throw new Exception("Not valid type. Select 1 for SVB or 2 for SVA");
+		}
+	}
+	/**
+	 * Used to get the ambulance's license plate number
+	 * @return - Integer with the number of the license plate
+	 */
+	public Integer getLicensePlateNumber() {
+		return licensePlateNumber;
+	}
+	/**
+	 * Used to set the ambulance's license plate number
+	 * @param licensePlateNumber - Integer with the number of the ambulance's license plate
+	 */
+	public void setLicensePlateNumber(Integer licensePlateNumber) throws Exception {
+		if (licensePlateNumber.toString().length() == 4) {
+		this.licensePlateNumber = licensePlateNumber;
+		} else {
+			throw new Exception("Not valid number. It should have 4 digits");
+		}
+	}
+	/**
+	 * Used to get the ambulance's license plate letter
+	 * @return - String with the letters of the license plate
+	 */
+	public String getLicensePlateLetters() {
+		return licensePlateLetters;
+	}
+
+	public void setLicensePlateLetters(String licensePlateLetters) throws Exception {
+		if (licensePlateLetters.length() == 3) {
+			this.licensePlateLetters = licensePlateLetters;
+			} else {
+				throw new Exception("Not valid characters. It should have 3 letters");
+			}
+	}
+	/**
+	 * Used to get the ambulance's liccense plate
+	 * @return - String in the form of 0000 XXX
+	 */
+	public String getLicensePalete() {
+		return licensePlate;
+	}
+	/**
+	 * Used to set the ambulance's license plate
+	 * @param licensePlateNumber - Integer of 4 digits with the number of the license plate
+	 * @param licensePlateLetters - String of 3 characters with the letters of the license plate
+	 * @throws Exception 
+	 */
+	public void setLicensePalete(Integer licensePlateNumber, String licensePlateLetters ) throws Exception {
+		if (licensePlateNumber.toString().length() == 4 && licensePlateLetters.length() == 3) {
+				this.licensePlate = licensePlateNumber + " " + licensePlateLetters;
+		} else {
+			throw new Exception("Not valid license plate. It should have 4 digits and 3 letters in the form 0000 XXX");
 		}
 	}
 	/**
