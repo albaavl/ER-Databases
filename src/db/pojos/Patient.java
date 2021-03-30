@@ -12,8 +12,6 @@ public class Patient {
 	private Integer medicalCardId;
 		//Unique for each patient - cannot be repeated for another patient.
 	private static List <Integer> medicalCardIds = new LinkedList<Integer>(); //WIP para comprobar que no hay dos ids iguales, ir añadiendo ids e ir comparando para q no haya 2 iguales.
-	
-	
 	private String patientName;
 	private String patientSurname;
 	private String gender;
