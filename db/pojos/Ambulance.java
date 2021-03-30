@@ -1,4 +1,4 @@
-package erDatabase.pojos;
+package pojos;
 
 public class Ambulance {
 

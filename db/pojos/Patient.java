@@ -1,4 +1,4 @@
-package erDatabase.pojos;
+package pojos;
 
 import java.rmi.*;
 import java.sql.Date;
