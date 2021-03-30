@@ -169,4 +169,11 @@ public class Treatment {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Treatment [treatmentId=" + treatmentId + ", diagnosis=" + diagnosis + ", recommendation="
+				+ recommendation + ", startDate=" + startDate + ", medication=" + medication + ", duration=" + duration
+				+ "]";
+	}
 }

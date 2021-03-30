@@ -9,7 +9,7 @@ public class Patient {
 
 //Attributes
 
-	private int medicalCardId;
+	private Integer medicalCardId;
 		//Unique for each patient - cannot be repeated for another patient.
 	private static List <Integer> medicalCardIds = new LinkedList<Integer>(); //WIP para comprobar que no hay dos ids iguales, ir añadiendo ids e ir comparando para q no haya 2 iguales.
 	
@@ -202,7 +202,7 @@ public class Patient {
 	 * Used to obtain the medical card id of the patient
 	 * @return - the medical card id of the patient [int]
 	 */
-	public int getMedicalCardId() {
+	public Integer getMedicalCardId() {
 		return medicalCardId;
 	}
 //builder
@@ -229,7 +229,7 @@ public class Patient {
 	 * @param medCardId - The medical card id of the patient (int) [Cannot be changed once it's created]
 	 * @throws NotBoundException if Gender or Blood type provided isnt one of the previous mentioned.
 	 */
-	public Patient( String pnam, String psnam, String pgen, String btype, String allerg, String paddress, Date bdat, Date cIndat, boolean hosp, int medCardId ) throws NotBoundException{
+	public Patient( String pnam, String psnam, String pgen, String btype, String allerg, String paddress, Date bdat, Date cIndat, boolean hosp, Integer medCardId ) throws NotBoundException{
 		this.setAllergieType( allerg);
 		this.setBdate(bdat);
 		this.setBloodType(btype);

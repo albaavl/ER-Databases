@@ -207,7 +207,7 @@ public class SQL implements SQLInterface{
 				e.printStackTrace();
 			}
 	}
-
+//SELECT treatment de un paciente 
 	@Override
 	public void drop() {
 		// TODO Auto-generated method stub
