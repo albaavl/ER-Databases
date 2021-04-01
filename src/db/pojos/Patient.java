@@ -203,6 +203,10 @@ public class Patient {
 	public Integer getMedicalCardId() {
 		return medicalCardId;
 	}
+	
+	public void setMedicalCardId (Integer medicalCardId) {
+		this.medicalCardId = medicalCardId;
+	}
 //builder
 
 	/**

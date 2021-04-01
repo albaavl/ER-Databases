@@ -3,6 +3,7 @@ package db.menu;
 import java.io.InputStreamReader;
 import java.rmi.NotBoundException;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.chrono.ThaiBuddhistDate;
 import java.util.*;
 
@@ -81,58 +82,54 @@ public class Main {
 	}
 		}
 	
-	public static Patient createPatient () throws NotBoundException {
+	public static void createPatient () throws NotBoundException {
 		
+		Patient p = new Patient();
 		System.out.println("Please, input the patient info:");
 		System.out.print("Name: ");
 		String name = sc.next();
+		p.setPatientName(name);
 		System.out.print("Surname: ");
 		String surname = sc.next();
+		p.setPatientSurename(surname);
 		System.out.print("Medical card number: ");
 		Integer medCardNumber = sc.nextInt();
+		p.setMedicalCardId(medCardNumber);
 		System.out.print("Gender: ");
 		String gender = sc.next();
+		p.setGender(gender);
 		System.out.print("Blood type: ");
 		String bloodType = sc.next();
+		p.setBloodType(bloodType);
 		System.out.print("Allergies: ");
 		String allergie = sc.next();
+		p.setAllergieType(allergie);
 		System.out.print("Date of birth: yyyy-[m]m-[d]d");
 		String birthdate = sc.next();
 		Date bdate = Date.valueOf(birthdate);
+		p.setBdate(bdate);
 		System.out.print("Check in date: yyyy-[m]m-[d]d"); //averiguar como meter horas y minutos
 		String checkindate = sc.next();
 		Date cdate = Date.valueOf(checkindate);
+		p.setCheckInDate(cdate);
 		System.out.print("Address: ");				
 		String address = sc.next();
+		p.setPatientAddress(address);
 		System.out.print("Hospitalization [YES/NO]: ");
 		Boolean hospitalized = sc.nextBoolean();
-		Patient p= new Patient (name, surname, gender, bloodType, allergie, address, bdate, cdate, hospitalized, medCardNumber);
-		return p;
-	} //por qué devuelves un paciente si en el menú luego no haces nada con él? no sé si quieres comprobar luego si se ha creado y es por eso
+		p.setHospitalized(hospitalized);
+	}
 	
 	public static void showPatientsTreatments(){
 		String treatment;
 		List<Treatment> treatmentsList = new ArrayList<Treatment>();
-		while(treatmentsList.isEmpty()) {
-			treatmentsList = sql.searchPatientsTreatment();//FUNCION NO CREADA debe buscar los tratamientos de un paciente, ordenarlos por fecha de inicio y devolver una lista
-		}
-		while(treatment == null) {
+		treatmentsList = sql.searchPatientsTreatment();//FUNCION NO CREADA debe buscar los tratamientos de un paciente, ordenarlos por fecha de inicio y devolver una lista
+		if(treatmentList.isEmpty()){
+			System.out.println ("No hay ningún tratamiento disponible para este paciente");
+		} else{
 			System.out.println("Here you can see all your treatments ordered by date: ");
-			treatment = treatmentsList.toString();
-			System.out.println(treatment);
+			System.out.println(treatmentList.toString);
 		}
-		
-		/*List<Treatment> treatmentsList = new ArrayList<Treatment>();
-		 * treatmentsList = sql.searchPatientsTreatment(); ESTO DEBERIA DEVOLVER UNA LISTA
-		 * if(treatmentList.isEmpty()){
-		 * System.out.println ("No hay ningún tratamiento disponible para este paciente");
-		 * }
-		 * else{
-		 * System.out.println("Here you can see all your treatments ordered by date: ");
-		 * System.out.println(treatmentList.toString);
-		 * }
-		 */
-		
 	}
 
 	private static void accessToAPatientsProfile() {
@@ -168,8 +165,8 @@ public class Main {
 	}
 	private static void adAccessToPatientsProfile() {
 		Patient patient = selectPatient();
-		System.out.println("Name: " + patient.getPatientName() + "\nSurname: " + patient.getPatientSurname() + "\nGender: " + patient.getGender() + "\nBirth date: " + patient.getBdate() + "\nBlood Type: " + patient.getBloodType() + "\nAllergies: " + patient.getAllergieType() + "\nCheck-in: " + patient.getCheckInDate());
-		} //esto deberia ser directamente patient.toString una vez que el toString este creado
+		System.out.println(patient.toString());
+		}
 	}
 	private static void consultShifts() {
 		System.out.println("Your shifts for the next 15 days are: ");
