@@ -112,6 +112,9 @@ public class Treatment {
 	public void setMedication(String medication) {
 		this.medication = medication;
 	}
+	public int getTreatmentId() {
+		return treatmentId;
+	}
 	/**
 	 * Used to get the duration of the treatment in days 
 	 *  @return the duration of the treatment.
