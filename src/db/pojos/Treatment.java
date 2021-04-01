@@ -24,14 +24,26 @@ public class Treatment {
 	 * @param startDate - Start date of the treatment (SQL Date)
 	 * @param medication - Medication prescribed to the patient (String)
 	 * @param duration - How many days is the treatment going to last (Integer)
+	 * @throws Exception 
 	 */
-	public Treatment(String diagnosis, String recommendation, Date startDate, String medication, Integer duration) {
+	public Treatment(String diagnosis, String recommendation, Date startDate, String medication, Integer duration) throws Exception {
 		super();
-		this.diagnosis = diagnosis;
-		this.recommendation = recommendation;
-		this.startDate = startDate;
-		this.medication = medication;
-		this.duration = duration;
+		setDiagnosis(diagnosis);
+		setRecommendation(recommendation);
+		setStartDate(startDate);
+		setMedication(medication);
+		setDuration(duration);
+	}
+	
+	public Treatment() {
+	}
+	
+	public Treatment(Treatment t) throws Exception {
+		setDiagnosis(t.diagnosis);
+		setRecommendation(t.recommendation);
+		setStartDate(t.startDate);
+		setMedication(t.medication);
+		setDuration(t.duration);
 	}
 
 	//Getters + Setters

@@ -240,12 +240,25 @@ public class Patient {
 		this.medicalCardId = medCardId;
 	}
 	
+	public Patient(Patient p) throws NotBoundException {
+		this.setAllergieType(p.allergieType);
+		this.setBdate(p.bDate);
+		this.setBloodType(p.bloodType);
+		this.setCheckInDate(p.checkInDate);
+		this.setGender(p.gender);
+		this.setHospitalized(p.hospitalized); 
+		this.setPatientName(p.patientName);
+		this.setPatientSurename(p.patientSurname);
+		this.setPatientAddress(p.patientAddress);
+		this.medicalCardId = p.medicalCardId;
+	}
+	
 
 	//Methods
 /*
 	@Override
 	public String toString() {
-		return "Name: " + this.patientName + ", Surename: " + this.patientSurename + ", Gender: " + this.gender + ", Blood type: " + this.bloodType
+		return "Name: " + this.patientName + ", Surname: " + this.patientSurename + ", Gender: " + this.gender + ", Blood type: " + this.bloodType
 		+ ", Check in date: " + this.checkInDate.toString() + ", Allergies: " +  this.allergieType + ", ";
 	}
 */

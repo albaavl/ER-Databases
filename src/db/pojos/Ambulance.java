@@ -105,7 +105,7 @@ public class Ambulance {
 	 * Used to know if the ambulance is available
 	 * @return True/False
 	 */
-	public boolean isAviable() {
+	public boolean isAvailable() {
 		return availability;
 	}
 	/**

@@ -68,20 +68,21 @@ public class Main {
 			}
 			
 		}if(username.equalsIgnoreCase("p")&&password.equalsIgnoreCase("p")) {
-			System.out.println("Consult my tratment");
+			System.out.println("Consult my treatment");
 			System.out.println("Here you can see all your treatments ordered by date");
-			ShowPatientsTreatments();			
+			showPatientsTreatments();			
 			
-		}else {
 		}
 		
 		sc.close();
+		}
 		}catch (Exception e) {
 		// TODO: handle exception
 	}
 		}
 	
 	public static Patient createPatient () throws NotBoundException {
+		
 		System.out.println("Please, input the patient info:");
 		System.out.print("Name: ");
 		String name = sc.next();
@@ -107,35 +108,35 @@ public class Main {
 		Boolean hospitalized = sc.nextBoolean();
 		Patient p= new Patient (name, surname, gender, bloodType, allergie, address, bdate, cdate, hospitalized, medCardNumber);
 		return p;
-	}
+	} //por qué devuelves un paciente si en el menú luego no haces nada con él? no sé si quieres comprobar luego si se ha creado y es por eso
 	
-	public static void ShowPatientsTreatments(){
+	public static void showPatientsTreatments(){
 		String treatment;
 		List<Treatment> treatmentsList = new ArrayList<Treatment>();
 		while(treatmentsList.isEmpty()) {
-			treatmentsList = sql.searchPatientsTreatment();//FUNCION NO CREADA debe buscar los tratamientos de un paciente, ordenarlos por fecha de inicio y devolver un string
+			treatmentsList = sql.searchPatientsTreatment();//FUNCION NO CREADA debe buscar los tratamientos de un paciente, ordenarlos por fecha de inicio y devolver una lista
 		}
 		while(treatment == null) {
 			System.out.println("Here you can see all your treatments ordered by date: ");
 			treatment = treatmentsList.toString();
 			System.out.println(treatment);
 		}
+		
+		/*List<Treatment> treatmentsList = new ArrayList<Treatment>();
+		 * treatmentsList = sql.searchPatientsTreatment(); ESTO DEBERIA DEVOLVER UNA LISTA
+		 * if(treatmentList.isEmpty()){
+		 * System.out.println ("No hay ningún tratamiento disponible para este paciente");
+		 * }
+		 * else{
+		 * System.out.println("Here you can see all your treatments ordered by date: ");
+		 * System.out.println(treatmentList.toString);
+		 * }
+		 */
+		
 	}
 
 	private static void accessToAPatientsProfile() {
-		List<Patient> patientList = new ArrayList<Patient>();
-		Patient patient = null;
-		while(patientList.isEmpty()) {
-		System.out.println("Enter the patient's name:");
-		String name = sc.next();
-		patientList = SQL.searchPatient(name); //FUNCION NO CREADA debe buscar un paciente pasandole un string del nombre y devolviendo una lista de objetos de tipo paciente que estará vacía si no hay ningún paciente con ese nombre;
-		}
-		while(patient == null) {
-		System.out.println(patientList.toString());
-		System.out.println("Enter the medical card number of the chosen patient:");
-		Integer medCard = Integer.parseInt(sc.next());
-		patient = SQL.selectPatient (medCard); //FUNCION NO CREADA debe seleccionar un paciente por el medical card number y devolver un objeto paciente que debe ser null si no existe un paciente con ese medical card number;
-		}
+		Patient patient = selectPatient();
 		System.out.println("Choose an option:");
 		System.out.println(" 1.Access to a clinical history \n 2.Create diagnosis and treatment\n 3.Edit diagnosis and treatment\n ");
 		switch(option) {
@@ -152,54 +153,106 @@ public class Main {
 	}
 	private static void checkAmbulancceAvailability() {
 		Ambulance ambulance = null;
+		String licensePlate;
 		while(ambulance == null) {
 		System.out.println("Enter the ambulance's license plate (0000 XXX):");
-		String licensePlate = sc.next();
+		licensePlate = sc.next();
 		ambulance = SQL.searchAmbulance(licensePlate); //FUNCION NO CREADA debe buscar una ambulancia pasándole la matrícula y devolver la ambulancia correspondiente, si no existe, devolverá null
-		if(ambulance.isAviable() == true) {
+		}
+		if(ambulance.isAvailable()) {
 			System.out.println("The ambulance " + licensePlate + "is available");
 		} else{
 			System.out.println("The ambulance " + licensePlate + "is not available");
 		}
-		}
+		
 	}
 	private static void adAccessToPatientsProfile() {
+		Patient patient = selectPatient();
+		System.out.println("Name: " + patient.getPatientName() + "\nSurname: " + patient.getPatientSurname() + "\nGender: " + patient.getGender() + "\nBirth date: " + patient.getBdate() + "\nBlood Type: " + patient.getBloodType() + "\nAllergies: " + patient.getAllergieType() + "\nCheck-in: " + patient.getCheckInDate());
+		} //esto deberia ser directamente patient.toString una vez que el toString este creado
+	}
+	private static void consultShifts() {
+		System.out.println("Your shifts for the next 15 days are: ");
+		//terminar en funcion de lo que decidamos hacer con shifts
+	}
+
+	private static void consultMedicalTest() {
+		Patient patient = selectPatient();
+		List<MedicalTest> tests = new ArrayList<MedicalTest>();
+		tests = sql.searchMedicalTestByPatient(patient.getMedicalCardId()); //FUNCIÓN NO CREADA debe buscar medical tests por el medical card number del paciente asociaod al test y devolver una lista con todos los test asociados a ese paciente ordenados por fecha, null si no hay ninguno
+		if (tests == null) {
+			System.out.println("No tests available for patient " + patient.getPatientName()+" "+ patient.getPatientSurname());
+	} else {
+		System.out.println("These are all the medical tests of "+patient.getPatientName()+" "+patient.getPatientSurname()+" ordered by date:");
+		System.out.println(tests.toString());
+	}
+	}
+
+	private static void editDiagnosisAndTreatment(Patient  patient) {
+		List<Treatment> treatments = new ArrayList<Treatment>();
+		treatments = sql.searchTreatmentsByMedCardNumber(patient.getMedicalCardId()); //FUNCION NO CREADA debe buscar los tratamientos asociados a un paciente (se le pasa su medcard numnber) y devolver una lista con estos, null si no hay
+		if(treatments == null) {
+			System.out.println("No treatments available for patient "+ patient.getPatientName()+" "+ patient.getPatientSurname());
+		} else {
+			System.out.println("These are all the treatments associated to patient "+patient.getPatientName()+" "+patient.getPatientSurname()+" ordered by date:");
+			System.out.println(treatments.toString());
+			Treatment t = null;
+			while (t == null) {
+			System.out.println("Enter the id of the treatment that you want to edit:");
+			Integer id = sc.nextInt();
+			t = new Treatment(searchTreatmentsByID(id));//FUNCION NO CREADA debe buscar un treatment por su id y devolverlo, si no hay devolverá null
+			}
+			System.out.println("This is the selected treatment:");
+			System.out.println(t.toString());
+			System.out.println("Enter the new diagnosis, if you don't want to edit it enter a 0:");
+			String diagnosis = sc.next();
+			System.out.println("Enter the new medication, if you don't want to edit it enter a 0:");
+			String medication = sc.next();
+			System.out.println("Enter the new duration, if you don't want to edit it enter a 0:");
+			String duration = sc.next();
+			System.out.println("Enter the new recommendations, if you don't want to edit them enter a 0:");
+			String recommendation = sc.next();
+			Treatment nuevo = new Treatment(sql.editTreatment(t.getID(),diagnosis,medication,duration,recommendation)); //FUNCION NO CREADA debe hacer un update del treatment cuyo id se le pasa, SOLO DEBE CAMBIAR CADA PARÁMETRO si la string que se le pasa no es igual a un 0, debe devolver el nuevo tratamiento
+			System.out.println("This is the edited treatment:");
+			System.out.println(nuevo.toString());
+		}
+			
+	}
+
+	private static void createDiagnosisAndTreatment(Patient patient) {
+		System.out.println("Enter the diagnosis:");
+		String diagnosis = sc.next();
+		System.out.println("Enter the medication:");
+		String medication = sc.next();
+		System.out.println("Enter the start date in this format yyyy-mm-dd:");
+		Date startDate = Date.valueOf(sc.next());
+		System.out.println("Enter the duration(number of days):");
+		Integer duration = Integer.parseInt(sc.next());
+		System.out.println("Enter the recommendations");
+		String recommendation = sc.next();
+		Treatment t = new Treatment(diagnosis, recommendation, startDate, medication, duration);
+		sql.addTreatment(patient.getMedicalCardId(), t); //FUNCION NO CREADA añade un nuevo treatment recibiendo el medcard number del paciente al que va asociado y un objeto treatment, no devuelve nada
+		System.out.println("Treatment added");
+	}
+
+	private static void accessToClinicalHistory(Patient patient) {
+		// TODO Auto-generated method stub
+	}
+	
+	private static Patient selectPatient() {
 		List<Patient> patientList = new ArrayList<Patient>();
 		Patient patient = null;
 		while(patientList.isEmpty()) {
-		System.out.println("Enter the patient's name:");
-		String name = sc.next();
-		patientList = SQL.searchPatient(name); //FUNCION NO CREADA debe buscar un paciente pasandole un string del nombre y devolviendo una lista de objetos de tipo paciente que estará vacía si no hay ningún paciente con ese nombre;
+		System.out.println("Enter the patient's surname:");
+		String surname = sc.next();
+		patientList = SQL.searchPatient(surname); //FUNCION NO CREADA debe buscar un paciente pasandole un string del apellido y devolviendo una lista de objetos de tipo paciente que estará vacía si no hay ningún paciente con ese nombre;
 		}
 		while(patient == null) {
 		System.out.println(patientList.toString());
 		System.out.println("Enter the medical card number of the chosen patient:");
 		Integer medCard = Integer.parseInt(sc.next());
-		patient = SQL.selectPatient (medCard); //FUNCION NO CREADA debe seleccionar un paciente por el medical card number y devolver un objeto paciente que debe ser null si no existe un paciente con ese medical card number;
-		System.out.println("Name: " + patient.getPatientName() + "\nSurname: " + patient.getPatientSurname() + "\nGender: " + patient.getGender() + "\nBirth date: " + patient.getBdate() + "\nBlood Type: " + patient.getBloodType() + "\nAllergies: " + patient.getAllergieType() + "\nCheck-in: " + patient.getCheckInDate());
+		patient = new Patient(SQL.selectPatient (medCard)); //FUNCION NO CREADA debe seleccionar un paciente por el medical card number y devolver un objeto paciente que debe ser null si no existe un paciente con ese medical card number;
 		}
-	}
-	private static void consultShifts() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private static void consultMedicalTest() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private static void editDiagnosisAndTreatment(Patient  patient) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private static void createDiagnosisAndTreatment(Patient patient) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private static void accessToClinicalHistory(Patient patient) {
-		// TODO Auto-generated method stub
+		return patient;
 	}
 }
