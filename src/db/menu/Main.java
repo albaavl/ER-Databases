@@ -26,6 +26,7 @@ public class Main {
 		password = sc.next();
 		
 		if(username.equalsIgnoreCase("ms")&&password.equalsIgnoreCase("ms")) {
+			Worker medStaff = new Worker();
 			while(option != 0) {
 			System.out.println("Choose an option[0-3]:");
 			System.out.println(" 1.Access to a patient's profile \n 2.Consult medical test\n 3.Consult my shifts \n 0. Exit");
@@ -45,6 +46,7 @@ public class Main {
 			}
 			}
 		}if(username.equalsIgnoreCase("as")&&password.equalsIgnoreCase("as")) {
+			Worker adstaff = new Worker();
 			while (option!=0) {
 			System.out.println("Choose an option[0-3]:");
 			System.out.println(" 1. Register new patient \n 2. Check ambulance availability\n 3. Acces to a patient's profile \n 0. Exit");
@@ -57,8 +59,6 @@ public class Main {
 				createPatient();
 				break;
 			case 2: 
-				System.out.println("Check ambulance availability");
-				checkAmbulancceAvailability();
 				break;
 			case 3: {
 				System.out.println("Acces to a patient's profile");
@@ -68,9 +68,10 @@ public class Main {
 			}
 			
 		}if(username.equalsIgnoreCase("p")&&password.equalsIgnoreCase("p")) {
+			Patient patient = new Patient();//deberia ser el patient que ha hecho el log in
 			System.out.println("Consult my treatment");
 			System.out.println("Here you can see all your treatments ordered by date");
-			showPatientsTreatments();			
+			showPatientsTreatments(patient);			
 			
 		}
 		
@@ -110,11 +111,11 @@ public class Main {
 		return p;
 	} //por qué devuelves un paciente si en el menú luego no haces nada con él? no sé si quieres comprobar luego si se ha creado y es por eso
 	
-	public static void showPatientsTreatments(){
+	public static void showPatientsTreatments(Patient patient){
 		String treatment;
 		List<Treatment> treatmentsList = new ArrayList<Treatment>();
 		while(treatmentsList.isEmpty()) {
-			treatmentsList = sql.searchPatientsTreatment();//FUNCION NO CREADA debe buscar los tratamientos de un paciente, ordenarlos por fecha de inicio y devolver una lista
+			treatmentsList = sql.searchPatientsTreatment(patient);//FUNCION NO CREADA debe buscar los tratamientos de un paciente, ordenarlos por fecha de inicio y devolver una lista
 		}
 		while(treatment == null) {
 			System.out.println("Here you can see all your treatments ordered by date: ");
@@ -123,7 +124,7 @@ public class Main {
 		}
 		
 		/*List<Treatment> treatmentsList = new ArrayList<Treatment>();
-		 * treatmentsList = sql.searchPatientsTreatment(); ESTO DEBERIA DEVOLVER UNA LISTA
+		 * treatmentsList = sql.searchPatientsTreatment(patient); ESTO DEBERIA DEVOLVER UNA LISTA
 		 * if(treatmentList.isEmpty()){
 		 * System.out.println ("No hay ningún tratamiento disponible para este paciente");
 		 * }
@@ -151,26 +152,13 @@ public class Main {
 			break;
 		}
 	}
-	private static void checkAmbulancceAvailability() {
-		Ambulance ambulance = null;
-		String licensePlate;
-		while(ambulance == null) {
-		System.out.println("Enter the ambulance's license plate (0000 XXX):");
-		licensePlate = sc.next();
-		ambulance = SQL.searchAmbulance(licensePlate); //FUNCION NO CREADA debe buscar una ambulancia pasándole la matrícula y devolver la ambulancia correspondiente, si no existe, devolverá null
-		}
-		if(ambulance.isAvailable()) {
-			System.out.println("The ambulance " + licensePlate + "is available");
-		} else{
-			System.out.println("The ambulance " + licensePlate + "is not available");
-		}
-		
-	}
+	
 	private static void adAccessToPatientsProfile() {
 		Patient patient = selectPatient();
 		System.out.println("Name: " + patient.getPatientName() + "\nSurname: " + patient.getPatientSurname() + "\nGender: " + patient.getGender() + "\nBirth date: " + patient.getBdate() + "\nBlood Type: " + patient.getBloodType() + "\nAllergies: " + patient.getAllergieType() + "\nCheck-in: " + patient.getCheckInDate());
-		} //esto deberia ser directamente patient.toString una vez que el toString este creado
+		//esto deberia ser directamente patient.toString una vez que el toString este creado
 	}
+	
 	private static void consultShifts() {
 		System.out.println("Your shifts for the next 15 days are: ");
 		//terminar en funcion de lo que decidamos hacer con shifts
