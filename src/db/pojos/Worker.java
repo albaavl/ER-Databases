@@ -36,6 +36,9 @@ public class Worker {
 		this.typeWorker = typeWorker;
 		this.shift = shift;
 	}
+	
+	public Worker() {
+	}
 
 	//Getters + Setters
 	/**

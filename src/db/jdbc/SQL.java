@@ -2,28 +2,21 @@ package db.jdbc;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.*;
+import db.pojos.*;
+
 
 public class SQL implements SQLInterface{
 
 	@Override
-	public void connect() {
-		// TODO Auto-generated method stub
-		try {
-			//Open database connection
-			Class.forName("org.sqlite.JDBC");
-			Connection c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
-			c.createStatement().execute("PRAGMA foreign_keys=ON");
-			System.out.println("Database connection opened.");
-			
-			// Here is where I do things with the database
-			
-			//Close database connection
-			c.close();
-			System.out.println("Database connection closed.");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+	public Connection connect() throws SQLException, ClassNotFoundException {
+		Class.forName("org.sqlite.JDBC");
+		Connection c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
+		c.createStatement().execute("PRAGMA foreign_keys=ON");
+		System.out.println("Database connection opened.");
+		return c;
+	}
+	public void disconnect(Connection c) throws SQLException{
+		c.close();
 	}
 	
 	@Override
@@ -86,8 +79,7 @@ public class SQL implements SQLInterface{
 				   + " start_date   DATE      NOT NULL,"
 				   + " duration   INTEGER     NOT NULL"
 				   + " advice       TEXT      NOT NULL,"
-				   + "patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL"
-				   + "emp_id     INTEGER REFERENCES employees(id) ON UPDATE CASCADE ON DELETE SET NULL)";
+				   + "patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt6.executeUpdate(sql6);
 		stmt6.close();
 		Statement stmt7 = c.createStatement();
@@ -208,11 +200,55 @@ public class SQL implements SQLInterface{
 			}
 	}
 //SELECT treatment de un paciente 
+
+	public void addPatient(Connection c, Patient p) throws SQLException{
+
+	}
+
+	public void addMedicalTest(Connection c, MedicalTest medtest) throws SQLException{
+	//medical_test id(int) type(s) image(b) result(s) patient_id(int) emp_id(int)
+        try {
+			Statement statement1 = c.createStatement();
+			Blob image = null;
+			String result = null; // TODO
+			String sq1 = "INSERT INTO medical_test (id, type, image, result, patient_id, emp_id) VALUES ("+medtest.getMedicalTestId()+", " +medtest.getTestType()+", " +image+ ", " +result+ ", " +medtest.getIdPatient()+ ", " +medtest.getIdDoctor()+")";
+			statement1.executeUpdate(sq1);
+			statement1.close();
+			c.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+
+	public void addTreatment(Connection c, Treatment treatment, Integer patientId) throws SQLException {
+	//treatment id(int) medication(s) diagnosis(s) start_date(sqlDate) duration(int) advice(s) patient_id(int)
+		try {
+			Statement statement1 = c.createStatement();
+			String sq1 = "INSERT INTO treatment (id, medication, diagnosis, start_date, duration, advice, patient_id, emp_id) VALUES ("+treatment.getTreatmentId()+", "+treatment.getMedication()+","+treatment.getDiagnosis()+", "+treatment.getDuration()+", "+treatment.getRecommendation()+", "+patientId+")";
+			statement1.executeUpdate(sq1);
+			statement1.close();
+			c.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public void drop() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	
+	//Cosas a añadir: 
+	//searchPatientTreatment() - buscar los tratamientos de un paciente, ordenarlos por fecha de inicio y devolver una lista
+	//searchAmbulance(String licensePlate) - buscar una ambulancia pasandole la matricula y devolver la ambulancia correspondiente, si no existe, devolver null
+	//searchMedicalTestBtPatient() - buscar medical tests por el medical card number del paciente asociaod al test y devolver una lista con todos los test asociados a ese paciente ordenados por fecha, null si no hay ninguno
+	//searchTreatmentById() - buscar un treatment por su id y devolverlo, si no hay devolver null
+	//searchTreatmentByMedCardNum() - buscar los tratamientos asociados a un paciente (se le pasa su medcard numnber) y devolver una lista con estos, null si no hay
+	//editTreatment() - update del treatment cuyo id se le pasa, SOLO DEBE CAMBIAR CADA PARaMETRO si la string que se le pasa no es igual a un 0, debe devolver el nuevo tratamiento
+	//		sql.editTreatment(t.getID(),diagnosis,medication,duration,recommendation)
+	//addTreatment() - añade un nuevo treatment recibiendo el medcard number del paciente al que va asociado y un objeto treatment, no devuelve nada
+	//searchPatient(String surename) - buscar un paciente pasandole un string del apellido y devolviendo una lista de objetos de tipo paciente que estar vacia si no hay ningun paciente con ese nombre;
+	//selectpatient(Integer medCard) - debe seleccionar un paciente por el medical card number y devolver un objeto paciente que debe ser null si no existe un paciente con ese medical card number;
+
 }
