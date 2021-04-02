@@ -2,6 +2,8 @@ package db.jdbc;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.List;
+
 import db.pojos.*;
 
 
@@ -134,87 +136,58 @@ public class SQL implements SQLInterface{
 		stmt7.executeUpdate(sql7);
 		stmt7.close();
 	}
-	public void insert (Connection c) throws SQLException {
-		try {
-		// Get the employee info from the command prompt
-				System.out.println("Please, input the patient info:");
-				BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-				System.out.print("Name: ");
-				String name = reader.readLine();
-				System.out.print("Surname: ");
-				String surname = reader.readLine();
-				System.out.print("Medical card number: ");
-				Integer medCardNumber = reader.read();
-				System.out.print("Gender: ");
-				String gender = reader.readLine();
-				System.out.print("Blood type: ");
-				String bloodType = reader.readLine();
-				System.out.print("Allergies: ");
-				String allergie = reader.readLine();
-				System.out.print("Date of birth: ");
-				String bDate = reader.readLine(); //should it be a date here
-				System.out.print("Check in date: ");
-				String checkInDate = reader.readLine(); //should it be a date here
-				System.out.print("Address: ");				
-				String address = reader.readLine();
-				System.out.print("Hospitalization [YES/NO]: ");
-				Boolean hospitalized = reader.ready();
-
-				// Insert new record: begin
-				Statement stmt1 = c.createStatement();
-				String sql = "INSERT INTO patient (name, surname, medical card number, gender, blood type, allergies, date of birth, check in date, address, hospitalization) "
-							+ "VALUES ('" + name + "', '" + surname	+ "', '" + medCardNumber +"', '" + gender	+ "', '" + bloodType	+ "', '" + allergie	+ "', '" + bDate	+ "', '" + checkInDate	+ "', '" + address	+ "', '" + hospitalized	+ "');";
-				stmt1.executeUpdate(sql);
-				stmt1.close();
-				System.out.println("Patient info processed");
-				System.out.println("Records inserted.");
-
-				// Get the worker info from the command prompt
-				System.out.print("Name: ");
-				String nameW = reader.readLine();
-				System.out.print("Surname: ");
-				String surnameW = reader.readLine();
-				System.out.print("Specialty: ");
-				String specialty = reader.readLine();
-				System.out.print("Room assigned: ");
-				Integer room = reader.read();
-				System.out.print("Type of worker: ");
-				String tyoeW = reader.readLine();
-				System.out.print("Shift: ");
-				String shift = reader.readLine();
-
-				// Insert new record: begin
-				Statement stmt2 = c.createStatement();
-				String sq2 = "INSERT INTO workers (name, surname, speciality, room assigned, type, shift) "
-						+ "VALUES ('" + nameW + "', '" + surnameW	+ "', '" + specialty +"', '" + room	+ "', '" + tyoeW + "', '" + shift + "');";
-				stmt2.executeUpdate(sq2);
-				stmt2.close();
-				System.out.println("Worker info processed");
-				System.out.println("Records inserted.");
-				
-				// Close database connection
-				c.close();
-				System.out.println("Database connection closed.");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-	}
-//SELECT treatment de un paciente 
 
 	public void addPatient(Connection c, Patient p) throws SQLException{
+        try {
+			String sq1 = "INSERT INTO patient (name, surname, medical card number, gender, blood type, allergies, date of birth, check in date, address, hospitalization) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement preparedStatement = c.prepareStatement(sq1);
+			preparedStatement.setString(1, p.getPatientName());
+			preparedStatement.setString(2, p.getPatientSurname());
+			preparedStatement.setInt(3, p.getMedicalCardId());
+			preparedStatement.setString(4, p.getGender());
+			preparedStatement.setString(5, p.getBloodType());
+			preparedStatement.setString(6, p.getAllergieType());
+			preparedStatement.setDate(7, p.getBdate());
+			preparedStatement.setDate(8, p.getCheckInDate());
+			preparedStatement.setString(9, p.getPatientAddress());
+			preparedStatement.setBoolean(10, p.isHospitalized());
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
+	public void addWorker(Connection c, Worker w) throws SQLException{
+        try {
+			String sq1 = "INSERT INTO workers (name, surname, speciality, room assigned, type, shift) VALUES (?, ?, ?, ?, ?, ?)";
+			PreparedStatement preparedStatement = c.prepareStatement(sq1);
+			preparedStatement.setString(1, w.getWorkerName());
+			preparedStatement.setString(2, w.getWorkerSurname());
+			preparedStatement.setString(3, w.getSpecialtyId());
+			preparedStatement.setInt(4, w.getRoomEr());
+			preparedStatement.setString(5, w.getTypeWorker());
+			preparedStatement.setString(6, w.getShift());
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void addMedicalTest(Connection c, MedicalTest medtest) throws SQLException{
 	//medical_test id(int) type(s) image(b) result(s) patient_id(int) emp_id(int)
         try {
-			Statement statement1 = c.createStatement();
-			Blob image = null;
-			String result = null; // TODO
-			String sq1 = "INSERT INTO medical_test (id, type, image, result, patient_id, emp_id) VALUES ("+medtest.getMedicalTestId()+", " +medtest.getTestType()+", " +image+ ", " +result+ ", " +medtest.getIdPatient()+ ", " +medtest.getIdDoctor()+")";
-			statement1.executeUpdate(sq1);
-			statement1.close();
-			c.close();
+			String sq1 = "INSERT INTO medical_test (id, type, image, result, patient_id, emp_id) VALUES (?, ?, ?, ?, ?, ?)";
+			PreparedStatement preparedStatement = c.prepareStatement(sq1);
+			preparedStatement.setInt(1, medtest.getMedicalTestId());
+			preparedStatement.setString(2, medtest.getTestType());
+			preparedStatement.setBlob(3, medtest.getTestImage());
+			preparedStatement.setBlob(4, medtest.getTestResult());
+			preparedStatement.setInt(5, medtest.getIdPatient());
+			preparedStatement.setInt(6, medtest.getIdDoctor());
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -223,11 +196,17 @@ public class SQL implements SQLInterface{
 	public void addTreatment(Connection c, Treatment treatment, Integer patientId) throws SQLException {
 	//treatment id(int) medication(s) diagnosis(s) start_date(sqlDate) duration(int) advice(s) patient_id(int)
 		try {
-			Statement statement1 = c.createStatement();
-			String sq1 = "INSERT INTO treatment (id, medication, diagnosis, start_date, duration, advice, patient_id, emp_id) VALUES ("+treatment.getTreatmentId()+", "+treatment.getMedication()+","+treatment.getDiagnosis()+", "+treatment.getDuration()+", "+treatment.getRecommendation()+", "+patientId+")";
-			statement1.executeUpdate(sq1);
-			statement1.close();
-			c.close();
+			String sq1 = "INSERT INTO treatment (id, medication, diagnosis, start_date, duration, advice, patient_id) VALUES ("+treatment.getTreatmentId()+", "+treatment.getMedication()+","+treatment.getDiagnosis()+", "+treatment.getDuration()+", "+treatment.getRecommendation()+", "+patientId+")";
+			PreparedStatement preparedStatement = c.prepareStatement(sq1);
+			preparedStatement.setInt(1, treatment.getTreatmentId());
+			preparedStatement.setString(2, treatment.getMedication());
+			preparedStatement.setString(3, treatment.getDiagnosis());
+			preparedStatement.setDate(4, treatment.getStartDate());
+			preparedStatement.setInt(5, treatment.getDuration());
+			preparedStatement.setString(6, treatment.getDiagnosis());
+			preparedStatement.setInt(7, patientId);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -238,6 +217,22 @@ public class SQL implements SQLInterface{
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+
+	//Falta añadir comentarios en todo lol
+	public Treatment searchPatientsTreatment(Connection c, Patient patient) throws SQLException, Exception {
+		String sql = "SELECT * FROM treatment WHERE patient_id = ? ORDER BY start_date";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1, patient.getMedicalCardId());
+		ResultSet rs = p.executeQuery();
+		if(rs.next()){
+			return new Treatment(rs.getInt("id"), rs.getString("medication"), rs.getString("diagnosis"), rs.getDate("start_date"), rs.getInt("duration"), rs.getString("advice"));
+		}
+		p.close();
+		rs.close();
+		return null;
+	}
+	
 
 	//Cosas a añadir: 
 	//searchPatientTreatment() - buscar los tratamientos de un paciente, ordenarlos por fecha de inicio y devolver una lista

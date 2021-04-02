@@ -16,6 +16,7 @@ public class MedicalTest {
 	private String testType;
 	private Blob testResult;
 	//Result of the medical test as an image (for CT, X-rays, MRIs...)
+	private Blob testImage;
 
 	/**
 	 * Full builder for a medical test.
@@ -89,6 +90,15 @@ public class MedicalTest {
 		this.testResult = testResult;
 	}
 
+	public Blob getTestImage() {
+		return testImage;
+	}
+	public void setTestImage(Blob testImage) {
+		this.testImage = testImage;
+	}
+	public void setMedicalTestId(Integer medicalTestId) {
+		this.medicalTestId = medicalTestId;
+	}
 	public Integer getMedicalTestId() {
 		return medicalTestId;
 	}

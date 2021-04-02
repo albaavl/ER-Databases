@@ -35,6 +35,19 @@ public class Treatment {
 		setDuration(duration);
 	}
 	
+	public Treatment(int int1, String string, String string2, Date date, int int2, String string3) throws Exception {
+		setTreatmentId(int1);
+		setMedication(string);
+		setDiagnosis(string2);
+		setStartDate(date);
+		setDuration(int2);
+		setDiagnosis(string3);
+	}
+
+	public void setTreatmentId(int treatmentId) {	//TODO-HAY Q ORDENAR ESTO
+		this.treatmentId = treatmentId;
+	}
+
 	public Treatment() {
 	}
 	
