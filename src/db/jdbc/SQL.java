@@ -2,6 +2,7 @@ package db.jdbc;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.pojos.*;
@@ -217,22 +218,37 @@ public class SQL implements SQLInterface{
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
 
-	//Falta añadir comentarios en todo lol
-	public Treatment searchPatientsTreatment(Connection c, Patient patient) throws SQLException, Exception {
+	@Override
+	public List<Treatment> searchPatientsTreatment(Connection c, Patient patient) throws SQLException, Exception {
 		String sql = "SELECT * FROM treatment WHERE patient_id = ? ORDER BY start_date";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1, patient.getMedicalCardId());
 		ResultSet rs = p.executeQuery();
+		List <Treatment> tList = new ArrayList<Treatment>();
 		if(rs.next()){
-			return new Treatment(rs.getInt("id"), rs.getString("medication"), rs.getString("diagnosis"), rs.getDate("start_date"), rs.getInt("duration"), rs.getString("advice"));
+			tList.add( new Treatment(rs.getInt("id"), rs.getString("medication"), rs.getString("diagnosis"), rs.getDate("start_date"), rs.getInt("duration"), rs.getString("advice")) );
 		}
 		p.close();
 		rs.close();
-		return null;
+		return tList;
 	}
-	
+
+	@Override
+	public List<MedicalTest> searchMedicalTestByMedCardNumber(Connection c, Integer medCardNumber) throws SQLException, Exception{
+		String sql = "SELECT * FROM medical_test WHERE patient_id = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1, medCardNumber);
+		ResultSet rs = p.executeQuery();
+		List <MedicalTest> tList = new ArrayList<MedicalTest>();
+		if(rs.next()){
+			tList.add( new MedicalTest(rs.getInt("id"), rs.getString("type"), rs.getBlob("image"), rs.getString("result"), medCardNumber, rs.getInt("emp_id"))  );
+		}
+		p.close();
+		rs.close();
+		return tList;
+	}
+
 
 	//Cosas a añadir: 
 	//searchPatientTreatment() - buscar los tratamientos de un paciente, ordenarlos por fecha de inicio y devolver una lista

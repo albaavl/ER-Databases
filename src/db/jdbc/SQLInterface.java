@@ -12,12 +12,38 @@ public interface SQLInterface {
 	public void drop();
 	void drop(Connection c) throws SQLException;
 
+	/**
+	 * Used to add a new patient to the database
+	 * @param connection - connection of the database
+	 * @param patient - the patient to add to the database
+	 * @throws SQLException
+	 */
 	public void addPatient(Connection connection, Patient patient) throws SQLException;
-	public void addTreatment(Connection connection, Treatment treatment, Integer patientID) throws SQLException; //FUNCION NO CREADA a�ade un nuevo treatment recibiendo el medcard number del paciente al que va asociado y un objeto treatment, no devuelve nada
+	/**
+	 * Used to add a new treatment to the database
+	 * @param connection - connection to the database
+	 * @param treatment - the treatment that will be added to the database
+	 * @param patientID - the patient id that's associated to the treatment.
+	 * @throws SQLException
+	 */
+	public void addTreatment(Connection connection, Treatment treatment, Integer patientID) throws SQLException; 
 	
-	public Treatment 		searchPatientsTreatment(Connection c, Patient patient) throws SQLException, Exception;
-	//FUNCION NO CREADA debe buscar los tratamientos de un paciente, ordenarlos por fecha de inicio y devolver una lista
-	public List<MedicalTest> searchMedicalTestByMedCardNumber(Integer medCardNumber); 
+	/**
+	 * Used to return the treatments of a patient using the patient id from a patient object
+	 * @param c - connetion to the database. 
+	 * @param patient - used to get the medicalId and select all of the treatments associated with that id.
+	 * @return Returns all of the patient treatments, ordered by their start date. ALl of the treatments are returned inside of a List.
+	 * @throws SQLException
+	 * @throws Exception
+	 */
+	public List<Treatment> 		searchPatientsTreatment(Connection c, Patient patient) throws SQLException, Exception;
+
+	/**
+	 * 
+	 * @param medCardNumber
+	 * @return
+	 */
+	public List<MedicalTest> searchMedicalTestByMedCardNumber(Connection c, Integer medCardNumber) throws SQLException, Exception; 
 	//FUNCI�N NO CREADA debe buscar medical tests por el medical card number del paciente asociaod al test y devolver una lista con todos los test asociados a ese paciente ordenados por fecha, vacia si no hay ninguno
 	public List<Treatment> 	searchTreatmentsByMedCardNumber(Integer medCardNumber);
 	//FUNCION NO CREADA debe buscar los tratamientos asociados a un paciente (se le pasa su medcard numnber) y devolver una lista con estos, vacia si no hay

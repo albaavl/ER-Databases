@@ -1,6 +1,5 @@
 package db.pojos;
 
-import java.rmi.NotBoundException;
 import java.sql.*;
 
 public class MedicalTest {
@@ -14,7 +13,7 @@ public class MedicalTest {
 	private Integer idPatient;
 	//Identification of the patient who is getting done the medical test
 	private String testType;
-	private Blob testResult;
+	private String testResult;
 	//Result of the medical test as an image (for CT, X-rays, MRIs...)
 	private Blob testImage;
 
@@ -24,16 +23,24 @@ public class MedicalTest {
 	 * @param idD - Identification of the doctor (Integer)
 	 * @param idP - Identification of the patient (Integer)
 	 * @param tType - Name of the medical test (String)
-	 * @param tResult- Image obtained from the medical test (Blob)
+	 * @param tResult- Image obtained from the medical test (String)
 	 */
-	public MedicalTest(Integer idD, Integer idP, String tType, Blob tResult) {
+	public MedicalTest(Integer idD, Integer idP, String tType, String tResult) {
 		super();
 		this.idDoctor = idD;
 		this.idPatient = idP;
 		this.testType = tType;
 		this.testResult = tResult;
 	}
-	/**
+	public MedicalTest(int id, String type, Blob img, String result, Integer patientId, int medId) {
+		this.medicalTestId = id;
+		this.testType = type;
+		this.testImage = img;
+		this.testResult = result;
+		this.idPatient = patientId;
+		this.idDoctor = medId;
+    }
+    /**
 	 * Used to get the id of the doctor
 	 * @return [Integer] The doctor's id
 	 */
@@ -79,14 +86,14 @@ public class MedicalTest {
 	 * Used to get the image (result) of the medical test
 	 * @return [Blob] The image obtained from the medical test
 	 */
-	public Blob getTestResult() {
+	public String getTestResult() {
 		return testResult;
 	}
 	/**
 	 * Used to set the result of the medical test
 	 * @param testResult - The image resulted from the medical test
 	 */
-	public void setTestResult(Blob testResult) {
+	public void setTestResult(String testResult) {
 		this.testResult = testResult;
 	}
 
