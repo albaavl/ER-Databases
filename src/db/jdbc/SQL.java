@@ -1,6 +1,7 @@
 package db.jdbc;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.rmi.NotBoundException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -226,7 +227,7 @@ public class SQL implements SQLInterface{
 		p.setInt(1, patient.getMedicalCardId());
 		ResultSet rs = p.executeQuery();
 		List <Treatment> tList = new ArrayList<Treatment>();
-		if(rs.next()){
+		while(rs.next()){
 			tList.add( new Treatment(rs.getInt("id"), rs.getString("medication"), rs.getString("diagnosis"), rs.getDate("start_date"), rs.getInt("duration"), rs.getString("advice")) );
 		}
 		p.close();
@@ -241,7 +242,7 @@ public class SQL implements SQLInterface{
 		p.setInt(1, medCardNumber);
 		ResultSet rs = p.executeQuery();
 		List <MedicalTest> tList = new ArrayList<MedicalTest>();
-		if(rs.next()){
+		while(rs.next()){
 			tList.add( new MedicalTest(rs.getInt("id"), rs.getString("type"), rs.getBlob("image"), rs.getString("result"), medCardNumber, rs.getInt("emp_id"))  );
 		}
 		p.close();
@@ -249,17 +250,40 @@ public class SQL implements SQLInterface{
 		return tList;
 	}
 
+	@Override
+	public List<Patient> searchPatient(Connection c, String surname) throws SQLException, NotBoundException {
+		String sql = "SELECT * FROM patients WHERE surname = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setString(1,"%" + surname + "%");
+		ResultSet rs = p.executeQuery();
+		List <Patient> pList = new ArrayList<Patient>();
+		while(rs.next()){
+			pList.add( new Patient(rs.getString("name"), rs.getString("surname"), rs.getString("gender"), rs.getString("blood_type"), rs.getString("allergies"), rs.getString("address"), rs.getDate("birthdate"), rs.getDate("check_in"), rs.getBoolean("hospitalized"), rs.getInt("medical_card_number")) );
+		}
+		p.close();
+		rs.close();
+		return pList;
+	}
 
+	@Override
+	public Patient selectPatient(Connection c, Integer medCard) throws SQLException, NotBoundException {
+		String sql = "SELECT * FROM patients WHERE medical_card_number = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1,medCard);
+		ResultSet rs = p.executeQuery();
+		Patient patient = null;
+		if(rs.next()){
+			patient = new Patient(rs.getString("name"), rs.getString("surname"), rs.getString("gender"), rs.getString("blood_type"), rs.getString("allergies"), rs.getString("address"), rs.getDate("birthdate"), rs.getDate("check_in"), rs.getBoolean("hospitalized"), rs.getInt("medical_card_number")) );
+		}
+		p.close();
+		rs.close();
+		return patient;	
+	}
 	//Cosas a añadir: 
-	//searchPatientTreatment() - buscar los tratamientos de un paciente, ordenarlos por fecha de inicio y devolver una lista
 	//searchAmbulance(String licensePlate) - buscar una ambulancia pasandole la matricula y devolver la ambulancia correspondiente, si no existe, devolver null
-	//searchMedicalTestBtPatient() - buscar medical tests por el medical card number del paciente asociaod al test y devolver una lista con todos los test asociados a ese paciente ordenados por fecha, null si no hay ninguno
 	//searchTreatmentById() - buscar un treatment por su id y devolverlo, si no hay devolver null
 	//searchTreatmentByMedCardNum() - buscar los tratamientos asociados a un paciente (se le pasa su medcard numnber) y devolver una lista con estos, null si no hay
 	//editTreatment() - update del treatment cuyo id se le pasa, SOLO DEBE CAMBIAR CADA PARaMETRO si la string que se le pasa no es igual a un 0, debe devolver el nuevo tratamiento
 	//		sql.editTreatment(t.getID(),diagnosis,medication,duration,recommendation)
-	//addTreatment() - añade un nuevo treatment recibiendo el medcard number del paciente al que va asociado y un objeto treatment, no devuelve nada
-	//searchPatient(String surename) - buscar un paciente pasandole un string del apellido y devolviendo una lista de objetos de tipo paciente que estar vacia si no hay ningun paciente con ese nombre;
-	//selectpatient(Integer medCard) - debe seleccionar un paciente por el medical card number y devolver un objeto paciente que debe ser null si no existe un paciente con ese medical card number;
 
 }
