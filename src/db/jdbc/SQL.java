@@ -279,6 +279,21 @@ public class SQL implements SQLInterface{
 		rs.close();
 		return patient;	
 	}
+
+	@Override
+	public Treatment searchTreatmentsByID(Connection c, Integer id) throws SQLException, NotBoundException {
+		String sql = "SELECT * FROM treatment WHERE id = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1,id);
+		ResultSet rs = p.executeQuery();
+		Treatment treatment = null;
+		if(rs.next()){
+			treatment = new Treatment(id, rs.getString("medication"), rs.getString("diagnosis"), rs.getDate("start_date"), rs.getInt("duration"), rs.getString("advice"));
+		p.close();
+		rs.close();
+		return treatment;	
+	}
+
 	//Cosas a añadir: 
 	//searchAmbulance(String licensePlate) - buscar una ambulancia pasandole la matricula y devolver la ambulancia correspondiente, si no existe, devolver null
 	//searchTreatmentById() - buscar un treatment por su id y devolverlo, si no hay devolver null

@@ -46,7 +46,7 @@ public interface SQLInterface {
 	 */
 	public List<MedicalTest> searchMedicalTestByMedCardNumber(Connection c, Integer medCardNumber) throws SQLException, Exception; 
 	//FUNCI�N NO CREADA debe buscar medical tests por el medical card number del paciente asociaod al test y devolver una lista con todos los test asociados a ese paciente ordenados por fecha, vacia si no hay ninguno
-	public Treatment 		searchTreatmentsByID(Integer id);
+	public Treatment 		searchTreatmentsByID(Connection c, Integer id) throws SQLException, NotBoundException;
 	//FUNCION NO CREADA debe buscar un treatment por su id y devolverlo, si no hay devolver� null
 	public List<Patient> 	searchPatient(Connection c, String surname) throws SQLException, NotBoundException; 
 	//FUNCION NO CREADA debe buscar un paciente pasandole un string del apellido y devolviendo una lista de objetos de tipo paciente que estar� vac�a si no hay ning�n paciente con ese nombre;
