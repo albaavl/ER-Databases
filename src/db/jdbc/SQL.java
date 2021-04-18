@@ -5,7 +5,6 @@ import java.rmi.NotBoundException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import db.pojos.*;
 
 
@@ -25,9 +24,9 @@ public class SQL implements SQLInterface{
 	
 	@Override
 	public void create(Connection c) throws SQLException {
-		// TODO table workers, 
+		// TODO 
 		Statement stmt1 = c.createStatement();
-		String sql1 = "CREATE TABLE patients "
+		String sql1 = "CREATE TABLE patient "
 				   + "(medical_card_number       INTEGER  PRIMARY KEY,"
 				   + " name     TEXT     NOT NULL, "
 				   + " surname     TEXT     NOT NULL, "
@@ -47,14 +46,12 @@ public class SQL implements SQLInterface{
 		stmt2.executeUpdate(sql2);
 		stmt2.close();
 		Statement stmt3 = c.createStatement();
-		String sql3 = "CREATE TABLE employees "
+		String sql3 = "CREATE TABLE worker "
 				   + "(id       INTEGER  PRIMARY KEY AUTOINCREMENT,"
 				   + " name     TEXT     NOT NULL, "
 				   + " surname     TEXT     NOT NULL, "
-				   + " gender     TEXT     NOT NULL, "
-				   + " speciality   TEXT, "
+				   + " specialty   TEXT, "
 				   + " room_in_ER   TEXT, "
-				   + " shift TEXT NOT NULL, "
 				   + " emp_type INTEGER REFERENCES employees types(id) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt3.executeUpdate(sql3);
 		stmt3.close();
@@ -65,39 +62,36 @@ public class SQL implements SQLInterface{
 				   + " PRIMARY KEY (patient_id,doctor_id))";
 		stmt4.executeUpdate(sql4);
 		stmt4.close();
-		Statement stmt5 = c.createStatement();
+		Statement stmt5 = c.createStatement();		
 		String sql5 = "CREATE TABLE medical_test "
 				   + "(id       INTEGER  PRIMARY KEY AUTOINCREMENT,"
-				   + " type     TEXT     NOT NULL,"
-				   + " image    BLOB,"
-				   + " result TEXT NOT NULL,"
+				   + "emp_id     INTEGER REFERENCES employees(id) ON UPDATE CASCADE ON DELETE SET NULL) "
 				   + "patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL,"
-				   + "emp_id     INTEGER REFERENCES employees(id) ON UPDATE CASCADE ON DELETE SET NULL) ";
+				   + " type     TEXT     NOT NULL,"				   
+				   + " result TEXT  NULL,"
+				   + " image    BLOB,";
 		stmt5.executeUpdate(sql5);
 		stmt5.close();
 		Statement stmt6 = c.createStatement();
 		String sql6 = "CREATE TABLE treatment "
 				   + "(id       INTEGER  PRIMARY KEY AUTOINCREMENT,"
-				   + " medication    TEXT     NOT NULL,"
 				   + " diagnosis     TEXT     NOT NULL,"
+				   + " medication    TEXT     NOT NULL,"				   
 				   + " start_date   DATE      NOT NULL,"
-				   + " duration   INTEGER     NOT NULL"
 				   + " advice       TEXT      NOT NULL,"
+				   + " duration   INTEGER     NOT NULL"				   
 				   + "patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt6.executeUpdate(sql6);
-		stmt6.close();
+		stmt6.close(); 
 		Statement stmt7 = c.createStatement();
-		String sql7 = "CREATE TABLE ambulance "
-				   + "(id       INTEGER  PRIMARY KEY AUTOINCREMENT,"
-				   + " type     TEXT     NOT NULL,"
-				   + " available BOOLEAN NOT NULL,"
-				   + "patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL,)";
+		String sql7 = "CREATE TABLE shift "
+				   + "(shift       TEXT  PRIMARY KEY,"
+				   + " date     DATE     NOT NULL, "
+				   + " room   INTEGER     NOT NULL"
+		 		   + " doctor_id   INTEGER  REFERENCES employees(id) ON UPDATE CASCADE ON DELETE SET NULL";
 		stmt7.executeUpdate(sql7);
-		stmt7.close();
-		//faltan previous pathologies y ambulance staff como fk en employeees
-		
-		System.out.println("Tables created.");
-		
+		stmt7.close();		
+		System.out.println("Tables created.");		
 	}
 
 	@Override
@@ -110,7 +104,7 @@ public class SQL implements SQLInterface{
 	public void drop (Connection c) throws SQLException {
 		// TODO Auto-generated method stub
 		Statement stmt1 = c.createStatement();
-		String sql1 = "DROP TABLE patients";
+		String sql1 = "DROP TABLE patient";
 		stmt1.executeUpdate(sql1);
 		stmt1.close();
 		Statement stmt2 = c.createStatement();
@@ -118,7 +112,7 @@ public class SQL implements SQLInterface{
 		stmt2.executeUpdate(sql2);
 		stmt2.close();
 		Statement stmt3 = c.createStatement();
-		String sql3 = "DROP TABLE employees";
+		String sql3 = "DROP TABLE worker";
 		stmt3.executeUpdate(sql3);
 		stmt3.close();
 		Statement stmt4 = c.createStatement();
@@ -134,14 +128,14 @@ public class SQL implements SQLInterface{
 		stmt6.executeUpdate(sql6);
 		stmt6.close();
 		Statement stmt7 = c.createStatement();
-		String sql7 = "DROP TABLE ambulance";
+		String sql7 = "DROP TABLE shift";
 		stmt7.executeUpdate(sql7);
 		stmt7.close();
 	}
 
 	public void addPatient(Connection c, Patient p) throws SQLException{
         try {
-			String sq1 = "INSERT INTO patient (name, surname, medical card number, gender, blood type, allergies, date of birth, check in date, address, hospitalization) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String sq1 = "INSERT INTO patient ( medical card number, name, surname, gender, date of birth,  address, blood type, allergies, check in date, hospitalization) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
 			preparedStatement.setString(1, p.getPatientName());
 			preparedStatement.setString(2, p.getPatientSurname());
@@ -162,14 +156,15 @@ public class SQL implements SQLInterface{
 
 	public void addWorker(Connection c, Worker w) throws SQLException{
         try {
-			String sq1 = "INSERT INTO workers (name, surname, speciality, room assigned, type, shift) VALUES (?, ?, ?, ?, ?, ?)";
+			String sq1 = "INSERT INTO worker (id, name, surname, specialty, room_in_ER, type, emp_type) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
-			preparedStatement.setString(1, w.getWorkerName());
-			preparedStatement.setString(2, w.getWorkerSurname());
-			preparedStatement.setString(3, w.getSpecialtyId());
-			preparedStatement.setInt(4, w.getRoomEr());
-			preparedStatement.setString(5, w.getTypeWorker());
-			preparedStatement.setString(6, w.getShift());
+			preparedStatement.setInt(1, w.getWorkerId());
+			preparedStatement.setString(2, w.getWorkerName());
+			preparedStatement.setString(3, w.getWorkerSurname());
+			preparedStatement.setString(4, w.getSpecialtyId());
+			preparedStatement.setInt(5, w.getRoomEr());
+			preparedStatement.setString(6, w.getTypeWorker());
+			preparedStatement.setString(7, w.getTypeWorker());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 		} catch (Exception e) {
@@ -178,16 +173,15 @@ public class SQL implements SQLInterface{
 	}
 
 	public void addMedicalTest(Connection c, MedicalTest medtest) throws SQLException{
-	//medical_test id(int) type(s) image(b) result(s) patient_id(int) emp_id(int)
         try {
-			String sq1 = "INSERT INTO medical_test (id, type, image, result, patient_id, emp_id) VALUES (?, ?, ?, ?, ?, ?)";
+			String sq1 = "INSERT INTO medical_test (id, emp_id,  patient_id, type, result, image) VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
 			preparedStatement.setInt(1, medtest.getMedicalTestId());
-			preparedStatement.setString(2, medtest.getTestType());
-			preparedStatement.setBlob(3, medtest.getTestImage());
-			preparedStatement.setBlob(4, medtest.getTestResult());
-			preparedStatement.setInt(5, medtest.getIdPatient());
-			preparedStatement.setInt(6, medtest.getIdDoctor());
+			preparedStatement.setInt(2, medtest.getIdDoctor());
+			preparedStatement.setInt(3, medtest.getIdPatient());
+			preparedStatement.setString(4, medtest.getTestType());
+			preparedStatement.setString(5, medtest.getTestResult());
+			preparedStatement.setBlob(6, medtest.getTestImage());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 		} catch (Exception e) {
@@ -196,28 +190,21 @@ public class SQL implements SQLInterface{
     }
 
 	public void addTreatment(Connection c, Treatment treatment, Integer patientId) throws SQLException {
-	//treatment id(int) medication(s) diagnosis(s) start_date(sqlDate) duration(int) advice(s) patient_id(int)
 		try {
-			String sq1 = "INSERT INTO treatment (id, medication, diagnosis, start_date, duration, advice, patient_id) VALUES ("+treatment.getTreatmentId()+", "+treatment.getMedication()+","+treatment.getDiagnosis()+", "+treatment.getDuration()+", "+treatment.getRecommendation()+", "+patientId+")";
+			String sq1 = "INSERT INTO treatment (id, diagnosis, medication, start_date, advice, duration, patient_id) VALUES ("+treatment.getTreatmentId()+", "+treatment.getDiagnosis()+", "+treatment.getMedication()+", "+treatment.getRecommendation()+", "+treatment.getDuration()+", "+patientId+")";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
 			preparedStatement.setInt(1, treatment.getTreatmentId());
-			preparedStatement.setString(2, treatment.getMedication());
-			preparedStatement.setString(3, treatment.getDiagnosis());
-			preparedStatement.setDate(4, treatment.getStartDate());
-			preparedStatement.setInt(5, treatment.getDuration());
-			preparedStatement.setString(6, treatment.getDiagnosis());
+			preparedStatement.setString(2, treatment.getDiagnosis());
+			preparedStatement.setString(3, treatment.getMedication());			
+			preparedStatement.setDate(4, treatment.getStartDate());			
+			preparedStatement.setString(5, treatment.getDiagnosis());
+			preparedStatement.setInt(6, treatment.getDuration());
 			preparedStatement.setInt(7, patientId);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void drop() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -228,7 +215,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List <Treatment> tList = new ArrayList<Treatment>();
 		while(rs.next()){
-			tList.add( new Treatment(rs.getInt("id"), rs.getString("medication"), rs.getString("diagnosis"), rs.getDate("start_date"), rs.getInt("duration"), rs.getString("advice")) );
+			tList.add( new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")) );
 		}
 		p.close();
 		rs.close();
@@ -241,18 +228,47 @@ public class SQL implements SQLInterface{
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1, medCardNumber);
 		ResultSet rs = p.executeQuery();
-		List <MedicalTest> tList = new ArrayList<MedicalTest>();
+		List <MedicalTest> mList = new ArrayList<MedicalTest>();
 		while(rs.next()){
-			tList.add( new MedicalTest(rs.getInt("id"), rs.getString("type"), rs.getBlob("image"), rs.getString("result"), medCardNumber, rs.getInt("emp_id"))  );
+			mList.add( new MedicalTest(rs.getInt("id"), rs.getInt("emp_id"), medCardNumber, rs.getString("type"), rs.getString("result"), rs.getBlob("image"))  );
 		}
 		p.close();
 		rs.close();
-		return tList;
+		return mList;
+	}
+	
+	public Shift searchShiftByWorkerId (Connection c, Integer workerId) throws SQLException, Exception {
+		String sql = "SELECT * FROM shift WHERE workerId = ? ";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1, workerId);
+		ResultSet rs = p.executeQuery();
+		Shift s = null;
+		if(rs.next()){ 
+			s = new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), workerId);		
+		}
+		p.close();
+		rs.close();
+		return s;
+	}
+	
+	public Shift searchShiftByDate (Connection c, Integer workerId, Date date) throws SQLException, Exception {
+		String sql = "SELECT * FROM shift WHERE workerId = ?, date = ? ";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1, workerId);
+		p.setDate(2, date);
+		ResultSet rs = p.executeQuery();
+		Shift s = null;
+		if(rs.next()){ 
+			s = new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), rs.getInt("doctor_id"));		
+		}
+		p.close();
+		rs.close();
+		return s;
 	}
 
 	@Override
 	public List<Patient> searchPatient(Connection c, String surname) throws SQLException, NotBoundException {
-		String sql = "SELECT * FROM patients WHERE surname = ?";
+		String sql = "SELECT * FROM patient WHERE surname = ?";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setString(1,"%" + surname + "%");
 		ResultSet rs = p.executeQuery();
@@ -264,22 +280,51 @@ public class SQL implements SQLInterface{
 		rs.close();
 		return pList;
 	}
+	
+	public List<Worker> searchWorker(Connection c, String surname) throws SQLException, NotBoundException {
+		String sql = "SELECT * FROM worker WHERE surname = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setString(1,"%" + surname + "%");
+		ResultSet rs = p.executeQuery();
+		List <Worker> wList = new ArrayList<Worker>();
+		while(rs.next()){ 
+			wList.add( new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getInt("room_in_ER"), rs.getString("type")) );
+		}
+		p.close();
+		rs.close();
+		return wList;
+	}
 
 	@Override
 	public Patient selectPatient(Connection c, Integer medCard) throws SQLException, NotBoundException {
-		String sql = "SELECT * FROM patients WHERE medical_card_number = ?";
+		String sql = "SELECT * FROM patient WHERE medical_card_number = ?";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1,medCard);
 		ResultSet rs = p.executeQuery();
 		Patient patient = null;
 		if(rs.next()){
-			patient = new Patient(rs.getString("name"), rs.getString("surname"), rs.getString("gender"), rs.getString("blood_type"), rs.getString("allergies"), rs.getString("address"), rs.getDate("birthdate"), rs.getDate("check_in"), rs.getBoolean("hospitalized"), rs.getInt("medical_card_number")) );
+			patient = new Patient(rs.getString("name"), rs.getString("surname"), rs.getString("gender"), rs.getString("blood_type"), rs.getString("allergies"), rs.getString("address"), rs.getDate("birthdate"), rs.getDate("check_in"), rs.getBoolean("hospitalized"), rs.getInt("medical_card_number"));
+		//creo que sobra el getmedicalcard, pues es como lo busca, no le hace falta verlo de nuevo. Si es así hay que crear un nuevo constructor sin la medical card
 		}
 		p.close();
 		rs.close();
 		return patient;	
 	}
 
+	public Worker selectWorker(Connection c, Integer workerId) throws SQLException, NotBoundException {
+		String sql = "SELECT * FROM worker WHERE id = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1,workerId);
+		ResultSet rs = p.executeQuery();
+		Worker worker = null;
+		if(rs.next()){
+			worker = new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getInt("room_in_ER"), rs.getString("type"));
+		}
+		p.close();
+		rs.close();
+		return worker;	
+	}
+	
 	@Override
 	public Treatment searchTreatmentsByID(Connection c, Integer id) throws SQLException, NotBoundException {
 		String sql = "SELECT * FROM treatment WHERE id = ?";
@@ -288,17 +333,78 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		Treatment treatment = null;
 		if(rs.next()){
-			treatment = new Treatment(id, rs.getString("medication"), rs.getString("diagnosis"), rs.getDate("start_date"), rs.getInt("duration"), rs.getString("advice"));
+			try {
+				treatment =  new Treatment(id, rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		p.close();
 		rs.close();
 		return treatment;	
 	}
 
-	//Cosas a aÃ±adir: 
-	//searchAmbulance(String licensePlate) - buscar una ambulancia pasandole la matricula y devolver la ambulancia correspondiente, si no existe, devolver null
-	//searchTreatmentById() - buscar un treatment por su id y devolverlo, si no hay devolver null
-	//searchTreatmentByMedCardNum() - buscar los tratamientos asociados a un paciente (se le pasa su medcard numnber) y devolver una lista con estos, null si no hay
-	//editTreatment() - update del treatment cuyo id se le pasa, SOLO DEBE CAMBIAR CADA PARaMETRO si la string que se le pasa no es igual a un 0, debe devolver el nuevo tratamiento
-	//		sql.editTreatment(t.getID(),diagnosis,medication,duration,recommendation)
+	public Treatment searchTreatmentsByMedCard(Connection c, Integer medCard) throws SQLException, NotBoundException {
+		String sql = "SELECT * FROM patients WHERE medical_card_number = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1,medCard);
+		ResultSet rs = p.executeQuery();
+		Treatment treatment = null;
+		if(rs.next()){
+			try {
+				treatment = new Treatment(rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				//TENEMOS QUE REVISAR TODO EL TEMA DE EXCEPCIONES
+			}
+		}
+		p.close();
+		rs.close();
+		return treatment;	
+	}
+	
+	//igual habría que hacer un edit para cada cosa del treatment, sino se cambiarían todos
+	public void editTreatment(Connection c, int id, String diagnosis, String medication, Date startDate, Integer duration, String recommendation) {
+		try {
+			String sql = "UPDATE treatment SET diagnosis = ?, medication = ?, start_date = ?, advice = ?, duration = ? ";
+			Treatment t = searchTreatmentsByID(c, id);
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setString(1, diagnosis);
+			prep.setString(2, medication);
+			prep.setDate(3, startDate);			
+			prep.setInt(4, duration);		
+			prep.setString(5, recommendation);	
+			prep.setInt(6, t.getDuration());
+			prep.executeUpdate();
+			prep.close();
 
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public void editShift (Connection c, int workerId, String shift, int room, Date date) {
+		try {
+			String sql = "UPDATE treatment SET shift = ?, room = ? WHERE doctor_id = ?, date = ? ";
+			Shift s = searchShiftByDate(c, workerId, date);
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setString(1, shift);
+			prep.setInt(2, room);
+			prep.setInt(3, workerId);			
+			prep.setDate(4, date);		
+			prep.executeUpdate();
+			prep.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
 }
