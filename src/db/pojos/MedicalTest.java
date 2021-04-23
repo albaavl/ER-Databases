@@ -1,10 +1,22 @@
 package db.pojos;
 
 import java.sql.*;
+import java.sql.Date;
+import java.util.*;
+import javax.persistence.*;
+import java.io.*;
 
-public class MedicalTest {
+@Entity
+@Table(name = "medical_tests")
+public class MedicalTest implements Serializable{
 	
-	//Attributes
+	private static final long serialVersionUID = 7210218883507746083L;
+
+	@Id
+	@GeneratedValue(generator = "medical_tests")
+	@TableGenerator(name = "medical_tests", table = "sqlite_sequence",
+		pkColumnName = "id", valueColumnName = "seq", pkColumnValue = "medical_tests")
+	
 	private Integer medicalTestId;
 	//Unique for each patient - cannot be repeated for another patient.
 
@@ -14,17 +26,20 @@ public class MedicalTest {
 	//Identification of the patient who is getting done the medical test
 	private String testType;
 	private String testResult;
-	//Result of the medical test as an image (for CT, X-rays, MRIs...)
-	private Blob testImage;
+	private Date date; 
+	@Basic(fetch = FetchType.LAZY)
+	@Lob
+	private byte[] testImage;
+	
+	//Relationship 1-to-n with Patient
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn (name = "patient_id")
+	private Patient patient;
 
-	/**
-	 * Full builder for a medical test.
-	 * 
-	 * @param idD - Identification of the doctor (Integer)
-	 * @param idP - Identification of the patient (Integer)
-	 * @param tType - Name of the medical test (String)
-	 * @param tResult- Image obtained from the medical test (String)
-	 */
+	public MedicalTest() {
+			super();
+	}
+	
 	public MedicalTest(Integer idD, Integer idP, String tType, String tResult) {
 		super();
 		this.idDoctor = idD;
@@ -41,9 +56,6 @@ public class MedicalTest {
 		this.idDoctor = medId;
     }
 	
-    public MedicalTest() {
-		super();
-	}
 	/**
 	 * Used to get the id of the doctor
 	 * @return [Integer] The doctor's id
