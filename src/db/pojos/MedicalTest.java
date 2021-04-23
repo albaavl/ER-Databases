@@ -7,7 +7,7 @@ public class MedicalTest {
 	//Attributes
 	private Integer medicalTestId;
 	//Unique for each patient - cannot be repeated for another patient.
-	
+
 	private Integer idDoctor;
 	//Identification of the doctor who is asking for and receiving the medical test of a patient
 	private Integer idPatient;
@@ -32,7 +32,7 @@ public class MedicalTest {
 		this.testType = tType;
 		this.testResult = tResult;
 	}
-	public MedicalTest(int id, String type, Blob img, String result, Integer patientId, int medId) {
+	public MedicalTest(int id, Integer medId, Integer patientId, String type, String result, Blob img) {
 		this.medicalTestId = id;
 		this.testType = type;
 		this.testImage = img;
@@ -40,7 +40,11 @@ public class MedicalTest {
 		this.idPatient = patientId;
 		this.idDoctor = medId;
     }
-    /**
+	
+    public MedicalTest() {
+		super();
+	}
+	/**
 	 * Used to get the id of the doctor
 	 * @return [Integer] The doctor's id
 	 */

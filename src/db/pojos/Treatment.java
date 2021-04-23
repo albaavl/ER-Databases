@@ -4,15 +4,14 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 public class Treatment {
-
 	private int treatmentId;
 	//Unique for each treatment for each patient - can be repeated
 	
 	private String diagnosis;
+	private String medication;
 	private String recommendation;
 	private Date startDate;
 	//Date when the patient starts the treatment
-	private String medication;
 	private Integer duration; 
 	//Duration of the treatment in days
 	
@@ -26,28 +25,28 @@ public class Treatment {
 	 * @param duration - How many days is the treatment going to last (Integer)
 	 * @throws Exception 
 	 */
-	public Treatment(String diagnosis, String recommendation, Date startDate, String medication, Integer duration) throws Exception {
+	public Treatment(String diagnosis, String medication , Date startDate, String recommendation, Integer duration) throws Exception {
 		super();
 		setDiagnosis(diagnosis);
-		setRecommendation(recommendation);
-		setStartDate(startDate);
 		setMedication(medication);
+		setStartDate(startDate);
+		setRecommendation(recommendation);
 		setDuration(duration);
 	}
 	
-	public Treatment(int treatmentId, String medication, String diagnosis, Date startDate, int duration, String recommendation) throws Exception {
+	public Treatment(int treatmentId, String diagnosis, String medication, Date startDate, String recommendation, int duration) throws Exception {
 		setTreatmentId(treatmentId);
-		setMedication(medication);
 		setDiagnosis(diagnosis);
-		setStartDate(startDate);
-		setDuration(duration);
+		setMedication(medication);		
+		setStartDate(startDate);		
 		setRecommendation(recommendation);
+		setDuration(duration);
 	}
 
 	public void setTreatmentId(int treatmentId) {	//TODO-HAY Q ORDENAR ESTO
 		this.treatmentId = treatmentId;
 	}
-
+	//este constructor vacío lo usamos para algo?
 	public Treatment() {
 	}
 	
