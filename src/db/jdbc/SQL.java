@@ -302,3 +302,9 @@ public class SQL implements SQLInterface{
 	//		sql.editTreatment(t.getID(),diagnosis,medication,duration,recommendation)
 
 }
+	@Override
+	public Treatment editTreatment(Integer id, String diagnosis, String medication, Integer duration,
+			String recommendation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
