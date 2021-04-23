@@ -1,17 +1,29 @@
 package db.pojos;
 
+import java.io.*;
 import java.rmi.*;
 import java.sql.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-public class Patient {
+import javax.persistence.*;
+
+
+
+@Entity
+@Table(name = "patients")
+public class Patient implements Serializable{
 
 //Attributes
 
+	
+	private static final long serialVersionUID = -2589974670411322131L;
+	@Id
+	@GeneratedValue(generator="patients")
+	@TableGenerator(name="patients", table="sqlite_sequence",
+	    pkColumnName="medicalCardId", valueColumnName="seq", pkColumnValue="patients")
+	
 	private Integer medicalCardId;
 		//Unique for each patient - cannot be repeated for another patient.
-	private static List <Integer> medicalCardIds = new LinkedList<Integer>(); //WIP para comprobar que no hay dos ids iguales, ir añadiendo ids e ir comparando para q no haya 2 iguales.
 	private String patientName;
 	private String patientSurname;
 	private String gender;
@@ -27,6 +39,13 @@ public class Patient {
 		//Home address of the patient.
 	private boolean hospitalized;
 		//Whether the patient is hospitalized or not.
+	@OneToMany(mappedBy= "patient") 
+	private List<Treatment> treatments;
+	@ManyToMany
+	@JoinTable(name="doctor_patient",
+	joinColumns={@JoinColumn(name="patient_id", referencedColumnName="medicalCardId")},
+    inverseJoinColumns={@JoinColumn(name="doctor_id", referencedColumnName="workerId")})
+	private List<Worker> doctor;
 	
 
 //Getters + Setters
@@ -74,7 +93,7 @@ public class Patient {
 	 * Sets the gender of the patient.
 	 * 
 	 * @param gender - Must be Male or Female.
- 	 * @throws NotBoundException if not a corret gender
+ 	 * @throws NotBoundException if not a correct gender
 	 */
 	public void setGender(String gender) throws NotBoundException {
 		if(gender.equalsIgnoreCase("Male")) {
@@ -186,7 +205,7 @@ public class Patient {
 	 * Used to know if the patient is hospitalized
 	 * @return True/False
 	 */
-	public boolean isHospitalized() {
+	public boolean getHospitalized() {
 		return hospitalized;
 	}
 	/**
@@ -259,11 +278,38 @@ public class Patient {
 	
 
 	//Methods
-/*
+
 	@Override
 	public String toString() {
-		return "Name: " + this.patientName + ", Surname: " + this.patientSurename + ", Gender: " + this.gender + ", Blood type: " + this.bloodType
-		+ ", Check in date: " + this.checkInDate.toString() + ", Allergies: " +  this.allergieType + ", ";
+		return "MedicalCardNumber: "+this.medicalCardId+ "Name: " + this.patientName + ", Surname: " + this.patientSurname + ", Gender: " + this.gender + ", Blood type: " + this.bloodType
+		+ ", Birthdate:"+this.getBdate().toString()+", Address: "+this.getPatientAddress()+", Check in date: " + this.checkInDate.toString() + ", Allergies: " +  this.allergieType + ", Hospitalized: "+this.getHospitalized();
 	}
-*/
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((medicalCardId == null) ? 0 : medicalCardId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Patient other = (Patient) obj;
+		if (medicalCardId == null) {
+			if (other.medicalCardId != null)
+				return false;
+		} else if (!medicalCardId.equals(other.medicalCardId))
+			return false;
+		return true;
+	}
+	
+	
+
 }
