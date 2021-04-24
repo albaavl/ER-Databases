@@ -28,7 +28,7 @@ public class Worker implements Serializable{
 	
 	//Relationship 1-to-1 with Shift
 	@OneToOne (fetch = FetchType.LAZY)
-	@JoinColumn (name = "workerId")
+	@JoinColumn (name = "doctor_id")
 	private Shift shift;
 	
 	//Relationship 1-to-n with Treatment
