@@ -1,23 +1,62 @@
 package db.pojos;
+import java.util.*;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.TableGenerator;
+
+import java.io.Serializable;
+
+//import sample.db.pojos.Employee;
 
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
 
-public class Shift {
+
+@Entity
+@Table(name = "shift")
+public class Shift implements Serializable {
+	//Attributes
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(generator="shift")
+	@TableGenerator(name="shift", table="sqlite_sequence",
+	    pkColumnName="workerId", valueColumnName="seq", pkColumnValue="shift")
 	private Date date;
 	private String shift;
 	private Integer room;
 	private Integer workerId;
+	private List<String> shiftsList;
+	//private WeekShift
 
 	public Shift() {
+		super();
+		this.shiftsList = new LinkedList<String>();
+		
 	}
-	
 	public Shift(Date date, String shift, Integer room, Integer workerId) throws Exception {
+		super();
 		this.setDate(date);
-		this.setShift(shift);
+		this.setWeekShift();
 		this.setRoom(room);
 		this.setWorkerId(workerId);
+		this.shiftsList = new LinkedList<String>();
+	}
+	
+	public Shift(Date date, String shift, Integer room, Integer workerId,List<String> shiftsList) throws Exception {
+		super();
+		this.setDate(date);
+		this.setWeekShift();
+		this.setRoom(room);
+		this.setWorkerId(workerId);
+		this.shiftsList = shiftsList;
 	}
 	/**
 	 * @return the date
@@ -47,12 +86,33 @@ public class Shift {
 	 * @param shift the shift to set
 	 * @throws Exception 
 	 */
+	
+	public void setWeekShift() {
+		for(int n=0;n==6;n++) {
+		int numShift = (int)(Math. random()*3+1);
+		if(numShift==1) {
+			this.shiftsList.add("morning");
+		}
+		if(numShift==2) {
+			this.shiftsList.add("afternoon");
+		}
+		if(numShift==3) {
+			this.shiftsList.add("night");
+		} }
+	}
+	
+		public void imprimir(LinkedList<String> shiftsList) {
+			for (String shift : shiftsList)
+				System.out.print(shift + "-");
+			System.out.println();
+		}
+		
 	public void setShift(String shift) throws Exception {
-		if(shift.equalsIgnoreCase("morning")||shift.equalsIgnoreCase("afternoon")||shift.equalsIgnoreCase("night")) {
-			this.shift = shift;
+		if(shift.equalsIgnoreCase("morning")||shift.equalsIgnoreCase("afternoon")||shift.equalsIgnoreCase("night")){
+			this.shift=shift;
 		}
 		else {
-			throw new Exception("Shift not valid, choose between 'morning', 'afternoon' or 'night'");
+			throw new Exception("Shift not valid, choose between 'morning','afternoon or 'night'");
 		}
 	}
 	/**
@@ -123,9 +183,9 @@ public class Shift {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "Shift [date=" + date + ", shift=" + shift + ", room=" + room + "]";
-	}
+	//@Override //el toString está mal hay que hacerlo
+	//public String toString() {
+		//return "Shift [date=" + date + ", shift=" + shift + ", room=" + room + "]";
+	//}
 	
 }

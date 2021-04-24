@@ -4,7 +4,6 @@ import java.io.*;
 import java.rmi.*;
 import java.sql.Date;
 import java.util.*;
-
 import javax.persistence.*;
 
 
@@ -22,7 +21,7 @@ public class Patient implements Serializable{
 	@TableGenerator(name="patients", table="sqlite_sequence",
 	    pkColumnName="medicalCardId", valueColumnName="seq", pkColumnValue="patients")
 	
-	private Integer medicalCardId;
+	private Integer medical_card_number;
 		//Unique for each patient - cannot be repeated for another patient.
 	private String patientName;
 	private String patientSurname;
@@ -43,9 +42,11 @@ public class Patient implements Serializable{
 	private List<Treatment> treatments;
 	@ManyToMany
 	@JoinTable(name="doctor_patient",
-	joinColumns={@JoinColumn(name="patient_id", referencedColumnName="medicalCardId")},
+	joinColumns={@JoinColumn(name="patient_id", referencedColumnName="medical_card_number")},
     inverseJoinColumns={@JoinColumn(name="doctor_id", referencedColumnName="workerId")})
-	private List<Worker> doctor;
+	private List<Worker> doctors;
+	@OneToMany(mappedBy="medicalTest")
+	private List<MedicalTest> medicalTests;
 	
 
 //Getters + Setters
@@ -67,6 +68,89 @@ public class Patient implements Serializable{
 	}
 	
 	/**
+	 * @return the bDate
+	 */
+	public Date getbDate() {
+		return bDate;
+	}
+
+	/**
+	 * @param bDate the bDate to set
+	 */
+	public void setbDate(Date bDate) {
+		this.bDate = bDate;
+	}
+
+	/**
+	 * @return the treatments
+	 */
+	public List<Treatment> getTreatments() {
+		return treatments;
+	}
+	
+	public String getTreatmentsToString() {
+		String treatments = "";
+		for(Treatment treatment: this.treatments) {
+			treatments+=treatment.toString();
+			treatments+="\n";
+		}
+		return treatments;
+	}
+
+	/**
+	 * @param treatments the treatments to set
+	 */
+	public void setTreatments(List<Treatment> treatments) {
+		this.treatments = treatments;
+	}
+
+	/**
+	 * @return the doctors
+	 */
+	public List<Worker> getDoctors() {
+		return doctors;
+	}
+	
+	public String getDoctorsToString() {
+		String docs = "";
+		for(Worker doctor: this.doctors) {
+			docs+=doctor.toString();
+			docs+="\n";
+		}
+		return docs;
+	}
+
+	/**
+	 * @param doctors the doctors to set
+	 */
+	public void setDoctors(List<Worker> doctors) {
+		this.doctors = doctors;
+	}
+
+	/**
+	 * @return the medicalTests
+	 */
+	public List<MedicalTest> getMedicalTests() {
+		return medicalTests;
+	}
+	
+	public String getMedTestsToString() {
+		String tests = "";
+		for(MedicalTest medt: this.medicalTests) {
+			tests+=medt.toString();
+			tests+="\n";
+		}
+		return tests;
+	}
+
+	/**
+	 * @param medicalTests the medicalTests to set
+	 */
+	public void setMedicalTests(List<MedicalTest> medicalTests) {
+		this.medicalTests = medicalTests;
+	}
+
+	/**
 	 * Used to get the surname of the patient.
 	 * @return [String] The patient surname
 	 */
@@ -77,7 +161,7 @@ public class Patient implements Serializable{
 	 * Used to set the patient's surname.
 	 * @param patientSurename - The surname of the patient
 	 */
-	public void setPatientSurename(String patientSurname) {
+	public void setPatientSurname(String patientSurname) {
 		this.patientSurname = patientSurname;
 	}
 	
@@ -156,20 +240,6 @@ public class Patient implements Serializable{
 		this.allergieType = allergieType;
 	}
 	
-	/**
-	 * Used to get the birth date of the patient
-	 * @return Birth date of the patient (sql Date)
-	 */
-	public Date getBdate() {
-		return bDate;
-	}
-	/**
-	 * Used to set the birth date of the patient.
-	 * @param bdate - the birth date of the patient (sql Date)
-	 */
-	public void setBdate(Date bdate) {
-		this.bDate = bdate;
-	}
 	
 	/**
 	 * Used to get the check in date of the patient into the ER.
@@ -220,11 +290,11 @@ public class Patient implements Serializable{
 	 * @return - the medical card id of the patient [int]
 	 */
 	public Integer getMedicalCardId() {
-		return medicalCardId;
+		return medical_card_number;
 	}
 	
 	public void setMedicalCardId (Integer medicalCardId) {
-		this.medicalCardId = medicalCardId;
+		this.medical_card_number = medicalCardId;
 	}
 //builder
 
@@ -252,28 +322,28 @@ public class Patient implements Serializable{
 	 */
 	public Patient( String pnam, String psnam, String pgen, String btype, String allerg, String paddress, Date bdat, Date cIndat, boolean hosp, Integer medCardId ) throws NotBoundException{
 		this.setAllergieType( allerg);
-		this.setBdate(bdat);
+		this.setbDate(bdat);
 		this.setBloodType(btype);
 		this.setCheckInDate(cIndat);
 		this.setGender(pgen);
 		this.setHospitalized(hosp); 
 		this.setPatientName(pnam);
-		this.setPatientSurename(psnam);
+		this.setPatientSurname(psnam);
 		this.setPatientAddress(paddress);
-		this.medicalCardId = medCardId;
+		this.medical_card_number = medCardId;
 	}
 	
 	public Patient(Patient p) throws NotBoundException {
 		this.setAllergieType(p.allergieType);
-		this.setBdate(p.bDate);
+		this.setbDate(p.bDate);
 		this.setBloodType(p.bloodType);
 		this.setCheckInDate(p.checkInDate);
 		this.setGender(p.gender);
 		this.setHospitalized(p.hospitalized); 
 		this.setPatientName(p.patientName);
-		this.setPatientSurename(p.patientSurname);
+		this.setPatientSurname(p.patientSurname);
 		this.setPatientAddress(p.patientAddress);
-		this.medicalCardId = p.medicalCardId;
+		this.medical_card_number = p.medical_card_number;
 	}
 	
 
@@ -281,15 +351,15 @@ public class Patient implements Serializable{
 
 	@Override
 	public String toString() {
-		return "MedicalCardNumber: "+this.medicalCardId+ "Name: " + this.patientName + ", Surname: " + this.patientSurname + ", Gender: " + this.gender + ", Blood type: " + this.bloodType
-		+ ", Birthdate:"+this.getBdate().toString()+", Address: "+this.getPatientAddress()+", Check in date: " + this.checkInDate.toString() + ", Allergies: " +  this.allergieType + ", Hospitalized: "+this.getHospitalized();
+		return "MedicalCardNumber: "+this.medical_card_number+ "Name: " + this.patientName + ", Surname: " + this.patientSurname + ", Gender: " + this.gender + ", Blood type: " + this.bloodType
+		+ ", Birthdate:"+this.getbDate().toString()+", Address: "+this.getPatientAddress()+", Check in date: " + this.checkInDate.toString() + ", Allergies: " +  this.allergieType + ", Hospitalized: "+this.getHospitalized();
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((medicalCardId == null) ? 0 : medicalCardId.hashCode());
+		result = prime * result + ((medical_card_number == null) ? 0 : medical_card_number.hashCode());
 		return result;
 	}
 
@@ -302,10 +372,10 @@ public class Patient implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Patient other = (Patient) obj;
-		if (medicalCardId == null) {
-			if (other.medicalCardId != null)
+		if (medical_card_number == null) {
+			if (other.medical_card_number != null)
 				return false;
-		} else if (!medicalCardId.equals(other.medicalCardId))
+		} else if (!medical_card_number.equals(other.medical_card_number))
 			return false;
 		return true;
 	}
