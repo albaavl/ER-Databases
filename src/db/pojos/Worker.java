@@ -1,8 +1,20 @@
 package db.pojos;
 
 import java.rmi.NotBoundException;
+import java.util.*;
+import javax.persistence.*;
+import java.io.*;
 
-public class Worker {
+@Entity
+@Table(name = "workers")
+public class Worker implements Serializable{
+	
+	private static final long serialVersionUID = 5053907057578582101L;
+	
+	@Id
+	@GeneratedValue(generator = "workers")
+	@TableGenerator(name = "workers", table = "sqlite_sequence",
+		pkColumnName = "id", valueColumnName = "seq", pkColumnValue = "workers")
 	
 	private Integer workerId;
 	//Unique for each doctor - cannot be repeated for another doctor.
@@ -14,16 +26,50 @@ public class Worker {
 	private String typeWorker;
 	//Can be doctor(1), nurse(2), administration staff(3), technician(4)
 	
-	/**
-	 * Full builder for a worker.
-	 * 
-	 * @param workerId - Identification of the worker (Integer)
-	 * @param workerName - Name of the worker (String)
-	 * @param workerSurname - Surname of the worker (String)
-	 * @param specialtyId - Identification of the specialty of the doctor (Integer)
-	 * @param roomER - Blood type of the patient [Must be: A+,A-,B+,B-,AB+,AB-,O+,O-] (String)
-	 * @param typeWorker - Type of worker [doctor(1), nurse(2), adStaff(3), Technician(4)] (Integer)
-	 */
+	//Relationship 1-to-1 with Shift
+	@OneToOne (fetch = FetchType.LAZY)
+	@JoinColumn (name = "doctor_id")
+	private Shift shift;
+	
+	//Relationship 1-to-n with Treatment
+	@OneToMany(mappedBy = "patient")
+	private Treatment treatment;
+	
+	//Relationship n-to-n with Patient
+	@ManyToMany(mappedBy = "doctors")
+	private List<Patient> patients;
+	
+	public Worker() {
+		super();
+		this.patients = new ArrayList<Patient>();
+	}
+	
+	public Worker(String workerName, String workerSurname, String specialtyId, int roomEr,
+			String typeWorker, Shift shift, Treatment treatment) {
+		super();
+		this.workerName = workerName;
+		this.workerSurname = workerSurname;
+		this.specialtyId = specialtyId;
+		this.roomEr = roomEr;
+		this.typeWorker = typeWorker;
+		this.shift = shift;
+		this.treatment = treatment;
+		this.patients = new ArrayList<Patient>();
+	}
+	
+	public Worker(String workerName, String workerSurname, String specialtyId, int roomEr,
+			String typeWorker, Shift shift, Treatment treatment, List<Patient> patients) {
+		super();
+		this.workerName = workerName;
+		this.workerSurname = workerSurname;
+		this.specialtyId = specialtyId;
+		this.roomEr = roomEr;
+		this.typeWorker = typeWorker;
+		this.shift = shift;
+		this.treatment = treatment;
+		this.patients = patients;
+	}
+	
 	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, int roomEr,
 			String typeWorker) {
 		super();
@@ -33,18 +79,67 @@ public class Worker {
 		this.specialtyId = specialtyId;
 		this.roomEr = roomEr;
 		this.typeWorker = typeWorker;
+		this.patients = new ArrayList<Patient>();
+	}
+	
+	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, int roomEr,
+			String typeWorker, Shift shift, Treatment treatment) {
+		super();
+		this.workerId = workerId;
+		this.workerName = workerName;
+		this.workerSurname = workerSurname;
+		this.specialtyId = specialtyId;
+		this.roomEr = roomEr;
+		this.typeWorker = typeWorker;
+		this.shift = shift;
+		this.treatment = treatment;
+		this.patients = new ArrayList<Patient>();
+	}
+	
+	//Hashcode uses workerId as it is the primary keys, since they are unique
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((workerId == null) ? 0 : workerId.hashCode());
+		return result;
+	}
+	//Equals uses workerId as it is the primary keys, since they are unique
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Worker other = (Worker) obj;
+		if (workerId == null) {
+			if (other.workerId != null)
+				return false;
+		} else if (!workerId.equals(other.workerId))
+			return false;
+		return true;
 	}
 
-	//este constructor vacío ns si sirve para algo
-	public Worker() {
+	@Override
+	public String toString() {
+		return "Worker [workerId=" + workerId + ", workerName=" + workerName + ", workerSurname=" + workerSurname
+				+ ", specialtyId=" + specialtyId + ", roomEr=" + roomEr + ", typeWorker=" + typeWorker + ", treatment = " + treatment + ", shift = " + shift + "]";
 	}
-
+	
 	//Getters + Setters
-	// workerId ha sido autogenerados, mirar a ver si hay que hacerles algo
+	/**
+	 * Used to get the id of the worker
+	 * @return [Integer] The worker's id
+	 */
 	public Integer getWorkerId() {
 		return workerId;
 	}
-
+	/**
+	 * Used to set the worker's id
+	 * @param workerId - The id of the worker.
+	 */
 	public void setWorkerId(Integer workerId) {
 		this.workerId = workerId;
 	}
@@ -103,7 +198,7 @@ public class Worker {
 	 */
 	public void setRoomEr(Integer roomEr) {
 		this.roomEr = roomEr;
-		//Podría limitarse sabiendo el número de salas de las que dispone el hospital
+		//We could limitate it by knowing the number of ER rooms in the hospital
 	}
 	/**
 	 * Used to get the type of worker.
@@ -129,62 +224,85 @@ public class Worker {
 			throw new NotBoundException("Incorrect type of worker");
 		}
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((roomEr == null) ? 0 : roomEr.hashCode());
-		result = prime * result + ((specialtyId == null) ? 0 : specialtyId.hashCode());
-		result = prime * result + ((typeWorker == null) ? 0 : typeWorker.hashCode());
-		result = prime * result + ((workerId == null) ? 0 : workerId.hashCode());
-		result = prime * result + ((workerName == null) ? 0 : workerName.hashCode());
-		result = prime * result + ((workerSurname == null) ? 0 : workerSurname.hashCode());
-		return result;
+	/**
+	 * Used to get the shift of a worker.
+	 * @return [Shift] The worker's shift.
+	 */
+	public Shift getShift() {
+		return shift;
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Worker other = (Worker) obj;
-		if (roomEr == null) {
-			if (other.roomEr != null)
-				return false;
-		} else if (!roomEr.equals(other.roomEr))
-			return false;
-		if (specialtyId == null) {
-			if (other.specialtyId != null)
-				return false;
-		} else if (!specialtyId.equals(other.specialtyId))
-			return false;
-		if (typeWorker == null) {
-			if (other.typeWorker != null)
-				return false;
-		} else if (!typeWorker.equals(other.typeWorker))
-			return false;
-		if (workerId == null) {
-			if (other.workerId != null)
-				return false;
-		} else if (!workerId.equals(other.workerId))
-			return false;
-		if (workerName == null) {
-			if (other.workerName != null)
-				return false;
-		} else if (!workerName.equals(other.workerName))
-			return false;
-		if (workerSurname == null) {
-			if (other.workerSurname != null)
-				return false;
-		} else if (!workerSurname.equals(other.workerSurname))
-			return false;
-		return true;
+	/**
+	 * Used to set the shift of a worker
+	 * @param shift - The assigned room of the worker.
+	 */
+	public void setShift(Shift shift) {
+		this.shift = shift;
 	}
-	@Override
-	public String toString() {
-		return "Worker [workerId=" + workerId + ", workerName=" + workerName + ", workerSurname=" + workerSurname
-				+ ", specialtyId=" + specialtyId + ", roomEr=" + roomEr + ", typeWorker=" + typeWorker + "]";
+	/**
+	 * Used to get the treatment assigned by a worker to a patient.
+	 * @return [Treatment] A patient's treatment assigned by the doctor.
+	 */
+	public Treatment getTreatment() {
+		return treatment;
+	}
+	/**
+	 * Used to set the treatment of a patient assigned by a worker.
+	 * @param treatment - The treatment assigned to a patient by a worker.
+	 */
+	public void setTreatment(Treatment treatment) {
+		this.treatment = treatment;
+	}
+	/**
+	 * Used to get the list of patients of a worker.
+	 * @return [List<Patient>] The list of patients of a worker.
+	 */
+	public List<Patient> getPatients() {
+		return patients;
+	}
+	public String getPatientstoString() {
+		String str = "";
+		for(Patient patient : patients) {
+			str += patient.toString() + "\n";
+		}
+		return str;
+	}
+	/**
+	 * Used to set the list of patients of a worker.
+	 * @param patients - The list of patients of a worker.
+	 */
+	public void setPatients(List<Patient> patients) {
+		this.patients = patients;
+	}
+	/**
+	 * Used to add new patient to the list of patients of the worker. If the patient is already in the list of patients of the worker, the patient will not be added and will notify the worker. 
+	 * @param patient - The patient that will be included in the list.
+	 */
+	public void addPatient (Patient patient) {
+		if(!patients.contains(patient)) {
+			this.patients.add(patient);
+		} else {
+			System.out.println("The patient " + patient.getPatientName() + " " + patient.getPatientSurname() + " with medical card: " +patient.getMedicalCardId()+ " is already included.");
+		}
+	}
+	/**
+	 * Used to remove a patient from the list of patients of the worker. If the patient is not in the list of patients of the worker, the patient will not be removed and will notify the worker. 
+	 * @param patient - The patient that will be removed from the list.
+	 */
+	public void removePatinet (Patient patient) {
+		if(patients.contains(patient)) {
+			this.patients.remove(patient);
+		} else {
+			System.out.println("Patient " + patient.getPatientName() + " " + patient.getPatientSurname() + " with medical card: " +patient.getMedicalCardId()+ " not found.");
+		}
+	}
+	/**
+	 * Used to show a list of patients of the worker. 
+	 */
+	public String showPatient() {
+		String str = "";
+		for(Patient patient : patients) {
+			str += patient.toString() + "\n";
+		}
+		return str;
 	}
 }
