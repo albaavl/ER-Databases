@@ -13,7 +13,7 @@ public class SQL implements SQLInterface{
 	@Override
 	public Connection connect() throws SQLException, ClassNotFoundException {
 		Class.forName("org.sqlite.JDBC");
-		Connection c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
+		Connection c = DriverManager.getConnection("jdbc:sqlite:./db/ER.db");
 		c.createStatement().execute("PRAGMA foreign_keys=ON");
 		System.out.println("Database connection opened.");
 		return c;
