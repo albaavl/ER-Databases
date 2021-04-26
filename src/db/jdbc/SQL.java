@@ -171,10 +171,21 @@ public class SQL implements SQLInterface{
 	}
 
 	@Override
-	public List<Treatment> searchPatientsTreatment(Connection c, Patient patient) throws SQLException, Exception {
-		String sql = "SELECT * FROM treatments WHERE patient_id = ? ORDER BY start_date";
+	public List<Treatment> searchPatientsTreatment(Connection c, Patient patient, String order) throws SQLException, Exception {
+		String sql = "SELECT * FROM treatments WHERE patient_id = ? ORDER BY ?";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1, patient.getMedicalCardId());
+		switch (order) {
+		case "date":
+			p.setString(2, "start_date");
+			break;
+		case "med":
+			p.setString(2, "medication");
+			break;
+		case "duration":
+			p.setString(2, "duration");
+			break;
+		}
 		ResultSet rs = p.executeQuery();
 		List <Treatment> tList = new ArrayList<Treatment>();
 		while(rs.next()){
@@ -311,7 +322,7 @@ public class SQL implements SQLInterface{
 	}
 
 	public Treatment searchTreatmentsByMedCard(Connection c, Integer medCard) throws SQLException, NotBoundException {
-		String sql = "SELECT * FROM patients WHERE medical_card_number = ?";
+		String sql = "SELECT * FROM patients WHERE medical_card_number = ?"; //ESTO NO BUSCA LO QUE DICE LA FUNCION QUE BUSCA Y DEBERIA DEVOLVER UNA LISTA DE TREATMENTS
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1,medCard);
 		ResultSet rs = p.executeQuery();
@@ -375,5 +386,18 @@ public class SQL implements SQLInterface{
 			String recommendation) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public List<Treatment> searchTreatmentByMed(Connection c,Patient patient, String med){
+		String sql = "SELECT * FROM treatments WHERE medication LIKE '%"+ med +"%' ";
+		PreparedStatement prep = c.prepareStatement(sql);		
+		ResultSet rs = prep.executeQuery();
+		List<Treatment> treatments = new ArrayList<>();
+		if(rs.next()) {
+			treatments.add(new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")));
+		}
+		prep.close();
+		return treatments;
 	}
 	}

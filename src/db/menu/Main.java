@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.rmi.NotBoundException;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
 import java.text.SimpleDateFormat;
 import java.time.chrono.ThaiBuddhistDate;
 import java.util.*;
@@ -15,8 +16,9 @@ public class Main {
 	static String username;
 	static String password;
 	static int option = 1;
-	
+	static Connection c ;
 	static Scanner sc = new Scanner(System.in);
+	static SQL jdbc = new SQL();
 
 	public static void main(String[] args) {
 		try {
@@ -28,6 +30,7 @@ public class Main {
 		password = sc.next();
 		
 		if(username.equalsIgnoreCase("ms")&&password.equalsIgnoreCase("ms")) {
+			c = jdbc.connect();
 			Worker medStaff = new Worker();
 			while(option != 0) {
 			System.out.println("Choose an option[0-3]:");
@@ -35,6 +38,7 @@ public class Main {
 			option = sc.nextInt();
 			switch(option) {
 			case 0:
+				jdbc.disconnect(c);
 				System.exit(0);
 			case 1: 
 				System.out.println("Access to a patient's profile");
@@ -55,6 +59,7 @@ public class Main {
 			option = sc.nextInt();
 			switch (option) {
 			case 0:
+				jdbc.disconnect(c);
 				System.exit(0);
 			case 1: 
 				System.out.println("Register new patient");
@@ -81,12 +86,42 @@ public class Main {
 		}if(username.equalsIgnoreCase("p")&&password.equalsIgnoreCase("p")) {
 			Patient patient = new Patient();//deberia ser el patient que ha hecho el log in
 			System.out.println("Consult my treatment");
-			System.out.println("Here you can see all your treatments ordered by date");
-			showPatientsTreatments(patient);			
-			
+			System.out.println("Would you like to order your treatments by[0-4]:"
+					+ "\n0.Exit \n1. Date \n2. Medication \n3. Duration \n4. I want to search for a specific treatment by the name of the medication");
+			option = sc.nextInt();
+			String order;
+			List<Treatment> treatments = new ArrayList<>();
+			while(option!=0) {
+			switch (option) {
+			case 0:
+				System.out.println("Thank you for using our system");
+				System.exit(0);
+			case 1:
+				order = "date";
+				System.out.println("Here you can see all your treatments ordered by date");
+				treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
+				break;
+			case 2:
+				order = "med";
+				System.out.println("Here you can see all your treatments ordered by medication");
+				treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
+				break;
+			case 3:
+				order = "duration";
+				System.out.println("Here you can see all your treatments ordered by duration");
+				treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
+				break;
+			case 4:
+				System.out.println("Please, enter the name of the medication:");
+				String med = sc.next();
+				treatments.addAll(jdbc.searchTreatmentByMed(c,patient, med));
+				break;
+			}			
+			for (Treatment treatment : treatments) {
+				System.out.println(treatment.toString());
+			}
 		}
-		
-		sc.close();
+		}
 		}
 		}catch (Exception e) {
 		// TODO: handle exception

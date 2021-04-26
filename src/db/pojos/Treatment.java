@@ -12,6 +12,7 @@ import java.util.List;
 @Table(name = "treatment")
 public class Treatment implements Serializable {
 
+	private static final long serialVersionUID = 5733730131671999655L;
 	@Id
 	@GeneratedValue(generator="treatment")
 	@TableGenerator(name="treatment", table="sqlite_sequence",
