@@ -196,7 +196,7 @@ public class SQL implements SQLInterface{
 		return tList;
 	}
 
-	@Override
+	@Override //Aqui hay q arreglar lo del blob añadiendo algo dd .toBitarray o como sea.
 	public List<MedicalTest> searchMedicalTestByMedCardNumber(Connection c, Integer medCardNumber) throws SQLException, Exception{
 		String sql = "SELECT * FROM medical_tests WHERE patient_id = ?";
 		PreparedStatement p = c.prepareStatement(sql);
@@ -321,33 +321,25 @@ public class SQL implements SQLInterface{
 		return treatment;	
 	}
 
-	public Treatment searchTreatmentsByMedCard(Connection c, Integer medCard) throws SQLException, NotBoundException {
-		String sql = "SELECT * FROM patients WHERE medical_card_number = ?"; //ESTO NO BUSCA LO QUE DICE LA FUNCION QUE BUSCA Y DEBERIA DEVOLVER UNA LISTA DE TREATMENTS
+	public List<Treatment> searchTreatmentsByMedCard(Connection c, Integer medCard) throws SQLException, NotBoundException {
+		String sql = "SELECT * FROM treatments WHERE patient_id = ?"; //ESTO NO BUSCA LO QUE DICE LA FUNCION QUE BUSCA Y DEBERIA DEVOLVER UNA LISTA DE TREATMENTS
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1,medCard);
 		ResultSet rs = p.executeQuery();
-		Treatment treatment = null;
-		if(rs.next()){
-			try {
-				treatment = new Treatment(rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"));
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				//TENEMOS QUE REVISAR TODO EL TEMA DE EXCEPCIONES
-			}
+		List<Treatment> rList = new ArrayList<Treatment>();
+		while (rs.next()) {
+			rList.add(new Treatment(rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")))
 		}
 		p.close();
 		rs.close();
-		return treatment;	
+		return rList;	
 	}
 	
-	//igual habr�a que hacer un edit para cada cosa del treatment, sino se cambiar�an todos
-	public void editTreatment(Connection c, int id, String diagnosis, String medication, Date startDate, Integer duration, String recommendation) {
+	//igual habr�a que hacer un edit para cada cosa del treatment, sino se cambiar�an todos
+	//Ns quien ha hecho esto pero esto no funciona ni de coña
+	/*public void editTreatment(Connection c, int id, String diagnosis, String medication, Date startDate, Integer duration, String recommendation) {
 		try {
-			String sql = "UPDATE treatments SET diagnosis = ?, medication = ?, start_date = ?, advice = ?, duration = ? ";
+			String sql = "UPDATE treatments SET diagnosis = ?, medication = ?, start_date = ?, advice = ?, duration = ? "; //Esto seleciona todos los treatmets btw
 			Treatment t = searchTreatmentsByID(c, id);
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setString(1, diagnosis);
@@ -363,6 +355,137 @@ public class SQL implements SQLInterface{
 			System.out.println(e.getMessage());
 		}
 	}
+	   //Se me ha ocurrido hacerlo así, aunq se podría hacer usando una única funcion y un switch bastante completo.
+	   //Se q queda raro al hacerlo asi pq las 3 funciones q editan string necesitan cambiar la posición dd la Connection ya q si no 
+	   		java se cree q son las mismas ya q tienen los mismos params 
+	public void editTreatment(Connection c, Integer id, String diagnosis, String medication, Date startDate, Integer duration, String recommendation){
+		String sql = "UPDATE treatments SET diagnosis = ?, medication = ?, start_date = ?, advice = ?, duration = ? WHERE id = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setString(1, diagnosis);
+		p.setString(2, medication);
+		p.setDate(3, startDate)
+		p.setString(4, recommendation);
+		p.setInt(5, duration);
+		p.setInt(6, id);
+		p.executeUpdate();
+		p.close();
+	}
+	*/
+	public void editTreatment(Connection c, Treatment t){
+		
+		String diagnosis = t.getDiagnosis();
+		Integer duration = t.getDuration();
+		String medication = t.getMedication();
+		String recommendation = t.getRecommendation();
+		Integer id = t.getTreatmentId();
+		Date startDate = t.getStartDate();
+
+		String sql;
+		PreparedStatement p;
+
+		if(diagnosis != null){
+
+			sql = "UPDATE treatments SET diagnosis = ? WHERE id = ?";
+			p = c.prepareStatement(sql);
+			p.setString(1, diagnosis);
+			p.setInt(2, id);
+			p.executeUpdate();
+	 
+		}
+		if(medication != null){
+
+			sql = "UPDATE treatments SET medication = ? WHERE id = ?";
+			p = c.prepareStatement(sql);
+			p.setString(1, medication);
+			p.setInt(2, id);
+			p.executeUpdate();
+		}
+		if(duration != null){
+
+			sql = "UPDATE treatments SET duration = ? WHERE id = ?";
+			p = c.prepareStatement(sql);
+			p.setInt(1, duration);
+			p.setInt(2,id);
+			p.executeUpdate();
+
+		}
+		if(startDate != null){
+
+			sql = "UPDATE treatments SET start_date = ? WHERE id = ?";
+			p = c.prepareStatement(sql);
+			p.setDate(1, startDate);
+			p.setInt(2, id);
+			p.executeUpdate();
+		
+		}
+		if(recommendation != null){
+
+			sql = "UPDATE treatments SET advice = ? WHERE id = ?";
+			p = c.prepareStatement(sql);
+			p.setString(1, recommendation);
+			p.setInt(2, id);
+			p.executeUpdate();
+
+		}
+
+		p.close();
+	}
+
+	
+	public void editTreatment(Connection c, Integer id, String diagnosis, String medication, Date startDate, Integer duration, String recommendation){
+		
+		String sql;
+		PreparedStatement p;
+
+		if(diagnosis != null){
+
+			sql = "UPDATE treatments SET diagnosis = ? WHERE id = ?";
+			p = c.prepareStatement(sql);
+			p.setString(1, diagnosis);
+			p.setInt(2, id);
+			p.executeUpdate();
+	 
+		}
+		if(medication != null){
+
+			sql = "UPDATE treatments SET medication = ? WHERE id = ?";
+			p = c.prepareStatement(sql);
+			p.setString(1, medication);
+			p.setInt(2, id);
+			p.executeUpdate();
+		}
+		if(duration != null){
+
+			sql = "UPDATE treatments SET duration = ? WHERE id = ?";
+			p = c.prepareStatement(sql);
+			p.setInt(1, duration);
+			p.setInt(2,id);
+			p.executeUpdate();
+
+		}
+		if(startDate != null){
+
+			sql = "UPDATE treatments SET start_date = ? WHERE id = ?";
+			p = c.prepareStatement(sql);
+			p.setDate(1, startDate);
+			p.setInt(2, id);
+			p.executeUpdate();
+		
+		}
+		if(recommendation != null){
+
+			sql = "UPDATE treatments SET advice = ? WHERE id = ?";
+			p = c.prepareStatement(sql);
+			p.setString(1, recommendation);
+			p.setInt(2, id);
+			p.executeUpdate();
+
+		}
+
+		p.close();
+	}
+
+	
 	
 	public void editShift (Connection c, int workerId, String shift, int room, Date date) {
 		try {
