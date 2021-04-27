@@ -95,8 +95,6 @@ public class Worker implements Serializable{
 		this.treatment = treatment;
 		this.patients = new ArrayList<Patient>();
 	}
-	
-	//Hashcode uses workerId as it is the primary keys, since they are unique
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -104,7 +102,6 @@ public class Worker implements Serializable{
 		result = prime * result + ((workerId == null) ? 0 : workerId.hashCode());
 		return result;
 	}
-	//Equals uses workerId as it is the primary keys, since they are unique
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

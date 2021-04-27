@@ -52,7 +52,6 @@ public class MedicalTest implements Serializable{
 		this.testResult = result;
 		this.patient = patient;
     }
-	//Hashcode uses workerId as it is the primary keys, since they are unique
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -60,7 +59,6 @@ public class MedicalTest implements Serializable{
 		result = prime * result + ((medicalTestId == null) ? 0 : medicalTestId.hashCode());
 		return result;
 	}
-	//Equals uses workerId as it is the primary keys, since they are unique
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
