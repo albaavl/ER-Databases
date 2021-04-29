@@ -2,15 +2,22 @@ package db.menu;
  
 import java.io.InputStreamReader;
 import java.rmi.NotBoundException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.chrono.ThaiBuddhistDate;
 import java.util.*;
 
 import db.pojos.*;
+import pojos.users.Role;
+import pojos.users.User;
+import db.interfaces.UserManager;
 import db.jdbc.*;
+import db.jpa.JPAUserManager;
 
 public class Main {
 	static String username;
@@ -19,114 +26,197 @@ public class Main {
 	static Connection c ;
 	static Scanner sc = new Scanner(System.in);
 	static SQL jdbc = new SQL();
+	private static UserManager userman = new JPAUserManager();
 
-	public static void main(String[] args) {
-		try {
-		System.out.println("Welcome to the Quiron's ER");
+	public static void main(String[] args) throws Exception, SQLException {
+		jdbc.connect();
+		userman.connect();
+			do {
+				System.out.println("Welcome to the Quiron's ER");
+				System.out.println("1. Register");
+				System.out.println("2. Login");
+				System.out.println("0. Exit");
+				int choice = sc.nextInt();
+				switch(choice) {
+				case 1:
+					register();
+					break;
+				case 2:
+					login();
+					break;
+				case 0: 
+					jdbc.disconnect(c);
+					userman.disconnect();
+					System.exit(0);
+					break;
+				default:
+					break;
+				}
+			}while(true);
+	}
+	private static void register() throws Exception {
+		//ask the user for an email
+		System.out.println("Please, write your username: ");
+		String username = sc.next();
+		//ask the user for a password
+		System.out.println("Please, write your password: ");
+		String password= sc.next();
+		//List the roles
+		System.out.println(userman.getRoles());
+		//ask the user for a role
+		System.out.println("Type the chosen role ID: ");
+		int id = sc.nextInt();
+		Role role = userman.getRole(id);
+		//generate the hash
+		MessageDigest md = MessageDigest.getInstance("MDS");
+		md.update(password.getBytes());
+		byte[] hash = md.digest();
+		User user = new User(username, hash, role);
+		userman.newUser(user);
+	}
+	
+	private static void login() throws Exception{
 		System.out.println("Please enter your username and password:");
 		System.out.println("Username:");
 		username = sc.next();
 		System.out.println("Password:");
 		password = sc.next();
-		
-		if(username.equalsIgnoreCase("ms")&&password.equalsIgnoreCase("ms")) {
-			c = jdbc.connect();
-			Worker medStaff = new Worker();
-			while(option != 0) {
-			System.out.println("Choose an option[0-3]:");
-			System.out.println(" 1.Access to a patient's profile \n 2.Consult my shifts \n 0. Exit");
-			option = sc.nextInt();
-			switch(option) {
-			case 0:
-				jdbc.disconnect(c);
-				System.exit(0);
-			case 1: 
-				System.out.println("Access to a patient's profile");
-				accessToAPatientsProfile();
-				break;
-			case 2:
-				System.out.println("Consult my shifts");
-				consultShifts(medStaff);
-				break;
-			}
-			}
-		}if(username.equalsIgnoreCase("as")&&password.equalsIgnoreCase("as")) {
-			Worker adstaff = new Worker();
-			while (option!=0) {
-			System.out.println("Choose an option[0-3]:");
-			//register new patient, register new worker, consult patient's profile, add new medical test, edit shifts
-			System.out.println(" 1. Register new patient \n 2. Register new worker\n 3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n 0. Exit");
-			option = sc.nextInt();
-			switch (option) {
-			case 0:
-				jdbc.disconnect(c);
-				System.exit(0);
-			case 1: 
-				System.out.println("Register new patient");
-				createPatient();
-				break;
-			case 2: 
-				System.out.println("Register new worker");
-				createWorker();
-				break;
-			case 3: 
-				System.out.println("Acces to a patient's profile");
-				adAccessToPatientsProfile();
-				break;	
-			case 4: 
-				System.out.println("Request new medical test");
-				requestMedTest();
-				break;	
-			case 5: 
-				System.out.println("Edit shifts");
-				editShift();
-				break;	
-			}
-			
-		}if(username.equalsIgnoreCase("p")&&password.equalsIgnoreCase("p")) {
-			Patient patient = new Patient();//deberia ser el patient que ha hecho el log in
-			System.out.println("Consult my treatment");
-			System.out.println("Would you like to order your treatments by[0-4]:"
-					+ "\n0.Exit \n1. Date \n2. Medication \n3. Duration \n4. I want to search for a specific treatment by the name of the medication");
-			option = sc.nextInt();
-			String order;
-			List<Treatment> treatments = new ArrayList<>();
-			while(option!=0) {
-			switch (option) {
-			case 0:
-				System.out.println("Thank you for using our system");
-				System.exit(0);
+		User user = userman.checkPassword(username, password);
+		if(user == null) {
+			System.out.println("Wrong username or passwoerd");
+			return;
+		} else if(user.getRole().getRole().equalsIgnoreCase("admin")){
+			adminMenu();
+		} else if(user.getRole().getRole().equalsIgnoreCase("user")){
+			userMenu();
+		}
+	}
+	public static void userMenu() throws Exception{
+		do {
+			System.out.println("Choose an option: ");
+			System.out.println("1. Add user ");
+			System.out.println("2. Apply: ");
+			System.out.println("0. Exit ");
+			int choice = sc.nextInt();
+			switch(choice) {
 			case 1:
-				order = "date";
-				System.out.println("Here you can see all your treatments ordered by date");
-				treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
-				break;
-			case 2:
-				order = "med";
-				System.out.println("Here you can see all your treatments ordered by medication");
-				treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
+				addUser();
 				break;
 			case 3:
-				order = "duration";
-				System.out.println("Here you can see all your treatments ordered by duration");
-				treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
+				Apply();
 				break;
-			case 4:
-				System.out.println("Please, enter the name of the medication:");
-				String med = sc.next();
-				treatments.addAll(jdbc.searchTreatmentByMed(c,patient, med));
+			case 0: 
+				jdbc.disconnect(c);
+				userman.disconnect();
+				System.exit(0);
 				break;
-			}			
-			for (Treatment treatment : treatments) {
-				System.out.println(treatment.toString());
+			default:
+				break;
 			}
-		}
-		}
-		}
-		}catch (Exception e) {
-		// TODO: handle exception
+		}while(true);
 	}
+	public static void oldMenu() throws Exception{
+		try {
+			if(username.equalsIgnoreCase("ms")&&password.equalsIgnoreCase("ms")) {
+				c = jdbc.connect();
+				Worker medStaff = new Worker();
+				while(option != 0) {
+				System.out.println("Choose an option[0-3]:");
+				System.out.println(" 1.Access to a patient's profile \n 2.Consult my shifts \n 0. Exit");
+				option = sc.nextInt();
+				switch(option) {
+				case 0:
+					jdbc.disconnect(c);
+					userman.disconnect();
+					System.exit(0);
+				case 1: 
+					System.out.println("Access to a patient's profile");
+					accessToAPatientsProfile();
+					break;
+				case 2:
+					System.out.println("Consult my shifts");
+					consultShifts(medStaff);
+					break;
+				}
+				}
+			}if(username.equalsIgnoreCase("as")&&password.equalsIgnoreCase("as")) {
+				Worker adstaff = new Worker();
+				while (option!=0) {
+				System.out.println("Choose an option[0-3]:");
+				//register new patient, register new worker, consult patient's profile, add new medical test, edit shifts
+				System.out.println(" 1. Register new patient \n 2. Register new worker\n 3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n 0. Exit");
+				option = sc.nextInt();
+				switch (option) {
+				case 0:
+					jdbc.disconnect(c);
+					System.exit(0);
+				case 1: 
+					System.out.println("Register new patient");
+					createPatient();
+					break;
+				case 2: 
+					System.out.println("Register new worker");
+					createWorker();
+					break;
+				case 3: 
+					System.out.println("Acces to a patient's profile");
+					adAccessToPatientsProfile();
+					break;	
+				case 4: 
+					System.out.println("Request new medical test");
+					requestMedTest();
+					break;	
+				case 5: 
+					System.out.println("Edit shifts");
+					editShift();
+					break;	
+				}
+				
+			}if(username.equalsIgnoreCase("p")&&password.equalsIgnoreCase("p")) {
+				Patient patient = new Patient();//deberia ser el patient que ha hecho el log in
+				System.out.println("Consult my treatment");
+				System.out.println("Would you like to order your treatments by[0-4]:"
+						+ "\n0.Exit \n1. Date \n2. Medication \n3. Duration \n4. I want to search for a specific treatment by the name of the medication");
+				option = sc.nextInt();
+				String order;
+				List<Treatment> treatments = new ArrayList<>();
+				while(option!=0) {
+				switch (option) {
+				case 0:
+					System.out.println("Thank you for using our system");
+					System.exit(0);
+				case 1:
+					order = "date";
+					System.out.println("Here you can see all your treatments ordered by date");
+					treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
+					break;
+				case 2:
+					order = "med";
+					System.out.println("Here you can see all your treatments ordered by medication");
+					treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
+					break;
+				case 3:
+					order = "duration";
+					System.out.println("Here you can see all your treatments ordered by duration");
+					treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
+					break;
+				case 4:
+					System.out.println("Please, enter the name of the medication:");
+					String med = sc.next();
+					treatments.addAll(jdbc.searchTreatmentByMed(c,patient, med));
+					break;
+				}			
+				for (Treatment treatment : treatments) {
+					System.out.println(treatment.toString());
+				}
+			}
+			}
+			}
+			}catch (Exception e) {
+			// TODO: handle exception
 		}
+	}
+	
 	private static void accessToAPatientsProfile() {
 		Patient patient = selectPatient();
 		while (option!=0) {

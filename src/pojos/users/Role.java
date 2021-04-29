@@ -26,6 +26,7 @@ public class Role implements Serializable{
 	public Role(String role) {
 		super();
 		this.role = role;
+		this.users = new ArrayList<User>();
 	}
 
 	public Role() {
