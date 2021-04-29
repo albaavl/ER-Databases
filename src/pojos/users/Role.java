@@ -17,7 +17,7 @@ public class Role implements Serializable{
 	@TableGenerator(name="roles", table="sqlite_sequence",
 	    pkColumnName="name", valueColumnName="seq", pkColumnValue="roles")
 	private Integer id;
-	private String role;
+	private String type;
 	@OneToMany(mappedBy = "role")
 	private List<User> users;
 	
@@ -25,7 +25,7 @@ public class Role implements Serializable{
 	
 	public Role(String role) {
 		super();
-		this.role = role;
+		this.type = role;
 		this.users = new ArrayList<User>();
 	}
 
@@ -41,10 +41,10 @@ public class Role implements Serializable{
 		this.id = id;
 	}
 	public String getRole() {
-		return role;
+		return type;
 	}
 	public void setRole(String role) {
-		this.role = role;
+		this.type = role;
 	}
 	public List<User> getUsers() {
 		return users;
@@ -77,6 +77,6 @@ public class Role implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "Role [id=" + id + ", role=" + role + "]";
+		return "Role [id=" + id + ", role=" + type + "]";
 	}
 }
