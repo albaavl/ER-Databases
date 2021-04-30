@@ -1,20 +1,38 @@
 package db.pojos;
 
+import java.io.Serializable;
+import java.lang.annotation.Inherited;
+
+import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
-public class Treatment {
-	private int treatmentId;
-	//Unique for each treatment for each patient - can be repeated
-	
+@Entity
+@Table(name = "treatment")
+public class Treatment implements Serializable {
+
+	private static final long serialVersionUID = 5733730131671999655L;
+	@Id
+	@GeneratedValue(generator="treatment")
+	@TableGenerator(name="treatment", table="sqlite_sequence",
+	pkColumnName="id", valueColumnName="seq",
+	pkColumnValue="treatment")	
+	private Integer treatmentId; //Unique for each treatment for each patient - can be repeated
 	private String diagnosis;
 	private String medication;
 	private String recommendation;
-	private Date startDate;
-	//Date when the patient starts the treatment
-	private Integer duration; 
-	//Duration of the treatment in days
-	
+	private Date startDate; //Date when the patient starts the treatment
+	private Integer duration; //Duration of the treatment in days
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="patient_id")	
+	private Patient patient;
+
+	//Builders
+
+	public Treatment() {
+	}
+
 	/**
 	 * Full builder for a treatment.
 	 * 
@@ -33,7 +51,7 @@ public class Treatment {
 		setRecommendation(recommendation);
 		setDuration(duration);
 	}
-	
+
 	public Treatment(int treatmentId, String diagnosis, String medication, Date startDate, String recommendation, int duration) throws Exception {
 		setTreatmentId(treatmentId);
 		setDiagnosis(diagnosis);
@@ -42,15 +60,9 @@ public class Treatment {
 		setRecommendation(recommendation);
 		setDuration(duration);
 	}
-
-	public void setTreatmentId(int treatmentId) {	//TODO-HAY Q ORDENAR ESTO
-		this.treatmentId = treatmentId;
-	}
-	//este constructor vacío lo usamos para algo?
-	public Treatment() {
-	}
 	
 	public Treatment(Treatment t) throws Exception {
+		setTreatmentId(t.treatmentId);
 		setDiagnosis(t.diagnosis);
 		setRecommendation(t.recommendation);
 		setStartDate(t.startDate);
@@ -60,6 +72,20 @@ public class Treatment {
 
 	//Getters + Setters
 
+	/**
+	 * Used to set the treatment id
+	 * @param treatmentId - the id of the treatment (int)
+	 */
+	public void setTreatmentId(int treatmentId) {	
+		this.treatmentId = treatmentId;
+	}
+	/**
+	 * Used to get the treatment id
+	 * @return treatmentId (int)
+	 */
+	public int getTreatmentId() {
+		return treatmentId;
+	}
 	/**
 	 * Used to get the diagnosis of the patient.
 	 *  @return the diagnosis of the patient
@@ -74,7 +100,6 @@ public class Treatment {
 	public void setDiagnosis(String diagnosis) {
 		this.diagnosis = diagnosis;
 	}
-
 	/**
 	 * Used to get the doctor's recommendations for the patient.
 	 *  @return the doctor's recommendations for the patient.
@@ -89,7 +114,6 @@ public class Treatment {
 	public void setRecommendation(String recommendation) {
 		this.recommendation = recommendation;
 	}
-	//START DATE 
 	/**
 	 * Used to get the start date of the treatment
 	 * @return Date of the start day (SQL Date)
@@ -124,9 +148,6 @@ public class Treatment {
 	public void setMedication(String medication) {
 		this.medication = medication;
 	}
-	public int getTreatmentId() {
-		return treatmentId;
-	}
 	/**
 	 * Used to get the duration of the treatment in days 
 	 *  @return the duration of the treatment.
@@ -148,15 +169,13 @@ public class Treatment {
 		}
 	}
 
+	//Methods
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((diagnosis == null) ? 0 : diagnosis.hashCode());
-		result = prime * result + ((duration == null) ? 0 : duration.hashCode());
-		result = prime * result + ((medication == null) ? 0 : medication.hashCode());
-		result = prime * result + ((recommendation == null) ? 0 : recommendation.hashCode());
-		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
+		result = prime * result + ((treatmentId == null) ? 0 : treatmentId.hashCode());
 		return result;
 	}
 
@@ -169,30 +188,10 @@ public class Treatment {
 		if (getClass() != obj.getClass())
 			return false;
 		Treatment other = (Treatment) obj;
-		if (diagnosis == null) {
-			if (other.diagnosis != null)
+		if (treatmentId == null) {
+			if (other.treatmentId != null)
 				return false;
-		} else if (!diagnosis.equals(other.diagnosis))
-			return false;
-		if (duration == null) {
-			if (other.duration != null)
-				return false;
-		} else if (!duration.equals(other.duration))
-			return false;
-		if (medication == null) {
-			if (other.medication != null)
-				return false;
-		} else if (!medication.equals(other.medication))
-			return false;
-		if (recommendation == null) {
-			if (other.recommendation != null)
-				return false;
-		} else if (!recommendation.equals(other.recommendation))
-			return false;
-		if (startDate == null) {
-			if (other.startDate != null)
-				return false;
-		} else if (!startDate.equals(other.startDate))
+		} else if (!treatmentId.equals(other.treatmentId))
 			return false;
 		return true;
 	}
@@ -200,7 +199,7 @@ public class Treatment {
 	@Override
 	public String toString() {
 		return "Treatment [treatmentId=" + treatmentId + ", diagnosis=" + diagnosis + ", recommendation="
-				+ recommendation + ", startDate=" + startDate + ", medication=" + medication + ", duration=" + duration
+				+ recommendation + ", medication=" + medication + ", startDate=" + startDate + ", duration=" + duration
 				+ "]";
 	}
 }
