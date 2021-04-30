@@ -24,7 +24,6 @@ public class SQL implements SQLInterface{
 	
 	@Override
 	public void create(Connection c) throws SQLException {
-		// TODO 
 		Statement stmt1 = c.createStatement();
 		String sql1 = "CREATE TABLE patients "
 				   + "(medical_card_number       INTEGER  PRIMARY KEY,"
@@ -56,9 +55,8 @@ public class SQL implements SQLInterface{
 		stmt4.executeUpdate(sql4);
 		stmt4.close();
 		Statement stmt5 = c.createStatement();		
-		String sql5 = "CREATE TABLE medical_test "
+		String sql5 = "CREATE TABLE medical_tests "
 				   + "(id       INTEGER  PRIMARY KEY AUTOINCREMENT,"
-				   + "emp_id     INTEGER REFERENCES employees(id) ON UPDATE CASCADE ON DELETE SET NULL) "
 				   + "patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL,"
 				   + " type     TEXT     NOT NULL,"				   
 				   + " result TEXT  NULL,"
@@ -88,13 +86,6 @@ public class SQL implements SQLInterface{
 		System.out.println("Tables created.");		
 	}
 
-	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
 
 	public void addPatient(Connection c, Patient p) throws SQLException{
         try {
@@ -137,14 +128,13 @@ public class SQL implements SQLInterface{
 
 	public void addMedicalTest(Connection c, MedicalTest medtest) throws SQLException{
         try {
-			String sq1 = "INSERT INTO medical_tests (id, emp_id,  patient_id, type, result, image) VALUES (?, ?, ?, ?, ?, ?)";
+			String sq1 = "INSERT INTO medical_tests (id, patient_id, type, result, image) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
 			preparedStatement.setInt(1, medtest.getMedicalTestId());
-			preparedStatement.setInt(2, medtest.getIdDoctor());
-			preparedStatement.setInt(3, medtest.getIdPatient());
-			preparedStatement.setString(4, medtest.getTestType());
-			preparedStatement.setString(5, medtest.getTestResult());
-			preparedStatement.setBlob(6, medtest.getTestImage());
+			preparedStatement.setInt(2, medtest.getPatient().getMedicalCardId());
+			preparedStatement.setString(3, medtest.getTestType());
+			preparedStatement.setString(4, medtest.getTestResult());
+			preparedStatement.setBytes(5, medtest.getTestImage());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 		} catch (Exception e) {
@@ -176,35 +166,55 @@ public class SQL implements SQLInterface{
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1, patient.getMedicalCardId());
 		switch (order) {
-		case "date":
-			p.setString(2, "start_date");
-			break;
-		case "med":
-			p.setString(2, "medication");
-			break;
-		case "duration":
-			p.setString(2, "duration");
-			break;
+
+			case "date":
+				p.setString(2, "start_date");
+				break;
+			case "med":
+				p.setString(2, "medication");
+				break;
+			case "duration":
+				p.setString(2, "duration");
+				break;
+
 		}
 		ResultSet rs = p.executeQuery();
 		List <Treatment> tList = new ArrayList<Treatment>();
 		while(rs.next()){
+
 			tList.add( new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")) );
+		
 		}
 		p.close();
 		rs.close();
 		return tList;
 	}
 
-	@Override //Aqui hay q arreglar lo del blob añadiendo algo dd .toBitarray o como sea.
+	@Override 
 	public List<MedicalTest> searchMedicalTestByMedCardNumber(Connection c, Integer medCardNumber) throws SQLException, Exception{
 		String sql = "SELECT * FROM medical_tests WHERE patient_id = ?";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1, medCardNumber);
 		ResultSet rs = p.executeQuery();
 		List <MedicalTest> mList = new ArrayList<MedicalTest>();
+
+		Patient patient1 = null; 
+		int duh = 0; //Used to avoid looking for the same patient for every treatment.
+
 		while(rs.next()){
-			mList.add( new MedicalTest(rs.getInt("id"), rs.getInt("emp_id"), medCardNumber, rs.getString("type"), rs.getString("result"), rs.getBlob("image"))  );
+
+			if(duh == 0){
+
+				String sql2 = "SELECT * FROM patients WHERE patient_id = ?";
+				PreparedStatement p1 = c.prepareStatement(sql2);
+				p1.setInt(1, medCardNumber);
+				ResultSet rs1 = p1.executeQuery();
+				patient1 = new Patient(rs.getString("name"), rs1.getString("surname"), rs1.getString("gender"), rs1.getString("blood_type"), rs1.getString("allergies"), rs1.getString("address"), rs1.getDate("birthdate"), rs1.getDate("check_in"), rs1.getBoolean("hospitalized"), rs1.getInt("medical_card_number"));
+				duh = 1; //As stated above, used to avoid looking for the same patient every time we add a new treatment, and looking for it only if it has a treatment.
+			
+			}
+			mList.add( new MedicalTest(rs.getInt("id"), rs.getDate("date"), rs.getString("type"), rs.getString("result"), rs.getBytes("image"), patient1));
+		
 		}
 		p.close();
 		rs.close();
@@ -218,7 +228,9 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		Shift s = null;
 		if(rs.next()){ 
+
 			s = new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), workerId);		
+		
 		}
 		p.close();
 		rs.close();
@@ -233,7 +245,9 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		Shift s = null;
 		if(rs.next()){ 
+
 			s = new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), rs.getInt("doctor_id"));		
+		
 		}
 		p.close();
 		rs.close();
@@ -248,7 +262,9 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List <Patient> pList = new ArrayList<Patient>();
 		while(rs.next()){
+
 			pList.add( new Patient(rs.getString("name"), rs.getString("surname"), rs.getString("gender"), rs.getString("blood_type"), rs.getString("allergies"), rs.getString("address"), rs.getDate("birthdate"), rs.getDate("check_in"), rs.getBoolean("hospitalized"), rs.getInt("medical_card_number")) );
+	
 		}
 		p.close();
 		rs.close();
@@ -262,7 +278,9 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List <Worker> wList = new ArrayList<Worker>();
 		while(rs.next()){ 
+
 			wList.add( new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getInt("room_in_ER"), rs.getString("type")) );
+		
 		}
 		p.close();
 		rs.close();
@@ -277,7 +295,9 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		Patient patient = null;
 		if(rs.next()){
+
 			patient = new Patient(rs.getString("name"), rs.getString("surname"), rs.getString("gender"), rs.getString("blood_type"), rs.getString("allergies"), rs.getString("address"), rs.getDate("birthdate"), rs.getDate("check_in"), rs.getBoolean("hospitalized"), rs.getInt("medical_card_number"));
+	
 		}
 		p.close();
 		rs.close();
@@ -291,7 +311,9 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		Worker worker = null;
 		if(rs.next()){
+
 			worker = new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getInt("room_in_ER"), rs.getString("type"));
+		
 		}
 		p.close();
 		rs.close();
@@ -299,36 +321,33 @@ public class SQL implements SQLInterface{
 	}
 	
 	@Override
-	public Treatment searchTreatmentsByID(Connection c, Integer id) throws SQLException, NotBoundException {
+	public Treatment searchTreatmentsByID(Connection c, Integer id) throws Exception {
 		String sql = "SELECT * FROM treatments WHERE id = ?";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1,id);
 		ResultSet rs = p.executeQuery();
 		Treatment treatment = null;
 		if(rs.next()){
-			try {
-				treatment =  new Treatment(id, rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"));
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+			treatment =  new Treatment(id, rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"));
+
 		}
 		p.close();
 		rs.close();
 		return treatment;	
 	}
 
-	public List<Treatment> searchTreatmentsByMedCard(Connection c, Integer medCard) throws SQLException, NotBoundException {
-		String sql = "SELECT * FROM treatments WHERE patient_id = ?"; //ESTO NO BUSCA LO QUE DICE LA FUNCION QUE BUSCA Y DEBERIA DEVOLVER UNA LISTA DE TREATMENTS
+	public List<Treatment> searchTreatmentsByMedCard(Connection c, Integer medCard) throws Exception {
+
+		String sql = "SELECT * FROM treatments WHERE patient_id = ?"; 
 		PreparedStatement p = c.prepareStatement(sql);
-		p.setInt(1,medCard);
+		p.setInt(1, medCard);
 		ResultSet rs = p.executeQuery();
 		List<Treatment> rList = new ArrayList<Treatment>();
 		while (rs.next()) {
-			rList.add(new Treatment(rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")))
+
+			rList.add(new Treatment(rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")));
+		
 		}
 		p.close();
 		rs.close();
@@ -371,7 +390,7 @@ public class SQL implements SQLInterface{
 		p.close();
 	}
 	*/
-	public void editTreatment(Connection c, Treatment t){
+	public void editTreatment(Connection c, Treatment t) throws SQLException{
 		
 		String diagnosis = t.getDiagnosis();
 		Integer duration = t.getDuration();
@@ -381,7 +400,7 @@ public class SQL implements SQLInterface{
 		Date startDate = t.getStartDate();
 
 		String sql;
-		PreparedStatement p;
+		PreparedStatement p = null;
 
 		if(diagnosis != null){
 
@@ -399,6 +418,7 @@ public class SQL implements SQLInterface{
 			p.setString(1, medication);
 			p.setInt(2, id);
 			p.executeUpdate();
+
 		}
 		if(duration != null){
 
@@ -432,10 +452,10 @@ public class SQL implements SQLInterface{
 	}
 
 	
-	public void editTreatment(Connection c, Integer id, String diagnosis, String medication, Date startDate, Integer duration, String recommendation){
+	public void editTreatment(Connection c, Integer id, String diagnosis, String medication, Date startDate, Integer duration, String recommendation) throws SQLException{
 		
 		String sql;
-		PreparedStatement p;
+		PreparedStatement p = null;
 
 		if(diagnosis != null){
 
@@ -453,6 +473,7 @@ public class SQL implements SQLInterface{
 			p.setString(1, medication);
 			p.setInt(2, id);
 			p.executeUpdate();
+			
 		}
 		if(duration != null){
 
@@ -503,7 +524,7 @@ public class SQL implements SQLInterface{
 			System.out.println(e.getMessage());
 		}
 	}
-}
+
 	@Override
 	public Treatment editTreatment(Integer id, String diagnosis, String medication, Integer duration,
 			String recommendation) {
@@ -512,7 +533,7 @@ public class SQL implements SQLInterface{
 	}
 	
 	@Override
-	public List<Treatment> searchTreatmentByMed(Connection c,Patient patient, String med){
+	public List<Treatment> searchTreatmentByMed(Connection c,Patient patient, String med) throws Exception{
 		String sql = "SELECT * FROM treatments WHERE medication LIKE '%"+ med +"%' ";
 		PreparedStatement prep = c.prepareStatement(sql);		
 		ResultSet rs = prep.executeQuery();
