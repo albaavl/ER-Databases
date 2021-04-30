@@ -10,7 +10,6 @@ public interface SQLInterface {
 	public Connection connect() throws SQLException, ClassNotFoundException;
 	public void create(Connection c) throws SQLException;
 	public void delete();
-	void drop(Connection c) throws SQLException;
 
 	/**
 	 * Used to add a new patient to the database

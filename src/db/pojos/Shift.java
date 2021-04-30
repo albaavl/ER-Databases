@@ -36,8 +36,9 @@ public class Shift implements Serializable {
 	
 
 	public Shift() {
-	
+	this.date = Date.valueOf(LocalDate.of(2001, 10, 1));
 	}
+	
 	
 	public Shift(Date date, String shift, Integer room, Integer workerId) throws Exception {
 		super();
@@ -47,11 +48,11 @@ public class Shift implements Serializable {
 		
 	}
 	
-	public Shift(Date date, String shift, Integer room, Integer workerId,List<String> shiftsList) throws Exception {
+	public Shift(Shift s) throws Exception {
 		super();
-		this.setDate(date);
-		this.setRoom(room);
-		this.setWorkerId(workerId);
+		this.setDate(s.date);
+		this.setRoom(s.room);
+		this.setWorkerId(s.workerId);
 		
 	}
 	/**
