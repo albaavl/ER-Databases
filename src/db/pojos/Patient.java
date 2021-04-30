@@ -67,6 +67,8 @@ public class Patient implements Serializable{
 		this.patientName = patientName;
 	}
 	
+	
+	
 	/**
 	 * @return the bDate
 	 */

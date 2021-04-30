@@ -56,6 +56,17 @@ public class Worker implements Serializable{
 		this.treatment = treatment;
 		this.patients = new ArrayList<Patient>();
 	}
+	public Worker(Worker w) {
+		super();
+		this.workerName = w.workerName;
+		this.workerSurname = w.workerSurname;
+		this.specialtyId = w.specialtyId;
+		this.roomEr = w.roomEr;
+		this.typeWorker = w.typeWorker;
+		this.shift = new Shift(w.shift);
+		this.treatment = w.treatment;
+		this.patients = new ArrayList<Patient>();
+	}
 	
 	public Worker(String workerName, String workerSurname, String specialtyId, int roomEr,
 			String typeWorker, Shift shift, Treatment treatment, List<Patient> patients) {

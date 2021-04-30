@@ -28,7 +28,9 @@ public class Main {
 	public static int option = 0;
 
 	public static void main(String[] args) throws Exception, SQLException {
-		jdbc.connect();
+		try{
+			jdbc.connect();
+		
 		userman.connect();
 			do {
 				System.out.println("Welcome to the Quiron's ER");
@@ -52,6 +54,7 @@ public class Main {
 					break;
 				}
 			}while(true);
+		}catch(Exception ex);
 	}
 	private static void register() throws Exception {
 		//ask the user for an email
@@ -229,7 +232,7 @@ public class Main {
 	private static void consultMedicalTest() {
 		Patient patient = selectPatient();
 		List<MedicalTest> tests = new ArrayList<MedicalTest>();
-		tests = SQL.searchMedicalTestByMedCardNumber(null, patient.getMedicalCardId()); //connection c, medicalCard
+		tests = jdbc.searchMedicalTestByMedCardNumber(c, patient.getMedicalCardId()); //connection c, medicalCard
 		if (tests == null) {
 			System.out.println("No tests available for patient " + patient.getPatientName()+" "+ patient.getPatientSurname());
 		} else {
@@ -250,7 +253,7 @@ public class Main {
 		System.out.println("Enter the recommendations");
 		String recommendation = sc.next();
 		Treatment t = new Treatment(diagnosis, recommendation, startDate, medication, duration);
-		SQL.addTreatment(null, t, patient.getMedicalCardId()); 
+		jdbc.addTreatment(null, t, patient.getMedicalCardId()); 
 		//en la función que habeis creado no le pasa la medical card, sino el id del paciente para la tabla doctor-paciente, ns si quereis que 
 		//sea así o es un error, si es así, en la clase de patient no hay un patient id, lo que usamos es la medical card, que no es lo mismo, habría que crearlo
 		System.out.println("Treatment added");
@@ -258,7 +261,7 @@ public class Main {
 
 	private static void editDiagnosisAndTreatment(Patient  patient) {
 		List<Treatment> treatments = new ArrayList<Treatment>();
-		treatments = SQL.searchTreatmentsByMedCardNumber(null, patient.getMedicalCardId()); //Connection c, Integer medCard
+		treatments = jdbc.searchTreatmentsByMedCardNumber(c, patient.getMedicalCardId()); //Connection c, Integer medCard
 		if(treatments == null) {
 			System.out.println("No treatments available for patient "+ patient.getPatientName()+" "+ patient.getPatientSurname());
 		} else {
@@ -268,7 +271,7 @@ public class Main {
 			while (t == null) {
 			System.out.println("Enter the id of the treatment that you want to edit:");
 			Integer id = sc.nextInt();
-			t = new Treatment(SQL.searchTreatmentsByID(null, id));//Connection c, Integer id
+			t = new Treatment(jdbc.searchTreatmentsByID(c, id));//Connection c, Integer id
 			}
 			System.out.println("This is the selected treatment:");
 			System.out.println(t.toString());
@@ -280,7 +283,7 @@ public class Main {
 			String duration = sc.next();
 			System.out.println("Enter the new recommendations, if you don't want to edit them enter a 0:");
 			String recommendation = sc.next();
-			Treatment nuevo = new Treatment(SQL.editTreatment(t.getTreatmentId(),diagnosis,medication,duration,recommendation)); //FUNCION NO CREADA 
+			Treatment nuevo = new Treatment(jdbc.editTreatment(t.getTreatmentId(),diagnosis,medication,duration,recommendation)); //FUNCION NO CREADA 
 			System.out.println("This is the edited treatment:");
 			System.out.println(nuevo.toString());
 		}		
@@ -293,7 +296,7 @@ public class Main {
 		while (shift == null) {
 			System.out.println("Enter the date of the shift that you want to edit:");
 			Date date = Date.valueOf(sc.next());
-			shift = SQL.searchShiftByDate (null, worker.getWorkerId(), date);//Connection c, Integer workerId, Date date
+			shift = jdbc.searchShiftByDate (c, worker.getWorkerId(), date);//Connection c, Integer workerId, Date date
 			}
 		System.out.println("This is the selected shift:");
 		System.out.println(shift.toString());
@@ -303,7 +306,7 @@ public class Main {
 		System.out.println("Enter the new room, if you don't want to edit it enter a 0:");
 		Integer room = sc.nextInt();
 		shift.setRoom(room);
-		Shift newShift = new Shift(SQL.editShift(null, worker.getWorkerId(), shift.getShift(), shift.getRoom(), shift.getDate());//Connection c, int workerId, String shift, int room, Date date
+		Shift newShift = new Shift(jdbc.editShift(c, worker.getWorkerId(), shift.getShift(), shift.getRoom(), shift.getDate());//Connection c, int workerId, String shift, int room, Date date
 		System.out.println("This is the edited shift:");
 		System.out.println(newShift.toString());
 	}
@@ -316,7 +319,7 @@ public class Main {
 			System.out.println("Insert date: [dd/mm/yyyy]");
 			String date = sc.next();
 			java.util.Date shiftDate = new SimpleDateFormat("dd/MM/yyyy").parse(date); //igual hay una forma mejor de pasarlo a date
-			Shift s = SQL.searchShiftByDate (null, w.getWorkerId(), shiftDate); //Connection c, Integer workerId
+			Shift s = jdbc.searchShiftByDate (c, w.getWorkerId(), shiftDate); //Connection c, Integer workerId
 			if ( s == null) {
 				System.out.println("No shifts available for worker " + w.getWorkerName()+" "+ w.getWorkerSurname() + " on " + shiftDate);
 			} else {
@@ -325,7 +328,7 @@ public class Main {
 			}
 		//para que busque todos los turnos del trabajador
 		} else if(answer.equalsIgnoreCase("NO")&&password.equalsIgnoreCase("no")){
-		Shift s = SQL.searchShiftByWorkerId (null, w.getWorkerId()); //Connection c, Integer workerId
+		Shift s = jdbc.searchShiftByWorkerId (c, w.getWorkerId()); //Connection c, Integer workerId
 		if ( s == null) {
 			System.out.println("No shifts available for worker " + w.getWorkerName()+" "+ w.getWorkerSurname());
 		} else {
@@ -345,7 +348,7 @@ public class Main {
 		p.setPatientName(name);
 		System.out.print("Surname: ");
 		String surname = sc.next();
-		p.setPatientSurename(surname);
+		p.setPatientSurname(surname);
 		System.out.print("Medical card number: ");
 		Integer medCardNumber = sc.nextInt();
 		p.setMedicalCardId(medCardNumber);
@@ -361,7 +364,7 @@ public class Main {
 		System.out.print("Date of birth: yyyy-[m]m-[d]d");
 		String birthdate = sc.next();
 		Date bdate = Date.valueOf(birthdate);
-		p.setBdate(bdate);
+		p.setbDate(bdate);
 		System.out.print("Check in date: yyyy-[m]m-[d]d"); //averiguar como meter horas y minutos
 		String checkindate = sc.next();
 		Date cdate = Date.valueOf(checkindate);
@@ -372,7 +375,7 @@ public class Main {
 		System.out.print("Hospitalization [YES/NO]: ");
 		Boolean hospitalized = sc.nextBoolean();
 		p.setHospitalized(hospitalized);
-		SQL.addPatient(null, p); //Connection c, Patient p
+		jdbc.addPatient(c, p); //Connection c, Patient p
 	}
 	
 	public static void createWorker() throws NotBoundException {		
@@ -403,24 +406,24 @@ public class Main {
 		String startDate = sc.next();
 		Date date = Date.valueOf(startDate);
 		s.setDate(date);
-		SQL.addWorker(null, w); //Connection c,Worker w
+		jdbc.addWorker(c, w); //Connection c,Worker w
 	}
 	public static void requestMedTest() throws NotBoundException{
-		Patient patient = selectPatient();
-		Worker worker = selectWorker();
+		Patient patient = new Patient(selectPatient());
+		Worker worker = new Worker (selectWorker()); 
 		MedicalTest medTest = new MedicalTest();
-		medTest.setIdPatient(patient.getMedicalCardId());
-		medTest.setIdDoctor(worker.getWorkerId());
+		medTest.setPatient(patient.getMedicalCardId());
+		medTest.setDoctor(worker.getWorkerId());
 		System.out.print("Type of medical test: ");
 		String type = sc.next();
 		medTest.setTestType(type);
-		SQL.addMedicalTest(null, medTest);//Connection c, MedicalTest medtest
+		jdbc.addMedicalTest(c, medTest);//Connection c, MedicalTest medtest
 	}
 	
 	public static void showPatientsTreatments(Patient patient){
 		String treatment;
 		List<Treatment> treatmentsList = new ArrayList<Treatment>();
-		treatmentsList = SQL.searchPatientsTreatment(null, patient);
+		treatmentsList = jdbc.searchPatientsTreatment(c, patient);
 		if(treatmentList.isEmpty()){
 			System.out.println ("Ther is no treatment available for this patient");
 		} else{
@@ -429,24 +432,24 @@ public class Main {
 		}
 	}
 	
-	private static void adAccessToPatientsProfile() {
+	private static void adAccessToPatientsProfile() throws NotBoundException {
 		Patient patient = selectPatient();
 		System.out.println(patient.toString());
 		}
 	
-	private static Patient selectPatient() {
+	private static Patient selectPatient() throws NotBoundException {
 		List<Patient> patientList = new ArrayList<Patient>();
 		Patient patient = null;
 		while(patientList.isEmpty()) {
 		System.out.println("Enter the patient's surname:");
 		String surname = sc.next();
-		patientList = SQL.searchPatient(null, surname); //(connection c, integer id)
+		patientList.addAll(jdbc.searchPatient(c, surname)); //(connection c, integer id)
 		}
 		while(patient == null) {
 		System.out.println(patientList.toString());
 		System.out.println("Enter the medical card number of the chosen patient:");
 		Integer medCard = Integer.parseInt(sc.next());
-		patient = new Patient(SQL.selectPatient (null, medCard)); //(connection c, integer id)
+		patient = new Patient(jdbc.selectPatient (c, medCard)); //(connection c, integer id)
 		}
 		return patient;
 	}
@@ -456,13 +459,13 @@ public class Main {
 		while(wList.isEmpty()) {
 		System.out.println("Enter the doctor's surname:");
 		String surname = sc.next();
-		wList = SQL.searchWorker(null, surname); //(connection c, integer id)
+		wList = jdbc.searchWorker(c, surname); //(connection c, integer id)
 		}
 		while(w == null) {
 		System.out.println(wList.toString());
 		System.out.println("Enter the id of the chosen worker:");
 		Integer id = Integer.parseInt(sc.next());
-		w = new Worker(SQL.selectWorker (null, id)); //Connection c, Integer workerId
+		w = new Worker(jdbc.selectWorker (c, id)); //Connection c, Integer workerId
 		}
 		return w;
 	}
