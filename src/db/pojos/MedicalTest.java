@@ -47,7 +47,7 @@ public class MedicalTest implements Serializable{
 		this.testResult = tResult;
 		this.patient = patient;
 	}
-	public MedicalTest(int id, Date date, String type, String result, byte[]  img, Patient patient) {
+	public MedicalTest(int id, Date date, String type, String result, byte[] img, Patient patient) {
 		super();
 		this.medicalTestId = id;
 		this.dateMedTest = date;
@@ -169,5 +169,9 @@ public class MedicalTest implements Serializable{
 	 */
 	public void setTestImage(byte[] testImage) {
 		this.testImage = testImage;
+	}
+
+	public Patient getPatient() {
+		return patient;
 	}
 }
