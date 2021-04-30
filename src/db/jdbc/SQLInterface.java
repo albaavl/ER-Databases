@@ -9,9 +9,6 @@ public interface SQLInterface {
 	
 	public Connection connect() throws SQLException, ClassNotFoundException;
 	public void create(Connection c) throws SQLException;
-	public void delete();
-	void drop(Connection c) throws SQLException;
-
 	/**
 	 * Used to add a new patient to the database
 	 * @param connection - connection of the database
@@ -44,8 +41,8 @@ public interface SQLInterface {
 	 * @return
 	 */
 	public List<MedicalTest> searchMedicalTestByMedCardNumber(Connection c, Integer medCardNumber) throws SQLException, Exception; 
-	public List<Treatment> searchTreatmentsByMedCard(Connection c, Integer medCard) throws SQLException, NotBoundException;
-	public Treatment searchTreatmentsByID(Connection c, Integer id) throws SQLException, NotBoundException;
+	public List<Treatment> searchTreatmentsByMedCard(Connection c, Integer medCard) throws SQLException, NotBoundException, Exception;
+	public Treatment searchTreatmentsByID(Connection c, Integer id) throws SQLException, NotBoundException, Exception;
 	//FUNCION NO CREADA debe buscar un treatment por su id y devolverlo, si no hay devolver� null
 	public List<Patient> searchPatient(Connection c, String surname) throws SQLException, NotBoundException; 
 	//FUNCION NO CREADA debe buscar un paciente pasandole un string del apellido y devolviendo una lista de objetos de tipo paciente que estar� vac�a si no hay ning�n paciente con ese nombre;
