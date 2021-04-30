@@ -17,46 +17,42 @@ import java.time.LocalDate;
 
 
 @Entity
-@Table(name = "shift")
+@Table(name = "shifts")
 public class Shift implements Serializable {
-	//Attributes
-	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3588643268907504481L;
+	//Attributes
+
 	@Id
-	@GeneratedValue(generator="shift")
-	@TableGenerator(name="shift", table="sqlite_sequence",
-	    pkColumnName="workerId", valueColumnName="seq", pkColumnValue="shift")
+	@GeneratedValue(generator="shifts")
+	@TableGenerator(name="shifts", table="sqlite_sequence",
+	    pkColumnName="workerId", valueColumnName="seq", pkColumnValue="shifts")
 	private Date date;
 	private String shift;
 	private Integer room;
-	private Integer workerId;
-	private List<String> shiftsList;
-	//private WeekShift
+	private Integer workerId ;
+	
 
 	public Shift() {
-		super();
-		this.shiftsList = new LinkedList<String>();
-		
+	
 	}
+	
 	public Shift(Date date, String shift, Integer room, Integer workerId) throws Exception {
 		super();
 		this.setDate(date);
-		this.setWeekShift();
 		this.setRoom(room);
 		this.setWorkerId(workerId);
-		this.shiftsList = new LinkedList<String>();
+		
 	}
 	
 	public Shift(Date date, String shift, Integer room, Integer workerId,List<String> shiftsList) throws Exception {
 		super();
 		this.setDate(date);
-		this.setWeekShift();
 		this.setRoom(room);
 		this.setWorkerId(workerId);
-		this.shiftsList = shiftsList;
+		
 	}
 	/**
 	 * @return the date
@@ -87,25 +83,7 @@ public class Shift implements Serializable {
 	 * @throws Exception 
 	 */
 	
-	public void setWeekShift() {
-		for(int n=0;n==6;n++) {
-		int numShift = (int)(Math. random()*3+1);
-		if(numShift==1) {
-			this.shiftsList.add("morning");
-		}
-		if(numShift==2) {
-			this.shiftsList.add("afternoon");
-		}
-		if(numShift==3) {
-			this.shiftsList.add("night");
-		} }
-	}
 	
-		public void imprimir(LinkedList<String> shiftsList) {
-			for (String shift : shiftsList)
-				System.out.print(shift + "-");
-			System.out.println();
-		}
 		
 	public void setShift(String shift) throws Exception {
 		if(shift.equalsIgnoreCase("morning")||shift.equalsIgnoreCase("afternoon")||shift.equalsIgnoreCase("night")){
@@ -182,10 +160,12 @@ public class Shift implements Serializable {
 			return false;
 		return true;
 	}
+	
+	
 
-	//@Override //el toString está mal hay que hacerlo
-	//public String toString() {
-		//return "Shift [date=" + date + ", shift=" + shift + ", room=" + room + "]";
-	//}
+	@Override 
+	public String toString() {
+		return "Shift [date=" + this.date + ", shift=" + this.shift + ", room=" + this.room + "]";
+	}
 	
 }

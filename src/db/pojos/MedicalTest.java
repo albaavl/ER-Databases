@@ -6,9 +6,13 @@ import java.util.*;
 import javax.persistence.*;
 import java.io.*;
 
+
+
+
 @Entity
 @Table(name = "medical_tests")
 public class MedicalTest implements Serializable{
+
 	
 	private static final long serialVersionUID = 7210218883507746083L;
 
