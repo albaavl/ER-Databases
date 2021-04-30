@@ -2,7 +2,7 @@ package db.pojos;
 
 import java.sql.*;
 
-public class MedicalTest {
+public class MedicalTest{
 	
 	//Attributes
 	private Integer medicalTestId;
