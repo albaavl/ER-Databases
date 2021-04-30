@@ -1,12 +1,10 @@
 package pojos.users;
 
-import java.util.List;
-import db.pojos.*;
 import javax.persistence.*;
 
-public class UserManager implements Interface {
+public class UserManager implements JPAInterface {
 
-	private static final String PERSISTENCE_PROVIDER = "project-provider";
+	private static final String PERSISTENCE_PROVIDER = "ER-provider";
 	private static EntityManager entityManager;
 	
 	public UserManager() {
@@ -39,24 +37,6 @@ public class UserManager implements Interface {
 	}
 	
 	//INSERT METHODS JPA
-	
-	// Insert patient into the database
-		public Patient InsertNewPatient(User user, Category category) {
-			try {
-				System.out.println("New client: " + entityManager.getTransaction().isActive());
-				Patient patient = new Patient();
-				patient.set
-				client.setUser(user);
-				client.setName(user.getUserName());
-				entity_manager.getTransaction().begin();
-				entity_manager.persist(client);
-				entity_manager.getTransaction().commit();
-				return client;
-			} catch (EntityNotFoundException new_client_account_error) {
-				new_client_account_error.printStackTrace();
-				return null;
-			}
-		}
 	//LIST METHODS JPA
 	//UPDATE METHODS
 	//DELETE METHODS JPA

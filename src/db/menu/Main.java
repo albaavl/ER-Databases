@@ -2,19 +2,15 @@ package db.menu;
  
 import java.io.InputStreamReader;
 import java.rmi.NotBoundException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
+import java.security.*;
+import java.sql.*;
 import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.chrono.ThaiBuddhistDate;
 import java.util.*;
 
 import db.pojos.*;
-import pojos.users.Role;
-import pojos.users.User;
+import pojos.users.*;
 import db.interfaces.UserManager;
 import db.jdbc.*;
 import db.jpa.JPAUserManager;
@@ -54,7 +50,9 @@ public class Main {
 					break;
 				}
 			}while(true);
-		}catch(Exception ex);
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 	private static void register() throws Exception {
 		//ask the user for an email
@@ -204,7 +202,7 @@ public class Main {
 		}while(true);
 	}
 	
-	private static void accessToAPatientsProfile() {
+	private static void accessToAPatientsProfile() throws Exception {
 		Patient patient = selectPatient();
 		while (option!=0) {
 			System.out.println("Choose an option[0-3]:");
@@ -229,7 +227,7 @@ public class Main {
 		}
 	}
 	
-	private static void consultMedicalTest() {
+	private static void consultMedicalTest() throws Exception {
 		Patient patient = selectPatient();
 		List<MedicalTest> tests = new ArrayList<MedicalTest>();
 		tests = jdbc.searchMedicalTestByMedCardNumber(c, patient.getMedicalCardId()); //connection c, medicalCard
@@ -241,7 +239,7 @@ public class Main {
 		}
 	}
 	
-	private static void createDiagnosisAndTreatment(Patient patient) {
+	private static void createDiagnosisAndTreatment(Patient patient) throws Exception {
 		System.out.println("Enter the diagnosis:");
 		String diagnosis = sc.next();
 		System.out.println("Enter the medication:");
@@ -259,9 +257,9 @@ public class Main {
 		System.out.println("Treatment added");
 	}
 
-	private static void editDiagnosisAndTreatment(Patient  patient) {
+	private static void editDiagnosisAndTreatment(Patient  patient) throws Exception {
 		List<Treatment> treatments = new ArrayList<Treatment>();
-		treatments = jdbc.searchTreatmentsByMedCardNumber(c, patient.getMedicalCardId()); //Connection c, Integer medCard
+		treatments = jdbc.searchTreatmentsByMedCard(null, patient.getMedicalCardId());
 		if(treatments == null) {
 			System.out.println("No treatments available for patient "+ patient.getPatientName()+" "+ patient.getPatientSurname());
 		} else {
@@ -280,7 +278,7 @@ public class Main {
 			System.out.println("Enter the new medication, if you don't want to edit it enter a 0:");
 			String medication = sc.next();
 			System.out.println("Enter the new duration, if you don't want to edit it enter a 0:");
-			String duration = sc.next();
+			Integer duration = sc.nextInt();
 			System.out.println("Enter the new recommendations, if you don't want to edit them enter a 0:");
 			String recommendation = sc.next();
 			Treatment nuevo = new Treatment(jdbc.editTreatment(t.getTreatmentId(),diagnosis,medication,duration,recommendation)); //FUNCION NO CREADA 
@@ -306,7 +304,7 @@ public class Main {
 		System.out.println("Enter the new room, if you don't want to edit it enter a 0:");
 		Integer room = sc.nextInt();
 		shift.setRoom(room);
-		Shift newShift = new Shift(jdbc.editShift(c, worker.getWorkerId(), shift.getShift(), shift.getRoom(), shift.getDate());//Connection c, int workerId, String shift, int room, Date date
+		Shift newShift = new Shift(jdbc.editShift(c, worker.getWorkerId(), shift.getShift(), shift.getRoom(), shift.getDate()));//Connection c, int workerId, String shift, int room, Date date
 		System.out.println("This is the edited shift:");
 		System.out.println(newShift.toString());
 	}
@@ -315,11 +313,11 @@ public class Main {
 		System.out.println("Do you want to see your shifts for an specific date? [YES/NO]");
 		String answer = sc.next();
 		//para que busque el turno del trabajador para x dia
-		if(answer.equalsIgnoreCase("YES")&&password.equalsIgnoreCase("yes")) {
+		if(answer.equalsIgnoreCase("YES")&&answer.equalsIgnoreCase("yes")) {
 			System.out.println("Insert date: [dd/mm/yyyy]");
 			String date = sc.next();
-			java.util.Date shiftDate = new SimpleDateFormat("dd/MM/yyyy").parse(date); //igual hay una forma mejor de pasarlo a date
-			Shift s = jdbc.searchShiftByDate (c, w.getWorkerId(), shiftDate); //Connection c, Integer workerId
+			Date shiftDate = new SimpleDateFormat("dd/MM/yyyy").parse(date); //igual hay una forma mejor de pasarlo a date
+			Shift s = jdbc.searchShiftByDate (null, w.getWorkerId(), shiftDate); //Connection c, Integer workerId
 			if ( s == null) {
 				System.out.println("No shifts available for worker " + w.getWorkerName()+" "+ w.getWorkerSurname() + " on " + shiftDate);
 			} else {
@@ -327,7 +325,7 @@ public class Main {
 				System.out.println(s.toString());
 			}
 		//para que busque todos los turnos del trabajador
-		} else if(answer.equalsIgnoreCase("NO")&&password.equalsIgnoreCase("no")){
+		} else if(answer.equalsIgnoreCase("NO")&&answer.equalsIgnoreCase("no")){
 		Shift s = jdbc.searchShiftByWorkerId (c, w.getWorkerId()); //Connection c, Integer workerId
 		if ( s == null) {
 			System.out.println("No shifts available for worker " + w.getWorkerName()+" "+ w.getWorkerSurname());
@@ -340,7 +338,7 @@ public class Main {
 		}
 	}
 	
-	public static void createPatient () throws NotBoundException {		
+	public static void createPatient () throws NotBoundException, Exception {		
 		Patient p = new Patient();
 		System.out.println("Please, input the patient info:");
 		System.out.print("Name: ");
@@ -378,7 +376,7 @@ public class Main {
 		jdbc.addPatient(c, p); //Connection c, Patient p
 	}
 	
-	public static void createWorker() throws NotBoundException {		
+	public static void createWorker() throws Exception {		
 		Worker w = new Worker();
 		Shift s = new Shift();
 		System.out.println("Please, input the worker info:");
@@ -420,10 +418,10 @@ public class Main {
 		jdbc.addMedicalTest(c, medTest);//Connection c, MedicalTest medtest
 	}
 	
-	public static void showPatientsTreatments(Patient patient){
+	public static void showPatientsTreatments(Patient patient) throws Exception{
 		String treatment;
 		List<Treatment> treatmentsList = new ArrayList<Treatment>();
-		treatmentsList = jdbc.searchPatientsTreatment(c, patient);
+		treatmentsList = jdbc.searchPatientsTreatment(null, patient);
 		if(treatmentList.isEmpty()){
 			System.out.println ("Ther is no treatment available for this patient");
 		} else{
@@ -432,12 +430,12 @@ public class Main {
 		}
 	}
 	
-	private static void adAccessToPatientsProfile() throws NotBoundException {
+	private static void adAccessToPatientsProfile() throws Exception {
 		Patient patient = selectPatient();
 		System.out.println(patient.toString());
 		}
 	
-	private static Patient selectPatient() throws NotBoundException {
+	private static Patient selectPatient() throws Exception {
 		List<Patient> patientList = new ArrayList<Patient>();
 		Patient patient = null;
 		while(patientList.isEmpty()) {
@@ -453,7 +451,7 @@ public class Main {
 		}
 		return patient;
 	}
-	private static Worker selectWorker() {
+	private static Worker selectWorker() throws Exception {
 		List<Worker> wList = new ArrayList<Worker>();
 		Worker w = null;
 		while(wList.isEmpty()) {

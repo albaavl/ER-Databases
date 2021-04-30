@@ -4,6 +4,9 @@ import java.io.*;
 import java.util.*;
 import javax.persistence.*;
 
+import com.sun.tools.javac.code.Attribute.Array;
+
+
 @Entity
 @Table(name =  "users")
 public class User implements Serializable{
@@ -32,8 +35,9 @@ public class User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "User [id=" + userId + ", username=" + username + ", password=" + Arrays.toString(password) + ", role="
-				+ role + "]";
+		String password1 = new String(this.password);
+		return "User [userId=" + userId + ", username=" + username + ", password=" + password1
+				+ ", role=" + role + "]";
 	}
 
 	@Override
