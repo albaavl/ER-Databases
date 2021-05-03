@@ -238,6 +238,8 @@ public class SQL implements SQLInterface{
 	}
 	
 	public Shift searchShiftByDate (Connection c, Integer workerId, Date date) throws SQLException, Exception {
+		//TODO hay que editar la funcion o mas bien crear uhna nueva que busque por id del shift
+		//TODO deberia devolver una lista de shifts NO un solo shift!!!!!
 		String sql = "SELECT * FROM shifts WHERE workerId = ?, date = ? ";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1, workerId);
@@ -354,42 +356,7 @@ public class SQL implements SQLInterface{
 		return rList;	
 	}
 	
-	//igual habr�a que hacer un edit para cada cosa del treatment, sino se cambiar�an todos
-	//Ns quien ha hecho esto pero esto no funciona ni de coña
-	/*public void editTreatment(Connection c, int id, String diagnosis, String medication, Date startDate, Integer duration, String recommendation) {
-		try {
-			String sql = "UPDATE treatments SET diagnosis = ?, medication = ?, start_date = ?, advice = ?, duration = ? "; //Esto seleciona todos los treatmets btw
-			Treatment t = searchTreatmentsByID(c, id);
-			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setString(1, diagnosis);
-			prep.setString(2, medication);
-			prep.setDate(3, startDate);			
-			prep.setInt(4, duration);		
-			prep.setString(5, recommendation);	
-			prep.setInt(6, t.getDuration());
-			prep.executeUpdate();
-			prep.close();
 
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
-	   //Se me ha ocurrido hacerlo así, aunq se podría hacer usando una única funcion y un switch bastante completo.
-	   //Se q queda raro al hacerlo asi pq las 3 funciones q editan string necesitan cambiar la posición dd la Connection ya q si no 
-	   		java se cree q son las mismas ya q tienen los mismos params 
-	public void editTreatment(Connection c, Integer id, String diagnosis, String medication, Date startDate, Integer duration, String recommendation){
-		String sql = "UPDATE treatments SET diagnosis = ?, medication = ?, start_date = ?, advice = ?, duration = ? WHERE id = ?";
-		PreparedStatement p = c.prepareStatement(sql);
-		p.setString(1, diagnosis);
-		p.setString(2, medication);
-		p.setDate(3, startDate)
-		p.setString(4, recommendation);
-		p.setInt(5, duration);
-		p.setInt(6, id);
-		p.executeUpdate();
-		p.close();
-	}
-	*/
 	public void editTreatment(Connection c, Treatment t) throws SQLException{
 		
 		String diagnosis = t.getDiagnosis();

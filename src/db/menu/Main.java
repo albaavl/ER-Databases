@@ -83,7 +83,7 @@ public class Main {
 		String password = sc.next();
 		User user = userman.checkPassword(username, password);
 		if(user == null) {
-			System.out.println("Wrong username or passwoerd");
+			System.out.println("Wrong username or password");
 			return;
 		} else if(user.getRole().getRole().equalsIgnoreCase("patient")){
 			patientMenu();
@@ -210,6 +210,9 @@ public class Main {
 			option = sc.nextInt();
 			switch(option) {
 			case 0:
+				System.out.println("Thank you for using our system");
+				jdbc.disconnect(c);
+				userman.disconnect();
 			System.exit(0);
 			case 1:
 				System.out.println("Consult medical tests");
@@ -230,12 +233,14 @@ public class Main {
 	private static void consultMedicalTest() throws Exception {
 		Patient patient = selectPatient();
 		List<MedicalTest> tests = new ArrayList<MedicalTest>();
-		tests = jdbc.searchMedicalTestByMedCardNumber(c, patient.getMedicalCardId()); //connection c, medicalCard
-		if (tests == null) {
+		tests.addAll(jdbc.searchMedicalTestByMedCardNumber(c, patient.getMedicalCardId())); //connection c, medicalCard
+		if (tests.isEmpty()) {
 			System.out.println("No tests available for patient " + patient.getPatientName()+" "+ patient.getPatientSurname());
 		} else {
 			System.out.println("These are all the medical tests of "+patient.getPatientName()+" "+patient.getPatientSurname()+" ordered by date:");
-			System.out.println(tests.toString());
+			for(MedicalTest med : tests) {
+				System.out.println(med.toString());
+			}
 		}
 	}
 	
@@ -251,16 +256,14 @@ public class Main {
 		System.out.println("Enter the recommendations");
 		String recommendation = sc.next();
 		Treatment t = new Treatment(diagnosis, recommendation, startDate, medication, duration);
-		jdbc.addTreatment(null, t, patient.getMedicalCardId()); 
-		//en la función que habeis creado no le pasa la medical card, sino el id del paciente para la tabla doctor-paciente, ns si quereis que 
-		//sea así o es un error, si es así, en la clase de patient no hay un patient id, lo que usamos es la medical card, que no es lo mismo, habría que crearlo
+		jdbc.addTreatment(c, t, patient.getMedicalCardId()); 
 		System.out.println("Treatment added");
 	}
 
 	private static void editDiagnosisAndTreatment(Patient  patient) throws Exception {
 		List<Treatment> treatments = new ArrayList<Treatment>();
-		treatments = jdbc.searchTreatmentsByMedCard(null, patient.getMedicalCardId());
-		if(treatments == null) {
+		treatments.addAll(jdbc.searchTreatmentsByMedCard(c, patient.getMedicalCardId()));
+		if(treatments.isEmpty()) {
 			System.out.println("No treatments available for patient "+ patient.getPatientName()+" "+ patient.getPatientSurname());
 		} else {
 			System.out.println("These are all the treatments associated to patient "+patient.getPatientName()+" "+patient.getPatientSurname()+" ordered by date:");
@@ -275,14 +278,28 @@ public class Main {
 			System.out.println(t.toString());
 			System.out.println("Enter the new diagnosis, if you don't want to edit it enter a 0:");
 			String diagnosis = sc.next();
+			if(diagnosis.equals("0")) {
+				diagnosis = null;
+			}
 			System.out.println("Enter the new medication, if you don't want to edit it enter a 0:");
 			String medication = sc.next();
+			if(medication.equals("0")) {
+				medication = null;
+			}
 			System.out.println("Enter the new duration, if you don't want to edit it enter a 0:");
 			Integer duration = sc.nextInt();
+			if(duration == 0) {
+				duration = null;
+			}
 			System.out.println("Enter the new recommendations, if you don't want to edit them enter a 0:");
 			String recommendation = sc.next();
-			Treatment nuevo = new Treatment(jdbc.editTreatment(t.getTreatmentId(),diagnosis,medication,duration,recommendation)); //FUNCION NO CREADA 
+			if(recommendation.equals("0")) {
+				recommendation = null;
+			}
+			jdbc.editTreatment(t.getTreatmentId(),diagnosis,medication,duration,recommendation); 
 			System.out.println("This is the edited treatment:");
+			Treatment nuevo = new Treatment(); //habria que buscar el nuevo treatment por lo que habria que crear
+			//un buscador de treatment con las caracteristicas exactas que ha introducido el usuario arriba
 			System.out.println(nuevo.toString());
 		}		
 	}
@@ -292,33 +309,52 @@ public class Main {
 		consultShifts(worker);
 		Shift shift = new Shift();
 		while (shift == null) {
-			System.out.println("Enter the date of the shift that you want to edit:");
-			Date date = Date.valueOf(sc.next());
-			shift = jdbc.searchShiftByDate (c, worker.getWorkerId(), date);//Connection c, Integer workerId, Date date
+			System.out.println("Enter the ID of the shift that you want to edit:");
+			Integer id = sc.nextInt();
+			shift = jdbc.searchShiftByID (c, worker.getWorkerId(), id);//Connection c, Integer workerId, Integer id FUNCION NO CREADA
 			}
 		System.out.println("This is the selected shift:");
 		System.out.println(shift.toString());
-		System.out.println("Enter the new shift, if you don't want to edit it enter a 0:");
-		String s = sc.next();
-		shift.setShift(s);
+		System.out.println("Enter the new shift[1-3], if you don't want to edit it enter a 0: \n1.Morning \n2.Afternoon \n3.Night");
+		Integer s = sc.nextInt();
+		String time;
+		switch(s) {
+		case 0:
+			time =null;
+			break;
+		case 1:
+			time = "Morning";
+			break;
+		case 2:
+			time = "Afternoon";
+			break;
+		case 3:
+			time = "Night";
+			break;
+		}
 		System.out.println("Enter the new room, if you don't want to edit it enter a 0:");
 		Integer room = sc.nextInt();
-		shift.setRoom(room);
-		Shift newShift = new Shift(jdbc.editShift(c, worker.getWorkerId(), shift.getShift(), shift.getRoom(), shift.getDate()));//Connection c, int workerId, String shift, int room, Date date
+		if(room == 0) {
+			room=null;
+		}
+		jdbc.editShift(c, worker.getWorkerId(), time,room, shift.getDate());//Connection c, int workerId, String shift, int room, Date date
 		System.out.println("This is the edited shift:");
+		Shift newShift = new Shift(); //FUNCION NO CREADA habria que buscar el shift de nuevo con las caracteristicas introducidas por el usuario o mejor aun con el id que tenemos ya del primer select
 		System.out.println(newShift.toString());
 	}
 	
 	private static void consultShifts(Worker w) {
 		System.out.println("Do you want to see your shifts for an specific date? [YES/NO]");
 		String answer = sc.next();
+		while(!answer.equalsIgnoreCase("0")) {
 		//para que busque el turno del trabajador para x dia
-		if(answer.equalsIgnoreCase("YES")&&answer.equalsIgnoreCase("yes")) {
+		if(answer.equalsIgnoreCase("YES")) {
 			System.out.println("Insert date: [dd/mm/yyyy]");
 			String date = sc.next();
-			Date shiftDate = new SimpleDateFormat("dd/MM/yyyy").parse(date); //igual hay una forma mejor de pasarlo a date
-			Shift s = jdbc.searchShiftByDate (null, w.getWorkerId(), shiftDate); //Connection c, Integer workerId
-			if ( s == null) {
+			Date shiftDate = Date.valueOf(date);
+			List<Shift> s = new ArrayList<>();
+			s.addAll( jdbc.searchShiftByDate (c, w.getWorkerId(), shiftDate)); //Connection c, Integer workerId
+			if ( s.isEmpty()) {
 				System.out.println("No shifts available for worker " + w.getWorkerName()+" "+ w.getWorkerSurname() + " on " + shiftDate);
 			} else {
 				System.out.println("These are the shifts of "+w.getWorkerName()+" "+ w.getWorkerSurname()+" on " + shiftDate);
@@ -335,7 +371,8 @@ public class Main {
 		}
 		 }else {
 			System.out.println("Not valid answer. Insert [YES/NO]");
-		}
+		}}
+		
 	}
 	
 	public static void createPatient () throws NotBoundException, Exception {		
