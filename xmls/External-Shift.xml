@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+The type of the attribute "id" of Employee needs
+to be CDATA instead of ID, since DTD doesn't allow
+IDs that start with a number
+-->
+<!DOCTYPE Report [
+    <!ELEMENT Shift (date, shift, room)>
+   <!ELEMENT date (#PCDATA)>
+   <!ELEMENT shift (#PCDATA)>
+   <!ELEMENT room (#PCDATA)>
+   <!ATTLIST Shift workerId CDATA #REQUIRED>
+]>
+<Shift>
+	<Shift workerId="1">
+    <date>2021-05-05</date>
+    <shift>morning</shift>
+    <room>0</room>
+    </Shift>
+</Shift>

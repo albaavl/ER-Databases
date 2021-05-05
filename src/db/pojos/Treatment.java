@@ -31,6 +31,7 @@ public class Treatment implements Serializable {
 	//Builders
 
 	public Treatment() {
+		super();
 	}
 
 	/**
@@ -43,22 +44,24 @@ public class Treatment implements Serializable {
 	 * @param duration - How many days is the treatment going to last (Integer)
 	 * @throws Exception 
 	 */
-	public Treatment(String diagnosis, String medication , Date startDate, String recommendation, Integer duration) throws Exception {
+	public Treatment(String diagnosis, String medication , Date startDate, String recommendation, Integer duration, Patient patient) throws Exception {
 		super();
 		setDiagnosis(diagnosis);
 		setMedication(medication);
 		setStartDate(startDate);
 		setRecommendation(recommendation);
 		setDuration(duration);
+		setPatient(patient);
 	}
 
-	public Treatment(int treatmentId, String diagnosis, String medication, Date startDate, String recommendation, int duration) throws Exception {
+	public Treatment(int treatmentId, String diagnosis, String medication, Date startDate, String recommendation, int duration, Patient patient) throws Exception {
 		setTreatmentId(treatmentId);
 		setDiagnosis(diagnosis);
 		setMedication(medication);		
 		setStartDate(startDate);		
 		setRecommendation(recommendation);
 		setDuration(duration);
+		setPatient(patient);
 	}
 	
 	public Treatment(Treatment t) throws Exception {
@@ -68,6 +71,7 @@ public class Treatment implements Serializable {
 		setStartDate(t.startDate);
 		setMedication(t.medication);
 		setDuration(t.duration);
+		setPatient(t.patient);
 	}
 
 	//Getters + Setters
@@ -170,6 +174,14 @@ public class Treatment implements Serializable {
 	}
 
 	//Methods
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
 
 	@Override
 	public int hashCode() {

@@ -56,7 +56,7 @@ public class Worker implements Serializable{
 		this.treatment = treatment;
 		this.patients = new ArrayList<Patient>();
 	}
-	public Worker(Worker w) {
+	public Worker(Worker w) throws Exception {
 		super();
 		this.workerName = w.workerName;
 		this.workerSurname = w.workerSurname;
