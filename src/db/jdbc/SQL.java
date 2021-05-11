@@ -75,8 +75,9 @@ public class SQL implements SQLInterface{
 		stmt6.executeUpdate(sql6);
 		stmt6.close(); 
 		Statement stmt7 = c.createStatement();
-		String sql7 = "CREATE TABLE shift "
-				   + "(shift       TEXT  PRIMARY KEY,"
+		String sql7 = "CREATE TABLE shifts "
+				   + "(id INTEGER  PRIMARY KEY AUTOINCREMENT,"
+				   + "shift    TEXT  NOT NULL,"
 				   + " date     DATE     NOT NULL, "
 				   + " room   INTEGER     NOT NULL,"
 		 		   + " doctor_id   INTEGER  REFERENCES workers(id) ON UPDATE CASCADE ON DELETE SET NULL)";
@@ -87,76 +88,69 @@ public class SQL implements SQLInterface{
 
 
 	public void addPatient(Connection c, Patient p) throws SQLException{
-        try {
 			String sq1 = "INSERT INTO patients ( medical_card_number, name, surname, gender, birthdate,  address, blood_type, allergies, check_in, hospitalized) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
+			preparedStatement.setInt(1, p.getMedicalCardId());
 			preparedStatement.setString(2, p.getPatientName());
 			preparedStatement.setString(3, p.getPatientSurname());
-			preparedStatement.setInt(1, p.getMedicalCardId());
 			preparedStatement.setString(4, p.getGender());
+			preparedStatement.setDate(5, p.getbDate());
+			preparedStatement.setString(6, p.getPatientAddress());
 			preparedStatement.setString(7, p.getBloodType());
 			preparedStatement.setString(8, p.getAllergieType());
-			preparedStatement.setDate(5, p.getbDate());
 			preparedStatement.setDate(9, p.getCheckInDate());
-			preparedStatement.setString(6, p.getPatientAddress());
 			preparedStatement.setBoolean(10, p.getHospitalized());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 
 	public void addWorker(Connection c, Worker w) throws SQLException{
-        try {
 			String sq1 = "INSERT INTO workers (name, surname, specialty, role, room_in_ER) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
 			preparedStatement.setString(1, w.getWorkerName());
 			preparedStatement.setString(2, w.getWorkerSurname());
 			preparedStatement.setString(3, w.getSpecialtyId());
-			preparedStatement.setInt(5, w.getRoomEr());
 			preparedStatement.setString(4, w.getTypeWorker());
+			preparedStatement.setInt(5, w.getRoomEr());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 
 	public void addMedicalTest(Connection c, MedicalTest medtest) throws SQLException{
-        try {
-			String sq1 = "INSERT INTO medical_tests (id, patient_id, type, result, image) VALUES (?, ?, ?, ?, ?)";
+			String sq1 = "INSERT INTO medical_tests (patient_id, type, result, image) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
-			preparedStatement.setInt(1, medtest.getMedicalTestId());
-			preparedStatement.setInt(2, medtest.getPatient().getMedicalCardId());
-			preparedStatement.setString(3, medtest.getTestType());
-			preparedStatement.setString(4, medtest.getTestResult());
-			preparedStatement.setBytes(5, medtest.getTestImage());
+			preparedStatement.setInt(1, medtest.getPatient().getMedicalCardId());
+			preparedStatement.setString(2, medtest.getTestType());
+			preparedStatement.setString(3, medtest.getTestResult());
+			preparedStatement.setBytes(4, medtest.getTestImage());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
     }
 
-	public void addTreatment(Connection c, Treatment treatment, Integer patientId) throws SQLException {
-		try {
-			String sq1 = "INSERT INTO treatments (id, diagnosis, medication, start_date, advice, duration, patient_id) VALUES ("+treatment.getTreatmentId()+", "+treatment.getDiagnosis()+", "+treatment.getMedication()+", "+treatment.getRecommendation()+", "+treatment.getDuration()+", "+patientId+")";
+	public void addTreatment(Connection c, Treatment treatment) throws SQLException {
+		String sq1 = "INSERT INTO treatments (diagnosis, medication, start_date, advice, duration, patient_id) VALUES (?,?,?,?,?,?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
-			preparedStatement.setInt(1, treatment.getTreatmentId());
-			preparedStatement.setString(2, treatment.getDiagnosis());
-			preparedStatement.setString(3, treatment.getMedication());			
-			preparedStatement.setDate(4, treatment.getStartDate());			
-			preparedStatement.setString(5, treatment.getDiagnosis());
-			preparedStatement.setInt(6, treatment.getDuration());
-			preparedStatement.setInt(7, patientId);
+			preparedStatement.setString(1, treatment.getDiagnosis());
+			preparedStatement.setString(2, treatment.getMedication());			
+			preparedStatement.setDate(3, treatment.getStartDate());			
+			preparedStatement.setString(4, treatment.getRecommendation());
+			preparedStatement.setInt(5, treatment.getDuration());
+			preparedStatement.setInt(6, treatment.getPatientId());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	}
+	
+	public void addShift(Connection c, Shift s) throws SQLException{
+		String sq1 = "INSERT INTO shifts (shift, date, room, doctor_id) VALUES (?,?,?,?)";
+		PreparedStatement preparedStatement = c.prepareStatement(sq1);
+		preparedStatement.setString(1, s.getShift());
+		preparedStatement.setDate(2, s.getDate());
+		preparedStatement.setInt(3, s.getRoom());
+		preparedStatement.setInt(4, s.getWorkerId());
+		preparedStatement.executeUpdate();
+		preparedStatement.close();
 	}
 
 	@Override
@@ -165,7 +159,6 @@ public class SQL implements SQLInterface{
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1, patient.getMedicalCardId());
 		switch (order) {
-
 			case "date":
 				p.setString(2, "start_date");
 				break;
@@ -180,9 +173,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List <Treatment> tList = new ArrayList<Treatment>();
 		while(rs.next()){
-
 			tList.add( new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")) );
-		
 		}
 		p.close();
 		rs.close();
@@ -196,63 +187,42 @@ public class SQL implements SQLInterface{
 		p.setInt(1, medCardNumber);
 		ResultSet rs = p.executeQuery();
 		List <MedicalTest> mList = new ArrayList<MedicalTest>();
-
-		Patient patient1 = null; 
-		int duh = 0; //Used to avoid looking for the same patient for every treatment.
-
 		while(rs.next()){
-
-			if(duh == 0){
-
-				String sql2 = "SELECT * FROM patients WHERE patient_id = ?";
-				PreparedStatement p1 = c.prepareStatement(sql2);
-				p1.setInt(1, medCardNumber);
-				ResultSet rs1 = p1.executeQuery();
-				patient1 = new Patient(rs.getString("name"), rs1.getString("surname"), rs1.getString("gender"), rs1.getString("blood_type"), rs1.getString("allergies"), rs1.getString("address"), rs1.getDate("birthdate"), rs1.getDate("check_in"), rs1.getBoolean("hospitalized"), rs1.getInt("medical_card_number"));
-				duh = 1; //As stated above, used to avoid looking for the same patient every time we add a new treatment, and looking for it only if it has a treatment.
-			
-			}
-			mList.add( new MedicalTest(rs.getInt("id"), rs.getDate("date"), rs.getString("type"), rs.getString("result"), rs.getBytes("image"), patient1));
-		
+			mList.add( new MedicalTest(rs.getInt("id"), rs.getDate("date"), rs.getString("type"), rs.getString("result"), rs.getBytes("image"),rs.getInt("patient_id")));
 		}
 		p.close();
 		rs.close();
 		return mList;
 	}
 	
-	public Shift searchShiftByWorkerId (Connection c, Integer workerId) throws SQLException, Exception {
+	public List<Shift> searchShiftByWorkerId (Connection c, Integer workerId) throws SQLException, Exception {
 		String sql = "SELECT * FROM shifts WHERE workerId = ? ";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1, workerId);
 		ResultSet rs = p.executeQuery();
-		Shift s = null;
+		List<Shift> shifts = new ArrayList<>();
 		if(rs.next()){ 
-
-			s = new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), workerId);		
-		
+			shifts.add(new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), workerId));		
 		}
 		p.close();
 		rs.close();
-		return s;
+		return shifts;
 	}
 	
-	public Shift searchShiftByDate (Connection c, Integer workerId, Date date) throws SQLException, Exception {
-		//TODO hay que editar la funcion o mas bien crear uhna nueva que busque por id del shift
-		//TODO deberia devolver una lista de shifts NO un solo shift!!!!!
-		String sql = "SELECT * FROM shifts WHERE workerId = ?, date = ? ";
+	public List<Shift> searchShiftByDate (Connection c, Integer workerId, Date date) throws SQLException, Exception {
+		//TODO hay que editar la funcion o mas bien crear una nueva que busque por id del shift
+		String sql = "SELECT * FROM shifts WHERE workerId = ? AND date = ? ";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1, workerId);
 		p.setDate(2, date);
 		ResultSet rs = p.executeQuery();
-		Shift s = null;
+		List<Shift> shifts = new ArrayList<>();
 		if(rs.next()){ 
-
-			s = new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), rs.getInt("doctor_id"));		
-		
+		shifts.add(new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), rs.getInt("doctor_id"))) ;		
 		}
 		p.close();
 		rs.close();
-		return s;
+		return shifts;
 	}
 
 	@Override
@@ -263,9 +233,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List <Patient> pList = new ArrayList<Patient>();
 		while(rs.next()){
-
 			pList.add( new Patient(rs.getString("name"), rs.getString("surname"), rs.getString("gender"), rs.getString("blood_type"), rs.getString("allergies"), rs.getString("address"), rs.getDate("birthdate"), rs.getDate("check_in"), rs.getBoolean("hospitalized"), rs.getInt("medical_card_number")) );
-	
 		}
 		p.close();
 		rs.close();
@@ -279,9 +247,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List <Worker> wList = new ArrayList<Worker>();
 		while(rs.next()){ 
-
 			wList.add( new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getInt("room_in_ER"), rs.getString("type")) );
-		
 		}
 		p.close();
 		rs.close();
@@ -296,9 +262,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		Patient patient = null;
 		if(rs.next()){
-
 			patient = new Patient(rs.getString("name"), rs.getString("surname"), rs.getString("gender"), rs.getString("blood_type"), rs.getString("allergies"), rs.getString("address"), rs.getDate("birthdate"), rs.getDate("check_in"), rs.getBoolean("hospitalized"), rs.getInt("medical_card_number"));
-	
 		}
 		p.close();
 		rs.close();
@@ -312,26 +276,36 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		Worker worker = null;
 		if(rs.next()){
-
 			worker = new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getInt("room_in_ER"), rs.getString("type"));
-		
 		}
 		p.close();
 		rs.close();
 		return worker;	
 	}
 	
+	public Shift selectShift(Connection c, Integer shiftId) {
+		String sql = "SELECT * FROM shifts WHERE id = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1,shiftId);
+		ResultSet rs = p.executeQuery();
+		Shift shift = null;
+		if(rs.next()){
+			shift = new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), rs.getInt("doctor_id"), rs.getInt("id"));
+		}
+		p.close();
+		rs.close();
+		return shift;
+	}
+	
 	@Override
-	public Treatment searchTreatmentsByID(Connection c, Integer id) throws Exception {
+	public Treatment selectTreatment(Connection c, Integer id) throws Exception {
 		String sql = "SELECT * FROM treatments WHERE id = ?";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1,id);
 		ResultSet rs = p.executeQuery();
 		Treatment treatment = null;
 		if(rs.next()){
-
 			treatment =  new Treatment(id, rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"));
-
 		}
 		p.close();
 		rs.close();
@@ -339,16 +313,13 @@ public class SQL implements SQLInterface{
 	}
 
 	public List<Treatment> searchTreatmentsByMedCard(Connection c, Integer medCard) throws Exception {
-
 		String sql = "SELECT * FROM treatments WHERE patient_id = ?"; 
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1, medCard);
 		ResultSet rs = p.executeQuery();
 		List<Treatment> rList = new ArrayList<Treatment>();
 		while (rs.next()) {
-
 			rList.add(new Treatment(rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")));
-		
 		}
 		p.close();
 		rs.close();
@@ -356,69 +327,8 @@ public class SQL implements SQLInterface{
 	}
 	
 
-	public void editTreatment(Connection c, Treatment t) throws SQLException{
-		
-		String diagnosis = t.getDiagnosis();
-		Integer duration = t.getDuration();
-		String medication = t.getMedication();
-		String recommendation = t.getRecommendation();
-		Integer id = t.getTreatmentId();
-		Date startDate = t.getStartDate();
-
-		String sql;
-		PreparedStatement p = null;
-
-		if(diagnosis != null){
-
-			sql = "UPDATE treatments SET diagnosis = ? WHERE id = ?";
-			p = c.prepareStatement(sql);
-			p.setString(1, diagnosis);
-			p.setInt(2, id);
-			p.executeUpdate();
-	 
-		}
-		if(medication != null){
-
-			sql = "UPDATE treatments SET medication = ? WHERE id = ?";
-			p = c.prepareStatement(sql);
-			p.setString(1, medication);
-			p.setInt(2, id);
-			p.executeUpdate();
-
-		}
-		if(duration != null){
-
-			sql = "UPDATE treatments SET duration = ? WHERE id = ?";
-			p = c.prepareStatement(sql);
-			p.setInt(1, duration);
-			p.setInt(2,id);
-			p.executeUpdate();
-
-		}
-		if(startDate != null){
-
-			sql = "UPDATE treatments SET start_date = ? WHERE id = ?";
-			p = c.prepareStatement(sql);
-			p.setDate(1, startDate);
-			p.setInt(2, id);
-			p.executeUpdate();
-		
-		}
-		if(recommendation != null){
-
-			sql = "UPDATE treatments SET advice = ? WHERE id = ?";
-			p = c.prepareStatement(sql);
-			p.setString(1, recommendation);
-			p.setInt(2, id);
-			p.executeUpdate();
-
-		}
-
-		p.close();
-	}
-
-	
-	public void editTreatment(Connection c, Integer id, String diagnosis, String medication, Date startDate, Integer duration, String recommendation) throws SQLException{
+	@Override
+	public Treatment editTreatment(Connection c, Integer id, String diagnosis, String medication, Date startDate, Integer duration, String recommendation) throws Exception{
 		
 		String sql;
 		PreparedStatement p = null;
@@ -468,39 +378,61 @@ public class SQL implements SQLInterface{
 			p.executeUpdate();
 
 		}
-
+		Treatment t = new Treatment(this.selectTreatment(c, id));
 		p.close();
+		return t;
 	}
 
 	
 	
-	public void editShift (Connection c, int workerId, String shift, int room, Date date) {
-		try {
-			String sql = "UPDATE treatments SET shift = ?, room = ? WHERE doctor_id = ?, date = ? ";
-			Shift s = searchShiftByDate(c, workerId, date);
-			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setString(1, shift);
-			prep.setInt(2, room);
-			prep.setInt(3, workerId);			
-			prep.setDate(4, date);		
-			prep.executeUpdate();
-			prep.close();
+	public Shift editShift (Connection c,int shiftId, Integer workerId, String shift, Integer room, Date date) throws Exception {
+			String sql;
+			PreparedStatement p = null;
 
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+			if(workerId != null){
+
+				sql = "UPDATE shifts SET workerId = ? WHERE id = ?";
+				p = c.prepareStatement(sql);
+				p.setInt(1, workerId);
+				p.setInt(2, shiftId);
+				p.executeUpdate();
+		 
+			}if(shift != null){
+
+				sql = "UPDATE shifts SET shift = ? WHERE id = ?";
+				p = c.prepareStatement(sql);
+				p.setString(1, shift);
+				p.setInt(2, shiftId);
+				p.executeUpdate();
+		 
+			}if(room != null){
+
+				sql = "UPDATE shifts SET room = ? WHERE id = ?";
+				p = c.prepareStatement(sql);
+				p.setInt(1, room);
+				p.setInt(2, shiftId);
+				p.executeUpdate();
+		 
+			}if(date != null){
+
+				sql = "UPDATE shifts SET date = ? WHERE id = ?";
+				p = c.prepareStatement(sql);
+				p.setDate(1, date);
+				p.setInt(2, shiftId);
+				p.executeUpdate();
+		 
+			}
+		
+			p.close();
+			Shift s = new Shift(this.selectShift(c, shiftId));
+			return s;
+
 	}
 
-	@Override
-	public Treatment editTreatment(Integer id, String diagnosis, String medication, Integer duration,
-			String recommendation) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	@Override
 	public List<Treatment> searchTreatmentByMed(Connection c,Patient patient, String med) throws Exception{
-		String sql = "SELECT * FROM treatments WHERE medication LIKE '%"+ med +"%' ";
+		String sql = "SELECT * FROM treatments WHERE medication LIKE '%"+ med +"%' AND patient_id = "+patient.getMedicalCardId();
 		PreparedStatement prep = c.prepareStatement(sql);		
 		ResultSet rs = prep.executeQuery();
 		List<Treatment> treatments = new ArrayList<>();
@@ -510,9 +442,6 @@ public class SQL implements SQLInterface{
 		prep.close();
 		return treatments;
 	}
-	public Shift searchShiftByID(Connection c, Integer workerId, Integer id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 	
 	}
