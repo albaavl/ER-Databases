@@ -8,54 +8,38 @@ import javax.persistence.*;
 import java.io.*;
 
 
-
-
-@Entity
-@Table(name = "medical_tests")
 public class MedicalTest implements Serializable{
-
 	
 	private static final long serialVersionUID = 7210218883507746083L;
 
-	@Id
-	@GeneratedValue(generator = "medical_tests")
-	@TableGenerator(name = "medical_tests", table = "sqlite_sequence",
-		pkColumnName = "id", valueColumnName = "seq", pkColumnValue = "medical_tests")
-	
 	private Integer medicalTestId;
 	//Unique for each patient - cannot be repeated for another patient.
-
+	
 	private Date dateMedTest;
 	private String testType;
 	private String testResult; 
-	@Basic(fetch = FetchType.LAZY)
-	@Lob
 	private byte[] testImage;
-	
-	//Relationship 1-to-n with Patient
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn (name = "patient_id")
-	private Patient patient;
+	private Integer patientId;
 
 	public MedicalTest() {
 			super();
 	}
-	
-	public MedicalTest(Date date, String tType, String tResult, Patient patient) {
+
+	public MedicalTest(Date date, String tType, String tResult, int patientId) {
 		super();
 
 		this.testType = tType;
 		this.testResult = tResult;
-		this.patient = patient;
+		this.patientId = patientId;
 	}
-	public MedicalTest(int id, Date date, String type, String result, byte[] img, Patient patient) {
+	public MedicalTest(int id, Date date, String type, String result, byte[] img, int patientId) {
 		super();
 		this.medicalTestId = id;
 		this.dateMedTest = date;
 		this.testType = type;
 		this.testImage = img;
 		this.testResult = result;
-		this.patient = patient;
+		this.patientId = patientId;
     }
 	@Override
 	public int hashCode() {
@@ -84,7 +68,7 @@ public class MedicalTest implements Serializable{
 	@Override
 	public String toString() {
 		return "MedicalTest [medicalTestId=" + medicalTestId + ", dateMedTest=" + dateMedTest + ", testType=" + testType
-				+ ", testResult=" + testResult + ", testImage=" + Arrays.toString(testImage) + ", patient=" + patient
+				+ ", testResult=" + testResult + ", testImage=" + Arrays.toString(testImage) + ", patientId=" + patientId
 				+ "]";
 	}
 	/**
@@ -172,7 +156,11 @@ public class MedicalTest implements Serializable{
 		this.testImage = testImage;
 	}
 
-	public Patient getPatient() {
-		return patient;
+	public Integer getPatientId() {
+		return patientId;
+	}
+
+	public void setPatientId(Integer patientId) {
+		this.patientId = patientId;
 	}
 }

@@ -29,6 +29,7 @@ public class Shift implements Serializable {
 	@GeneratedValue(generator="shifts")
 	@TableGenerator(name="shifts", table="sqlite_sequence",
 	    pkColumnName="workerId", valueColumnName="seq", pkColumnValue="shifts")
+	private Integer shiftId;
 	private Date date;
 	private String shift;
 	private Integer room;
@@ -44,8 +45,15 @@ public class Shift implements Serializable {
 		super();
 		this.setDate(date);
 		this.setRoom(room);
+		this.setWorkerId(workerId);	
+	}
+	
+	public Shift(Date date, String shift, Integer room, Integer workerId, Integer shiftId) throws Exception {
+		super();
+		this.setDate(date);
+		this.setRoom(room);
 		this.setWorkerId(workerId);
-		
+		this.setShiftId(shiftId);
 	}
 	
 	public Shift(Shift s) throws Exception {
@@ -53,6 +61,7 @@ public class Shift implements Serializable {
 		this.setDate(s.date);
 		this.setRoom(s.room);
 		this.setWorkerId(s.workerId);
+		this.setShiftId(s.shiftId);
 		
 	}
 	/**
@@ -85,7 +94,6 @@ public class Shift implements Serializable {
 	 */
 	
 	
-		
 	public void setShift(String shift) throws Exception {
 		if(shift.equalsIgnoreCase("morning")||shift.equalsIgnoreCase("afternoon")||shift.equalsIgnoreCase("night")){
 			this.shift=shift;
@@ -117,6 +125,14 @@ public class Shift implements Serializable {
 	 */
 	public void setWorkerId(Integer workerId) {
 		this.workerId = workerId;
+	}
+	
+	public Integer getShiftId() {
+		return shiftId;
+	}
+
+	public void setShiftId(Integer shiftId) {
+		this.shiftId = shiftId;
 	}
 
 	@Override

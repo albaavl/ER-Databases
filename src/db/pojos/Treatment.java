@@ -8,25 +8,17 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
-@Table(name = "treatment")
 public class Treatment implements Serializable {
 
 	private static final long serialVersionUID = 5733730131671999655L;
-	@Id
-	@GeneratedValue(generator="treatment")
-	@TableGenerator(name="treatment", table="sqlite_sequence",
-	pkColumnName="id", valueColumnName="seq",
-	pkColumnValue="treatment")	
+
 	private Integer treatmentId; //Unique for each treatment for each patient - can be repeated
 	private String diagnosis;
 	private String medication;
 	private String recommendation;
 	private Date startDate; //Date when the patient starts the treatment
 	private Integer duration; //Duration of the treatment in days
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="patient_id")	
-	private Patient patient;
+	private Integer patientId;
 
 	//Builders
 
@@ -44,24 +36,24 @@ public class Treatment implements Serializable {
 	 * @param duration - How many days is the treatment going to last (Integer)
 	 * @throws Exception 
 	 */
-	public Treatment(String diagnosis, String medication , Date startDate, String recommendation, Integer duration, Patient patient) throws Exception {
+	public Treatment(String diagnosis, String medication , Date startDate, String recommendation, Integer duration, Integer patientId) throws Exception {
 		super();
 		setDiagnosis(diagnosis);
 		setMedication(medication);
 		setStartDate(startDate);
 		setRecommendation(recommendation);
 		setDuration(duration);
-		setPatient(patient);
+		setPatientId(patientId);
 	}
 
-	public Treatment(int treatmentId, String diagnosis, String medication, Date startDate, String recommendation, int duration, Patient patient) throws Exception {
+	public Treatment(int treatmentId, String diagnosis, String medication, Date startDate, String recommendation, int duration, Integer patientId) throws Exception {
 		setTreatmentId(treatmentId);
 		setDiagnosis(diagnosis);
 		setMedication(medication);		
 		setStartDate(startDate);		
 		setRecommendation(recommendation);
 		setDuration(duration);
-		setPatient(patient);
+		setPatientId(patientId);
 	}
 	
 	public Treatment(Treatment t) throws Exception {
@@ -71,7 +63,7 @@ public class Treatment implements Serializable {
 		setStartDate(t.startDate);
 		setMedication(t.medication);
 		setDuration(t.duration);
-		setPatient(t.patient);
+		setPatientId(t.patientId);
 	}
 
 	//Getters + Setters
@@ -182,14 +174,12 @@ public class Treatment implements Serializable {
 		}
 	}
 
-	//Methods
-
-	public Patient getPatient() {
-		return patient;
+	public Integer getPatientId() {
+		return patientId;
 	}
 
-	public void setPatient(Patient patient) {
-		this.patient = patient;
+	public void setPatientId(Integer patientId) {
+		this.patientId = patientId;
 	}
 
 	@Override

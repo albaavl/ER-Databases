@@ -5,17 +5,11 @@ import java.util.*;
 import javax.persistence.*;
 import java.io.*;
 
-@Entity
-@Table(name = "workers")
+
 public class Worker implements Serializable{
 	
 	private static final long serialVersionUID = 5053907057578582101L;
-	
-	@Id
-	@GeneratedValue(generator = "workers")
-	@TableGenerator(name = "workers", table = "sqlite_sequence",
-		pkColumnName = "id", valueColumnName = "seq", pkColumnValue = "workers")
-	
+
 	private Integer workerId;
 	//Unique for each doctor - cannot be repeated for another doctor.
 
@@ -25,48 +19,22 @@ public class Worker implements Serializable{
 	private int roomEr;
 	private String typeWorker;
 	//Can be doctor(1), nurse(2), administration staff(3), technician(4)
-	
-	//Relationship 1-to-1 with Shift
-	@OneToOne (fetch = FetchType.LAZY)
-	@JoinColumn (name = "doctor_id")
-	private Shift shift;
-	
-	//Relationship 1-to-n with Treatment
-	@OneToMany(mappedBy = "patient")
-	private Treatment treatment;
-	
-	//Relationship n-to-n with Patient
-	@ManyToMany(mappedBy = "doctors")
-	private List<Patient> patients;
+
 	
 	public Worker() {
 		super();
-		this.patients = new ArrayList<Patient>();
 	}
-
-	public Worker(String name, String surname, String specialty, int roomEr, String tpeworker){
-		this.workerName = name;
-		this.workerSurname = surname;
-		this.specialtyId = specialty;
-		this.roomEr = roomEr;
-		this.typeWorker = tpeworker;
-		this.shift = new Shift();
-		this.treatment = new Treatment();
-		this.patients = new ArrayList<Patient>();
-		workerId = 0;
-	}
+	
 	public Worker(String workerName, String workerSurname, String specialtyId, int roomEr,
-			String typeWorker, Shift shift, Treatment treatment) {
+			String typeWorker) {
 		super();
 		this.workerName = workerName;
 		this.workerSurname = workerSurname;
 		this.specialtyId = specialtyId;
 		this.roomEr = roomEr;
 		this.typeWorker = typeWorker;
-		this.shift = shift;
-		this.treatment = treatment;
-		this.patients = new ArrayList<Patient>();
 	}
+	
 	public Worker(Worker w) throws Exception {
 		super();
 		this.workerName = w.workerName;
@@ -74,22 +42,6 @@ public class Worker implements Serializable{
 		this.specialtyId = w.specialtyId;
 		this.roomEr = w.roomEr;
 		this.typeWorker = w.typeWorker;
-		this.shift = new Shift(w.shift);
-		this.treatment = w.treatment;
-		this.patients = new ArrayList<Patient>();
-	}
-	
-	public Worker(String workerName, String workerSurname, String specialtyId, int roomEr,
-			String typeWorker, Shift shift, Treatment treatment, List<Patient> patients) {
-		super();
-		this.workerName = workerName;
-		this.workerSurname = workerSurname;
-		this.specialtyId = specialtyId;
-		this.roomEr = roomEr;
-		this.typeWorker = typeWorker;
-		this.shift = shift;
-		this.treatment = treatment;
-		this.patients = patients;
 	}
 	
 	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, int roomEr,
@@ -101,22 +53,8 @@ public class Worker implements Serializable{
 		this.specialtyId = specialtyId;
 		this.roomEr = roomEr;
 		this.typeWorker = typeWorker;
-		this.patients = new ArrayList<Patient>();
 	}
 	
-	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, int roomEr,
-			String typeWorker, Shift shift, Treatment treatment) {
-		super();
-		this.workerId = workerId;
-		this.workerName = workerName;
-		this.workerSurname = workerSurname;
-		this.specialtyId = specialtyId;
-		this.roomEr = roomEr;
-		this.typeWorker = typeWorker;
-		this.shift = shift;
-		this.treatment = treatment;
-		this.patients = new ArrayList<Patient>();
-	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -144,7 +82,7 @@ public class Worker implements Serializable{
 	@Override
 	public String toString() {
 		return "Worker [workerId=" + workerId + ", workerName=" + workerName + ", workerSurname=" + workerSurname
-				+ ", specialtyId=" + specialtyId + ", roomEr=" + roomEr + ", typeWorker=" + typeWorker + ", treatment = " + treatment + ", shift = " + shift + "]";
+				+ ", specialtyId=" + specialtyId + ", roomEr=" + roomEr + ", typeWorker=" + typeWorker + "]";
 	}
 	
 	//Getters + Setters
@@ -242,86 +180,5 @@ public class Worker implements Serializable{
 		} else {
 			throw new NotBoundException("Incorrect type of worker");
 		}
-	}
-	/**
-	 * Used to get the shift of a worker.
-	 * @return [Shift] The worker's shift.
-	 */
-	public Shift getShift() {
-		return shift;
-	}
-	/**
-	 * Used to set the shift of a worker
-	 * @param shift - The assigned room of the worker.
-	 */
-	public void setShift(Shift shift) {
-		this.shift = shift;
-	}
-	/**
-	 * Used to get the treatment assigned by a worker to a patient.
-	 * @return [Treatment] A patient's treatment assigned by the doctor.
-	 */
-	public Treatment getTreatment() {
-		return treatment;
-	}
-	/**
-	 * Used to set the treatment of a patient assigned by a worker.
-	 * @param treatment - The treatment assigned to a patient by a worker.
-	 */
-	public void setTreatment(Treatment treatment) {
-		this.treatment = treatment;
-	}
-	/**
-	 * Used to get the list of patients of a worker.
-	 * @return [List<Patient>] The list of patients of a worker.
-	 */
-	public List<Patient> getPatients() {
-		return patients;
-	}
-	public String getPatientstoString() {
-		String str = "";
-		for(Patient patient : patients) {
-			str += patient.toString() + "\n";
-		}
-		return str;
-	}
-	/**
-	 * Used to set the list of patients of a worker.
-	 * @param patients - The list of patients of a worker.
-	 */
-	public void setPatients(List<Patient> patients) {
-		this.patients = patients;
-	}
-	/**
-	 * Used to add new patient to the list of patients of the worker. If the patient is already in the list of patients of the worker, the patient will not be added and will notify the worker. 
-	 * @param patient - The patient that will be included in the list.
-	 */
-	public void addPatient (Patient patient) {
-		if(!patients.contains(patient)) {
-			this.patients.add(patient);
-		} else {
-			System.out.println("The patient " + patient.getPatientName() + " " + patient.getPatientSurname() + " with medical card: " +patient.getMedicalCardId()+ " is already included.");
-		}
-	}
-	/**
-	 * Used to remove a patient from the list of patients of the worker. If the patient is not in the list of patients of the worker, the patient will not be removed and will notify the worker. 
-	 * @param patient - The patient that will be removed from the list.
-	 */
-	public void removePatinet (Patient patient) {
-		if(patients.contains(patient)) {
-			this.patients.remove(patient);
-		} else {
-			System.out.println("Patient " + patient.getPatientName() + " " + patient.getPatientSurname() + " with medical card: " +patient.getMedicalCardId()+ " not found.");
-		}
-	}
-	/**
-	 * Used to show a list of patients of the worker. 
-	 */
-	public String showPatient() {
-		String str = "";
-		for(Patient patient : patients) {
-			str += patient.toString() + "\n";
-		}
-		return str;
 	}
 }
