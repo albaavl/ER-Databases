@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 public class UserManager implements JPAInterface {
 
-	private static final String PERSISTENCE_PROVIDER = "ER-provider";
+	private static final String PERSISTENCE_PROVIDER = "user-provider";
 	private static EntityManager entityManager;
 	
 	public UserManager() {
