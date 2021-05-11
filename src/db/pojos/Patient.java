@@ -7,19 +7,9 @@ import java.util.*;
 import javax.persistence.*;
 
 
-
-@Entity
-@Table(name = "patients")
 public class Patient implements Serializable{
 
-//Attributes
-
-	
 	private static final long serialVersionUID = -2589974670411322131L;
-	@Id
-	@GeneratedValue(generator="patients")
-	@TableGenerator(name="patients", table="sqlite_sequence",
-	    pkColumnName="medicalCardId", valueColumnName="seq", pkColumnValue="patients")
 	
 	private Integer medical_card_number;
 		//Unique for each patient - cannot be repeated for another patient.
@@ -38,16 +28,55 @@ public class Patient implements Serializable{
 		//Home address of the patient.
 	private boolean hospitalized;
 		//Whether the patient is hospitalized or not.
-	@OneToMany(mappedBy= "patient") 
-	private List<Treatment> treatments;
-	@ManyToMany
-	@JoinTable(name="doctor_patient",
-	joinColumns={@JoinColumn(name="patient_id", referencedColumnName="medical_card_number")},
-    inverseJoinColumns={@JoinColumn(name="doctor_id", referencedColumnName="workerId")})
-	private List<Worker> doctors;
-	@OneToMany(mappedBy="medicalTest")
-	private List<MedicalTest> medicalTests;
+
+//builder
+
+	/**
+	 * Empty builder - shouldn't be used for anything.
+	 */
+	public Patient() {
+	}
 	
+	/**
+	 * Full builder for a patient.
+	 * 
+	 * @param pnam - Name of the patient (String)
+	 * @param psnam - Surname of the patient (String)
+	 * @param pgen - Gender of the patient [Must be Male or Female] (String)
+	 * @param btype - Blood type of the patient [Must be: A+,A-,B+,B-,AB+,AB-,O+,O-] (String)
+	 * @param allerg - String with the allergies of the patient. 
+	 * @param paddress - String with the home address of the patient.
+	 * @param bdat - Birthday of the patient (SQL Date)
+	 * @param cIndat - Check in date of the patient (SQL Date)
+	 * @param hosp - Is the patient hospitalized? (boolean)
+	 * @param medCardId - The medical card id of the patient (int) [Cannot be changed once it's created]
+	 * @throws NotBoundException if Gender or Blood type provided isnt one of the previous mentioned.
+	 */
+	public Patient(String pnam, String psnam, String pgen, String btype, String allerg, String paddress, Date bdat, Date cIndat, boolean hosp, Integer medCardId ) throws NotBoundException{
+		this.setAllergieType( allerg);
+		this.setbDate(bdat);
+		this.setBloodType(btype);
+		this.setCheckInDate(cIndat);
+		this.setGender(pgen);
+		this.setHospitalized(hosp); 
+		this.setPatientName(pnam);
+		this.setPatientSurname(psnam);
+		this.setPatientAddress(paddress);
+		this.medical_card_number = medCardId;
+	}
+	
+	public Patient(Patient p) throws NotBoundException {
+		this.setAllergieType(p.allergieType);
+		this.setbDate(p.bDate);
+		this.setBloodType(p.bloodType);
+		this.setCheckInDate(p.checkInDate);
+		this.setGender(p.gender);
+		this.setHospitalized(p.hospitalized); 
+		this.setPatientName(p.patientName);
+		this.setPatientSurname(p.patientSurname);
+		this.setPatientAddress(p.patientAddress);
+		this.medical_card_number = p.medical_card_number;
+	}
 
 //Getters + Setters
 
@@ -66,92 +95,6 @@ public class Patient implements Serializable{
 	public void setPatientName(String patientName) {
 		this.patientName = patientName;
 	}
-	
-	
-	
-	/**
-	 * @return the bDate
-	 */
-	public Date getbDate() {
-		return bDate;
-	}
-
-	/**
-	 * @param bDate the bDate to set
-	 */
-	public void setbDate(Date bDate) {
-		this.bDate = bDate;
-	}
-
-	/**
-	 * @return the treatments
-	 */
-	public List<Treatment> getTreatments() {
-		return treatments;
-	}
-	
-	public String getTreatmentsToString() {
-		String treatments = "";
-		for(Treatment treatment: this.treatments) {
-			treatments+=treatment.toString();
-			treatments+="\n";
-		}
-		return treatments;
-	}
-
-	/**
-	 * @param treatments the treatments to set
-	 */
-	public void setTreatments(List<Treatment> treatments) {
-		this.treatments = treatments;
-	}
-
-	/**
-	 * @return the doctors
-	 */
-	public List<Worker> getDoctors() {
-		return doctors;
-	}
-	
-	public String getDoctorsToString() {
-		String docs = "";
-		for(Worker doctor: this.doctors) {
-			docs+=doctor.toString();
-			docs+="\n";
-		}
-		return docs;
-	}
-
-	/**
-	 * @param doctors the doctors to set
-	 */
-	public void setDoctors(List<Worker> doctors) {
-		this.doctors = doctors;
-	}
-
-	/**
-	 * @return the medicalTests
-	 */
-	public List<MedicalTest> getMedicalTests() {
-		return medicalTests;
-	}
-	
-	public String getMedTestsToString() {
-		String tests = "";
-		for(MedicalTest medt: this.medicalTests) {
-			tests+=medt.toString();
-			tests+="\n";
-		}
-		return tests;
-	}
-
-	/**
-	 * @param medicalTests the medicalTests to set
-	 */
-	public void setMedicalTests(List<MedicalTest> medicalTests) {
-		this.medicalTests = medicalTests;
-	}
-
 	/**
 	 * Used to get the surname of the patient.
 	 * @return [String] The patient surname
@@ -167,6 +110,19 @@ public class Patient implements Serializable{
 		this.patientSurname = patientSurname;
 	}
 	
+	/**
+	 * @return the bDate
+	 */
+	public Date getbDate() {
+		return bDate;
+	}
+
+	/**
+	 * @param bDate the bDate to set
+	 */
+	public void setbDate(Date bDate) {
+		this.bDate = bDate;
+	}
 
 	/**
 	 * Used to get the gender of the patient.
@@ -241,8 +197,7 @@ public class Patient implements Serializable{
 	public void setAllergieType(String allergieType) {
 		this.allergieType = allergieType;
 	}
-	
-	
+		
 	/**
 	 * Used to get the check in date of the patient into the ER.
 	 * @return Date of check in (SQL Date)
@@ -297,57 +252,7 @@ public class Patient implements Serializable{
 	
 	public void setMedicalCardId (Integer medicalCardId) {
 		this.medical_card_number = medicalCardId;
-	}
-//builder
-
-	/**
-	 * Empty builder - shouldn't be used for anything.
-	 */
-	public Patient() {
-	}
-	
-	//name gender blood type allergies patientAddress (strings) bDate checkInDate(date) hospitalized (boolean)
-	/**
-	 * Full builder for a patient.
-	 * 
-	 * @param pnam - Name of the patient (String)
-	 * @param psnam - Surname of the patient (String)
-	 * @param pgen - Gender of the patient [Must be Male or Female] (String)
-	 * @param btype - Blood type of the patient [Must be: A+,A-,B+,B-,AB+,AB-,O+,O-] (String)
-	 * @param allerg - String with the allergies of the patient. 
-	 * @param paddress - String with the home address of the patient.
-	 * @param bdat - Birthday of the patient (SQL Date)
-	 * @param cIndat - Check in date of the patient (SQL Date)
-	 * @param hosp - Is the patient hospitalized? (boolean)
-	 * @param medCardId - The medical card id of the patient (int) [Cannot be changed once it's created]
-	 * @throws NotBoundException if Gender or Blood type provided isnt one of the previous mentioned.
-	 */
-	public Patient( String pnam, String psnam, String pgen, String btype, String allerg, String paddress, Date bdat, Date cIndat, boolean hosp, Integer medCardId ) throws NotBoundException{
-		this.setAllergieType( allerg);
-		this.setbDate(bdat);
-		this.setBloodType(btype);
-		this.setCheckInDate(cIndat);
-		this.setGender(pgen);
-		this.setHospitalized(hosp); 
-		this.setPatientName(pnam);
-		this.setPatientSurname(psnam);
-		this.setPatientAddress(paddress);
-		this.medical_card_number = medCardId;
-	}
-	
-	public Patient(Patient p) throws NotBoundException {
-		this.setAllergieType(p.allergieType);
-		this.setbDate(p.bDate);
-		this.setBloodType(p.bloodType);
-		this.setCheckInDate(p.checkInDate);
-		this.setGender(p.gender);
-		this.setHospitalized(p.hospitalized); 
-		this.setPatientName(p.patientName);
-		this.setPatientSurname(p.patientSurname);
-		this.setPatientAddress(p.patientAddress);
-		this.medical_card_number = p.medical_card_number;
-	}
-	
+	}	
 
 	//Methods
 
@@ -381,7 +286,4 @@ public class Patient implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
-
 }
