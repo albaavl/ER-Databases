@@ -3,7 +3,7 @@ package db.interfaces;
 import java.util.*;
 import pojos.users.*;
 
-public interface UserManager {
+public interface UMInterface {
 
 	public void connect();
 	public void disconnect();
@@ -12,5 +12,6 @@ public interface UserManager {
 	public Role getRole(int id);
 	public List<Role> getRoles();
 	public User checkPassword(String username, String password);
+	Role getRoleByName(String name);
 	
 }

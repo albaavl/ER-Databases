@@ -1,18 +1,20 @@
 package db.jpa;
 
+
 import java.security.*;
 import java.util.List;
 import javax.persistence.*;
-import db.interfaces.UserManager;
+
+import db.interfaces.UMInterface;
 import pojos.users.*;
 
-public class JPAUserManager implements UserManager {
+public class JPAUserManager implements UMInterface {
 
 	private EntityManager em;
 	
 	@Override
 	public void connect() {
-		em = Persistence.createEntityManagerFactory("user-provider").createEntityManager();
+		em = Persistence.createEntityManagerFactory("ER-provider").createEntityManager();
 		em.getTransaction().begin();
 		em.createNativeQuery("PRAGMA foreign_keys=ON").executeUpdate();
 		em.getTransaction().commit();
@@ -49,6 +51,14 @@ public class JPAUserManager implements UserManager {
 		q.setParameter(1, id);
 		return (Role) q.getSingleResult();
 	}
+	
+	@Override
+	public Role getRoleByName(String name) {
+		Query q = em.createNativeQuery("SELECT * FROM roles WHERE ROLE = ?", Role.class);
+		q.setParameter(1, name);
+		Role role = (Role) q.getSingleResult();
+		return role;
+	}
 
 	@Override
 	public List<Role> getRoles() {
@@ -58,6 +68,7 @@ public class JPAUserManager implements UserManager {
 
 	@Override
 	public User checkPassword(String username, String password) {
+		User user = null;
 		try {
 			MessageDigest md = MessageDigest.getInstance("MDS");
 			md.update(password.getBytes());
@@ -65,12 +76,11 @@ public class JPAUserManager implements UserManager {
 			Query q = em.createNamedQuery("SELECT * FROM users WHERE username = ? AND password = ?", User.class);
 			q.setParameter(1, username);
 			q.setParameter(2, hash);
-			return (User) q.getSingleResult();
+			user = (User) q.getSingleResult();
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
-		}catch(NoResultException nre) {
-			return null;
 		}
-		return null;
+		return user;
 	}
+	
 }
