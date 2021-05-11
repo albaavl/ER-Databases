@@ -10,13 +10,13 @@
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
  
 		<!-- Entity Class -->
-		<class>db.pojos.MedicalTest</class>
+	<!--  	<class>db.pojos.MedicalTest</class>
 		<class>db.pojos.Patient</class>
 		<class>db.pojos.Shift</class>
 		<class>db.pojos.Treatment</class>
-		<class>db.pojos.Worker</class>
+		<class>db.pojos.Worker</class> -->
 				<class>pojos.users.User</class>
-				<class>pojos.users.Role</class>
+				<class>pojos.users.Role</class> 
 
 		<properties>	
 			<!-- Connection properties -->
