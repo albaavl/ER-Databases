@@ -121,7 +121,7 @@ public class SQL implements SQLInterface{
 	public void addMedicalTest(Connection c, MedicalTest medtest) throws SQLException{
 			String sq1 = "INSERT INTO medical_tests (patient_id, type, result, image) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
-			preparedStatement.setInt(1, medtest.getPatient().getMedicalCardId());
+			preparedStatement.setInt(1, medtest.getPatientId());
 			preparedStatement.setString(2, medtest.getTestType());
 			preparedStatement.setString(3, medtest.getTestResult());
 			preparedStatement.setBytes(4, medtest.getTestImage());
@@ -283,7 +283,7 @@ public class SQL implements SQLInterface{
 		return worker;	
 	}
 	
-	public Shift selectShift(Connection c, Integer shiftId) {
+	public Shift selectShift(Connection c, Integer shiftId) throws SQLException, Exception {
 		String sql = "SELECT * FROM shifts WHERE id = ?";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1,shiftId);
