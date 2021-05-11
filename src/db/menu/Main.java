@@ -18,7 +18,7 @@ public class Main {
 	static Connection c ;
 	static Scanner sc = new Scanner(System.in);
 	static SQL jdbc = new SQL();
-	private static UserManager userman = new JPAUserManager();
+	private static JPAUserManager userman = new JPAUserManager();
 	public static int option = 0;
 
 	public static void main(String[] args) throws Exception, SQLException {
@@ -276,7 +276,7 @@ public class Main {
 			while (t == null) {
 			System.out.println("Enter the id of the treatment that you want to edit:");
 			Integer id = sc.nextInt();
-			t = new Treatment(jdbc.searchTreatmentsByID(c, id));//Connection c, Integer id
+			t = new Treatment(jdbc.selectTreatment(c, id));//Connection c, Integer id
 			}
 			System.out.println("This is the selected treatment:");
 			System.out.println(t.toString());
