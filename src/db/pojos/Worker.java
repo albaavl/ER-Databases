@@ -43,7 +43,18 @@ public class Worker implements Serializable{
 		super();
 		this.patients = new ArrayList<Patient>();
 	}
-	
+
+	public Worker(String name, String surname, String specialty, int roomEr, String tpeworker){
+		this.workerName = name;
+		this.workerSurname = surname;
+		this.specialtyId = specialty;
+		this.roomEr = roomEr;
+		this.typeWorker = tpeworker;
+		this.shift = new Shift();
+		this.treatment = new Treatment();
+		this.patients = new ArrayList<Patient>();
+		workerId = 0;
+	}
 	public Worker(String workerName, String workerSurname, String specialtyId, int roomEr,
 			String typeWorker, Shift shift, Treatment treatment) {
 		super();

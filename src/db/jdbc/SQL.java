@@ -44,6 +44,7 @@ public class SQL implements SQLInterface{
 				   + " name     TEXT     NOT NULL, "
 				   + " surname     TEXT     NOT NULL, "
 				   + " specialty   TEXT, "
+				   + " role TEXT NOT NULL,"
 				   + " room_in_ER   TEXT)";
 		stmt3.executeUpdate(sql3);
 		stmt3.close();
@@ -60,7 +61,7 @@ public class SQL implements SQLInterface{
 				   + "patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL,"
 				   + " type     TEXT     NOT NULL,"				   
 				   + " result TEXT  NULL,"
-				   + " image    BLOB,";
+				   + " image    BLOB)";
 		stmt5.executeUpdate(sql5);
 		stmt5.close();
 		Statement stmt6 = c.createStatement();
@@ -70,7 +71,7 @@ public class SQL implements SQLInterface{
 				   + " medication    TEXT     NOT NULL,"				   
 				   + " start_date   DATE      NOT NULL,"
 				   + " advice       TEXT      NOT NULL,"
-				   + " duration   INTEGER     NOT NULL"	
+				   + " duration   INTEGER     NOT NULL,"	
 				   + " doctor_id   INTEGER  REFERENCES workers(id) ON UPDATE CASCADE ON DELETE SET NULL,"
 				   + "patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt6.executeUpdate(sql6);
@@ -79,8 +80,8 @@ public class SQL implements SQLInterface{
 		String sql7 = "CREATE TABLE shift "
 				   + "(shift       TEXT  PRIMARY KEY,"
 				   + " date     DATE     NOT NULL, "
-				   + " room   INTEGER     NOT NULL"
-		 		   + " doctor_id   INTEGER  REFERENCES workers(id) ON UPDATE CASCADE ON DELETE SET NULL";
+				   + " room   INTEGER     NOT NULL,"
+		 		   + " doctor_id   INTEGER  REFERENCES workers(id) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt7.executeUpdate(sql7);
 		stmt7.close();		
 		System.out.println("Tables created.");		
@@ -89,17 +90,17 @@ public class SQL implements SQLInterface{
 
 	public void addPatient(Connection c, Patient p) throws SQLException{
         try {
-			String sq1 = "INSERT INTO patients ( medical card number, name, surname, gender, date of birth,  address, blood type, allergies, check in date, hospitalization) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String sq1 = "INSERT INTO patients ( medical_card_number, name, surname, gender, birthdate,  address, blood_type, allergies, check_in, hospitalized) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
-			preparedStatement.setString(1, p.getPatientName());
-			preparedStatement.setString(2, p.getPatientSurname());
-			preparedStatement.setInt(3, p.getMedicalCardId());
+			preparedStatement.setString(2, p.getPatientName());
+			preparedStatement.setString(3, p.getPatientSurname());
+			preparedStatement.setInt(1, p.getMedicalCardId());
 			preparedStatement.setString(4, p.getGender());
-			preparedStatement.setString(5, p.getBloodType());
-			preparedStatement.setString(6, p.getAllergieType());
-			preparedStatement.setDate(7, p.getbDate());
-			preparedStatement.setDate(8, p.getCheckInDate());
-			preparedStatement.setString(9, p.getPatientAddress());
+			preparedStatement.setString(7, p.getBloodType());
+			preparedStatement.setString(8, p.getAllergieType());
+			preparedStatement.setDate(5, p.getbDate());
+			preparedStatement.setDate(9, p.getCheckInDate());
+			preparedStatement.setString(6, p.getPatientAddress());
 			preparedStatement.setBoolean(10, p.getHospitalized());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
@@ -108,23 +109,23 @@ public class SQL implements SQLInterface{
 		}
 	}
 
+
 	public void addWorker(Connection c, Worker w) throws SQLException{
         try {
-			String sq1 = "INSERT INTO workers (id, name, surname, specialty, room_in_ER, type, emp_type) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			String sq1 = "INSERT INTO workers (name, surname, specialty, role, room_in_ER) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
-			preparedStatement.setInt(1, w.getWorkerId());
-			preparedStatement.setString(2, w.getWorkerName());
-			preparedStatement.setString(3, w.getWorkerSurname());
-			preparedStatement.setString(4, w.getSpecialtyId());
+			preparedStatement.setString(1, w.getWorkerName());
+			preparedStatement.setString(2, w.getWorkerSurname());
+			preparedStatement.setString(3, w.getSpecialtyId());
 			preparedStatement.setInt(5, w.getRoomEr());
-			preparedStatement.setString(6, w.getTypeWorker());
-			preparedStatement.setString(7, w.getTypeWorker());
+			preparedStatement.setString(4, w.getTypeWorker());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
 
 	public void addMedicalTest(Connection c, MedicalTest medtest) throws SQLException{
         try {
@@ -258,7 +259,7 @@ public class SQL implements SQLInterface{
 
 	@Override
 	public List<Patient> searchPatient(Connection c, String surname) throws SQLException, NotBoundException {
-		String sql = "SELECT * FROM patients WHERE surname = ?";
+		String sql = "SELECT * FROM patients WHERE surname LIKE ?";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setString(1,"%" + surname + "%");
 		ResultSet rs = p.executeQuery();
@@ -274,7 +275,7 @@ public class SQL implements SQLInterface{
 	}
 	
 	public List<Worker> searchWorker(Connection c, String surname) throws SQLException, NotBoundException {
-		String sql = "SELECT * FROM workers WHERE surname = ?";
+		String sql = "SELECT * FROM workers WHERE surname LIKE ?";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setString(1,"%" + surname + "%");
 		ResultSet rs = p.executeQuery();
@@ -511,4 +512,9 @@ public class SQL implements SQLInterface{
 		prep.close();
 		return treatments;
 	}
+	public Shift searchShiftByID(Connection c, Integer workerId, Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	}

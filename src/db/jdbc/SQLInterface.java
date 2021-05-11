@@ -49,6 +49,6 @@ public interface SQLInterface {
 	public Patient selectPatient(Connection c, Integer medCard) throws SQLException, NotBoundException;
 	
 	public Treatment editTreatment(Integer id, String diagnosis, String medication, Integer duration, String recommendation); //FUNCION NO CREADA debe hacer un update del treatment cuyo id se le pasa, SOLO DEBE CAMBIAR CADA PAR�METRO si la string que se le pasa no es igual a un 0, debe devolver el nuevo tratamiento
-	public List<Treatment> searchTreatmentByMed(Connection c,Patient patient, String med);
+	public List<Treatment> searchTreatmentByMed(Connection c,Patient patient, String med) throws Exception;
 
 }

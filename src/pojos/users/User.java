@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 import javax.persistence.*;
 
-import com.sun.tools.javac.code.Attribute.Array;
 
 
 @Entity

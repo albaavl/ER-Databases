@@ -25,9 +25,9 @@ public class Main {
 
 	public static void main(String[] args) throws Exception, SQLException {
 		try{
-			jdbc.connect();
-		
-		userman.connect();
+			c= jdbc.connect();
+			userman.connect();
+			jdbc.create(c);
 			do {
 				System.out.println("Welcome to the Quiron's ER");
 				System.out.println("1. Register");
@@ -192,7 +192,7 @@ public class Main {
 					break;	
 				case 4: 
 					System.out.println("Request new medical test");
-					requestMedTest();
+//					requestMedTest();
 					break;	
 				case 5: 
 					System.out.println("Edit shifts");
@@ -303,7 +303,7 @@ public class Main {
 			System.out.println(nuevo.toString());
 		}		
 	}
-	private static void editShift() {
+	private static void editShift() throws Exception {
 		Worker worker = selectWorker();
 		System.out.println("These are the shifts associated to worker "+worker.getWorkerName()+ " " +worker.getWorkerSurname()+ " ordered by date: ");
 		consultShifts(worker);
@@ -317,7 +317,7 @@ public class Main {
 		System.out.println(shift.toString());
 		System.out.println("Enter the new shift[1-3], if you don't want to edit it enter a 0: \n1.Morning \n2.Afternoon \n3.Night");
 		Integer s = sc.nextInt();
-		String time;
+		String time =null;
 		switch(s) {
 		case 0:
 			time =null;
@@ -348,30 +348,31 @@ public class Main {
 		String answer = sc.next();
 		while(!answer.equalsIgnoreCase("0")) {
 		//para que busque el turno del trabajador para x dia
-		if(answer.equalsIgnoreCase("YES")) {
-			System.out.println("Insert date: [dd/mm/yyyy]");
-			String date = sc.next();
-			Date shiftDate = Date.valueOf(date);
-			List<Shift> s = new ArrayList<>();
-			s.addAll( jdbc.searchShiftByDate (c, w.getWorkerId(), shiftDate)); //Connection c, Integer workerId
-			if ( s.isEmpty()) {
-				System.out.println("No shifts available for worker " + w.getWorkerName()+" "+ w.getWorkerSurname() + " on " + shiftDate);
-			} else {
-				System.out.println("These are the shifts of "+w.getWorkerName()+" "+ w.getWorkerSurname()+" on " + shiftDate);
-				System.out.println(s.toString());
+//		if(answer.equalsIgnoreCase("YES")) {
+//			System.out.println("Insert date: [dd/mm/yyyy]");
+//			String date = sc.next();
+//			Date shiftDate = Date.valueOf(date);
+//			List<Shift> s = new ArrayList<>();
+//			s.addAll( jdbc.searchShiftByDate (c, w.getWorkerId(), shiftDate)); //Connection c, Integer workerId
+//			if ( s.isEmpty()) {
+//				System.out.println("No shifts available for worker " + w.getWorkerName()+" "+ w.getWorkerSurname() + " on " + shiftDate);
+//			} else {
+//				System.out.println("These are the shifts of "+w.getWorkerName()+" "+ w.getWorkerSurname()+" on " + shiftDate);
+//				System.out.println(s.toString());
+//			}
+//		//para que busque todos los turnos del trabajador
+//		} else if(answer.equalsIgnoreCase("NO")&&answer.equalsIgnoreCase("no")){
+//		Shift s = jdbc.searchShiftByWorkerId (c, w.getWorkerId()); //Connection c, Integer workerId
+//		if ( s == null) {
+//			System.out.println("No shifts available for worker " + w.getWorkerName()+" "+ w.getWorkerSurname());
+//		} else {
+//			System.out.println("These are the shifts of "+w.getWorkerName()+" "+ w.getWorkerSurname()+" ordered by date:");
+//			System.out.println(s.toString());
+//		}
+//		 }else {
+//			System.out.println("Not valid answer. Insert [YES/NO]");
+//		}
 			}
-		//para que busque todos los turnos del trabajador
-		} else if(answer.equalsIgnoreCase("NO")&&answer.equalsIgnoreCase("no")){
-		Shift s = jdbc.searchShiftByWorkerId (c, w.getWorkerId()); //Connection c, Integer workerId
-		if ( s == null) {
-			System.out.println("No shifts available for worker " + w.getWorkerName()+" "+ w.getWorkerSurname());
-		} else {
-			System.out.println("These are the shifts of "+w.getWorkerName()+" "+ w.getWorkerSurname()+" ordered by date:");
-			System.out.println(s.toString());
-		}
-		 }else {
-			System.out.println("Not valid answer. Insert [YES/NO]");
-		}}
 		
 	}
 	
@@ -443,29 +444,29 @@ public class Main {
 		s.setDate(date);
 		jdbc.addWorker(c, w); //Connection c,Worker w
 	}
-	public static void requestMedTest() throws NotBoundException{
-		Patient patient = new Patient(selectPatient());
-		Worker worker = new Worker (selectWorker()); 
-		MedicalTest medTest = new MedicalTest();
-		medTest.setPatient(patient.getMedicalCardId());
-		medTest.setDoctor(worker.getWorkerId());
-		System.out.print("Type of medical test: ");
-		String type = sc.next();
-		medTest.setTestType(type);
-		jdbc.addMedicalTest(c, medTest);//Connection c, MedicalTest medtest
-	}
-	
-	public static void showPatientsTreatments(Patient patient) throws Exception{
-		String treatment;
-		List<Treatment> treatmentsList = new ArrayList<Treatment>();
-		treatmentsList = jdbc.searchPatientsTreatment(null, patient);
-		if(treatmentList.isEmpty()){
-			System.out.println ("Ther is no treatment available for this patient");
-		} else{
-			System.out.println("Here you can see all your treatments ordered by date: ");
-			System.out.println(treatmentList.toString);
-		}
-	}
+//	public static void requestMedTest() throws NotBoundException{
+//		Patient patient = new Patient(selectPatient());
+//		Worker worker = new Worker (selectWorker()); 
+//		MedicalTest medTest = new MedicalTest();
+//		medTest.setPatient(patient.getMedicalCardId());
+//		medTest.setDoctor(worker.getWorkerId());
+//		System.out.print("Type of medical test: ");
+//		String type = sc.next();
+//		medTest.setTestType(type);
+//		jdbc.addMedicalTest(c, medTest);//Connection c, MedicalTest medtest
+//	}
+//	
+//	public static void showPatientsTreatments(Patient patient) throws Exception{
+//		String treatment;
+//		List<Treatment> treatmentsList = new ArrayList<Treatment>();
+//		treatmentsList = jdbc.searchPatientsTreatment(null, patient);
+//		if(treatmentList.isEmpty()){
+//			System.out.println ("Ther is no treatment available for this patient");
+//		} else{
+//			System.out.println("Here you can see all your treatments ordered by date: ");
+//			System.out.println(treatmentList.toString);
+//		}
+//	}
 	
 	private static void adAccessToPatientsProfile() throws Exception {
 		Patient patient = selectPatient();

@@ -6,12 +6,17 @@
 	<!-- Persistence Provider -->
 	<!-- RESOURCE-LOCAL: Application-managed transactions -->
 	<!-- JTA: Container-managed transactions -->
-	<persistence-unit name="user-provider" transaction-type="RESOURCE_LOCAL">
+	<persistence-unit name="user2-provider" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
  
 		<!-- Entity Class -->
-		<class>ERDatabases.src.pojos.users.Role.java</class>
-		<class>ERDatabases.src.pojos.users.User.java</class>
+		<class>db.pojos.MedicalTest</class>
+		<class>db.pojos.Patient</class>
+		<class>db.pojos.Shift</class>
+		<class>db.pojos.Treatment</class>
+		<class>db.pojos.Worker</class>
+				<class>pojos.users.User</class>
+				<class>pojos.users.Role</class>
 
 		<properties>	
 			<!-- Connection properties -->
