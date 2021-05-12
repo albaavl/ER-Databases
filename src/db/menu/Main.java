@@ -46,7 +46,7 @@ public class Main {
 					login();
 					break;
 				case 0: 
-					jdbc.disconnect(c); //él en su connect no le tiene que pasar ningún parámetro REVISAR
+					jdbc.disconnect(c); //ï¿½l en su connect no le tiene que pasar ningï¿½n parï¿½metro REVISAR
 					userman.disconnect();
 					System.exit(0);
 					break;
@@ -170,7 +170,7 @@ public class Main {
 	
 	public static void adStaffMenu() throws Exception{
 		
-		Worker adstaff = new Worker();
+		//Worker adstaff = new Worker();  //TODO - esto sobra bastante (?)
 		System.out.println("Choose an option[0-5]:");
 		System.out.println(" 1. Register new patient \n 2. Register new worker\n 3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n 0. Exit");
 		option = sc.nextInt();
@@ -403,25 +403,25 @@ public class Main {
 		//TODO que vaya comprobando segun va metiendo datos si estan bien o mal porque sino lanzaria excepcion y volveria al menu principal
 		Patient p = new Patient();
 		System.out.println("Please, input the patient info:");
-		System.out.print("Name: ");
+		System.out.print("Name: "); //TODO - nombres con espacios.
 		String name = sc.next();
 		p.setPatientName(name);
-		System.out.print("Surname: ");
+		System.out.print("Surname: "); //TODO - en caso de solo nombre simple, hacer flush para evitar problemas
 		String surname = sc.next();
 		p.setPatientSurname(surname);
-		System.out.print("Medical card number: ");
+		System.out.print("Medical card number: "); //TODO - aÃ±adir comprobaciÃ³n para q no se repitan (En caso de repetido "El paciente ya existe en la db" o "Med card incorrecto")
 		Integer medCardNumber = sc.nextInt();
 		p.setMedicalCardId(medCardNumber);
 		System.out.print("Gender: ");
-		String gender = sc.next();
-		p.setGender(gender);
+		String gender = sc.next();   
+		p.setGender(gender);		//TODO - hay q pillar excepciones (Solo vale male/female iirc)
 		System.out.print("Blood type: ");
 		String bloodType = sc.next();
 		p.setBloodType(bloodType);
-		System.out.print("Allergies: ");
+		System.out.print("Allergies: "); //TODO - ("none if patient doesnt have any")
 		String allergie = sc.next();
 		p.setAllergieType(allergie);
-		System.out.print("Date of birth: yyyy-[m]m-[d]d");
+		System.out.print("Date of birth: yyyy-[m]m-[d]d");	//TODO - Comprobar/pillar excepciones para fechas futuras etc.
 		String birthdate = sc.next();
 		Date bdate = Date.valueOf(birthdate);
 		p.setbDate(bdate);
@@ -432,14 +432,14 @@ public class Main {
 		System.out.print("Address: ");				
 		String address = sc.next();
 		p.setPatientAddress(address);
-		System.out.print("Hospitalization [YES/NO]: ");
+		System.out.print("Hospitalization [YES/NO]: "); //TODO - convertir a true/false
 		Boolean hospitalized = sc.nextBoolean();
 		p.setHospitalized(hospitalized);
 		jdbc.addPatient(c, p); //Connection c, Patient p
 	}
 	
 	public static void createWorker() throws Exception {
-		//TODO lo mismo que en el caso de createPatient()
+		//TODO lo mismo que en el caso de createPatient() fiestaaa
 		Worker w = new Worker();
 		Shift s = new Shift();
 		System.out.println("Please, input the worker info:");
@@ -462,7 +462,7 @@ public class Main {
 		System.out.print("Shift: ");
 		String shift = sc.next();
 		s.setShift(shift);
-		s.setWorkerId(w.getWorkerId()); //en teoría el workerId debería autoincrementarse, 
+		s.setWorkerId(w.getWorkerId()); //en teorï¿½a el workerId deberï¿½a autoincrementarse, //TODO - esto hace kaboom
 		System.out.println("Start date:  yyyy-[m]m-[d]d");
 		String startDate = sc.next();
 		Date date = Date.valueOf(startDate);
@@ -470,7 +470,7 @@ public class Main {
 		jdbc.addWorker(c, w); //Connection c,Worker w
 	}
 	public static void addMedTest() throws Exception{
-		//TODO hay que preguntar a rodrigo como se añade un blob para añadir la imagen del medical test
+		//TODO hay que preguntar a rodrigo como se aï¿½ade un blob para aï¿½adir la imagen del medical test
 		Patient patient = new Patient(selectPatient());
 		MedicalTest medTest = new MedicalTest();
 		medTest.setPatientId(patient.getMedicalCardId());
@@ -486,9 +486,9 @@ public class Main {
 		Patient patient = selectPatient();
 		System.out.println(patient.toString());
 		/*TODO preguntar que si se quieren editar los datos, 
-		por ejemplo añadiendo un doctor al paciente!! 
+		por ejemplo aï¿½adiendo un doctor al paciente!! 
 		(cosa que aun no se puede hacer en ninguna funcion de la database, 
-		debería preguntar que doctor le atiende al añadir un paciente nuevo y 
+		deberï¿½a preguntar que doctor le atiende al aï¿½adir un paciente nuevo y 
 		crear en sql una funcion para linkear paciente-doctor en la tabla correspondiente*/
 		}
 	
@@ -501,7 +501,7 @@ public class Main {
 		patientList.addAll(jdbc.searchPatient(c, surname)); //(connection c, integer id)
 		}
 		while(patient == null) {
-		System.out.println(patientList.toString());
+		System.out.println(patientList.toString()); //TODO - Esto va a imprimir todos los pacientes de forma bastante interesante 
 		System.out.println("Enter the medical card number of the chosen patient:");
 		Integer medCard = Integer.parseInt(sc.next());
 		patient = new Patient(jdbc.selectPatient (c, medCard)); //(connection c, integer id)
@@ -517,7 +517,7 @@ public class Main {
 		wList = jdbc.searchWorker(c, surname); //(connection c, integer id)
 		}
 		while(w == null) {
-		System.out.println(wList.toString());
+		System.out.println(wList.toString()); //TODO - Esto va a imprimir todo jej
 		System.out.println("Enter the id of the chosen worker:");
 		Integer id = Integer.parseInt(sc.next());
 		w = new Worker(jdbc.selectWorker (c, id)); //Connection c, Integer workerId
