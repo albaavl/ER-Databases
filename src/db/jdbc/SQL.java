@@ -19,7 +19,7 @@ public class SQL implements SQLInterface{
 	public void disconnect(Connection c) throws SQLException{
 		c.close();
 	}
-	
+	//crear una foreing key para patient y worker que sea el tipo de usuario
 	@Override
 	public void create(Connection c) throws SQLException {
 			Statement stmt1 = c.createStatement();
@@ -83,6 +83,7 @@ public class SQL implements SQLInterface{
 		 		   + " doctor_id   INTEGER  REFERENCES workers(id) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt7.executeUpdate(sql7);
 		stmt7.close();		
+		
 		System.out.println("Tables created.");		
 	}
 

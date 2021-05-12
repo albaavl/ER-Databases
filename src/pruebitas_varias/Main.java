@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
-import db.interfaces.UserManager;
+import db.interfaces.UMInterface;
 import db.jdbc.SQL;
 import db.jpa.JPAUserManager;
 import db.pojos.*;

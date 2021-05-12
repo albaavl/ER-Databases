@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.*;
 
 import db.interfaces.UMInterface;
+import db.pojos.Patient;
+import db.pojos.Worker;
 import pojos.users.*;
 
 public class JPAUserManager implements UMInterface {
@@ -70,10 +72,10 @@ public class JPAUserManager implements UMInterface {
 	public User checkPassword(String username, String password) {
 		User user = null;
 		try {
-			MessageDigest md = MessageDigest.getInstance("MDS");
+			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(password.getBytes());
 			byte[] hash = md.digest();
-			Query q = em.createNamedQuery("SELECT * FROM users WHERE username = ? AND password = ?", User.class);
+			Query q = em.createNativeQuery("SELECT * FROM users WHERE username = ? AND password = ?", User.class);
 			q.setParameter(1, username);
 			q.setParameter(2, hash);
 			user = (User) q.getSingleResult();

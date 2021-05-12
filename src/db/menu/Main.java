@@ -9,7 +9,7 @@ import java.util.*;
 
 import db.pojos.*;
 import pojos.users.*;
-import db.interfaces.UserManager;
+import db.interfaces.UMInterface;
 import db.jdbc.*;
 import db.jpa.JPAUserManager;
 
@@ -34,15 +34,11 @@ public class Main {
 			}
 			do {
 				System.out.println("Welcome to the Quiron's ER");
-				System.out.println("1. Register");
-				System.out.println("2. Login");
+				System.out.println("1. Login");
 				System.out.println("0. Exit");
 				int choice = sc.nextInt();
 				switch(choice) {
 				case 1:
-					register();
-					break;
-				case 2:
 					login();
 					break;
 				case 0: 
@@ -72,11 +68,18 @@ public class Main {
 		int id = sc.nextInt();
 		Role role = userman.getRole(id);
 		//generate the hash
-		MessageDigest md = MessageDigest.getInstance("MDS");
+		MessageDigest md = MessageDigest.getInstance("MD5");
 		md.update(password.getBytes());
 		byte[] hash = md.digest();
 		User user = new User(username, hash, role);
 		userman.newUser(user);
+		if(user.getRole().equals("patient")) {
+			createPatient();
+		} else if(user.getRole().equals("medicalStaff")) {
+			createWorker();
+		} else if(user.getRole().equals("adStaff")) {
+			createWorker();
+		}
 	}
 	
 	private static void login() throws Exception{
@@ -172,7 +175,7 @@ public class Main {
 		
 		Worker adstaff = new Worker();
 		System.out.println("Choose an option[0-5]:");
-		System.out.println(" 1. Register new patient \n 2. Register new worker\n 3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n 0. Exit");
+		System.out.println(" 1. Register new administration staff \n1. Register new patient \n 2. Register new worker\n 3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n 0. Exit");
 		option = sc.nextInt();
 		
 		do {
@@ -183,22 +186,29 @@ public class Main {
 					userman.disconnect();
 					System.exit(0);
 				case 1: 
-					System.out.println("Register new patient");
-					createPatient();
+					System.out.println("Register new administration staff");
+					register();
 					break;
 				case 2: 
-					System.out.println("Register new worker");
-					createWorker();
+					System.out.println("Register new patient");
+					register();
+					//
+					//createPatient();
 					break;
 				case 3: 
+					System.out.println("Register new worker");
+					register();
+					//createWorker();
+					break;
+				case 4: 
 					System.out.println("Acces to a patient's profile");
 					adAccessToPatientsProfile();
 					break;	
-				case 4: 
+				case 5: 
 					System.out.println("Add new medical test");
 					addMedTest();
 					break;	
-				case 5: 
+				case 6: 
 					System.out.println("Edit shifts");
 					editShift();
 					break;	
