@@ -21,7 +21,7 @@ public class User implements Serializable{
 	private String username;
 	@Lob
 	private byte[] password;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "role_id")
 	private Role role;
 	
