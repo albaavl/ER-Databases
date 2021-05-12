@@ -86,7 +86,6 @@ public class SQL implements SQLInterface{
 		System.out.println("Tables created.");		
 	}
 
-
 	public void addPatient(Connection c, Patient p) throws SQLException{
 			String sq1 = "INSERT INTO patients ( medical_card_number, name, surname, gender, birthdate,  address, blood_type, allergies, check_in, hospitalized) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
@@ -325,7 +324,6 @@ public class SQL implements SQLInterface{
 		rs.close();
 		return rList;	
 	}
-	
 
 	@Override
 	public Treatment editTreatment(Connection c, Integer id, String diagnosis, String medication, Date startDate, Integer duration, String recommendation) throws Exception{
@@ -383,8 +381,6 @@ public class SQL implements SQLInterface{
 		return t;
 	}
 
-	
-	
 	public Shift editShift (Connection c,Integer shiftId, Integer workerId, String shift, Integer room, Date date) throws Exception {
 			String sql;
 			PreparedStatement p = null;
@@ -433,7 +429,7 @@ public class SQL implements SQLInterface{
 	@Override
 	public List<Treatment> searchTreatmentByMed(Connection c,Patient patient, String med) throws Exception{
 		String sql = "SELECT * FROM treatments WHERE medication LIKE '%"+ med +"%' AND patient_id = "+patient.getMedicalCardId();
-		PreparedStatement prep = c.prepareStatement(sql);		
+		PreparedStatement prep = c.prepareStatement(sql);		//TODO - Esta funcion esta mal hecha, si usas prepstatement no puedes dar los datos en el statement xD
 		ResultSet rs = prep.executeQuery();
 		List<Treatment> treatments = new ArrayList<>();
 		if(rs.next()) {
@@ -443,6 +439,53 @@ public class SQL implements SQLInterface{
 		return treatments;
 	}
 	
-	
-	
+	/**
+	 * Deletes any patient whose id matches the given medCardNumber
+	 * @param c - Database connection.
+	 * @param medCardNumber - The id from the patient that will be deleted. (int)
+	 * @throws SQLException
+	 */
+	public void deletePatientByMedicalCardId(Connection c, int medCardNumber) throws SQLException{
+		String sql = "DELETE FROM patients WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setInt(1, medCardNumber);
+		pStatement.executeUpdate();
+		pStatement.close();
 	}
+
+	/**
+	 * Deletes any worker with and id that matches the given id.
+	 * @param c - Database connection.
+	 * @param id - Id from the worker that will be deleted. (int)
+	 * @throws SQLException
+	 */
+	public void deleteWorkerById(Connection c, int id) throws SQLException {
+		String sql = "DELETE FROM workers WHERE id = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setInt(1, id);
+		pStatement.executeUpdate();
+		pStatement.close();
+	}
+
+	/**
+	 * Creates a connection between a patient and a doctor. 
+	 * @param c - Database connection.
+	 * @param medCardNumber - the id of the patient that will be connected to a doctor. (int)
+	 * @param workerId - the id of the doctor that will be linked to the patient. (int)
+	 * @throws SQLException
+	 */
+	public void createLinkDoctorPatient(Connection c, int medCardNumber, int workerId) throws SQLException {
+		String sql = "INSERT INTO doctor_patient (patient_id, doctor_id) VALUES (?,?)";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setInt(1, medCardNumber);
+		pStatement.setInt(2, workerId);
+		pStatement.executeUpdate();
+		pStatement.close();
+	}
+
+}
+
+// String sql4 = "CREATE TABLE doctor_patient "
+// + "(patient_id     INTEGER  REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL,"
+// + " doctor_id   INTEGER  REFERENCES workers(id) ON UPDATE CASCADE ON DELETE SET NULL,"
+// + " PRIMARY KEY (patient_id,doctor_id))";
