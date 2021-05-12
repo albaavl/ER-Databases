@@ -202,7 +202,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List<Shift> shifts = new ArrayList<>();
 		if(rs.next()){ 
-			shifts.add(new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), workerId));		
+			shifts.add(new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), workerId, rs.getInt("id")));		
 		}
 		p.close();
 		rs.close();
@@ -385,7 +385,7 @@ public class SQL implements SQLInterface{
 
 	
 	
-	public Shift editShift (Connection c,int shiftId, Integer workerId, String shift, Integer room, Date date) throws Exception {
+	public Shift editShift (Connection c,Integer shiftId, Integer workerId, String shift, Integer room, Date date) throws Exception {
 			String sql;
 			PreparedStatement p = null;
 
@@ -442,6 +442,7 @@ public class SQL implements SQLInterface{
 		prep.close();
 		return treatments;
 	}
+	
 	
 	
 	}
