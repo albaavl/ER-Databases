@@ -454,15 +454,41 @@ public class SQL implements SQLInterface{
 	}
 
 	/**
-	 * Deletes any worker with and id that matches the given id.
+	 * Deletes any worker with an id that matches the given id.
 	 * @param c - Database connection.
 	 * @param id - Id from the worker that will be deleted. (int)
 	 * @throws SQLException
 	 */
-	public void deleteWorkerById(Connection c, int id) throws SQLException {
+	public void deleteWorkerById(Connection c, int workerId) throws SQLException {
 		String sql = "DELETE FROM workers WHERE id = ?";
 		PreparedStatement pStatement = c.prepareStatement(sql);
-		pStatement.setInt(1, id);
+		pStatement.setInt(1, workerId);
+		pStatement.executeUpdate();
+		pStatement.close();
+	}
+
+	/**
+	 * @param c - Database connection
+	 * @param treatmentId - Id from the treatment that will be deleted. (int)
+	 * @throws SQLException
+	 */
+	public void deleteTreatmentById(Connection c, int treatmentId) throws SQLException {
+		String sql = "DELETE FROM treatments WHERE id = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setInt(1, treatmentId);
+		pStatement.executeUpdate();
+		pStatement.close();
+	}
+
+	/**
+	 * @param c - Database connection.
+	 * @param shiftId - Id from the shift that you want to delete. (int)
+	 * @throws SQLException
+	 */
+	public void deleteShiftById(Connection c, int shiftId) throws SQLException {
+		String sql = "DELETE FROM shifts WHERE id = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setInt(1, shiftId);
 		pStatement.executeUpdate();
 		pStatement.close();
 	}
@@ -483,9 +509,44 @@ public class SQL implements SQLInterface{
 		pStatement.close();
 	}
 
-}
+	//Se me ha ocurrido esto para algunas funciones del main. *probablemente es innecesario peeero ahi las dejo 
 
-// String sql4 = "CREATE TABLE doctor_patient "
-// + "(patient_id     INTEGER  REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL,"
-// + " doctor_id   INTEGER  REFERENCES workers(id) ON UPDATE CASCADE ON DELETE SET NULL,"
-// + " PRIMARY KEY (patient_id,doctor_id))";
+	/**
+	 * Used to check if there's any patient with the given id on the database.
+	 * @param c - Database Connection.
+	 * @param medCardNumber - Id of the patient that will be checked (int)
+	 * @return True if theres any patient with that id, otherwise false
+	 * @throws SQLException
+	 */
+	public boolean checkPatient(Connection c, int medCardNumber) throws SQLException{
+		String sql = "SELECT name FROM patients WHERE medical_card_number = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1,medCardNumber);
+		ResultSet rs = p.executeQuery();
+		if(rs.next()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	/**
+	 * Used to check if there's any worker with the given id on the database.
+	 * @param c - Database Connection.
+	 * @param workerId - Id of the worker that will be checked (int)
+	 * @return True if theres any patient with that id, otherwise false
+	 * @throws SQLException
+	 */
+	public boolean checkWorker(Connection c, int workerId) throws SQLException{
+		String sql = "SELECT name FROM workers WHERE id = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1,workerId);
+		ResultSet rs = p.executeQuery();
+		if(rs.next()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+}
