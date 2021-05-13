@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<MedicalTest>
+   <MedicalTest id="1">
+    <patient_id>10</patient_id>
+    <dateMedTest>2021-11-09</dateMedTest>
+    <type>CT Scan</type>
+    <result>Broken bone</result>
+    </MedicalTest>
+</MedicalTest>
