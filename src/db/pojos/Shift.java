@@ -48,11 +48,12 @@ public class Shift implements Serializable {
 	}
 	
 	
-	public Shift(Date date, Integer room, Integer workerId) throws Exception {
+	public Shift(Date date, Integer room, Integer workerId, String turn) throws Exception {
 		super();
 		this.setDate(date);
 		this.setRoom(room);
 		this.setWorkerId(workerId);	
+		this.setTurn(turn);
 	}
 	
 	public Shift(Date date, Integer room, Integer workerId, Integer shiftId) throws Exception {
