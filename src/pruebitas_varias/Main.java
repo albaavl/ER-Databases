@@ -1,4 +1,5 @@
 package pruebitas_varias;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -13,26 +14,28 @@ import db.pojos.*;
 public class Main {
 
 
-	static Connection c ;
-	static Scanner sc = new Scanner(System.in);
-	static SQL jdbc = new SQL();
-
 	public static void main(String[] args) {
 		try {
-			c= jdbc.connect();
-			jdbc.addPatient(c, new Patient("nom-1", "ap5", "female", "O-","gluten", "adress", Date.valueOf("2001-07-07"), Date.valueOf("2010-07-07"), false, 01));
-			jdbc.addPatient(c, new Patient("nom2", "ap3", "female", "O-","gluten", "adress", Date.valueOf("2001-07-07"), Date.valueOf("2010-07-07"), false, 02));
-			jdbc.addPatient(c, new Patient("nom3", "ap2", "female", "O-","gluten", "adress", Date.valueOf("2001-07-07"), Date.valueOf("2010-07-07"), false, 03));
-			jdbc.addWorker(c, new Worker("name", "surname", "specialty", 07, "normal"));
-			List<Patient> Patients = new ArrayList<>();
-			Patients.addAll(jdbc.searchPatient(c, "ap"));
-			System.out.println(Patients.toString());
+			Scanner sc = new Scanner(System.in);
+			String[] symbols = {"0", "1", "9", "7", "K", "Q", "a", "b", "c", "U","w","3","0"};
+	        int length = 14;
+	        Random random;
+	            random = SecureRandom.getInstanceStrong();
+	            StringBuilder sb = new StringBuilder(length);
+	            for (int i = 0; i < length; i++) {
+	                 int indexRandom = random.nextInt ( symbols.length );
+	                 sb.append( symbols[indexRandom] );
+	            }
+	            String password = sb.toString();
+	            System.out.println(password);
+			
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	
+}
 }
 
 

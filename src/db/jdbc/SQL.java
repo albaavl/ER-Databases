@@ -33,7 +33,8 @@ public class SQL implements SQLInterface{
 				   + " blood_type     TEXT     NOT NULL, "
 				   + " allergies     TEXT,"
 				   + " check_in    DATE    NOT NULL,"
-				   + " hospitalized BOOLEAN)";
+				   + " hospitalized BOOLEAN,"
+				   + "userId INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt1.executeUpdate(sql1);
 		stmt1.close();
 		Statement stmt3 = c.createStatement();
@@ -43,7 +44,8 @@ public class SQL implements SQLInterface{
 				   + " surname     TEXT     NOT NULL, "
 				   + " specialty   TEXT, "
 				   + " role TEXT NOT NULL,"
-				   + " room_in_ER   TEXT)";
+				   + " room_in_ER   TEXT,"
+				   + " userId INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt3.executeUpdate(sql3);
 		stmt3.close();
 		Statement stmt4 = c.createStatement();
@@ -58,8 +60,7 @@ public class SQL implements SQLInterface{
 				   + "(id       INTEGER  PRIMARY KEY AUTOINCREMENT,"
 				   + "patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL,"
 				   + " type     TEXT     NOT NULL,"				   
-				   + " result TEXT  NULL,"
-				   + " image    BLOB)";
+				   + " result TEXT  NULL)";
 		stmt5.executeUpdate(sql5);
 		stmt5.close();
 		Statement stmt6 = c.createStatement();
@@ -88,6 +89,21 @@ public class SQL implements SQLInterface{
 	}
 
 	public void addPatient(Connection c, Patient p) throws SQLException{
+		if (p.getAllergieType()==null) {
+			String sq1 = "INSERT INTO patients ( medical_card_number, name, surname, gender, birthdate,  address, blood_type, check_in, hospitalized) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement preparedStatement = c.prepareStatement(sq1);
+			preparedStatement.setInt(1, p.getMedicalCardId());
+			preparedStatement.setString(2, p.getPatientName());
+			preparedStatement.setString(3, p.getPatientSurname());
+			preparedStatement.setString(4, p.getGender());
+			preparedStatement.setDate(5, p.getbDate());
+			preparedStatement.setString(6, p.getPatientAddress());
+			preparedStatement.setString(7, p.getBloodType());
+			preparedStatement.setDate(8, p.getCheckInDate());
+			preparedStatement.setBoolean(9, p.getHospitalized());
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		}else {
 			String sq1 = "INSERT INTO patients ( medical_card_number, name, surname, gender, birthdate,  address, blood_type, allergies, check_in, hospitalized) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
 			preparedStatement.setInt(1, p.getMedicalCardId());
@@ -102,6 +118,7 @@ public class SQL implements SQLInterface{
 			preparedStatement.setBoolean(10, p.getHospitalized());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
+		}
 	}
 
 
@@ -119,12 +136,11 @@ public class SQL implements SQLInterface{
 
 
 	public void addMedicalTest(Connection c, MedicalTest medtest) throws SQLException{
-			String sq1 = "INSERT INTO medical_tests (patient_id, type, result, image) VALUES (?, ?, ?, ?, ?)";
+			String sq1 = "INSERT INTO medical_tests (patient_id, type, result) VALUES (?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
 			preparedStatement.setInt(1, medtest.getPatientId());
 			preparedStatement.setString(2, medtest.getTestType());
 			preparedStatement.setString(3, medtest.getTestResult());
-			preparedStatement.setBytes(4, medtest.getTestImage());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
     }
@@ -188,7 +204,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List <MedicalTest> mList = new ArrayList<MedicalTest>();
 		while(rs.next()){
-			mList.add( new MedicalTest(rs.getInt("id"), rs.getDate("date"), rs.getString("type"), rs.getString("result"), rs.getBytes("image"),rs.getInt("patient_id")));
+			mList.add( new MedicalTest(rs.getInt("id"), rs.getDate("date"), rs.getString("type"), rs.getString("result"),rs.getInt("patient_id")));
 		}
 		p.close();
 		rs.close();
@@ -509,6 +525,54 @@ public class SQL implements SQLInterface{
 		pStatement.executeUpdate();
 		pStatement.close();
 	}
+	
+	public void createLinkUserPatient(Connection c, int userId, int medCardNumber) throws Exception {
+		String sql1 = "UPDATE patients SET userId = ? WHERE id = ? ";
+		PreparedStatement pStatement = c.prepareStatement(sql1);
+		pStatement.setInt(1, userId);
+		pStatement.setInt(2, medCardNumber);
+		pStatement.executeUpdate();
+		pStatement.close();
+	}
+	
+	public void createLinkUserWorker(Connection c, int userId, int workerId) throws Exception {
+		String sql1 = "UPDATE workers SET userId = ? WHERE id = ? ";
+		PreparedStatement pStatement = c.prepareStatement(sql1);
+		pStatement.setInt(1, userId);
+		pStatement.setInt(2, workerId);
+		pStatement.executeUpdate();
+		pStatement.close();
+	}
+	public Worker selectWorkerByUserId(Connection c, Integer userID) throws Exception {
+		String sql = "SELECT * FROM workers WHERE userId = ? ";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setInt(1, userID);
+		ResultSet rs = pStatement.executeQuery();
+		Worker worker = null;
+		if(rs.next()){
+			worker = new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getInt("room_in_ER"), rs.getString("type"));
+			
+		}
+		pStatement.close();
+		rs.close();
+		return worker;
+	}
+	
+	public Patient selectPatientByUserId(Connection c, Integer userId) throws SQLException, NotBoundException {
+		String sql = "SELECT * FROM patients userId = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1,userId);
+		ResultSet rs = p.executeQuery();
+		Patient patient = null;
+		if(rs.next()){
+			patient = new Patient(rs.getString("name"), rs.getString("surname"), rs.getString("gender"), rs.getString("blood_type"), rs.getString("allergies"), rs.getString("address"), rs.getDate("birthdate"), rs.getDate("check_in"), rs.getBoolean("hospitalized"), rs.getInt("medical_card_number"));
+		}
+		p.close();
+		rs.close();
+		return patient;	
+	}
+	
+	
 
 	//Se me ha ocurrido esto para algunas funciones del main. *probablemente es innecesario peeero ahi las dejo 
 
