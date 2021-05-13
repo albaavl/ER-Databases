@@ -36,7 +36,7 @@ public class Shift implements Serializable {
 	@XmlJavaTypeAdapter(SQLDateAdapter.class)
 	private Date date;
 	@XmlElement
-	private String shift;
+	private String turn;
 	@XmlElement
 	private Integer room;
 	@XmlElement
@@ -48,14 +48,14 @@ public class Shift implements Serializable {
 	}
 	
 	
-	public Shift(Date date, String shift, Integer room, Integer workerId) throws Exception {
+	public Shift(Date date, Integer room, Integer workerId) throws Exception {
 		super();
 		this.setDate(date);
 		this.setRoom(room);
 		this.setWorkerId(workerId);	
 	}
 	
-	public Shift(Date date, String shift, Integer room, Integer workerId, Integer shiftId) throws Exception {
+	public Shift(Date date, Integer room, Integer workerId, Integer shiftId) throws Exception {
 		super();
 		this.setDate(date);
 		this.setRoom(room);
@@ -92,8 +92,8 @@ public class Shift implements Serializable {
 	/**
 	 * @return the shift
 	 */
-	public String getShift() {
-		return shift;
+	public String getTurn() {
+		return turn;
 	}
 	/**
 	 * @param shift the shift to set
@@ -101,9 +101,9 @@ public class Shift implements Serializable {
 	 */
 	
 	
-	public void setShift(String shift) throws Exception {
-		if(shift.equalsIgnoreCase("morning")||shift.equalsIgnoreCase("afternoon")||shift.equalsIgnoreCase("night")){
-			this.shift=shift;
+	public void setTurn(String t) throws Exception {
+		if(t.equalsIgnoreCase("morning")||t.equalsIgnoreCase("afternoon")||t.equalsIgnoreCase("night")){
+			this.turn = t;
 		}
 		else {
 			throw new Exception("Shift not valid, choose between 'morning','afternoon or 'night'");
@@ -142,16 +142,16 @@ public class Shift implements Serializable {
 		this.shiftId = shiftId;
 	}
 
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((date == null) ? 0 : date.hashCode());
-		result = prime * result + ((room == null) ? 0 : room.hashCode());
-		result = prime * result + ((shift == null) ? 0 : shift.hashCode());
-		result = prime * result + ((workerId == null) ? 0 : workerId.hashCode());
+		result = prime * result + ((shiftId == null) ? 0 : shiftId.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -162,34 +162,18 @@ public class Shift implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Shift other = (Shift) obj;
-		if (date == null) {
-			if (other.date != null)
+		if (shiftId == null) {
+			if (other.shiftId != null)
 				return false;
-		} else if (!date.equals(other.date))
-			return false;
-		if (room == null) {
-			if (other.room != null)
-				return false;
-		} else if (!room.equals(other.room))
-			return false;
-		if (shift == null) {
-			if (other.shift != null)
-				return false;
-		} else if (!shift.equals(other.shift))
-			return false;
-		if (workerId == null) {
-			if (other.workerId != null)
-				return false;
-		} else if (!workerId.equals(other.workerId))
+		} else if (!shiftId.equals(other.shiftId))
 			return false;
 		return true;
 	}
-	
-	
+
 
 	@Override 
 	public String toString() {
-		return "Shift [date=" + this.date + ", shift=" + this.shift + ", room=" + this.room + "]";
+		return "Shift [date=" + this.date + ", shift=" + this.turn + ", room=" + this.room + "]";
 	}
 	
 }

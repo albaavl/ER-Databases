@@ -2,6 +2,7 @@ package db.menu;
  
 
 import java.rmi.NotBoundException;
+
 import java.security.*;
 import java.sql.*;
 import java.sql.Date;
@@ -644,7 +645,7 @@ public class Main {
 
 		System.out.print("Shift: ");
 		String shift = sc.next();
-		s.setShift(shift);
+		s.setTurn(shift);
 		s.setWorkerId(w.getWorkerId()); //en teor�a el workerId deber�a autoincrementarse, //esto hace kaboom 99% seguro, pq worker id no esta iniciado en ningun momento..
 		
 		System.out.print("Start date [yyyy-mm-dd]:  ");

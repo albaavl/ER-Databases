@@ -12,7 +12,7 @@ import java.io.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name="MedicalTest")
-@XmlType(propOrder = {"dateMedTest","type","result","patient_id"})
+@XmlType(propOrder = {"patient_id", "dateMedTest","type","result"})
 
 public class MedicalTest implements Serializable{
 	
@@ -22,6 +22,8 @@ public class MedicalTest implements Serializable{
 	//Unique for each patient - cannot be repeated for another patient.
 	
 	@XmlElement
+	private Integer patient_id;
+	@XmlElement
 	private Date dateMedTest;
 	@XmlElement
 	private String type;
@@ -29,8 +31,6 @@ public class MedicalTest implements Serializable{
 	private String result; 
 	//@XmlTransient
 	//private byte[] testImage;
-	@XmlElement
-	private Integer patient_id;
 
 	public MedicalTest() {
 			super();
@@ -43,7 +43,8 @@ public class MedicalTest implements Serializable{
 		this.result = tResult;
 		this.patient_id = patientId;
 	}
-	public MedicalTest(int id, Date date, String type, String result, byte[] img, int patientId) {
+	
+	public MedicalTest(int id, Date date, String type, String result, /*byte[] img,*/ int patientId) {
 		super();
 		this.id = id;
 		this.dateMedTest = date;
