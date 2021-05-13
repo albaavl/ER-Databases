@@ -10,9 +10,13 @@ import javax.persistence.*;
 @Table(name =  "users")
 public class User implements Serializable{
 
-	private static final long serialVersionUID = 1L;
 	
 	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8462818311128616934L;
 	@Id
 	@GeneratedValue(generator="users")
 	@TableGenerator(name="users", table="sqlite_sequence",
@@ -79,7 +83,9 @@ public class User implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
 
@@ -92,11 +98,25 @@ public class User implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
+		if (role == null) {
+			if (other.role != null)
+				return false;
+		} else if (!role.equals(other.role))
+			return false;
 		if (userId == null) {
 			if (other.userId != null)
 				return false;
 		} else if (!userId.equals(other.userId))
 			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
 		return true;
 	}
+
+	
+
+	
 }
