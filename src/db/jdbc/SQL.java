@@ -572,46 +572,125 @@ public class SQL implements SQLInterface{
 		return patient;	
 	}
 	
+	//me da pereza pensar osea q voy a usar literalmente 10 funciones :)
 	
+	// String sql1 = "CREATE TABLE patients "
+	// + "(medical_card_number       INTEGER  PRIMARY KEY,"
+	// + " name     TEXT     NOT NULL, "
+	// + " surname     TEXT     NOT NULL, "
+	// + " gender     TEXT     NOT NULL, "
+	// + " birthdate     DATE     NOT NULL, "
+	// + " address  TEXT	 NOT NULL,"
+	// + " blood_type     TEXT     NOT NULL, "
+	// + " allergies     TEXT,"
+	// + " check_in    DATE    NOT NULL,"
+	// + " hospitalized BOOLEAN,"
+	// + "userId INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL)";
 
-	//Se me ha ocurrido esto para algunas funciones del main. *probablemente es innecesario peeero ahi las dejo 
 
-	/**
-	 * Used to check if there's any patient with the given id on the database.
-	 * @param c - Database Connection.
-	 * @param medCardNumber - Id of the patient that will be checked (int)
-	 * @return True if theres any patient with that id, otherwise false
-	 * @throws SQLException
-	 */
-	public boolean checkPatient(Connection c, int medCardNumber) throws SQLException{
-		String sql = "SELECT name FROM patients WHERE medical_card_number = ?";
-		PreparedStatement p = c.prepareStatement(sql);
-		p.setInt(1,medCardNumber);
-		ResultSet rs = p.executeQuery();
-		if(rs.next()){
-			return true;
-		}else{
-			return false;
-		}
+	public void updatePatientName(Connection c, int medCardNum, String name) throws SQLException {
+		String sql = "UPDATE patients SET name = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setString(1, name);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
 	}
+	public void updatePatientSurname(Connection c, int medCardNum, String surname) throws SQLException {
+		String sql = "UPDATE patients SET surname = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setString(1, surname);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+	}
+	public void updatePatientGender(Connection c, int medCardNum, String gender) throws SQLException {
+		String sql = "UPDATE patients SET gender = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setString(1, gender);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+	}
+	public void updatePatientBloodType(Connection c, int medCardNum, String bloodType) throws SQLException {
+		String sql = "UPDATE patients SET blood_type = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setString(1, bloodType);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+	}
+	public void updatePatientAllergies(Connection c, int medCardNum, String allergies) throws SQLException {
+		String sql = "UPDATE patients SET allergies = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setString(1, allergies);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+	}
+	public void updatePatientBirthDate(Connection c, int medCardNum, Date bDate) throws SQLException {
+		String sql = "UPDATE patients SET birthdate = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setDate(1, bDate);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+	}
+	public void updatePatientCheckInDate(Connection c, int medCardNum, Date checkInDate) throws SQLException {
+		String sql = "UPDATE patients SET check_in = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setDate(1, checkInDate);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+	}
+	public void updatePatientAddress(Connection c, int medCardNum, String address) throws SQLException {
+		String sql = "UPDATE patients SET address = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setString(1, address);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+	}
+	public void updatePatientHospitalization(Connection c, int medCardNum, Boolean hospitalization) throws SQLException {
+		String sql = "UPDATE patients SET hospitalized = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setBoolean(1, hospitalization);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+	}
+
+		// //Se me ha ocurrido esto para algunas funciones del main. *probablemente es innecesario peeero ahi las dejo 
+
+	// /**
+	//  * Used to check if there's any patient with the given id on the database.
+	//  * @param c - Database Connection.
+	//  * @param medCardNumber - Id of the patient that will be checked (int)
+	//  * @return True if theres any patient with that id, otherwise false
+	//  * @throws SQLException
+	//  */
+	// public boolean checkPatient(Connection c, int medCardNumber) throws SQLException{
+	// 	String sql = "SELECT name FROM patients WHERE medical_card_number = ?";
+	// 	PreparedStatement p = c.prepareStatement(sql);
+	// 	p.setInt(1,medCardNumber);
+	// 	ResultSet rs = p.executeQuery();
+	// 	if(rs.next()){
+	// 		return true;
+	// 	}else{
+	// 		return false;
+	// 	}
+	// }
 	
-	/**
-	 * Used to check if there's any worker with the given id on the database.
-	 * @param c - Database Connection.
-	 * @param workerId - Id of the worker that will be checked (int)
-	 * @return True if theres any patient with that id, otherwise false
-	 * @throws SQLException
-	 */
-	public boolean checkWorker(Connection c, int workerId) throws SQLException{
-		String sql = "SELECT name FROM workers WHERE id = ?";
-		PreparedStatement p = c.prepareStatement(sql);
-		p.setInt(1,workerId);
-		ResultSet rs = p.executeQuery();
-		if(rs.next()){
-			return true;
-		}else{
-			return false;
-		}
-	}
+	// /**
+	//  * Used to check if there's any worker with the given id on the database.
+	//  * @param c - Database Connection.
+	//  * @param workerId - Id of the worker that will be checked (int)
+	//  * @return True if theres any patient with that id, otherwise false
+	//  * @throws SQLException
+	//  */
+	// public boolean checkWorker(Connection c, int workerId) throws SQLException{
+	// 	String sql = "SELECT name FROM workers WHERE id = ?";
+	// 	PreparedStatement p = c.prepareStatement(sql);
+	// 	p.setInt(1,workerId);
+	// 	ResultSet rs = p.executeQuery();
+	// 	if(rs.next()){
+	// 		return true;
+	// 	}else{
+	// 		return false;
+	// 	}
+	// }
+
 
 }
