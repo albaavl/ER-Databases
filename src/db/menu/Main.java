@@ -5,7 +5,9 @@ import java.rmi.NotBoundException;
 import java.security.*;
 import java.sql.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
+import java.security.MessageDigest;
 
 import db.pojos.*;
 import pojos.users.*;
@@ -42,7 +44,7 @@ public class Main {
 					login();
 					break;
 				case 0: 
-					jdbc.disconnect(c); //él en su connect no le tiene que pasar ningún parámetro REVISAR
+					jdbc.disconnect(c); //ï¿½l en su connect no le tiene que pasar ningï¿½n parï¿½metro REVISAR
 					userman.disconnect();
 					System.exit(0);
 					break;
@@ -173,7 +175,7 @@ public class Main {
 	
 	public static void adStaffMenu() throws Exception{
 		
-		Worker adstaff = new Worker();
+		//Worker adstaff = new Worker(); 
 		System.out.println("Choose an option[0-5]:");
 		System.out.println(" 1. Register new administration staff \n1. Register new patient \n 2. Register new worker\n 3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n 0. Exit");
 		option = sc.nextInt();
@@ -394,93 +396,256 @@ public class Main {
 		//para que busque todos los turnos del trabajador
 		} else if(answer.equalsIgnoreCase("NO")){
 			List<Shift> s = new ArrayList<>();
-		s.addAll(jdbc.searchShiftByWorkerId (c, w.getWorkerId()));  //Connection c, Integer workerId
-		if (s.isEmpty()) {
-			System.out.println("No shifts available for worker " + w.getWorkerName()+" "+ w.getWorkerSurname());
-		} else {
-			System.out.println("These are the shifts of "+w.getWorkerName()+" "+ w.getWorkerSurname()+" ordered by date:");
-			for(Shift shift : s) {
-				System.out.println(shift.toString());
+			s.addAll(jdbc.searchShiftByWorkerId (c, w.getWorkerId()));  //Connection c, Integer workerId
+			if (s.isEmpty()) {
+				System.out.println("No shifts available for worker " + w.getWorkerName()+" "+ w.getWorkerSurname());
+			} else {
+				System.out.println("These are the shifts of "+w.getWorkerName()+" "+ w.getWorkerSurname()+" ordered by date:");
+				for(Shift shift : s) {
+					System.out.println(shift.toString());
+				}
 			}
-		}
-		 }else {
+		}else {
 			System.out.println("Not valid answer. Insert [YES/NO]");
+		}
 	}
-			}
 		
 	
 	public static void createPatient () throws NotBoundException, Exception {
-		//TODO que vaya comprobando segun va metiendo datos si estan bien o mal porque sino lanzaria excepcion y volveria al menu principal
+		//System.out.flush();
+
 		Patient p = new Patient();
+		
 		System.out.println("Please, input the patient info:");
-		System.out.print("Name: ");
-		String name = sc.next();
+		System.out.print("Name: "); 
+		String name = sc.nextLine();
 		p.setPatientName(name);
-		System.out.print("Surname: ");
-		String surname = sc.next();
+		System.out.print("Surname: "); 
+		String surname = sc.nextLine();
 		p.setPatientSurname(surname);
-		System.out.print("Medical card number: ");
+		
+		System.out.print("Medical card number: "); 
 		Integer medCardNumber = sc.nextInt();
-		p.setMedicalCardId(medCardNumber);
+		if(jdbc.selectPatient(c, medCardNumber) == null ){ //para evitar que se introduzca un paciente con un id igual a uno ya existente
+			p.setMedicalCardId(medCardNumber);
+		} else {
+			do {
+				System.out.print("Error. Please introduce medical card number: "); //Ns si poner esto o si poner q el paciente ya existe. Creo q es mejor lo de q el paciente ya existe.
+			} while (jdbc.selectPatient(c, medCardNumber) != null );
+		}
+
 		System.out.print("Gender: ");
-		String gender = sc.next();
-		p.setGender(gender);
+		String gender = sc.next();   
+		try {
+			p.setGender(gender);		
+		} catch (Exception e) {
+			do{
+				System.out.print("Not a valid gender. Please introduce a gender (Male or Female): ");
+				gender = sc.next();
+			} while (gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female"));
+			p.setGender(gender);
+		}
+
 		System.out.print("Blood type: ");
 		String bloodType = sc.next();
-		p.setBloodType(bloodType);
-		System.out.print("Allergies: ");
-		String allergie = sc.next();
+		try {
+			p.setBloodType(bloodType);
+		} catch (Exception e) {
+
+			int bloodtypecontrol = 0;
+
+			do{
+				int bloodtypefailcount = 0;
+
+				if(bloodtypefailcount >= 2){
+					System.out.println("Valid blood types are: A+, A-, B+, B-, AB+, AB-, O+, O-");
+				}
+
+				System.out.print("Not a valid blood type. Please introduce a valid one: ");
+				bloodType = sc.next();
+				bloodtypefailcount++;
+
+				switch (bloodType) { //TODO - Creo q esto se podÃ­a hacer asÃ­, not sure tho. 
+					case "A+":
+					case "A-":	
+					case "B+":	
+					case "B-":	
+					case "AB+":	
+					case "AB-":	
+					case "O+":	//Por si quiere ver el mundo arder y usa la o en vez del 0 xD 
+					case "O-":
+					case "0+":	
+					case "0-":
+					case "a+":
+					case "a-":	
+					case "b+":	
+					case "b-":	
+					case "ab+":	
+					case "ab-":	
+					case "o+":	
+					case "o-":
+						bloodtypecontrol = 1;
+						break;
+					default:
+						bloodtypecontrol = 0;
+						break;
+				}
+
+			} while (bloodtypecontrol == 0 );
+
+			p.setBloodType(bloodType);
+		}
+
+		System.out.print("Allergies: "); //TODO - yo pondrÃ­a algo como ""none" if patient has no allergies"
+		String allergie = sc.nextLine();
 		p.setAllergieType(allergie);
-		System.out.print("Date of birth: yyyy-[m]m-[d]d");
+
+		System.out.print("Date of birth [yyyy-mm-dd]: ");	
 		String birthdate = sc.next();
-		Date bdate = Date.valueOf(birthdate);
-		p.setbDate(bdate);
-		System.out.print("Check in date: yyyy-[m]m-[d]d"); //averiguar como meter horas y minutos
+		Date bdate; 
+		try {
+			bdate = Date.valueOf(birthdate);
+			if (bdate.before(Date.valueOf(LocalDate.now()))) {
+				p.setCheckInDate(bdate);
+			} else {
+				do {
+					System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");
+					birthdate = sc.next();
+					bdate = Date.valueOf(birthdate);
+				} while (bdate.before(Date.valueOf(LocalDate.now())));
+				p.setCheckInDate(bdate);
+			}
+		} catch (Exception e) {
+			int b=0;
+			do {
+				try {	//Esta para evitar q haga chof si pones un string con un formato invÃ¡lido
+					System.out.print("Please introduce a valid date format [yyyy-mm-dd]: ");
+					birthdate = sc.next();
+					bdate = Date.valueOf(birthdate); 
+			
+					if (bdate.before(Date.valueOf(LocalDate.now()))) {
+						p.setCheckInDate(bdate);
+					} else {
+						do {
+							System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");							
+							birthdate = sc.next();
+							bdate = Date.valueOf(birthdate);
+						} while (bdate.before(Date.valueOf(LocalDate.now())));
+						p.setCheckInDate(bdate);
+					}
+					b=1;
+				} catch (Exception e1) {
+				}
+			} while (b==0);
+		}
+		
+		System.out.print("Check in date [yyyy-mm-dd]: "); //averiguar como meter horas y minutos - Nope: sql dates no tienen hh:mm
 		String checkindate = sc.next();
-		Date cdate = Date.valueOf(checkindate);
-		p.setCheckInDate(cdate);
+		Date cdate;
+		try {
+			cdate = Date.valueOf(checkindate);
+			if (cdate.before(Date.valueOf(LocalDate.now()))) {
+				p.setCheckInDate(cdate);
+			} else {
+				do {
+					System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");
+					checkindate = sc.next();
+					cdate = Date.valueOf(checkindate);
+				} while (cdate.before(Date.valueOf(LocalDate.now())));
+				p.setCheckInDate(cdate);
+			}
+		} catch (Exception e) {
+			int b=0;
+			do {
+				try {	//Esta para evitar q haga chof si pones un string con un formato invÃ¡lido
+					System.out.print("Please introduce a valid date format [yyyy-mm-dd]: ");
+					checkindate = sc.next();
+					cdate = Date.valueOf(checkindate); 
+			
+					if (cdate.before(Date.valueOf(LocalDate.now()))) {
+						p.setCheckInDate(cdate);
+					} else {
+						do {
+							System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");							
+							checkindate = sc.next();
+							cdate = Date.valueOf(checkindate);
+						} while (cdate.before(Date.valueOf(LocalDate.now())));
+						p.setCheckInDate(cdate);
+					}
+					b=1;
+				} catch (Exception e1) {
+				}
+			} while (b==0);
+		}
+
 		System.out.print("Address: ");				
-		String address = sc.next();
+		String address = sc.nextLine();
 		p.setPatientAddress(address);
-		System.out.print("Hospitalization [YES/NO]: ");
+
+		System.out.print("Hospitalization [true/false]: ");
 		Boolean hospitalized = sc.nextBoolean();
 		p.setHospitalized(hospitalized);
+
 		jdbc.addPatient(c, p); //Connection c, Patient p
 	}
 	
 	public static void createWorker() throws Exception {
-		//TODO lo mismo que en el caso de createPatient()
+		
+		//TODO - Esto habrÃ­a q separarlo, no creo q sea buena idea crear shif y worker a la vez.
+
 		Worker w = new Worker();
 		Shift s = new Shift();
+
 		System.out.println("Please, input the worker info:");
 		System.out.print("Name: ");
-		String name = sc.next();
+		String name = sc.nextLine();
 		w.setWorkerName(name);
+
 		System.out.print("Surname: ");
-		String surname = sc.next();
+		String surname = sc.nextLine();
 		w.setWorkerSurname(surname);
+
 		System.out.print("Type of worker: ");
 		String type = sc.next();
 		w.setTypeWorker(type);
+
 		System.out.print("Specialty: ");
 		String specialty = sc.next();
 		w.setSpecialtyId(specialty);
+
 		System.out.print("Room: ");
 		Integer roomER = sc.nextInt();
 		w.setRoomEr(roomER);
 		s.setRoom(roomER);
+
 		System.out.print("Shift: ");
 		String shift = sc.next();
 		s.setShift(shift);
-		s.setWorkerId(w.getWorkerId()); //en teoría el workerId debería autoincrementarse, 
-		System.out.println("Start date:  yyyy-[m]m-[d]d");
+		s.setWorkerId(w.getWorkerId()); //en teorï¿½a el workerId deberï¿½a autoincrementarse, //esto hace kaboom 99% seguro, pq worker id no esta iniciado en ningun momento..
+		
+		System.out.print("Start date [yyyy-mm-dd]:  ");
 		String startDate = sc.next();
-		Date date = Date.valueOf(startDate);
-		s.setDate(date);
+		Date date;
+		try {
+			date = Date.valueOf(startDate);
+			s.setDate(date); //TODO - aqui hay un throw q no me gusta mucho y ns si deberÃ­amos (En caso de dejarlo hay q hacer un poco de copypasta)
+		} catch (Exception e) {
+			int b=0;
+			do {
+				try {
+					System.out.print("Please introduce a valid date format [yyyy-mm-dd]: ");
+					startDate = sc.next();
+					date = Date.valueOf(startDate);
+					b=1;
+					s.setDate(date); 
+				} catch (Exception e1) {
+				}
+			} while (b==0);
+		}
 		jdbc.addWorker(c, w); //Connection c,Worker w
 	}
 	public static void addMedTest() throws Exception{
-		//TODO hay que preguntar a rodrigo como se añade un blob para añadir la imagen del medical test
+		//TODO hay que preguntar a rodrigo como se aï¿½ade un blob para aï¿½adir la imagen del medical test - fuck se nos olvidÃ³ esto.
 		Patient patient = new Patient(selectPatient());
 		MedicalTest medTest = new MedicalTest();
 		medTest.setPatientId(patient.getMedicalCardId());
@@ -496,9 +661,9 @@ public class Main {
 		Patient patient = selectPatient();
 		System.out.println(patient.toString());
 		/*TODO preguntar que si se quieren editar los datos, 
-		por ejemplo añadiendo un doctor al paciente!! 
+		por ejemplo aï¿½adiendo un doctor al paciente!! 
 		(cosa que aun no se puede hacer en ninguna funcion de la database, 
-		debería preguntar que doctor le atiende al añadir un paciente nuevo y 
+		deberï¿½a preguntar que doctor le atiende al aï¿½adir un paciente nuevo y 
 		crear en sql una funcion para linkear paciente-doctor en la tabla correspondiente*/
 		}
 	
@@ -511,7 +676,7 @@ public class Main {
 		patientList.addAll(jdbc.searchPatient(c, surname)); //(connection c, integer id)
 		}
 		while(patient == null) {
-		System.out.println(patientList.toString());
+		System.out.println(patientList.toString());  
 		System.out.println("Enter the medical card number of the chosen patient:");
 		Integer medCard = Integer.parseInt(sc.next());
 		patient = new Patient(jdbc.selectPatient (c, medCard)); //(connection c, integer id)
@@ -527,7 +692,7 @@ public class Main {
 		wList = jdbc.searchWorker(c, surname); //(connection c, integer id)
 		}
 		while(w == null) {
-		System.out.println(wList.toString());
+		System.out.println(wList.toString()); 
 		System.out.println("Enter the id of the chosen worker:");
 		Integer id = Integer.parseInt(sc.next());
 		w = new Worker(jdbc.selectWorker (c, id)); //Connection c, Integer workerId
