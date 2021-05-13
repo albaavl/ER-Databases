@@ -5,21 +5,32 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
 import javax.persistence.*;
+
+import org.eclipse.persistence.jaxb.xmlmodel.XmlAccessType;
+
 import java.io.*;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name="MedicalTest")
+@XmlType(propOrder = {"dateMedTest","type","result","patient_id"})
 
 public class MedicalTest implements Serializable{
 	
 	private static final long serialVersionUID = 7210218883507746083L;
 
-	private Integer medicalTestId;
+	private Integer id;
 	//Unique for each patient - cannot be repeated for another patient.
 	
+	@XmlElement
 	private Date dateMedTest;
-	private String testType;
-	private String testResult; 
-	private byte[] testImage;
-	private Integer patientId;
+	@XmlElement
+	private String type;
+	@XmlElement
+	private String result; 
+	//@XmlTransient
+	//private byte[] testImage;
+	@XmlElement
+	private Integer patient_id;
 
 	public MedicalTest() {
 			super();
@@ -28,24 +39,24 @@ public class MedicalTest implements Serializable{
 	public MedicalTest(Date date, String tType, String tResult, int patientId) {
 		super();
 
-		this.testType = tType;
-		this.testResult = tResult;
-		this.patientId = patientId;
+		this.type = tType;
+		this.result = tResult;
+		this.patient_id = patientId;
 	}
 	public MedicalTest(int id, Date date, String type, String result, byte[] img, int patientId) {
 		super();
-		this.medicalTestId = id;
+		this.id = id;
 		this.dateMedTest = date;
-		this.testType = type;
-		this.testImage = img;
-		this.testResult = result;
-		this.patientId = patientId;
+		this.type = type;
+		//this.testImage = img;
+		this.result = result;
+		this.patient_id = patientId;
     }
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((medicalTestId == null) ? 0 : medicalTestId.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 	@Override
@@ -57,18 +68,18 @@ public class MedicalTest implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		MedicalTest other = (MedicalTest) obj;
-		if (medicalTestId == null) {
-			if (other.medicalTestId != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!medicalTestId.equals(other.medicalTestId))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
 	
 	@Override
 	public String toString() {
-		return "MedicalTest [medicalTestId=" + medicalTestId + ", dateMedTest=" + dateMedTest + ", testType=" + testType
-				+ ", testResult=" + testResult + ", testImage=" + Arrays.toString(testImage) + ", patientId=" + patientId
+		return "MedicalTest [medicalTestId=" + id + ", dateMedTest=" + dateMedTest + ", testType=" + type
+				+ ", testResult=" + result + ", testImage="/* + Arrays.toString(testImage)*/ + ", patientId=" + id
 				+ "]";
 	}
 	/**
@@ -76,14 +87,14 @@ public class MedicalTest implements Serializable{
 	 * @return [Integer] The medical test's id
 	 */
 	public Integer getMedicalTestId() {
-		return medicalTestId;
+		return id;
 	}
 	/**
 	 * Used to set the ID of the medical test.
 	 * @param medicalTestId - The id of the medical test requested.
 	 */
 	public void setMedicalTestId(Integer medicalTestId) {
-		this.medicalTestId = medicalTestId;
+		this.id = medicalTestId;
 	}
 	/**
 	 * Used to get the date when realized of the medical test
@@ -118,49 +129,49 @@ public class MedicalTest implements Serializable{
 	 * @return [String] The medical test's type.
 	 */
 	public String getTestType() {
-		return testType;
+		return type;
 	}
 	/**
 	 * Used to set the type of medical test.
 	 * @param testType - The name of the medical test requested.
 	 */
 	public void setTestType(String testType) {
-		this.testType = testType;
+		this.type = testType;
 	}
 	/**
 	 * Used to get the result of the medical test
 	 * @return [Blob] The result obtained from the medical test
 	 */
 	public String getTestResult() {
-		return testResult;
+		return result;
 	}
 	/**
 	 * Used to set the result of the medical test
 	 * @param testResult - The result from the medical test
 	 */
 	public void setTestResult(String testResult) {
-		this.testResult = testResult;
+		this.result = testResult;
 	}
 	/**
 	 * Used to get the image (result) of the medical test.
 	 * @return [byte[]] The image obtained from the medical test
 	 */
-	public byte[]  getTestImage() {
+	/*public byte[]  getTestImage() {
 		return testImage;
-	}
+	}*/
 	/**
 	 * Used to set the result of the medical test
 	 * @param testImage- The image resulted from the medical test
 	 */
-	public void setTestImage(byte[] testImage) {
+	/*public void setTestImage(byte[] testImage) {
 		this.testImage = testImage;
-	}
+	}*/
 
 	public Integer getPatientId() {
-		return patientId;
+		return patient_id;
 	}
 
 	public void setPatientId(Integer patientId) {
-		this.patientId = patientId;
+		this.patient_id = patientId;
 	}
 }

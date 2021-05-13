@@ -1,12 +1,6 @@
 package db.pojos;
 import java.util.*;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-
+import javax.persistence.*;
 import java.io.Serializable;
 
 //import sample.db.pojos.Employee;
@@ -16,8 +10,12 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 
+
 @Entity
 @Table(name = "shifts")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name="Shift")
+@XmlType(propOrder = {"date","shift","room","workerId"})
 public class Shift implements Serializable {
 	/**
 	 * 
@@ -29,10 +27,18 @@ public class Shift implements Serializable {
 	@GeneratedValue(generator="shifts")
 	@TableGenerator(name="shifts", table="sqlite_sequence",
 	    pkColumnName="workerId", valueColumnName="seq", pkColumnValue="shifts")
+	
+	//we make the id transient to be able to import data from a XML file
+	@XmlTransient
 	private Integer shiftId;
+	@XmlElement
+	@XmlJavaTypeAdapter(SQLDateAdapter.class)
 	private Date date;
+	@XmlElement
 	private String shift;
+	@XmlElement
 	private Integer room;
+	@XmlElement
 	private Integer workerId ;
 	
 
@@ -186,3 +192,11 @@ public class Shift implements Serializable {
 	}
 	
 }
+//AQUI NO, EN MAIN
+//create the JAXBContext
+/*JAXBContext jaxbContext= JAXBContext=.newInstance(Shift.class)
+//get the marshaller
+Marshaller marshaller=jaxbContext.createMarshaller();
+
+marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
+marshaller.marshal(shift,file);*/
