@@ -161,7 +161,7 @@ public class SQL implements SQLInterface{
 	public void addShift(Connection c, Shift s) throws SQLException{
 		String sq1 = "INSERT INTO shifts (shift, date, room, doctor_id) VALUES (?,?,?,?)";
 		PreparedStatement preparedStatement = c.prepareStatement(sq1);
-		preparedStatement.setString(1, s.getShift());
+		preparedStatement.setString(1, s.getTurn());
 		preparedStatement.setDate(2, s.getDate());
 		preparedStatement.setInt(3, s.getRoom());
 		preparedStatement.setInt(4, s.getWorkerId());
@@ -189,7 +189,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List <Treatment> tList = new ArrayList<Treatment>();
 		while(rs.next()){
-			tList.add( new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")) );
+			tList.add( new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"), patient.getMedicalCardId()) );
 		}
 		p.close();
 		rs.close();
@@ -218,7 +218,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List<Shift> shifts = new ArrayList<>();
 		if(rs.next()){ 
-			shifts.add(new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), workerId, rs.getInt("id")));		
+			shifts.add(new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("shift"), workerId, rs.getInt("id")));		
 		}
 		p.close();
 		rs.close();
@@ -234,7 +234,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List<Shift> shifts = new ArrayList<>();
 		if(rs.next()){ 
-		shifts.add(new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), rs.getInt("doctor_id"))) ;		
+		shifts.add(new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("shift"), rs.getInt("doctor_id"))) ;		
 		}
 		p.close();
 		rs.close();
@@ -306,7 +306,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		Shift shift = null;
 		if(rs.next()){
-			shift = new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), rs.getInt("doctor_id"), rs.getInt("id"));
+			shift = new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("shift"), rs.getInt("doctor_id"), rs.getInt("id"));
 		}
 		p.close();
 		rs.close();
@@ -335,7 +335,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List<Treatment> rList = new ArrayList<Treatment>();
 		while (rs.next()) {
-			rList.add(new Treatment(rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")));
+			rList.add(new Treatment(rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"), medCard));
 		}
 		p.close();
 		rs.close();
@@ -445,12 +445,14 @@ public class SQL implements SQLInterface{
 	
 	@Override
 	public List<Treatment> searchTreatmentByMed(Connection c,Patient patient, String med) throws Exception{
-		String sql = "SELECT * FROM treatments WHERE medication LIKE '%"+ med +"%' AND patient_id = "+patient.getMedicalCardId();
-		PreparedStatement prep = c.prepareStatement(sql);		//TODO - Esta funcion esta mal hecha, si usas prepstatement no puedes dar los datos en el statement xD
+		String sql = "SELECT * FROM treatments WHERE medication LIKE '%?%' AND patient_id = ?";
+		PreparedStatement prep = c.prepareStatement(sql);
+		prep.setString(1, med);
+		prep.setInt(2, patient.getMedicalCardId());
 		ResultSet rs = prep.executeQuery();
 		List<Treatment> treatments = new ArrayList<>();
 		if(rs.next()) {
-			treatments.add(new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")));
+			treatments.add(new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"), patient.getMedicalCardId()));
 		}
 		prep.close();
 		return treatments;
@@ -573,45 +575,9 @@ public class SQL implements SQLInterface{
 	}
 	
 	
-
-	//Se me ha ocurrido esto para algunas funciones del main. *probablemente es innecesario peeero ahi las dejo 
-
-	/**
-	 * Used to check if there's any patient with the given id on the database.
-	 * @param c - Database Connection.
-	 * @param medCardNumber - Id of the patient that will be checked (int)
-	 * @return True if theres any patient with that id, otherwise false
-	 * @throws SQLException
-	 */
-	public boolean checkPatient(Connection c, int medCardNumber) throws SQLException{
-		String sql = "SELECT name FROM patients WHERE medical_card_number = ?";
-		PreparedStatement p = c.prepareStatement(sql);
-		p.setInt(1,medCardNumber);
-		ResultSet rs = p.executeQuery();
-		if(rs.next()){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	/**
-	 * Used to check if there's any worker with the given id on the database.
-	 * @param c - Database Connection.
-	 * @param workerId - Id of the worker that will be checked (int)
-	 * @return True if theres any patient with that id, otherwise false
-	 * @throws SQLException
-	 */
-	public boolean checkWorker(Connection c, int workerId) throws SQLException{
-		String sql = "SELECT name FROM workers WHERE id = ?";
-		PreparedStatement p = c.prepareStatement(sql);
-		p.setInt(1,workerId);
-		ResultSet rs = p.executeQuery();
-		if(rs.next()){
-			return true;
-		}else{
-			return false;
-		}
+	public void updatePatientName(Connection c, Integer medicalCardId, String newName) {
+		//TODO crear todos los fucking updates que has decidido hacer, en vdd yo haria una funcion tipo editshift/treatment
+		
 	}
 
 }
