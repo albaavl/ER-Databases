@@ -28,6 +28,7 @@ public class Patient implements Serializable{
 		//Home address of the patient.
 	private boolean hospitalized;
 		//Whether the patient is hospitalized or not.
+	private Integer userId;
 
 //builder
 
@@ -62,6 +63,20 @@ public class Patient implements Serializable{
 		this.setPatientName(pnam);
 		this.setPatientSurname(psnam);
 		this.setPatientAddress(paddress);
+		this.medical_card_number = medCardId;
+	}
+	
+	public Patient(String pnam, String psnam, String pgen, String btype, String allerg, String paddress, Date bdat, Date cIndat, boolean hosp, Integer medCardId, Integer userId ) throws NotBoundException{
+		this.setAllergieType( allerg);
+		this.setbDate(bdat);
+		this.setBloodType(btype);
+		this.setCheckInDate(cIndat);
+		this.setGender(pgen);
+		this.setHospitalized(hosp); 
+		this.setPatientName(pnam);
+		this.setPatientSurname(psnam);
+		this.setPatientAddress(paddress);
+		this.userId= userId;
 		this.medical_card_number = medCardId;
 	}
 	

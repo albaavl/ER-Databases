@@ -1,37 +1,55 @@
 package db.pojos;
 
 import java.rmi.NotBoundException;
+
+
 import java.util.*;
 import javax.persistence.*;
 import java.io.*;
+import javax.xml.bind.annotation.*;
 
-
+@Entity
+@Table(name = "workers")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Worker")
+@XmlType(propOrder = { "name", "surname", "specialty", "role", "room_in_ER" })
 public class Worker implements Serializable{
 	
 	private static final long serialVersionUID = 5053907057578582101L;
 
+	@Id
+	@GeneratedValue(generator = "workers")
+	@TableGenerator(name = "workers", table = "sqlite_sequence",
+		pkColumnName = "name", valueColumnName = "seq", pkColumnValue = "workers")
+	
+	@XmlTransient
 	private Integer workerId;
 	//Unique for each doctor - cannot be repeated for another doctor.
 
+	@XmlAttribute
 	private String workerName;
+	@XmlElement
 	private String workerSurname;
+	@XmlElement
 	private String specialtyId;
-	private int roomEr;
+	@XmlElement
+	private Integer shiftId;
+	@XmlElement
 	private String typeWorker;
 	//Can be doctor(1), nurse(2), administration staff(3), technician(4)
-
+	@XmlElement
+	private Integer userId;
 	
 	public Worker() {
 		super();
 	}
 	
-	public Worker(String workerName, String workerSurname, String specialtyId, int roomEr,
+	public Worker(String workerName, String workerSurname, String specialtyId,
 			String typeWorker) {
 		super();
 		this.workerName = workerName;
 		this.workerSurname = workerSurname;
 		this.specialtyId = specialtyId;
-		this.roomEr = roomEr;
 		this.typeWorker = typeWorker;
 	}
 	
@@ -40,21 +58,33 @@ public class Worker implements Serializable{
 		this.workerName = w.workerName;
 		this.workerSurname = w.workerSurname;
 		this.specialtyId = w.specialtyId;
-		this.roomEr = w.roomEr;
+		this.shiftId = w.shiftId;
 		this.typeWorker = w.typeWorker;
 	}
 	
-	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, int roomEr,
+	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, Integer shiftId,
 			String typeWorker) {
 		super();
 		this.workerId = workerId;
 		this.workerName = workerName;
 		this.workerSurname = workerSurname;
 		this.specialtyId = specialtyId;
-		this.roomEr = roomEr;
+		this.shiftId = shiftId;
 		this.typeWorker = typeWorker;
 	}
 	
+	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, Integer shiftId,
+			String typeWorker, Integer userId) {
+		super();
+		this.workerId = workerId;
+		this.workerName = workerName;
+		this.workerSurname = workerSurname;
+		this.specialtyId = specialtyId;
+		this.shiftId = shiftId;
+		this.typeWorker = typeWorker;
+		this.userId = userId;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -82,7 +112,7 @@ public class Worker implements Serializable{
 	@Override
 	public String toString() {
 		return "Worker [workerId=" + workerId + ", workerName=" + workerName + ", workerSurname=" + workerSurname
-				+ ", specialtyId=" + specialtyId + ", roomEr=" + roomEr + ", typeWorker=" + typeWorker + "]";
+				+ ", specialtyId=" + specialtyId + ", shiftId" + shiftId + ", typeWorker=" + typeWorker + "]";
 	}
 	
 	//Getters + Setters
@@ -142,21 +172,16 @@ public class Worker implements Serializable{
 	public void setSpecialtyId(String specialtyId) {
 		this.specialtyId = specialtyId;
 	}
-	/**
-	 * Used to get the room assigned to the worker.
-	 * @return [Integer] The worker's room.
-	 */
-	public int getRoomEr() {
-		return roomEr;
+	
+	
+	public Integer getShiftId() {
+		return shiftId;
 	}
-	/**
-	 * Used to set the worker's assigned room
-	 * @param roomEr - The assigned room of the worker.
-	 */
-	public void setRoomEr(Integer roomEr) {
-		this.roomEr = roomEr;
-		//We could limitate it by knowing the number of ER rooms in the hospital
+
+	public void setShiftId(Integer shiftId) {
+		this.shiftId = shiftId;
 	}
+
 	/**
 	 * Used to get the type of worker.
 	 * @return [Integer] The worker's type.
@@ -180,5 +205,13 @@ public class Worker implements Serializable{
 		} else {
 			throw new NotBoundException("Incorrect type of worker");
 		}
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 }

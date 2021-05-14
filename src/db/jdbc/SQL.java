@@ -16,10 +16,12 @@ public class SQL implements SQLInterface{
 		System.out.println("Database connection opened.");
 		return c;
 	}
+	
+	@Override
 	public void disconnect(Connection c) throws SQLException{
 		c.close();
 	}
-	//crear una foreing key para patient y worker que sea el tipo de usuario
+	
 	@Override
 	public void create(Connection c) throws SQLException {
 			Statement stmt1 = c.createStatement();
@@ -44,7 +46,6 @@ public class SQL implements SQLInterface{
 				   + " surname     TEXT     NOT NULL, "
 				   + " specialty   TEXT, "
 				   + " role TEXT NOT NULL,"
-				   + " room_in_ER   TEXT,"
 				   + " userId INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt3.executeUpdate(sql3);
 		stmt3.close();
@@ -88,6 +89,7 @@ public class SQL implements SQLInterface{
 		System.out.println("Tables created.");		
 	}
 
+	@Override
 	public void addPatient(Connection c, Patient p) throws SQLException{
 		if (p.getAllergieType()==null) {
 			String sq1 = "INSERT INTO patients ( medical_card_number, name, surname, gender, birthdate,  address, blood_type, check_in, hospitalized) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -121,20 +123,19 @@ public class SQL implements SQLInterface{
 		}
 	}
 
-
+@Override
 	public void addWorker(Connection c, Worker w) throws SQLException{
-			String sq1 = "INSERT INTO workers (name, surname, specialty, role, room_in_ER) VALUES (?, ?, ?, ?, ?)";
+			String sq1 = "INSERT INTO workers (name, surname, specialty, role) VALUES (?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
 			preparedStatement.setString(1, w.getWorkerName());
 			preparedStatement.setString(2, w.getWorkerSurname());
 			preparedStatement.setString(3, w.getSpecialtyId());
 			preparedStatement.setString(4, w.getTypeWorker());
-			preparedStatement.setInt(5, w.getRoomEr());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 	}
 
-
+@Override
 	public void addMedicalTest(Connection c, MedicalTest medtest) throws SQLException{
 			String sq1 = "INSERT INTO medical_tests (patient_id, type, result) VALUES (?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
@@ -145,6 +146,7 @@ public class SQL implements SQLInterface{
 			preparedStatement.close();
     }
 
+@Override
 	public void addTreatment(Connection c, Treatment treatment) throws SQLException {
 		String sq1 = "INSERT INTO treatments (diagnosis, medication, start_date, advice, duration, patient_id) VALUES (?,?,?,?,?,?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
@@ -158,10 +160,11 @@ public class SQL implements SQLInterface{
 			preparedStatement.close();
 	}
 	
+@Override
 	public void addShift(Connection c, Shift s) throws SQLException{
 		String sq1 = "INSERT INTO shifts (shift, date, room, doctor_id) VALUES (?,?,?,?)";
 		PreparedStatement preparedStatement = c.prepareStatement(sq1);
-		preparedStatement.setString(1, s.getShift());
+		preparedStatement.setString(1, s.getTurn());
 		preparedStatement.setDate(2, s.getDate());
 		preparedStatement.setInt(3, s.getRoom());
 		preparedStatement.setInt(4, s.getWorkerId());
@@ -189,7 +192,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List <Treatment> tList = new ArrayList<Treatment>();
 		while(rs.next()){
-			tList.add( new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")) );
+			tList.add( new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"), patient.getMedicalCardId()) );
 		}
 		p.close();
 		rs.close();
@@ -211,6 +214,7 @@ public class SQL implements SQLInterface{
 		return mList;
 	}
 	
+	@Override
 	public List<Shift> searchShiftByWorkerId (Connection c, Integer workerId) throws SQLException, Exception {
 		String sql = "SELECT * FROM shifts WHERE workerId = ? ";
 		PreparedStatement p = c.prepareStatement(sql);
@@ -218,13 +222,14 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List<Shift> shifts = new ArrayList<>();
 		if(rs.next()){ 
-			shifts.add(new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), workerId, rs.getInt("id")));		
+			shifts.add(new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("shift"), workerId, rs.getInt("id")));		
 		}
 		p.close();
 		rs.close();
 		return shifts;
 	}
 	
+	@Override
 	public List<Shift> searchShiftByDate (Connection c, Integer workerId, Date date) throws SQLException, Exception {
 		//TODO hay que editar la funcion o mas bien crear una nueva que busque por id del shift
 		String sql = "SELECT * FROM shifts WHERE workerId = ? AND date = ? ";
@@ -234,7 +239,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List<Shift> shifts = new ArrayList<>();
 		if(rs.next()){ 
-		shifts.add(new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), rs.getInt("doctor_id"))) ;		
+		shifts.add(new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("shift"), rs.getInt("doctor_id"))) ;		
 		}
 		p.close();
 		rs.close();
@@ -256,6 +261,7 @@ public class SQL implements SQLInterface{
 		return pList;
 	}
 	
+	@Override
 	public List<Worker> searchWorker(Connection c, String surname) throws SQLException, NotBoundException {
 		String sql = "SELECT * FROM workers WHERE surname LIKE ?";
 		PreparedStatement p = c.prepareStatement(sql);
@@ -285,6 +291,7 @@ public class SQL implements SQLInterface{
 		return patient;	
 	}
 
+	@Override
 	public Worker selectWorker(Connection c, Integer workerId) throws SQLException, NotBoundException {
 		String sql = "SELECT * FROM workers WHERE id = ?";
 		PreparedStatement p = c.prepareStatement(sql);
@@ -299,6 +306,7 @@ public class SQL implements SQLInterface{
 		return worker;	
 	}
 	
+	@Override
 	public Shift selectShift(Connection c, Integer shiftId) throws SQLException, Exception {
 		String sql = "SELECT * FROM shifts WHERE id = ?";
 		PreparedStatement p = c.prepareStatement(sql);
@@ -306,7 +314,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		Shift shift = null;
 		if(rs.next()){
-			shift = new Shift(rs.getDate("date"), rs.getString("shift"), rs.getInt("room"), rs.getInt("doctor_id"), rs.getInt("id"));
+			shift = new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("shift"), rs.getInt("doctor_id"), rs.getInt("id"));
 		}
 		p.close();
 		rs.close();
@@ -328,6 +336,7 @@ public class SQL implements SQLInterface{
 		return treatment;	
 	}
 
+	@Override
 	public List<Treatment> searchTreatmentsByMedCard(Connection c, Integer medCard) throws Exception {
 		String sql = "SELECT * FROM treatments WHERE patient_id = ?"; 
 		PreparedStatement p = c.prepareStatement(sql);
@@ -335,7 +344,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List<Treatment> rList = new ArrayList<Treatment>();
 		while (rs.next()) {
-			rList.add(new Treatment(rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")));
+			rList.add(new Treatment(rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"), medCard));
 		}
 		p.close();
 		rs.close();
@@ -398,6 +407,7 @@ public class SQL implements SQLInterface{
 		return t;
 	}
 
+	@Override
 	public Shift editShift (Connection c,Integer shiftId, Integer workerId, String shift, Integer room, Date date) throws Exception {
 			String sql;
 			PreparedStatement p = null;
@@ -445,12 +455,14 @@ public class SQL implements SQLInterface{
 	
 	@Override
 	public List<Treatment> searchTreatmentByMed(Connection c,Patient patient, String med) throws Exception{
-		String sql = "SELECT * FROM treatments WHERE medication LIKE '%"+ med +"%' AND patient_id = "+patient.getMedicalCardId();
-		PreparedStatement prep = c.prepareStatement(sql);		//TODO - Esta funcion esta mal hecha, si usas prepstatement no puedes dar los datos en el statement xD
+		String sql = "SELECT * FROM treatments WHERE medication LIKE '%?%' AND patient_id = ?";
+		PreparedStatement prep = c.prepareStatement(sql);
+		prep.setString(1, med);
+		prep.setInt(2, patient.getMedicalCardId());
 		ResultSet rs = prep.executeQuery();
 		List<Treatment> treatments = new ArrayList<>();
 		if(rs.next()) {
-			treatments.add(new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")));
+			treatments.add(new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"), patient.getMedicalCardId()));
 		}
 		prep.close();
 		return treatments;
@@ -462,6 +474,8 @@ public class SQL implements SQLInterface{
 	 * @param medCardNumber - The id from the patient that will be deleted. (int)
 	 * @throws SQLException
 	 */
+	
+	@Override
 	public void deletePatientByMedicalCardId(Connection c, int medCardNumber) throws SQLException{
 		String sql = "DELETE FROM patients WHERE medical_card_number = ?";
 		PreparedStatement pStatement = c.prepareStatement(sql);
@@ -476,6 +490,8 @@ public class SQL implements SQLInterface{
 	 * @param id - Id from the worker that will be deleted. (int)
 	 * @throws SQLException
 	 */
+	
+	@Override
 	public void deleteWorkerById(Connection c, int workerId) throws SQLException {
 		String sql = "DELETE FROM workers WHERE id = ?";
 		PreparedStatement pStatement = c.prepareStatement(sql);
@@ -489,6 +505,8 @@ public class SQL implements SQLInterface{
 	 * @param treatmentId - Id from the treatment that will be deleted. (int)
 	 * @throws SQLException
 	 */
+	
+	@Override
 	public void deleteTreatmentById(Connection c, int treatmentId) throws SQLException {
 		String sql = "DELETE FROM treatments WHERE id = ?";
 		PreparedStatement pStatement = c.prepareStatement(sql);
@@ -502,6 +520,8 @@ public class SQL implements SQLInterface{
 	 * @param shiftId - Id from the shift that you want to delete. (int)
 	 * @throws SQLException
 	 */
+	
+	@Override
 	public void deleteShiftById(Connection c, int shiftId) throws SQLException {
 		String sql = "DELETE FROM shifts WHERE id = ?";
 		PreparedStatement pStatement = c.prepareStatement(sql);
@@ -517,6 +537,7 @@ public class SQL implements SQLInterface{
 	 * @param workerId - the id of the doctor that will be linked to the patient. (int)
 	 * @throws SQLException
 	 */
+	@Override
 	public void createLinkDoctorPatient(Connection c, int medCardNumber, int workerId) throws SQLException {
 		String sql = "INSERT INTO doctor_patient (patient_id, doctor_id) VALUES (?,?)";
 		PreparedStatement pStatement = c.prepareStatement(sql);
@@ -526,6 +547,7 @@ public class SQL implements SQLInterface{
 		pStatement.close();
 	}
 	
+	@Override
 	public void createLinkUserPatient(Connection c, int userId, int medCardNumber) throws Exception {
 		String sql1 = "UPDATE patients SET userId = ? WHERE id = ? ";
 		PreparedStatement pStatement = c.prepareStatement(sql1);
@@ -535,6 +557,7 @@ public class SQL implements SQLInterface{
 		pStatement.close();
 	}
 	
+	@Override
 	public void createLinkUserWorker(Connection c, int userId, int workerId) throws Exception {
 		String sql1 = "UPDATE workers SET userId = ? WHERE id = ? ";
 		PreparedStatement pStatement = c.prepareStatement(sql1);
@@ -543,6 +566,8 @@ public class SQL implements SQLInterface{
 		pStatement.executeUpdate();
 		pStatement.close();
 	}
+	
+	@Override
 	public Worker selectWorkerByUserId(Connection c, Integer userID) throws Exception {
 		String sql = "SELECT * FROM workers WHERE userId = ? ";
 		PreparedStatement pStatement = c.prepareStatement(sql);
@@ -558,6 +583,7 @@ public class SQL implements SQLInterface{
 		return worker;
 	}
 	
+	@Override
 	public Patient selectPatientByUserId(Connection c, Integer userId) throws SQLException, NotBoundException {
 		String sql = "SELECT * FROM patients userId = ?";
 		PreparedStatement p = c.prepareStatement(sql);
@@ -578,6 +604,7 @@ public class SQL implements SQLInterface{
 		pStatement.setString(1, name);
 		pStatement.setInt(2, medCardNum);
 		pStatement.executeUpdate();
+		pStatement.close();
 	}
 	public void updatePatientSurname(Connection c, int medCardNum, String surname) throws SQLException {
 		String sql = "UPDATE patients SET surname = ? WHERE medical_card_number = ?";
@@ -585,6 +612,7 @@ public class SQL implements SQLInterface{
 		pStatement.setString(1, surname);
 		pStatement.setInt(2, medCardNum);
 		pStatement.executeUpdate();
+		pStatement.close();
 	}
 	public void updatePatientGender(Connection c, int medCardNum, String gender) throws SQLException {
 		String sql = "UPDATE patients SET gender = ? WHERE medical_card_number = ?";
@@ -592,6 +620,7 @@ public class SQL implements SQLInterface{
 		pStatement.setString(1, gender);
 		pStatement.setInt(2, medCardNum);
 		pStatement.executeUpdate();
+		pStatement.close();
 	}
 	public void updatePatientBloodType(Connection c, int medCardNum, String bloodType) throws SQLException {
 		String sql = "UPDATE patients SET blood_type = ? WHERE medical_card_number = ?";
@@ -599,6 +628,7 @@ public class SQL implements SQLInterface{
 		pStatement.setString(1, bloodType);
 		pStatement.setInt(2, medCardNum);
 		pStatement.executeUpdate();
+		pStatement.close();
 	}
 	public void updatePatientAllergies(Connection c, int medCardNum, String allergies) throws SQLException {
 		String sql = "UPDATE patients SET allergies = ? WHERE medical_card_number = ?";
@@ -606,6 +636,7 @@ public class SQL implements SQLInterface{
 		pStatement.setString(1, allergies);
 		pStatement.setInt(2, medCardNum);
 		pStatement.executeUpdate();
+		pStatement.close();
 	}
 	public void updatePatientBirthDate(Connection c, int medCardNum, Date bDate) throws SQLException {
 		String sql = "UPDATE patients SET birthdate = ? WHERE medical_card_number = ?";
@@ -613,6 +644,7 @@ public class SQL implements SQLInterface{
 		pStatement.setDate(1, bDate);
 		pStatement.setInt(2, medCardNum);
 		pStatement.executeUpdate();
+		pStatement.close();
 	}
 	public void updatePatientCheckInDate(Connection c, int medCardNum, Date checkInDate) throws SQLException {
 		String sql = "UPDATE patients SET check_in = ? WHERE medical_card_number = ?";
@@ -620,6 +652,7 @@ public class SQL implements SQLInterface{
 		pStatement.setDate(1, checkInDate);
 		pStatement.setInt(2, medCardNum);
 		pStatement.executeUpdate();
+		pStatement.close();
 	}
 	public void updatePatientAddress(Connection c, int medCardNum, String address) throws SQLException {
 		String sql = "UPDATE patients SET address = ? WHERE medical_card_number = ?";
@@ -627,6 +660,7 @@ public class SQL implements SQLInterface{
 		pStatement.setString(1, address);
 		pStatement.setInt(2, medCardNum);
 		pStatement.executeUpdate();
+		pStatement.close();
 	}
 	public void updatePatientHospitalization(Connection c, int medCardNum, Boolean hospitalization) throws SQLException {
 		String sql = "UPDATE patients SET hospitalized = ? WHERE medical_card_number = ?";
@@ -634,6 +668,15 @@ public class SQL implements SQLInterface{
 		pStatement.setBoolean(1, hospitalization);
 		pStatement.setInt(2, medCardNum);
 		pStatement.executeUpdate();
+		pStatement.close();
+	}
+
+	@Override
+	public Patient editPatient(Connection c, Integer medCardNumber, String name, String surname, String gender,
+			String bloodType, String allergies, String address, Date bdate, Date checkIn, boolean hosp)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

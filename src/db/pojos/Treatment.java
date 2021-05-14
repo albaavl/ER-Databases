@@ -1,12 +1,8 @@
 package db.pojos;
 
 import java.io.Serializable;
-import java.lang.annotation.Inherited;
-
-import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.List;
 
 public class Treatment implements Serializable {
 
@@ -45,8 +41,18 @@ public class Treatment implements Serializable {
 		setDuration(duration);
 		setPatientId(patientId);
 	}
+	
+	public Treatment(Integer id, String diagnosis, String medication , Date startDate, String recommendation, Integer duration) throws Exception {
+		super();
+		this.setTreatmentId(id);
+		setDiagnosis(diagnosis);
+		setMedication(medication);
+		setStartDate(startDate);
+		setRecommendation(recommendation);
+		setDuration(duration);
+	}
 
-	public Treatment(int treatmentId, String diagnosis, String medication, Date startDate, String recommendation, int duration, Integer patientId) throws Exception {
+	public Treatment(Integer treatmentId, String diagnosis, String medication, Date startDate, String recommendation, int duration, Integer patientId) throws Exception {
 		setTreatmentId(treatmentId);
 		setDiagnosis(diagnosis);
 		setMedication(medication);		
@@ -68,14 +74,7 @@ public class Treatment implements Serializable {
 
 	//Getters + Setters
 
-	public Treatment(int int1, String string, String string2, Date date, String string3, int int2) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public Treatment(String diagnosis2, String recommendation2, Date startDate2, String medication2,
-			Integer duration2) {
-		// TODO Auto-generated constructor stub
-	}
+	
 
 	/**
 	 * Used to set the treatment id

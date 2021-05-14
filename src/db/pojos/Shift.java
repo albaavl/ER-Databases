@@ -1,14 +1,16 @@
 package db.pojos;
 import java.util.*;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import javax.xml.*;
-
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDate;
-
+import db.xml.utils.*;
 
 
 
@@ -16,7 +18,7 @@ import java.time.LocalDate;
 @Table(name = "shifts")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name="Shift")
-@XmlType(propOrder = {"date","shift","room","workerId"})
+@XmlType(propOrder = {"date","turn","room","workerId"})
 public class Shift implements Serializable {
 	/**
 	 * 
@@ -48,18 +50,19 @@ public class Shift implements Serializable {
 	}
 	
 	
-	public Shift(Date date, Integer room, Integer workerId, String turn) throws Exception {
+	public Shift(Date date, Integer room, String turn, Integer workerId) throws Exception {
 		super();
 		this.setDate(date);
 		this.setRoom(room);
-		this.setWorkerId(workerId);	
 		this.setTurn(turn);
+		this.setWorkerId(workerId);	
 	}
 	
-	public Shift(Date date, Integer room, Integer workerId, Integer shiftId) throws Exception {
+	public Shift(Date date, Integer room, String turn, Integer workerId, Integer shiftId) throws Exception {
 		super();
 		this.setDate(date);
 		this.setRoom(room);
+		this.setTurn(turn);
 		this.setWorkerId(workerId);
 		this.setShiftId(shiftId);
 	}
@@ -68,6 +71,7 @@ public class Shift implements Serializable {
 		super();
 		this.setDate(s.date);
 		this.setRoom(s.room);
+		this.setTurn(s.turn);
 		this.setWorkerId(s.workerId);
 		this.setShiftId(s.shiftId);
 		
@@ -178,11 +182,3 @@ public class Shift implements Serializable {
 	}
 	
 }
-//AQUI NO, EN MAIN
-//create the JAXBContext
-/*JAXBContext jaxbContext= JAXBContext=.newInstance(Shift.class)
-//get the marshaller
-Marshaller marshaller=jaxbContext.createMarshaller();
-
-marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
-marshaller.marshal(shift,file);*/

@@ -10,9 +10,6 @@ import org.eclipse.persistence.jaxb.xmlmodel.XmlAccessType;
 
 import java.io.*;
 
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name="MedicalTest")
-@XmlType(propOrder = {"patient_id", "dateMedTest","type","result"})
 
 public class MedicalTest implements Serializable{
 	
@@ -21,15 +18,10 @@ public class MedicalTest implements Serializable{
 	private Integer id;
 	//Unique for each patient - cannot be repeated for another patient.
 	
-	@XmlElement
 	private Integer patient_id;
-	@XmlElement
 	private Date dateMedTest;
-	@XmlElement
 	private String type;
-	@XmlElement
 	private String result; 
-	//@XmlTransient
 	//private byte[] testImage;
 
 	public MedicalTest() {
