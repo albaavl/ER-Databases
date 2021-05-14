@@ -31,9 +31,9 @@ public class Main {
 				if(!ex.getMessage().contains("already exists")) {
 					ex.printStackTrace();
 				}
-			userman.connect();
-			
 			}
+			userman.connect();
+			firstlogin();
 			do {
 				System.out.println("Welcome to the Quiron's ER");
 				System.out.println("1. Login");
@@ -625,6 +625,7 @@ public class Main {
 		String surname = sc.nextLine();
 		w.setWorkerSurname(surname);
 
+		//TODO CONTROLA EXCEPCIONES CERDO @HUGO
 		System.out.print("Type of worker: ");
 		String type = sc.next();
 		w.setTypeWorker(type);
@@ -1019,6 +1020,26 @@ public class Main {
 		w = new Worker(jdbc.selectWorker (c, id)); //Connection c, Integer workerId
 		}
 		return w;
+	}
+	
+	private static void firstlogin(){
+		try{
+		String username = "admin";
+		String password = "admin";
+		Role role = userman.getRole(3);
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		md.update(password.getBytes());
+		byte[] hash = md.digest();
+		User user = new User(username, hash, role);
+		userman.newUser(user);
+		Worker worker = new Worker("admin","admin","none","adStaff");
+		jdbc.addWorker(c,worker );
+		Worker created = new Worker(jdbc.selectWorker(c, 1));
+		jdbc.createLinkUserWorker(c, user.getUserId(), created.getWorkerId());
+		System.out.println("Admin created");
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 }
 

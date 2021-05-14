@@ -299,7 +299,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		Worker worker = null;
 		if(rs.next()){
-			worker = new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getInt("room_in_ER"), rs.getString("type"));
+			worker = new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getString("role"));
 		}
 		p.close();
 		rs.close();
@@ -575,7 +575,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = pStatement.executeQuery();
 		Worker worker = null;
 		if(rs.next()){
-			worker = new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getInt("room_in_ER"), rs.getString("type"));
+			worker = new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"),  rs.getString("role"));
 			
 		}
 		pStatement.close();
