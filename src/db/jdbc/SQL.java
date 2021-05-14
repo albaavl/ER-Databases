@@ -46,7 +46,7 @@ public class SQL implements SQLInterface{
 				   + " surname     TEXT     NOT NULL, "
 				   + " specialty   TEXT, "
 				   + " role TEXT NOT NULL,"
-				   + " userId INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL)";
+				   + " userId INTEGER REFERENCES users(userId) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt3.executeUpdate(sql3);
 		stmt3.close();
 		Statement stmt4 = c.createStatement();
@@ -672,11 +672,69 @@ public class SQL implements SQLInterface{
 	}
 
 	@Override
-	public Patient editPatient(Connection c, Integer medCardNumber, String name, String surname, String gender,
-			String bloodType, String allergies, String address, Date bdate, Date checkIn, boolean hosp)
+	public Patient editPatient(Connection c, Integer medCardNum, String name, String surname, String gender,
+			String bloodType, String allergies, String address, Date bdate, Date checkInDate, boolean hosp)
 			throws Exception {
 		// TODO Auto-generated method stub
+
+		String sql;
+		PreparedStatement pStatement;
+
+		if (name != null) {
+			sql = "UPDATE patients SET name = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setString(1, name);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();	
+		} 
+		if (surname != null) {
+			sql = "UPDATE patients SET surname = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setString(1, surname);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();
+		}
+		if (gender != null) {
+			sql = "UPDATE patients SET gender = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setString(1, gender);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();	
+		}
+		if (bloodType != null) {
+			sql = "UPDATE patients SET blood_type = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setString(1, bloodType);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();
+		}
+		if (allergies != null) {
+			sql = "UPDATE patients SET allergies = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setString(1, allergies);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();
+		}
+		if (bdate != null) {
+			sql = "UPDATE patients SET birthdate = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setDate(1, bdate);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();
+		}
+
+		//TODO - fuck this shit xD como hacer q un boolean null no haga petar esto :)
+		if ( ) {
+			sql = "UPDATE patients SET check_in = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setDate(1, checkInDate);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();
+	
+		}
+
 		return null;
 	}
 
+	
 }
