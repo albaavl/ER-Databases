@@ -46,7 +46,7 @@ public class SQL implements SQLInterface{
 				   + " surname     TEXT     NOT NULL, "
 				   + " specialty   TEXT, "
 				   + " role TEXT NOT NULL,"
-				   + " userId INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL)";
+				   + " userId INTEGER REFERENCES users(userId) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt3.executeUpdate(sql3);
 		stmt3.close();
 		Statement stmt4 = c.createStatement();
@@ -299,7 +299,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		Worker worker = null;
 		if(rs.next()){
-			worker = new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getInt("room_in_ER"), rs.getString("type"));
+			worker = new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getString("role"));
 		}
 		p.close();
 		rs.close();
@@ -575,7 +575,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = pStatement.executeQuery();
 		Worker worker = null;
 		if(rs.next()){
-			worker = new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getInt("room_in_ER"), rs.getString("type"));
+			worker = new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"),  rs.getString("role"));
 			
 		}
 		pStatement.close();

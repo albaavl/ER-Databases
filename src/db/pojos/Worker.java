@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.*;
 @Table(name = "workers")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Worker")
-@XmlType(propOrder = { "name", "surname", "specialty", "role", "room_in_ER" })
+@XmlType(propOrder = { "name", "surname", "specialty", "role" })
 public class Worker implements Serializable{
 	
 	private static final long serialVersionUID = 5053907057578582101L;
@@ -55,6 +55,7 @@ public class Worker implements Serializable{
 	
 	public Worker(Worker w) throws Exception {
 		super();
+		this.workerId = w.workerId;
 		this.workerName = w.workerName;
 		this.workerSurname = w.workerSurname;
 		this.specialtyId = w.specialtyId;
@@ -70,6 +71,15 @@ public class Worker implements Serializable{
 		this.workerSurname = workerSurname;
 		this.specialtyId = specialtyId;
 		this.shiftId = shiftId;
+		this.typeWorker = typeWorker;
+	}
+	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId,
+			String typeWorker) {
+		super();
+		this.workerId = workerId;
+		this.workerName = workerName;
+		this.workerSurname = workerSurname;
+		this.specialtyId = specialtyId;
 		this.typeWorker = typeWorker;
 	}
 	
