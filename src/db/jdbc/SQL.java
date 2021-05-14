@@ -36,7 +36,7 @@ public class SQL implements SQLInterface{
 				   + " allergies     TEXT,"
 				   + " check_in    DATE    NOT NULL,"
 				   + " hospitalized BOOLEAN,"
-				   + "userId INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL)";
+				   + " userId INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt1.executeUpdate(sql1);
 		stmt1.close();
 		Statement stmt3 = c.createStatement();
@@ -46,6 +46,7 @@ public class SQL implements SQLInterface{
 				   + " surname     TEXT     NOT NULL, "
 				   + " specialty   TEXT, "
 				   + " role TEXT NOT NULL,"
+				   + " shiftId INTEGER REFERENCES shifts(id) ON UPDATE CASCADE ON DELETE SET NULL,"
 				   + " userId INTEGER REFERENCES users(userId) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt3.executeUpdate(sql3);
 		stmt3.close();
@@ -59,8 +60,9 @@ public class SQL implements SQLInterface{
 		Statement stmt5 = c.createStatement();		
 		String sql5 = "CREATE TABLE medical_tests "
 				   + "(id       INTEGER  PRIMARY KEY AUTOINCREMENT,"
-				   + "patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL,"
+				   + " patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL,"
 				   + " type     TEXT     NOT NULL,"				   
+				   + " date     DATE     NOT NULL,"				   
 				   + " result TEXT  NULL)";
 		stmt5.executeUpdate(sql5);
 		stmt5.close();
@@ -73,13 +75,14 @@ public class SQL implements SQLInterface{
 				   + " advice       TEXT      NOT NULL,"
 				   + " duration   INTEGER     NOT NULL,"	
 				   + " doctor_id   INTEGER  REFERENCES workers(id) ON UPDATE CASCADE ON DELETE SET NULL,"
-				   + "patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL)";
+				   + " patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL)";
+				   //TODO - EL doctor_id q hacemos con el, en el pojo no se usa...
 		stmt6.executeUpdate(sql6);
 		stmt6.close(); 
 		Statement stmt7 = c.createStatement();
 		String sql7 = "CREATE TABLE shifts "
 				   + "(id INTEGER  PRIMARY KEY AUTOINCREMENT,"
-				   + "shift    TEXT  NOT NULL,"
+				   + " shift    TEXT  NOT NULL,"
 				   + " date     DATE     NOT NULL, "
 				   + " room   INTEGER     NOT NULL,"
 		 		   + " doctor_id   INTEGER  REFERENCES workers(id) ON UPDATE CASCADE ON DELETE SET NULL)";
@@ -92,7 +95,7 @@ public class SQL implements SQLInterface{
 	@Override
 	public void addPatient(Connection c, Patient p) throws SQLException{
 		if (p.getAllergieType()==null) {
-			String sq1 = "INSERT INTO patients ( medical_card_number, name, surname, gender, birthdate,  address, blood_type, check_in, hospitalized) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String sq1 = "INSERT INTO patients ( medical_card_number, name, surname, gender, birthdate,  address, blood_type, check_in, hospitalized, userId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
 			preparedStatement.setInt(1, p.getMedicalCardId());
 			preparedStatement.setString(2, p.getPatientName());
@@ -103,10 +106,11 @@ public class SQL implements SQLInterface{
 			preparedStatement.setString(7, p.getBloodType());
 			preparedStatement.setDate(8, p.getCheckInDate());
 			preparedStatement.setBoolean(9, p.getHospitalized());
+			preparedStatement.setInt(10, p.getUserId());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 		}else {
-			String sq1 = "INSERT INTO patients ( medical_card_number, name, surname, gender, birthdate,  address, blood_type, allergies, check_in, hospitalized) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String sq1 = "INSERT INTO patients ( medical_card_number, name, surname, gender, birthdate,  address, blood_type, allergies, check_in, hospitalized, userId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
 			preparedStatement.setInt(1, p.getMedicalCardId());
 			preparedStatement.setString(2, p.getPatientName());
@@ -118,35 +122,39 @@ public class SQL implements SQLInterface{
 			preparedStatement.setString(8, p.getAllergieType());
 			preparedStatement.setDate(9, p.getCheckInDate());
 			preparedStatement.setBoolean(10, p.getHospitalized());
+			preparedStatement.setInt(11, p.getUserId());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 		}
 	}
 
-@Override
+	@Override
 	public void addWorker(Connection c, Worker w) throws SQLException{
-			String sq1 = "INSERT INTO workers (name, surname, specialty, role) VALUES (?, ?, ?, ?)";
-			PreparedStatement preparedStatement = c.prepareStatement(sq1);
-			preparedStatement.setString(1, w.getWorkerName());
-			preparedStatement.setString(2, w.getWorkerSurname());
-			preparedStatement.setString(3, w.getSpecialtyId());
-			preparedStatement.setString(4, w.getTypeWorker());
-			preparedStatement.executeUpdate();
-			preparedStatement.close();
+		String sq1 = "INSERT INTO workers (name, surname, specialty, role, shiftId, userId) VALUES (?, ?, ?, ?, ?, ?)";
+		PreparedStatement preparedStatement = c.prepareStatement(sq1);
+		preparedStatement.setString(1, w.getWorkerName());
+		preparedStatement.setString(2, w.getWorkerSurname());
+		preparedStatement.setString(3, w.getSpecialtyId());
+		preparedStatement.setString(4, w.getTypeWorker());
+		preparedStatement.setInt(5, w.getShiftId());
+		preparedStatement.setInt(6, w.getUserId());
+		preparedStatement.executeUpdate();
+		preparedStatement.close();
 	}
 
-@Override
+	@Override
 	public void addMedicalTest(Connection c, MedicalTest medtest) throws SQLException{
-			String sq1 = "INSERT INTO medical_tests (patient_id, type, result) VALUES (?, ?, ?)";
-			PreparedStatement preparedStatement = c.prepareStatement(sq1);
-			preparedStatement.setInt(1, medtest.getPatientId());
-			preparedStatement.setString(2, medtest.getTestType());
-			preparedStatement.setString(3, medtest.getTestResult());
-			preparedStatement.executeUpdate();
-			preparedStatement.close();
+		String sq1 = "INSERT INTO medical_tests (patient_id, type, date, result) VALUES (?, ?, ?, ?)";
+		PreparedStatement preparedStatement = c.prepareStatement(sq1);
+		preparedStatement.setInt(1, medtest.getPatientId());
+		preparedStatement.setString(2, medtest.getTestType());
+		preparedStatement.setString(3, medtest.getTestResult());
+		preparedStatement.setDate(4, medtest.getDateMedTest());
+		preparedStatement.executeUpdate();
+		preparedStatement.close();
     }
 
-@Override
+	@Override
 	public void addTreatment(Connection c, Treatment treatment) throws SQLException {
 		String sq1 = "INSERT INTO treatments (diagnosis, medication, start_date, advice, duration, patient_id) VALUES (?,?,?,?,?,?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
@@ -723,8 +731,7 @@ public class SQL implements SQLInterface{
 			pStatement.executeUpdate();
 		}
 
-		//TODO - fuck this shit xD como hacer q un boolean null no haga petar esto :)
-		if ( ) {
+		if (checkInDate != null) {
 			sql = "UPDATE patients SET check_in = ? WHERE medical_card_number = ?";
 			pStatement = c.prepareStatement(sql);
 			pStatement.setDate(1, checkInDate);
@@ -732,7 +739,18 @@ public class SQL implements SQLInterface{
 			pStatement.executeUpdate();
 	
 		}
+		
+		try {//TODO - need to check if this works (kaboom when the boolean == null) try on database thingy.
 
+			sql = "UPDATE patients SET hospitalized = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setBoolean(1, hosp);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();
+	
+		} catch (Exception e) {
+		}
+		
 		return null;
 	}
 

@@ -162,6 +162,10 @@ public class Patient implements Serializable{
 		}
 	}
 
+	public Integer getUserId() {
+		return userId;
+	}
+	
 	/**
 	 * Returns the patient blood type as a string.
 	 */
