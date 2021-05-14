@@ -1,9 +1,0 @@
-<!DOCTYPE medicalTest [
-    <!ELEMENT medicalTest (id, patient_id, type, result)>
-    <!ATTLIST medicalTest id CDATA #REQUIRED>
-    <!ELEMENT patient_id (#PCDATA)>
-    <!ELEMENT dateMedTest (#PCDATA)>
-    <!ELEMENT type (#PCDATA)>
-    <!ELEMENT result (#PCDATA)>
-  ]>
-  

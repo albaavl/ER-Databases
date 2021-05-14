@@ -1,9 +1,15 @@
 
 <!DOCTYPE Shift [
-   <!ELEMENT shift (date, shift, room)>
+   <!ELEMENT Shift (date, turn, room)>
    <!ATTLIST shiftId id CDATA #REQUIRED>
    <!ELEMENT date (#PCDATA)>
-   <!ELEMENT shift (#PCDATA)>
+   <!ELEMENT turn (#PCDATA)>
    <!ELEMENT room (#PCDATA)>
-   <!ELEMENT workerId (#PCDATA)>
+   <!ELEMENT Worker (Worker+)>
+   <!ELEMENT Worker (name, surname, specialty, role)>
+   <!ATTLIST Worker id CDATA #REQUIRED
+   					name CDATA #REQUIRED
+   					surname CDATA #REQUIRED>
+   <!ELEMENT specialty (#PCDATA)>
+   <!ELEMENT role (#PCDATA)>
 ]>
