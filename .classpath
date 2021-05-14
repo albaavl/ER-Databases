@@ -14,6 +14,15 @@
 	<classpathentry kind="lib" path="lib/javax.activation-api-1.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/jaxb-api-2.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/jaxb-impl-2.3.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/javaFX11"/>
+	<classpathentry kind="lib" path="JavaFX_lib/javafx.base.jar"/>
+	<classpathentry kind="lib" path="JavaFX_lib/javafx.controls.jar"/>
+	<classpathentry kind="lib" path="JavaFX_lib/javafx.fxml.jar"/>
+	<classpathentry kind="lib" path="JavaFX_lib/javafx.graphics.jar"/>
+	<classpathentry kind="lib" path="JavaFX_lib/javafx.media.jar"/>
+	<classpathentry kind="lib" path="JavaFX_lib/javafx.properties"/>
+	<classpathentry kind="lib" path="JavaFX_lib/javafx.swing.jar"/>
+	<classpathentry kind="lib" path="JavaFX_lib/javafx.web.jar"/>
+	<classpathentry kind="lib" path="JavaFX_lib/javafx-swt.jar"/>
+	<classpathentry kind="lib" path="JavaFX_lib/src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
