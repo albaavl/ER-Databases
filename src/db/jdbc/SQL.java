@@ -573,11 +573,78 @@ public class SQL implements SQLInterface{
 		rs.close();
 		return patient;	
 	}
-	
-	
-	public void updatePatientName(Connection c, Integer medicalCardId, String newName) {
-		//TODO crear todos los fucking updates que has decidido hacer, en vdd yo haria una funcion tipo editshift/treatment
-		
+
+	public void updatePatientName(Connection c, int medCardNum, String name) throws SQLException {
+		String sql = "UPDATE patients SET name = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setString(1, name);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+		pStatement.close();
+	}
+	public void updatePatientSurname(Connection c, int medCardNum, String surname) throws SQLException {
+		String sql = "UPDATE patients SET surname = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setString(1, surname);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+		pStatement.close();
+	}
+	public void updatePatientGender(Connection c, int medCardNum, String gender) throws SQLException {
+		String sql = "UPDATE patients SET gender = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setString(1, gender);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+		pStatement.close();
+	}
+	public void updatePatientBloodType(Connection c, int medCardNum, String bloodType) throws SQLException {
+		String sql = "UPDATE patients SET blood_type = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setString(1, bloodType);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+		pStatement.close();
+	}
+	public void updatePatientAllergies(Connection c, int medCardNum, String allergies) throws SQLException {
+		String sql = "UPDATE patients SET allergies = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setString(1, allergies);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+		pStatement.close();
+	}
+	public void updatePatientBirthDate(Connection c, int medCardNum, Date bDate) throws SQLException {
+		String sql = "UPDATE patients SET birthdate = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setDate(1, bDate);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+		pStatement.close();
+	}
+	public void updatePatientCheckInDate(Connection c, int medCardNum, Date checkInDate) throws SQLException {
+		String sql = "UPDATE patients SET check_in = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setDate(1, checkInDate);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+		pStatement.close();
+	}
+	public void updatePatientAddress(Connection c, int medCardNum, String address) throws SQLException {
+		String sql = "UPDATE patients SET address = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setString(1, address);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+		pStatement.close();
+	}
+	public void updatePatientHospitalization(Connection c, int medCardNum, Boolean hospitalization) throws SQLException {
+		String sql = "UPDATE patients SET hospitalized = ? WHERE medical_card_number = ?";
+		PreparedStatement pStatement = c.prepareStatement(sql);
+		pStatement.setBoolean(1, hospitalization);
+		pStatement.setInt(2, medCardNum);
+		pStatement.executeUpdate();
+		pStatement.close();
 	}
 
 }
