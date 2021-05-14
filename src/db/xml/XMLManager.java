@@ -1,16 +1,14 @@
 package db.xml;
 
 import java.io.*;
-
 import java.util.List;
 import java.util.Scanner;
 
-import db.jdbc.*;
-
 import javax.persistence.*;
+import javax.xml.bind.*;
 import javax.xml.transform.*;
-import org.eclipse.persistence.internal.oxm.Marshaller;
-import org.eclipse.persistence.jaxb.JAXBContext;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import db.pojos.*;
 
@@ -21,7 +19,7 @@ public class XMLManager {
 	private static EntityManager em;
 	static Scanner sc = new Scanner(System.in);
 
-	public void Xml2JavaShift(){
+	public void Xml2JavaShift() throws JAXBException {
 		//Create the JAXBContext
 		JAXBContext jaxbContext = JAXBContext.newInstance(Shift.class);
 		// Get the unmarshaller
@@ -33,8 +31,8 @@ public class XMLManager {
 		
 		// Print the report
 		System.out.println("Shift:");
-		System.out.println("Date: " + shift.getShift());
-		System.out.println("Shift: " + shift.getShift());
+		System.out.println("Date: " + shift.getDate());
+		System.out.println("Shift: " + shift.getTurn());
 		System.out.println("Room: " + shift.getRoom());
 		System.out.println("Worker Id: " + shift.getWorkerId());
 		
@@ -67,7 +65,7 @@ public class XMLManager {
 			System.out.println(s);
 		}
 	}
-	public void Java2XmlShift() {
+	public void Java2XmlShift() throws JAXBException {
 		
 		// Get the entity manager
 		em = Persistence.createEntityManagerFactory("ER-provider").createEntityManager();

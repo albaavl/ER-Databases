@@ -31,9 +31,9 @@ public class Main {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	}}
-	/*	public static void XmlToFamilyHistoryMenu() {
+		}}}
+/*	}}
+	public static void XmlToFamilyHistoryMenu() {
 			try {
 				JAXBContext jaxbContext = JAXBContext.newInstance(Shift.class);
 			    Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -94,6 +94,6 @@ public class Main {
 				
 			
 	}
-}*/
-
+}
+*/
 
