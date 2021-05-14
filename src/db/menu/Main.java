@@ -11,7 +11,6 @@ import java.util.*;
 
 import db.pojos.*;
 import pojos.users.*;
-import db.interfaces.UMInterface;
 import db.jdbc.*;
 import db.jpa.JPAUserManager;
 
@@ -26,13 +25,14 @@ public class Main {
 	public static void main(String[] args) throws Exception, SQLException {
 		try{
 			c= jdbc.connect();
-			userman.connect();
 			try{
 				jdbc.create(c);
 			}catch(SQLException ex) {
 				if(!ex.getMessage().contains("already exists")) {
 					ex.printStackTrace();
 				}
+			userman.connect();
+			
 			}
 			do {
 				System.out.println("Welcome to the Quiron's ER");
@@ -44,7 +44,7 @@ public class Main {
 					login();
 					break;
 				case 0: 
-					jdbc.disconnect(c); //�l en su connect no le tiene que pasar ning�n par�metro REVISAR
+					jdbc.disconnect(c);
 					userman.disconnect();
 					System.exit(0);
 					break;
