@@ -571,22 +571,6 @@ public class SQL implements SQLInterface{
 		rs.close();
 		return patient;	
 	}
-	
-	//me da pereza pensar osea q voy a usar literalmente 10 funciones :)
-	
-	// String sql1 = "CREATE TABLE patients "
-	// + "(medical_card_number       INTEGER  PRIMARY KEY,"
-	// + " name     TEXT     NOT NULL, "
-	// + " surname     TEXT     NOT NULL, "
-	// + " gender     TEXT     NOT NULL, "
-	// + " birthdate     DATE     NOT NULL, "
-	// + " address  TEXT	 NOT NULL,"
-	// + " blood_type     TEXT     NOT NULL, "
-	// + " allergies     TEXT,"
-	// + " check_in    DATE    NOT NULL,"
-	// + " hospitalized BOOLEAN,"
-	// + "userId INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL)";
-
 
 	public void updatePatientName(Connection c, int medCardNum, String name) throws SQLException {
 		String sql = "UPDATE patients SET name = ? WHERE medical_card_number = ?";
@@ -651,46 +635,5 @@ public class SQL implements SQLInterface{
 		pStatement.setInt(2, medCardNum);
 		pStatement.executeUpdate();
 	}
-
-		// //Se me ha ocurrido esto para algunas funciones del main. *probablemente es innecesario peeero ahi las dejo 
-
-	// /**
-	//  * Used to check if there's any patient with the given id on the database.
-	//  * @param c - Database Connection.
-	//  * @param medCardNumber - Id of the patient that will be checked (int)
-	//  * @return True if theres any patient with that id, otherwise false
-	//  * @throws SQLException
-	//  */
-	// public boolean checkPatient(Connection c, int medCardNumber) throws SQLException{
-	// 	String sql = "SELECT name FROM patients WHERE medical_card_number = ?";
-	// 	PreparedStatement p = c.prepareStatement(sql);
-	// 	p.setInt(1,medCardNumber);
-	// 	ResultSet rs = p.executeQuery();
-	// 	if(rs.next()){
-	// 		return true;
-	// 	}else{
-	// 		return false;
-	// 	}
-	// }
-	
-	// /**
-	//  * Used to check if there's any worker with the given id on the database.
-	//  * @param c - Database Connection.
-	//  * @param workerId - Id of the worker that will be checked (int)
-	//  * @return True if theres any patient with that id, otherwise false
-	//  * @throws SQLException
-	//  */
-	// public boolean checkWorker(Connection c, int workerId) throws SQLException{
-	// 	String sql = "SELECT name FROM workers WHERE id = ?";
-	// 	PreparedStatement p = c.prepareStatement(sql);
-	// 	p.setInt(1,workerId);
-	// 	ResultSet rs = p.executeQuery();
-	// 	if(rs.next()){
-	// 		return true;
-	// 	}else{
-	// 		return false;
-	// 	}
-	// }
-
 
 }
