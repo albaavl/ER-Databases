@@ -46,7 +46,6 @@ public class SQL implements SQLInterface{
 				   + " surname     TEXT     NOT NULL, "
 				   + " specialty   TEXT, "
 				   + " role TEXT NOT NULL,"
-				   + " room_in_ER   TEXT,"
 				   + " userId INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt3.executeUpdate(sql3);
 		stmt3.close();
@@ -126,13 +125,12 @@ public class SQL implements SQLInterface{
 
 @Override
 	public void addWorker(Connection c, Worker w) throws SQLException{
-			String sq1 = "INSERT INTO workers (name, surname, specialty, role, room_in_ER) VALUES (?, ?, ?, ?, ?)";
+			String sq1 = "INSERT INTO workers (name, surname, specialty, role) VALUES (?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
 			preparedStatement.setString(1, w.getWorkerName());
 			preparedStatement.setString(2, w.getWorkerSurname());
 			preparedStatement.setString(3, w.getSpecialtyId());
 			preparedStatement.setString(4, w.getTypeWorker());
-			preparedStatement.setInt(5, w.getRoomEr());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 	}
@@ -671,6 +669,14 @@ public class SQL implements SQLInterface{
 		pStatement.setInt(2, medCardNum);
 		pStatement.executeUpdate();
 		pStatement.close();
+	}
+
+	@Override
+	public Patient editPatient(Connection c, Integer medCardNumber, String name, String surname, String gender,
+			String bloodType, String allergies, String address, Date bdate, Date checkIn, boolean hosp)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
