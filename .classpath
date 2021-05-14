@@ -9,6 +9,15 @@
 	<classpathentry kind="lib" path="lib/eclipselink-2.7.7.jar"/>
 	<classpathentry kind="lib" path="lib/javax.persistence_2.1.1.v201509150925.jar"/>
 	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.8.7.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFx"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/javaFX11"/>
+	<classpathentry kind="lib" path="C:/Users/Hugo/Documents/Java stuff/javafx-sdk-11.0.2/lib/javafx.base.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Hugo/Documents/Java stuff/javafx-sdk-11.0.2/lib/javafx.controls.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Hugo/Documents/Java stuff/javafx-sdk-11.0.2/lib/javafx.fxml.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Hugo/Documents/Java stuff/javafx-sdk-11.0.2/lib/javafx.graphics.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Hugo/Documents/Java stuff/javafx-sdk-11.0.2/lib/javafx.media.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Hugo/Documents/Java stuff/javafx-sdk-11.0.2/lib/javafx.swing.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Hugo/Documents/Java stuff/javafx-sdk-11.0.2/lib/javafx.web.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Hugo/Documents/Java stuff/javafx-sdk-11.0.2/lib/javafx-swt.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Hugo/Documents/Java stuff/javafx-sdk-11.0.2/lib/src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
