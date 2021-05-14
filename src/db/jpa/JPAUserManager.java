@@ -80,6 +80,8 @@ public class JPAUserManager implements UMInterface {
 			user = (User) q.getSingleResult();
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
+		} catch(NoResultException e) {
+			user=null;
 		}
 		return user;
 	}
