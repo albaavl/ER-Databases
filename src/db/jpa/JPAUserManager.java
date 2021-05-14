@@ -74,7 +74,7 @@ public class JPAUserManager implements UMInterface {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(password.getBytes());
 			byte[] hash = md.digest();
-			Query q = em.createNativeQuery("SELECT * FROM users WHERE username = ? AND password = ?", User.class);
+			Query q = em.createNativeQuery("SELECT * FROM users WHERE username = ? AND password = ? LIMIT 1", User.class);
 			q.setParameter(1, username);
 			q.setParameter(2, hash);
 			user = (User) q.getSingleResult();

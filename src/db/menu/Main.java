@@ -25,15 +25,18 @@ public class Main {
 	public static void main(String[] args) throws Exception, SQLException {
 		try{
 			c= jdbc.connect();
+			
 			try{
-				jdbc.create(c);
+				jdbc.create(c);			
+				userman.connect();
+				firstlogin();
 			}catch(SQLException ex) {
 				if(!ex.getMessage().contains("already exists")) {
 					ex.printStackTrace();
 				}
 			}
+			
 			userman.connect();
-			firstlogin();
 			do {
 				System.out.println("Welcome to the Quiron's ER");
 				System.out.println("1. Login");
