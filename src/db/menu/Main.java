@@ -52,6 +52,7 @@ public class Main {
 					System.exit(0);
 					break;
 				default:
+					System.out.println("Not a valid option.");
 					break;
 				}
 			}while(true);
@@ -120,9 +121,8 @@ public class Main {
 		System.out.println("Hello Mr/Ms "+patient.getPatientSurname());
 		System.out.println("Consult my treatment");
 		System.out.println("Would you like to order your treatments by[0-4]:"
-				+ "\n0.Exit \n1. Date \n2. Medication \n3. Duration \n4. I want to search for a specific treatment by the name of the medication");
-		int option = sc.nextInt();
-		String order;
+				+ "\n0.Exit \n1. Date \n2. Medication \n3. Duration \n4. Search for a treatment by the name of the medication");
+		int option = sc.nextInt();                                                 
 		List<Treatment> treatments = new ArrayList<>();
 		
 		do{
@@ -133,40 +133,89 @@ public class Main {
 					userman.disconnect();
 					System.exit(0);
 				case 1:
-					order = "date";
 					System.out.println("Here you can see all your treatments ordered by date");
-					treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
+					treatments.addAll(jdbc.searchPatientsTreatment(c,patient, "date"));
+					for (Treatment treatment : treatments) {  
+						System.out.println(treatment.toString());
+					}
+		
 					break;
 				case 2:
-					order = "med";
 					System.out.println("Here you can see all your treatments ordered by medication");
-					treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
+					treatments.addAll(jdbc.searchPatientsTreatment(c,patient, "med"));
+					for (Treatment treatment : treatments) {  
+						System.out.println(treatment.toString());
+					}
+		
 					break;
 				case 3:
-					order = "duration";
 					System.out.println("Here you can see all your treatments ordered by duration");
-					treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
+					treatments.addAll(jdbc.searchPatientsTreatment(c,patient, "duration"));
+					for (Treatment treatment : treatments) { 
+						System.out.println(treatment.toString());
+					}
+		
 					break;
 				case 4:
 					System.out.println("Please, enter the name of the medication:");
 					String med = sc.next();
 					treatments.addAll(jdbc.searchTreatmentByMed(c,patient, med));
+					for (Treatment treatment : treatments) { 
+						System.out.println(treatment.toString());
+					}		
+					break;
+				default:
+					System.out.println("Not a valid option.");
 					break;
 			}		
-			for (Treatment treatment : treatments) {
-				System.out.println(treatment.toString());
-			}
 		}while(true);
+
+
+		// do{
+		// 	switch (option) {
+		// 		case 0:
+		// 			System.out.println("Thank you for using our system");
+		// 			jdbc.disconnect(c);
+		// 			userman.disconnect();
+		// 			System.exit(0);
+		// 		case 1:
+		// 			order = "date";
+		// 			System.out.println("Here you can see all your treatments ordered by date");
+		// 			treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
+		// 			break;
+		// 		case 2:
+		// 			order = "med";
+		// 			System.out.println("Here you can see all your treatments ordered by medication");
+		// 			treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
+		// 			break;
+		// 		case 3:
+		// 			order = "duration";
+		// 			System.out.println("Here you can see all your treatments ordered by duration");
+		// 			treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
+		// 			break;
+		// 		case 4:
+		// 			System.out.println("Please, enter the name of the medication:");
+		// 			String med = sc.next();
+		// 			treatments.addAll(jdbc.searchTreatmentByMed(c,patient, med));
+		// 			break;
+		// 	}		
+		// 	for (Treatment treatment : treatments) {  
+		// 		System.out.println(treatment.toString());
+		// 	}
+		// }while(true); //TODO dafuck q coño es este menu
 	}
 	
 	public static void medStaffMenu(Integer userID) throws Exception{
 		
 		Worker medStaff = new Worker(jdbc.selectWorkerByUserId(c,userID));
-		System.out.println("Hello Mr/Ms "+medStaff.getWorkerSurname());
-		System.out.println("Choose an option[0-2]:");
-		System.out.println(" 1.Access to a patient's profile \n 2.Consult my shifts \n 0. Exit");
-		option = sc.nextInt();
+
 		do{
+
+			System.out.println("Hello Mr/Ms "+medStaff.getWorkerSurname());
+			System.out.println("Choose an option[0-2]:");
+			System.out.println(" 1.Access to a patient's profile \n 2.Consult my shifts \n 0. Exit");
+			option = sc.nextInt();	
+
 			switch(option) {
 				case 0:
 					System.out.println("Thank you for using our system");
@@ -181,6 +230,9 @@ public class Main {
 					System.out.println("Consult my shifts");
 					consultShifts(medStaff);
 					break;
+				default:
+					System.out.println("Not a valid option.");
+					break;
 			}
 		}while(true);
 	}
@@ -188,12 +240,14 @@ public class Main {
 	public static void adStaffMenu(Integer userID) throws Exception{
 		
 		Worker adStaff = new Worker(jdbc.selectWorkerByUserId(c,userID));
-		System.out.println("Hello Mr/Ms "+adStaff.getWorkerSurname());
-		System.out.println("Choose an option[0-5]:");
-		System.out.println(" 1. Register new administration staff \n1. Register new patient \n 2. Register new worker\n 3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n 0. Exit");
-		option = sc.nextInt();
 		
 		do {
+
+			System.out.println("Hello Mr/Ms "+adStaff.getWorkerSurname());
+			System.out.println("Choose an option[0-5]:");
+			System.out.println(" 1. Register new worker\n 2. Register new patient \n  3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n 0. Exit");
+			option = sc.nextInt();
+	
 			switch (option) {
 				case 0:
 					System.out.println("Thank you for using our system");
@@ -209,19 +263,19 @@ public class Main {
 					createPatient();
 					break;
 				case 3: 
-					//TODO podemos poner esta opcion para xml
-					break;
-				case 4: 
 					System.out.println("Access to a patient's profile");
 					adAccessToPatientsProfile();
-					break;	
-				case 5: 
+					break;
+				case 4: 
 					System.out.println("Add new medical test");
 					addMedTest();
 					break;	
-				case 6: 
+				case 5: 
 					System.out.println("Edit shifts");
 					editShift();
+					break;	
+				default: 
+					System.out.println("Not a valid option.");
 					break;	
 			}
 		}while(true);
@@ -270,13 +324,27 @@ public class Main {
 	
 	private static void createDiagnosisAndTreatment(Patient patient) throws Exception {
 		System.out.println("Enter the diagnosis:");
-		String diagnosis = sc.next();
+		String diagnosis = sc.nextLine();
 		System.out.println("Enter the medication:");
-		String medication = sc.next();
+		String medication = sc.nextLine();
 		System.out.println("Enter the start date in this format yyyy-mm-dd:");
-		Date startDate = Date.valueOf(sc.next());
+		Date startDate = null; 
+		try { //TODO - fuck me en q momento hize esta puta basura, btw hay q cambiar los setters tambien cuz reasons :) @me to @me
+			startDate = Date.valueOf(sc.next());
+		} catch (Exception e) {
+			int controlDate = 0;
+			do {
+				try {
+					System.out.print("Please introduce a valid date format [yyyy-mm-dd]: ");
+					startDate = Date.valueOf(sc.next());
+					controlDate = 1;
+				} catch (Exception e1) {
+				}
+			} while (controlDate == 0);
+		}
+
 		System.out.println("Enter the duration(number of days):");
-		Integer duration = Integer.parseInt(sc.next());
+		Integer duration = sc.nextInt();
 		System.out.println("Enter the recommendations");
 		String recommendation = sc.next();
 		Treatment t = new Treatment(diagnosis, recommendation, startDate, medication, duration, patient.getMedicalCardId());
@@ -308,14 +376,24 @@ public class Main {
 			}
 			System.out.println("Enter the new start date in this format[yyyy-mm-dd], if you don't want to edit it enter a 0:");
 			String date = sc.next();
-			Date startDate;
-			if(date.equals("0")) {
-				startDate = null;
-			}else {
-				startDate = Date.valueOf(date);
+			Date startDate = null;
+			if(!date.equals("0")) {
+				try {
+					startDate = Date.valueOf(sc.next());
+				} catch (Exception e) {
+					int controlDate = 0;
+					do {
+						try {
+							System.out.print("Please introduce a valid date format [yyyy-mm-dd]: ");
+							startDate = Date.valueOf(sc.next());
+							controlDate = 1;
+						} catch (Exception e1) {
+						}
+					} while (controlDate == 0);
+				}
 			}
 			System.out.println("Enter the new medication, if you don't want to edit it enter a 0:");
-			String medication = sc.next();
+			String medication = sc.nextLine();
 			if(medication.equals("0")) {
 				medication = null;
 			}
@@ -325,7 +403,7 @@ public class Main {
 				duration = null;
 			}
 			System.out.println("Enter the new recommendations, if you don't want to edit them enter a 0:");
-			String recommendation = sc.next();
+			String recommendation = sc.nextLine();
 			if(recommendation.equals("0")) {
 				recommendation = null;
 			}
@@ -351,7 +429,7 @@ public class Main {
 		String time =null;
 		switch(s) {
 		case 0:
-			time =null;
+			time = null;
 			break;
 		case 1:
 			time = "Morning";
@@ -368,7 +446,7 @@ public class Main {
 		if(room == 0) {
 			room=null;
 		}
-		System.out.println("Enter the new date, if you don't want to edit it enter a 0:");
+		System.out.println("Enter the new date, if you don't want to edit it enter a 0:"); //TODO - fecha hace kaboom xD @me to @me 
 		String date = sc.next();
 		Date fecha;
 		if(date.equals("0")) {
@@ -517,14 +595,14 @@ public class Main {
 		Date bdate; 
 		try {
 			bdate = Date.valueOf(birthdate);
-			if (bdate.before(Date.valueOf(LocalDate.now()))) {
+			if (bdate.before(Date.valueOf(LocalDate.now())) || bdate.equals(Date.valueOf(LocalDate.now()))) {
 				p.setbDate(bdate);
 			} else {
 				do {
 					System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");
 					birthdate = sc.next();
 					bdate = Date.valueOf(birthdate);
-				} while (bdate.before(Date.valueOf(LocalDate.now())));
+				} while ((!bdate.before(Date.valueOf(LocalDate.now()))) || bdate.equals(Date.valueOf(LocalDate.now())));
 				p.setbDate(bdate);
 			}
 		} catch (Exception e) {
@@ -535,14 +613,14 @@ public class Main {
 					birthdate = sc.next();
 					bdate = Date.valueOf(birthdate); 
 			
-					if (bdate.before(Date.valueOf(LocalDate.now()))) {
+					if (bdate.before(Date.valueOf(LocalDate.now())) || bdate.equals(Date.valueOf(LocalDate.now()))) {
 						p.setbDate(bdate);
 					} else {
 						do {
 							System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");							
 							birthdate = sc.next();
 							bdate = Date.valueOf(birthdate);
-						} while (bdate.before(Date.valueOf(LocalDate.now())));
+						} while ((!bdate.before(Date.valueOf(LocalDate.now()))) || bdate.equals(Date.valueOf(LocalDate.now())));
 						p.setbDate(bdate);
 					}
 					b=1;
@@ -556,14 +634,14 @@ public class Main {
 		Date cdate;
 		try {
 			cdate = Date.valueOf(checkindate);
-			if (cdate.before(Date.valueOf(LocalDate.now()))) {
+			if (cdate.before(Date.valueOf(LocalDate.now())) || cdate.equals(Date.valueOf(LocalDate.now()))) {
 				p.setCheckInDate(cdate);
 			} else {
 				do {
 					System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");
 					checkindate = sc.next();
 					cdate = Date.valueOf(checkindate);
-				} while (cdate.before(Date.valueOf(LocalDate.now())));
+				} while ((!cdate.before(Date.valueOf(LocalDate.now()))) || cdate.equals(Date.valueOf(LocalDate.now())));
 				p.setCheckInDate(cdate);
 			}
 		} catch (Exception e) {
@@ -574,14 +652,14 @@ public class Main {
 					checkindate = sc.next();
 					cdate = Date.valueOf(checkindate); 
 			
-					if (cdate.before(Date.valueOf(LocalDate.now()))) {
+					if (cdate.before(Date.valueOf(LocalDate.now())) || cdate.equals(Date.valueOf(LocalDate.now()))) {
 						p.setCheckInDate(cdate);
 					} else {
 						do {
 							System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");							
 							checkindate = sc.next();
 							cdate = Date.valueOf(checkindate);
-						} while (cdate.before(Date.valueOf(LocalDate.now())));
+						} while ((!cdate.before(Date.valueOf(LocalDate.now()))) || cdate.equals(Date.valueOf(LocalDate.now())));
 						p.setCheckInDate(cdate);
 					}
 					b=1;
@@ -628,16 +706,26 @@ public class Main {
 		String surname = sc.nextLine();
 		w.setWorkerSurname(surname);
 
-		//TODO CONTROLA EXCEPCIONES CERDO @HUGO
-		System.out.print("Type of worker: ");
-		String type = sc.next();
-		w.setTypeWorker(type);
+		System.out.print("Type of worker (doctor, nurse, adstaff, technician): ");
+		int ctrltypeworker = 0;
+		do {
+			String type = sc.nextLine();
+
+			if (type.equalsIgnoreCase("doctor") || type.equalsIgnoreCase("nurse") || type.equalsIgnoreCase("adstaff") || type.equalsIgnoreCase("technician")) {
+				w.setTypeWorker(type);
+				ctrltypeworker = 1;
+			} else {
+				System.out.print("Please introduce a valid type of worker (doctor, nurse, adstaff, technician): ");
+			}
+		} while (ctrltypeworker == 0);
 
 		System.out.print("Specialty: ");
 		String specialty = sc.next();
 		w.setSpecialtyId(specialty);
 
-
+		//TODO - esto va a hacer kaboom btw xD #autoincrementSUCKSHARD 
+		//hace kaboom pq el worker creado no tiene id por defecto, lo cual hace q la funcion getWorkerId() devuelva lo q a java le de la gana
+		//y eso hace q register() probablemente haga kaboom xD @hugo may solve this but idk
 		System.out.println("Let's proceed with the registration, the username and password will be autogenerated by the system:");
 		register(w.getWorkerName(), w.getWorkerSurname(), w.getWorkerId());  
 		jdbc.addWorker(c, w); //Connection c,Worker w
@@ -653,22 +741,40 @@ public class Main {
 	 */
 	public static void createShift(int workerId) throws Exception{
 		Shift s = new Shift();
-
 		System.out.print("Start date for this shift [yyyy-mm-dd]:  ");
 		String startDate = sc.next();
 		Date date;
-		try {
+		try { 
 			date = Date.valueOf(startDate);
-			s.setDate(date); //TODO - aqui hay un throw q no me gusta mucho y ns si deberíamos (En caso de dejarlo hay q hacer un poco de copypasta)
+			if (date.before(Date.valueOf(LocalDate.now())) || date.equals(Date.valueOf(LocalDate.now()))) {
+				s.setDate(date);
+			} else {
+				do {
+					System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");
+					startDate = sc.next();
+					date = Date.valueOf(startDate);
+				} while ( (!date.before(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now())));
+				s.setDate(date);
+			}
 		} catch (Exception e) {
 			int b=0;
 			do {
-				try {
+				try {	
 					System.out.print("Please introduce a valid date format [yyyy-mm-dd]: ");
 					startDate = sc.next();
-					date = Date.valueOf(startDate);
+					date = Date.valueOf(startDate); 
+			
+					if (date.before(Date.valueOf(LocalDate.now()))) {
+						s.setDate(date);
+					} else {
+						do {
+							System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");							
+							startDate = sc.next();
+							date = Date.valueOf(startDate);
+						} while ((!date.before(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now())));
+						s.setDate(date);
+					}
 					b=1;
-					s.setDate(date); 
 				} catch (Exception e1) {
 				}
 			} while (b==0);
@@ -687,7 +793,7 @@ public class Main {
 			}
 		} while (scount == 0);
 
-		System.out.print("Room: "); //TODO - Deberíamos limitar esto. (como lo q hay debajo)
+		System.out.print("Room: "); //TODO - Deberíamos limitar esto. (como lo q he hecho debajo)
 		Integer roomER = sc.nextInt();
 		s.setRoom(roomER);
 
@@ -733,8 +839,8 @@ public class Main {
 		System.out.println("2. Add a doctor to the patient.");
 		System.out.println("0. Back.");
 		int key;
-		int ctrl1 = 0; //Control para el primer menu.
 		int key2;
+		int ctrl1 = 0; //Control para el primer menu.
 		int ctrl2 = 0; //Control para segundo menu.
 		Patient patient; 
 		do {
@@ -770,13 +876,13 @@ public class Main {
 								System.out.print("Introduce the new name: ");
 								String newName = sc.nextLine();
 								jdbc.updatePatientName(c, patient.getMedicalCardId(), newName);
-								ctrl2 = 1; //TODO - ns si dejar esto o si quitarlo para q se quede en el menu hasta q no le de a exit (por si quiere seguir haciendo cosas)
-								break;
+								// ctrl2 = 1; //TODO - ns si dejar esto o si quitarlo para q se quede en el menu hasta q no le de a exit (por si quiere seguir haciendo cosas)
+								break;			//por favor puede alguien decir si si/no a esto? o se va a quedar aqui hasta el fin de los tiempos xD
 							case 2: //apellidos
 								System.out.print("Introduce the new surname: ");
 								String newSurname = sc.nextLine();
 								jdbc.updatePatientSurname(c, patient.getMedicalCardId(), newSurname);
-								ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; // lo mismo q arriba
 								break;
 							case 3: //genero
 								System.out.print("Introduce the new gender: ");
@@ -793,12 +899,11 @@ public class Main {
 
 								jdbc.updatePatientGender(c, patient.getMedicalCardId(), newGender);
 								
-								ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; // lo mismo q arriba
 								break;
 							case 4: //sangre
 								System.out.print("Introduce the new blood type (A+, A-, B+, B-, AB+, AB-, O+, O-): ");
 								String newBloodType;
-								//TODO - revisar esto
 
 								int bloodtypecontrol = 0;
 								int bloodtypefailcount = 0;
@@ -851,28 +956,28 @@ public class Main {
 					
 
 								jdbc.updatePatientBloodType(c, patient.getMedicalCardId(), newBloodType);
-								ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; // lo mismo q arriba
 								break;
 							case 5: //alergias
 								System.out.print("Introduce the new allergies (none - if patient doesnt have): ");
 								String newAllergies = sc.nextLine();
 								jdbc.updatePatientAllergies(c, patient.getMedicalCardId(), newAllergies);
-								ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; // lo mismo q arriba
 								break;
 							case 6: // bdate
-								System.out.print("Introduce the new birthdate [yyyy-mm-dd]: ");
+								System.out.print("Introduce the new birthdate [yyyy-mm-dd]: "); 
 								Date newBDate;
 								String bdatesString = sc.next();
-								try { //TODO - revisar esto.
+								try { 
 									newBDate = Date.valueOf(bdatesString);
-									if (newBDate.before(Date.valueOf(LocalDate.now()))) {
+									if (newBDate.before(Date.valueOf(LocalDate.now())) || newBDate.equals(Date.valueOf(LocalDate.now()))) {
 										jdbc.updatePatientBirthDate(c, patient.getMedicalCardId(), newBDate);
 									} else {
 										do {
 											System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");
 											bdatesString = sc.next();
 											newBDate = Date.valueOf(bdatesString);
-										} while (newBDate.before(Date.valueOf(LocalDate.now())));
+										} while ( (!newBDate.before(Date.valueOf(LocalDate.now()))) || newBDate.equals(Date.valueOf(LocalDate.now())));
 										jdbc.updatePatientBirthDate(c, patient.getMedicalCardId(), newBDate);
 									}
 								} catch (Exception e) {
@@ -890,7 +995,7 @@ public class Main {
 													System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");							
 													bdatesString = sc.next();
 													newBDate = Date.valueOf(bdatesString);
-												} while (newBDate.before(Date.valueOf(LocalDate.now())));
+												} while ((!newBDate.before(Date.valueOf(LocalDate.now()))) || newBDate.equals(Date.valueOf(LocalDate.now())));
 												jdbc.updatePatientBirthDate(c, patient.getMedicalCardId(), newBDate);
 											}
 											b=1;
@@ -898,7 +1003,7 @@ public class Main {
 										}
 									} while (b==0);
 								}
-								ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; // lo mismo q arriba
 								break;
 							case 7: //check in
 								System.out.print("Introduce the new check-in date [yyyy-mm-dd]: ");
@@ -906,14 +1011,14 @@ public class Main {
 								String checkindateString = sc.next();
 								try {
 									newCheckInDate = Date.valueOf(checkindateString);
-									if (newCheckInDate.before(Date.valueOf(LocalDate.now()))) {
+									if (newCheckInDate.before(Date.valueOf(LocalDate.now())) || newCheckInDate.equals(Date.valueOf(LocalDate.now()))) {
 										jdbc.updatePatientCheckInDate(c, patient.getMedicalCardId(), newCheckInDate);
 									} else {
 										do {
 											System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");
 											checkindateString = sc.next();
 											newCheckInDate = Date.valueOf(checkindateString);
-										} while (newCheckInDate.before(Date.valueOf(LocalDate.now())));
+										} while ((!newCheckInDate.before(Date.valueOf(LocalDate.now()))) || newCheckInDate.equals(Date.valueOf(LocalDate.now())));
 										jdbc.updatePatientCheckInDate(c, patient.getMedicalCardId(), newCheckInDate);
 									}
 								} catch (Exception e) {
@@ -924,14 +1029,14 @@ public class Main {
 											checkindateString = sc.next();
 											newCheckInDate = Date.valueOf(checkindateString); 
 									
-											if (newCheckInDate.before(Date.valueOf(LocalDate.now()))) {
+											if (newCheckInDate.before(Date.valueOf(LocalDate.now())) || newCheckInDate.equals(Date.valueOf(LocalDate.now()))) {
 												jdbc.updatePatientCheckInDate(c, patient.getMedicalCardId(), newCheckInDate);
 											} else {
 												do {
 													System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");							
 													checkindateString = sc.next();
 													newCheckInDate = Date.valueOf(checkindateString);
-												} while (newCheckInDate.before(Date.valueOf(LocalDate.now())));
+												} while ((!newCheckInDate.before(Date.valueOf(LocalDate.now()))) || newCheckInDate.equals(Date.valueOf(LocalDate.now())));
 												jdbc.updatePatientCheckInDate(c, patient.getMedicalCardId(), newCheckInDate);
 											}
 											b=1;
@@ -940,19 +1045,19 @@ public class Main {
 									} while (b==0);
 								}
 
-								ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; // lo mismo q arriba
 								break;
 							case 8: //direccion
 								System.out.print("Introduce the new address: ");
 								String newAddress = sc.nextLine();
 								jdbc.updatePatientAddress(c, patient.getMedicalCardId(), newAddress);
-								ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; // lo mismo q arriba
 								break;
 							case 9: //hospitalizado
 								System.out.print("Does the patient need to be hospitalized?: ");
 								boolean hosp = sc.nextBoolean();
 								jdbc.updatePatientHospitalization(c, patient.getMedicalCardId(), hosp);
-								ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; // lo mismo q arriba
 								break;
 							case 0:  //Exit
 								ctrl2 = 1;
@@ -965,7 +1070,7 @@ public class Main {
 	
 					} while (ctrl2 == 0);
 
-					ctrl1 = 1; //TODO - ns si dejar esto o si quitarlo para q se quede en el menu hasta q no le de a exit (por si quiere seguir haciendo cosas)
+					// ctrl1 = 1; //mismo q arriba
 					break;
 				case 2: //Añadir un doctor al patient
 
@@ -977,9 +1082,9 @@ public class Main {
 					Worker doctor = new Worker(selectWorker());
 					jdbc.createLinkDoctorPatient(c, doctor.getWorkerId(), patient.getMedicalCardId());
 		
-					ctrl1 = 1; //TODO - ns si dejar esto o si quitarlo para q se quede en el menu hasta q no le de a exit (por si quiere seguir haciendo cosas)
+					// ctrl1 = 1; //mismo q arriba
 					break;
-				case 0: //me he equivocado halp xD
+				case 0:
 					ctrl1 = 1;
 					break;
 				default:
@@ -1045,60 +1150,3 @@ public class Main {
 		}
 	}
 }
-
-
-// 	public static void createWorker() throws Exception {
-		
-// 		// - Esto habría q separarlo, no creo q sea buena idea crear shift y worker a la vez.
-// // A�ADIR EL REGISTER AL FINAL DEL WORKER IGUAL QUE ESTA HECHO EN PATIENT
-// 		Worker w = new Worker();
-// 		Shift s = new Shift();
-
-// 		System.out.println("Please, input the worker info:");
-// 		System.out.print("Name: ");
-// 		String name = sc.nextLine();
-// 		w.setWorkerName(name);
-
-// 		System.out.print("Surname: ");
-// 		String surname = sc.nextLine();
-// 		w.setWorkerSurname(surname);
-
-// 		System.out.print("Type of worker: ");
-// 		String type = sc.next();
-// 		w.setTypeWorker(type);
-
-// 		System.out.print("Specialty: ");
-// 		String specialty = sc.next();
-// 		w.setSpecialtyId(specialty);
-
-// 		System.out.print("Room: ");
-// 		Integer roomER = sc.nextInt();
-// 		w.setRoomEr(roomER);
-// 		s.setRoom(roomER);
-
-// 		System.out.print("Shift: ");
-// 		String shift = sc.next();
-// 		s.setTurn(shift);
-// 		s.setWorkerId(w.getWorkerId()); //en teor�a el workerId deber�a autoincrementarse, //esto hace kaboom 99% seguro, pq worker id no esta iniciado en ningun momento..
-		
-// 		System.out.print("Start date [yyyy-mm-dd]:  ");
-// 		String startDate = sc.next();
-// 		Date date;
-// 		try {
-// 			date = Date.valueOf(startDate);
-// 			s.setDate(date); // - aqui hay un throw q no me gusta mucho y ns si deberíamos (En caso de dejarlo hay q hacer un poco de copypasta)
-// 		} catch (Exception e) {
-// 			int b=0;
-// 			do {
-// 				try {
-// 					System.out.print("Please introduce a valid date format [yyyy-mm-dd]: ");
-// 					startDate = sc.next();
-// 					date = Date.valueOf(startDate);
-// 					b=1;
-// 					s.setDate(date); 
-// 				} catch (Exception e1) {
-// 				}
-// 			} while (b==0);
-// 		}
-// 		jdbc.addWorker(c, w); //Connection c,Worker w
-// 	}
