@@ -1,4 +1,4 @@
-package application;
+package application.controllers;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -27,7 +27,7 @@ import db.jdbc.*;
 import db.jpa.JPAUserManager;
 
 
-public class UIcontroller {
+public class LogInController {
     
 	static Connection c ;
 	static SQL jdbc = new SQL();
