@@ -48,7 +48,8 @@ public class LogInController {
     @FXML
     public void logInMenuOK(ActionEvent aEvent) throws IOException {
 
-
+        connectDB();
+        
         try {
             
             String username = usernameTextfieldLogIn.getText();
@@ -74,7 +75,7 @@ public class LogInController {
             }    
 
         } catch (Exception e) {
-            //TODO: handle exception
+            e.printStackTrace();
         }
 
 
@@ -92,7 +93,7 @@ public class LogInController {
      * @throws IOException
      */
     private void switchToLogIn(ActionEvent aEvent) throws IOException{
-        root = FXMLLoader.load(getClass().getResource("logInMenu.fxml")); //TODO - need to create the patient menu fxml w scenebuilder
+        root = FXMLLoader.load(getClass().getResource("views/logInMenu.fxml")); //TODO - need to create the patient menu fxml w scenebuilder
         stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -101,7 +102,7 @@ public class LogInController {
 
     private void switchToPatientMenu(ActionEvent aEvent, Integer userId) throws IOException, SQLException, NotBoundException{
 
-        FXMLLoader loader = FXMLLoader.load(getClass().getResource("patientMenu.fxml")); //TODO - need to create the patient menu fxml w scenebuilder
+        FXMLLoader loader = FXMLLoader.load(getClass().getResource("/patientMenu.fxml")); //TODO - need to create the patient menu fxml w scenebuilder
         root = loader.load();
 
         PatientMenuController patientMenuController =  loader.getController();
@@ -115,7 +116,7 @@ public class LogInController {
     }
 
     private void switchToAdStaffMenu(ActionEvent aEvent, Integer userId) throws IOException{
-        root = FXMLLoader.load(getClass().getResource("adStaffMenu.fxml")); //TODO - need to create the administration Staff menu fxml w scenebuilder
+        root = FXMLLoader.load(getClass().getResource("/adStaffMenu.fxml")); //TODO - need to create the administration Staff menu fxml w scenebuilder
         stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -124,7 +125,7 @@ public class LogInController {
 
 
     private void switchToWorkerMenu(ActionEvent aEvent, Integer userId) throws IOException{
-        root = FXMLLoader.load(getClass().getResource("workerMenu.fxml")); //TODO - need to create the worker menu fxml w scenebuilder
+        root = FXMLLoader.load(getClass().getResource("/workerMenu.fxml")); //TODO - need to create the worker menu fxml w scenebuilder
         stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);

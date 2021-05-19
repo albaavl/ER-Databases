@@ -699,17 +699,17 @@ public class Main {
 
 		System.out.println("Please, input the worker info:");
 		System.out.print("Name: ");
-		String name = sc.nextLine();
+		String name = sc.next();
 		w.setWorkerName(name);
 
 		System.out.print("Surname: ");
-		String surname = sc.nextLine();
+		String surname = sc.next();
 		w.setWorkerSurname(surname);
 
 		System.out.print("Type of worker (doctor, nurse, adstaff, technician): ");
 		int ctrltypeworker = 0;
 		do {
-			String type = sc.nextLine();
+			String type = sc.next();
 
 			if (type.equalsIgnoreCase("doctor") || type.equalsIgnoreCase("nurse") || type.equalsIgnoreCase("adstaff") || type.equalsIgnoreCase("technician")) {
 				w.setTypeWorker(type);

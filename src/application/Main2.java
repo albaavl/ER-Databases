@@ -41,6 +41,9 @@ public class Main2 extends Application {
 		}
 	}
 	
+	public void name() {
+		
+	}
 	public static void main(String[] args) {
 		launch(args);
 	}
