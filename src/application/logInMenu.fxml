@@ -11,38 +11,38 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.UIcontroller">
    <children>
-      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="601.0" prefWidth="824.0">
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1400.0">
          <children>
-            <ImageView fitHeight="789.0" fitWidth="1146.0" layoutX="-24.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="907.0" fitWidth="1753.0" layoutX="-24.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@loginmenubgimg.jpg" />
                </image>
             </ImageView>
-            <Polygon fill="#9a0000" points="102.0, 0.0, 487.0, 600.0, 0.0, 600.0" stroke="#9a0000" strokeType="INSIDE" />
-            <Polygon fill="#141414" points="0.0, 600.0, 0.0, 0.0, 650.0, 0.0" stroke="BLACK" strokeType="INSIDE" />
-            <TextField alignment="CENTER" layoutX="68.0" layoutY="317.0" promptText="User">
+            <Polygon fill="#9a0000" points="195.3809814453125, 0.0, 769.3809814453125, 906.0, -3.6190185546875, 906.0" stroke="#9a0000" strokeType="INSIDE" />
+            <Polygon fill="#141414" points="0.0, 906.0, 0.0, 0.0, 1040.3809814453125, 0.0" stroke="BLACK" strokeType="INSIDE" />
+            <TextField fx:id="usernameTextfieldLogIn" alignment="CENTER" layoutX="101.0" layoutY="386.0" promptText="User">
                <font>
                   <Font size="15.0" />
                </font>
             </TextField>
-            <PasswordField alignment="CENTER" layoutX="68.0" layoutY="367.0" promptText="Password">
+            <PasswordField fx:id="passwordTextFieldLogIn" alignment="CENTER" layoutX="101.0" layoutY="436.0" promptText="Password">
                <font>
                   <Font size="15.0" />
                </font>
             </PasswordField>
-            <Text fill="WHITE" layoutX="133.0" layoutY="293.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Log in:">
+            <Text fill="WHITE" layoutX="166.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Log in:">
                <font>
                   <Font size="19.0" />
                </font>
             </Text>
-            <Text fill="WHITE" layoutX="29.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Quiron's ER Database" textAlignment="CENTER" wrappingWidth="450.78515625">
+            <Text fill="WHITE" layoutX="154.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Quiron's ER Database" textAlignment="CENTER" wrappingWidth="614.78515625">
                <font>
                   <Font name="Arial" size="49.0" />
                </font>
             </Text>
-            <Button layoutX="137.0" layoutY="420.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="48.0" text="Go" />
+            <Button layoutX="170.0" layoutY="489.0" mnemonicParsing="false" onAction="#logInMenuOK" prefHeight="25.0" prefWidth="48.0" text="Go" />
          </children>
       </Pane>
    </children>
