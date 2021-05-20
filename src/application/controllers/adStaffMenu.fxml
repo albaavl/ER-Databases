@@ -100,20 +100,55 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Pane fx:id="paneWelcome" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Pane fx:id="paneWelcome" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Text fx:id="adStaffMenuWelcomeText" layoutX="76.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello mr dickhead, wellcum to your favorite database &lt;3">
+                        <Text fx:id="adStaffMenuWelcomeText" layoutX="76.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LogInScreen">
                            <font>
                               <Font name="Arial" size="24.0" />
                            </font>
                         </Text>
                      </children>
                   </Pane>
-                  <Pane fx:id="paneCreatePatient" prefHeight="648.0" prefWidth="736.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Pane fx:id="paneCreatePatient" prefHeight="648.0" prefWidth="736.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Text layoutX="300.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient create hehe" wrappingWidth="176.076171875">
+                        <Text layoutX="166.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PatientCreate Screen" wrappingWidth="404.076171875">
                            <font>
                               <Font size="42.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="135.0" layoutY="237.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="293.0" layoutY="237.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Surname">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="81.0" layoutY="201.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient basic info">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="73.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Medical information">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="100.0" layoutY="473.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Blood Type">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="130.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gender">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="108.0" layoutY="345.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Allergies">
+                           <font>
+                              <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
                      </children>
