@@ -18,19 +18,19 @@ import db.xml.utils.*;
 @Table(name = "shifts")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name="Shift")
-@XmlType(propOrder = {"date","turn","room","workerId"})
+@XmlType(propOrder = {"date","turn","room"})
 public class Shift implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3588643268907504481L;
 	//Attributes
-
+/*
 	@Id
 	@GeneratedValue(generator="shifts")
 	@TableGenerator(name="shifts", table="sqlite_sequence",
 	    pkColumnName="workerId", valueColumnName="seq", pkColumnValue="shifts")
-	
+*/	
 	//we make the id transient to be able to import data from a XML file
 	@XmlTransient
 	private Integer shiftId;
@@ -41,8 +41,8 @@ public class Shift implements Serializable {
 	private String turn;
 	@XmlElement
 	private Integer room;
-	@XmlElement
-	private Integer workerId ;
+	@XmlTransient
+	private Worker worker ;
 	
 
 	public Shift() {
@@ -50,29 +50,36 @@ public class Shift implements Serializable {
 	}
 	
 	
-	public Shift(Date date, Integer room, String turn, Integer workerId) throws Exception {
+	public Shift(Date date, Integer room, String turn, Worker worker) throws Exception {
 		super();
 		this.setDate(date);
 		this.setRoom(room);
 		this.setTurn(turn);
-		this.setWorkerId(workerId);	
+		this.setWorker(worker);	
 	}
-	
-	public Shift(Date date, Integer room, String turn, Integer workerId, Integer shiftId) throws Exception {
+	public Shift(Date date, Integer room, String turn, Integer shiftId) throws Exception {
 		super();
 		this.setDate(date);
 		this.setRoom(room);
 		this.setTurn(turn);
-		this.setWorkerId(workerId);
 		this.setShiftId(shiftId);
 	}
 	
+	public Shift(Date date, Integer room, String turn, Worker worker, Integer shiftId) throws Exception {
+		super();
+		this.setDate(date);
+		this.setRoom(room);
+		this.setTurn(turn);
+		this.setWorker(worker);
+		this.setShiftId(shiftId);
+	}
+
 	public Shift(Shift s) throws Exception {
 		super();
 		this.setDate(s.date);
 		this.setRoom(s.room);
 		this.setTurn(s.turn);
-		this.setWorkerId(s.workerId);
+		this.setWorker(s.worker);
 		this.setShiftId(s.shiftId);
 		
 	}
@@ -126,19 +133,18 @@ public class Shift implements Serializable {
 	public void setRoom(Integer room) {
 		this.room = room;
 	}
-	/**
-	 * @return the worker id
-	 */
-	public Integer getWorkerId() {
-		return workerId;
-	}
-	/**
-	 * @param workerId the corresponding worker
-	 */
-	public void setWorkerId(Integer workerId) {
-		this.workerId = workerId;
-	}
 	
+	
+	public Worker getWorker() {
+		return worker;
+	}
+
+
+	public void setWorker(Worker worker) {
+		this.worker = worker;
+	}
+
+
 	public Integer getShiftId() {
 		return shiftId;
 	}

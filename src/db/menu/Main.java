@@ -1,6 +1,7 @@
 package db.menu;
  
 
+import java.io.File;
 import java.rmi.NotBoundException;
 
 import java.security.*;
@@ -9,7 +10,12 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
 import db.pojos.*;
+import db.xml.XMLManager;
 import pojos.users.*;
 import db.jdbc.*;
 import db.jpa.JPAUserManager;
@@ -213,7 +219,7 @@ public class Main {
 
 			System.out.println("Hello Mr/Ms "+medStaff.getWorkerSurname());
 			System.out.println("Choose an option[0-2]:");
-			System.out.println(" 1.Access to a patient's profile \n 2.Consult my shifts \n 0. Exit");
+			System.out.println(" 1. Access to a patient's profile \n 2. Consult my shifts  \n 3. Convert to XML file \n 4. Convert from XML to Shift \n 5.  Convert the XML file to HTML \n 0. Exit");
 			option = sc.nextInt();	
 
 			switch(option) {
@@ -230,6 +236,18 @@ public class Main {
 					System.out.println("Consult my shifts");
 					consultShifts(medStaff);
 					break;
+				case 3:
+					System.out.println(" Convert Shift to XML file");
+					shiftToXml();
+					break;
+				case 4:
+					System.out.println("Convert from XML to Shift");
+					xmlToShift();
+					break; 
+				case 5:
+					System.out.println(" Convert the XML file to HTML");
+					shiftXmlToHtml();
+					break; 
 				default:
 					System.out.println("Not a valid option.");
 					break;
@@ -245,7 +263,7 @@ public class Main {
 
 			System.out.println("Hello Mr/Ms "+adStaff.getWorkerSurname());
 			System.out.println("Choose an option[0-5]:");
-			System.out.println(" 1. Register new worker\n 2. Register new patient \n  3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n 0. Exit");
+			System.out.println(" 1. Register new worker\n 2. Register new patient \n  3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n 6. Convert Worker to XML file \n 7. Convert from XML to Worker \n 8.  Convert the XML file to HTML \n 0. Exit");
 			option = sc.nextInt();
 	
 			switch (option) {
@@ -274,6 +292,18 @@ public class Main {
 					System.out.println("Edit shifts");
 					editShift();
 					break;	
+				case 6:
+					System.out.println(" Convert Worker to XML file");
+					workerToXml();
+					break;
+				case 7:
+					System.out.println("Convert from XML to Shift");
+					xmlToWorker();
+					break; 
+				case 8:
+					System.out.println(" Convert the XML file to HTML");
+					workerXmlToHtml();
+					break; 
 				default: 
 					System.out.println("Not a valid option.");
 					break;	
@@ -739,7 +769,7 @@ public class Main {
 	 * @param workerId - Shift will be assigned to this worker.
 	 * @throws Exception
 	 */
-	public static void createShift(int workerId) throws Exception{
+	public static void createShift(Worker worker) throws Exception{
 		Shift s = new Shift();
 		System.out.print("Start date for this shift [yyyy-mm-dd]:  ");
 		String startDate = sc.next();
@@ -813,7 +843,7 @@ public class Main {
 		// 		}
 		// 	} while (roomcontrol == 0);
 		// }
-		s.setWorkerId(workerId);
+		s.setWorker(worker);
 		jdbc.addShift(c, s);
 		System.out.println("The shift was succesfully added.");
 	}
@@ -1148,5 +1178,37 @@ public class Main {
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	public static void shiftToXml() throws Exception {
+		XMLManager.java2XmlShift();
+	}
+	
+	public static void xmlToShift() {
+		try {
+			XMLManager.xml2JavaShift(); 
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public static void shiftXmlToHtml () {
+		XMLManager.simpleTransform("./xmls/Shift.xml", "./xmls/Shift-Style.xslt", "./xmls/Shift.html");
+	}
+	
+	public static void xmlToWorker() {
+		try {
+			XMLManager.xml2JavaWorker();  
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public static void workerToXml() throws JAXBException {
+		try {
+			XMLManager.java2XmlWorker(); 
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public static void workerXmlToHtml () {
+		XMLManager.simpleTransform("./xmls/Worker.xml", "./xmls/Worker-Style.xslt", "./xmls/Worker.html");
 	}
 }

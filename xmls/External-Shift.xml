@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
 <Shift>
-  <Shift id ="1">
+  <Shift shiftId ="1">
   <date>2021-05-05</date>
   <turn>morning</turn>
   <room>1</room>
   <Workers>
-     <Worker id="1" name="Juan" surname="Martínez">
-     <specialty>dermatologist</specialty>
-     <role>doctor</role>
+     <Worker workerId="1" workerName="Juan" workerSurname="Martinez" userId="1">
+     <specialtyId>dermatologist</specialtyId>
+     <typeWorker>doctor</typeWorker>
      </Worker>
-  </Workers>
+  <Worker workerId="2" workerName="Maria" workerSurname="Perez" userId="2">
+     <specialtyId>dermatologist</specialtyId>
+     <typeWorker>doctor</typeWorker>
+     </Worker>
+  </Workers> 
   </Shift>
 </Shift>

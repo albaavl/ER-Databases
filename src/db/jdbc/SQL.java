@@ -1,8 +1,11 @@
 package db.jdbc;
+import java.io.File;
 import java.rmi.NotBoundException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.*;
+
 import db.pojos.*;
 
 
@@ -136,7 +139,7 @@ public class SQL implements SQLInterface{
 		preparedStatement.setString(2, w.getWorkerSurname());
 		preparedStatement.setString(3, w.getSpecialtyId());
 		preparedStatement.setString(4, w.getTypeWorker());
-		preparedStatement.setInt(5, w.getShiftId());
+		preparedStatement.setInt(5, w.getShift().getShiftId());
 		preparedStatement.setInt(6, w.getUserId());
 		preparedStatement.executeUpdate();
 		preparedStatement.close();
@@ -175,7 +178,7 @@ public class SQL implements SQLInterface{
 		preparedStatement.setString(1, s.getTurn());
 		preparedStatement.setDate(2, s.getDate());
 		preparedStatement.setInt(3, s.getRoom());
-		preparedStatement.setInt(4, s.getWorkerId());
+		preparedStatement.setInt(4, s.getWorker().getWorkerId());
 		preparedStatement.executeUpdate();
 		preparedStatement.close();
 	}
@@ -224,13 +227,14 @@ public class SQL implements SQLInterface{
 	
 	@Override
 	public List<Shift> searchShiftByWorkerId (Connection c, Integer workerId) throws SQLException, Exception {
-		String sql = "SELECT * FROM shifts WHERE workerId = ? ";
+		String sql = "SELECT * FROM shifts WHERE doctor_id = ? ";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1, workerId);
 		ResultSet rs = p.executeQuery();
 		List<Shift> shifts = new ArrayList<>();
+		Worker w = selectWorker(c, workerId);
 		if(rs.next()){ 
-			shifts.add(new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("shift"), workerId, rs.getInt("id")));		
+			shifts.add(new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("shift"), w, rs.getInt("id")));		
 		}
 		p.close();
 		rs.close();
@@ -240,7 +244,7 @@ public class SQL implements SQLInterface{
 	@Override
 	public List<Shift> searchShiftByDate (Connection c, Integer workerId, Date date) throws SQLException, Exception {
 		//TODO hay que editar la funcion o mas bien crear una nueva que busque por id del shift
-		String sql = "SELECT * FROM shifts WHERE workerId = ? AND date = ? ";
+		String sql = "SELECT * FROM shifts WHERE doctor_id = ? AND date = ? ";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1, workerId);
 		p.setDate(2, date);
@@ -277,7 +281,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List <Worker> wList = new ArrayList<Worker>();
 		while(rs.next()){ 
-			wList.add( new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getInt("room_in_ER"), rs.getString("type")) );
+			wList.add( new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getString("type")) );
 		}
 		p.close();
 		rs.close();
@@ -322,7 +326,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		Shift shift = null;
 		if(rs.next()){
-			shift = new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("shift"), rs.getInt("doctor_id"), rs.getInt("id"));
+			shift = new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("shift"), rs.getInt("id"));
 		}
 		p.close();
 		rs.close();
@@ -422,7 +426,7 @@ public class SQL implements SQLInterface{
 
 			if(workerId != null){
 
-				sql = "UPDATE shifts SET workerId = ? WHERE id = ?";
+				sql = "UPDATE shifts SET docto_id = ? WHERE id = ?";
 				p = c.prepareStatement(sql);
 				p.setInt(1, workerId);
 				p.setInt(2, shiftId);
@@ -753,6 +757,4 @@ public class SQL implements SQLInterface{
 		
 		return null;
 	}
-
-	
 }

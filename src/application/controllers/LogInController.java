@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 //Stuff
 import java.security.*;
 import java.sql.*;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -93,7 +92,8 @@ public class LogInController {
      * @throws IOException
      */
     private void switchToLogIn(ActionEvent aEvent) throws IOException{
-        root = FXMLLoader.load(getClass().getResource("views/logInMenu.fxml")); //TODO - need to create the patient menu fxml w scenebuilder
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("logInMenu.fxml")); //TODO - need to create the patient menu fxml w scenebuilder
+        root = loader.load();
         stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -102,8 +102,8 @@ public class LogInController {
 
     private void switchToPatientMenu(ActionEvent aEvent, Integer userId) throws IOException, SQLException, NotBoundException{
 
-        FXMLLoader loader = FXMLLoader.load(getClass().getResource("/patientMenu.fxml")); //TODO - need to create the patient menu fxml w scenebuilder
-        root = loader.load();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("PatientMenu.fxml")); 
+        root = loader.load(); 
 
         PatientMenuController patientMenuController =  loader.getController();
         patientMenuController.displayUserName(jdbc.selectPatient(c, userId).getPatientName());
@@ -115,8 +115,15 @@ public class LogInController {
         stage.show();
     }
 
-    private void switchToAdStaffMenu(ActionEvent aEvent, Integer userId) throws IOException{
-        root = FXMLLoader.load(getClass().getResource("/adStaffMenu.fxml")); //TODO - need to create the administration Staff menu fxml w scenebuilder
+    private void switchToAdStaffMenu(ActionEvent aEvent, Integer userId) throws IOException, SQLException, NotBoundException{
+       
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("adStaffMenu.fxml")); 
+        root = loader.load(); 
+
+        AdStaffMenuController adStaffMenuController = loader.getController();
+        adStaffMenuController.displayWelcomeText(jdbc.selectWorker(c, userId).getWorkerName());
+        
+        // root = FXMLLoader.load(getClass().getResource("adStaffMenu.fxml")); //TODO - need to create the administration Staff menu fxml w scenebuilder
         stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -125,7 +132,10 @@ public class LogInController {
 
 
     private void switchToWorkerMenu(ActionEvent aEvent, Integer userId) throws IOException{
-        root = FXMLLoader.load(getClass().getResource("/workerMenu.fxml")); //TODO - need to create the worker menu fxml w scenebuilder
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("PatientMenu.fxml")); 
+        root = loader.load(); 
+
         stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
