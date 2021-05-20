@@ -1,7 +1,12 @@
 package application.controllers;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.*;
+import javafx.fxml.*;
+import javafx.scene.control.*;
+import db.jdbc.*;
 
 
 public class PatientMenuController {
@@ -12,13 +17,21 @@ public class PatientMenuController {
     @FXML
     Label userName;
     @FXML
-    Label userSurname;
+    ChoiceBox order = new ChoiceBox (FXCollections.observableArrayList(
+    	    "Date", "Medication", "Duration", "Look for specific meds"));
 
-    public void displayUserName(String name) {
-        userName.setText(name);
-    }
 
-    public void displayUserSurname(String surname) {
-        userSurname.setText(surname);
-    }
+    public void displayUserName(String surname) {
+        userName.setText(surname);
+    } 
+    
+    order.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+    	  
+        // if the item of the list is changed
+        public void changed(ObservableValue ov, Number value, Number new_value)
+        {
+
+        }
+    });
+     
 }
