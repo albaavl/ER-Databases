@@ -29,7 +29,7 @@ public class Main2 extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("views/logInMenu.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("controllers/logInMenu.fxml"));
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);

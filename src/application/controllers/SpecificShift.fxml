@@ -18,7 +18,7 @@
         <items>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Accordion prefHeight="251.0" prefWidth="247.0" style="-fx-background-color: darkred;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Accordion prefHeight="285.0" prefWidth="247.0" style="-fx-background-color: darkred;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <panes>
                       <TitledPane animated="false" style="-fx-background-color: darkred;" text="Access to patient's profile">
                         <content>
@@ -34,13 +34,15 @@
                               <Font name="Arial" size="12.0" />
                            </font>
                       </TitledPane>
-                      <TitledPane animated="false" text="Consult my shifts">
+                      <TitledPane animated="false" prefHeight="248.0" prefWidth="247.0" text="Consult my shifts">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="324.0" prefWidth="247.0" style="-fx-background-color: darkred;">
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="230.0" prefWidth="245.0" style="-fx-background-color: darkred;">
                                  <children>
-                                    <Button fx:id="specificDate" layoutX="72.0" layoutY="26.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="88.0" text="Specific date" />
-                                    <Button fx:id="allShifts" layoutX="70.0" layoutY="79.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="All my shifts" />
-                                    <Button fx:id="shiftsToXML" layoutX="70.0" layoutY="138.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="Shifts to XML" />
+                                    <Button fx:id="specificDate" layoutX="72.0" layoutY="14.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="88.0" text="Specific date" />
+                                    <Button fx:id="allShifts" layoutX="70.0" layoutY="59.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="All my shifts" />
+                                    <Button fx:id="shiftsToXML" layoutX="70.0" layoutY="103.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="Shifts to XML" />
+                                    <Button layoutX="70.0" layoutY="149.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="XML to shifts" fx:id="xmlToShift" />
+                                    <Button layoutX="70.0" layoutY="192.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="XML to HTML" fx:id="xmlToHTML" />
                                  </children>
                               </AnchorPane>
                         </content>
@@ -52,7 +54,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Pane prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Pane prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;">
                      <children>
                         <DatePicker fx:id="selectedDate" layoutX="255.0" layoutY="170.0" prefHeight="37.0" prefWidth="249.0" promptText="Date" />
                         <Label layoutX="155.0" layoutY="94.0" text="Please select the specific date:">
