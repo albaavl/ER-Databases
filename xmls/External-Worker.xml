@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<Worker>
+	<Worker workerId="2" workerName="Maria" workerSurname="Perez" userId="2">
+     <specialtyId>dermatologist</specialtyId>
+     <typeWorker>doctor</typeWorker>
+  <Shifts>
+     <Shift shiftId ="1">
+  	 <date>2021-05-05</date>
+  	 <turn>morning</turn>
+ 	 <room>1</room>
+ 	 </Shift>
+  	<Shift shiftId ="1">
+  	 <date>2021-05-05</date>
+  	 <turn>morning</turn>
+ 	 <room>1</room>
+ 	  </Shift>
+  </Shifts> 
+ </Worker>
+</Worker>

@@ -1,11 +1,5 @@
 
-<!DOCTYPE Shift [
-   <!ELEMENT Shift (date, turn, room)>
-   <!ATTLIST Shift shiftId CDATA #REQUIRED>
-   <!ELEMENT date (#PCDATA)>
-   <!ELEMENT turn (#PCDATA)>
-   <!ELEMENT room (#PCDATA)>
-   <!ELEMENT Worker (Worker+)>
+<!DOCTYPE Worker [
    <!ELEMENT Worker (specialtyId, typeWorker)>
    <!ATTLIST Worker workerId CDATA #REQUIRED
    					workerName CDATA #REQUIRED
@@ -13,4 +7,10 @@
    					userId CDATA #REQUIRED>
    <!ELEMENT specialtyId (#PCDATA)>
    <!ELEMENT typeWorker (#PCDATA)>
+   <!ELEMENT Shift (Shift+)>
+   <!ELEMENT Shift (date, turn, room)>
+   <!ATTLIST Shift shiftId CDATA #REQUIRED>
+   <!ELEMENT date (#PCDATA)>
+   <!ELEMENT turn (#PCDATA)>
+   <!ELEMENT room (#PCDATA)>
 ]>

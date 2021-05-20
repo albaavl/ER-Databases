@@ -12,33 +12,33 @@ import javax.xml.bind.annotation.*;
 @Table(name = "workers")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Worker")
-@XmlType(propOrder = { "name", "surname", "specialty", "role" })
+@XmlType(propOrder = { "specialtyId", "typeWorker"})
 public class Worker implements Serializable{
 	
 	private static final long serialVersionUID = 5053907057578582101L;
-
+/*
 	@Id
 	@GeneratedValue(generator = "workers")
 	@TableGenerator(name = "workers", table = "sqlite_sequence",
 		pkColumnName = "name", valueColumnName = "seq", pkColumnValue = "workers")
-	
+*/	
 	@XmlTransient
 	private Integer workerId;
 	//Unique for each doctor - cannot be repeated for another doctor.
 
 	@XmlAttribute
 	private String workerName;
-	@XmlElement
+	@XmlAttribute
 	private String workerSurname;
+	@XmlAttribute
+	private Integer userId;
 	@XmlElement
 	private String specialtyId;
 	@XmlElement
-	private Integer shiftId;
-	@XmlElement
 	private String typeWorker;
 	//Can be doctor(1), nurse(2), administration staff(3), technician(4)
-	@XmlElement
-	private Integer userId;
+	@XmlTransient
+	private Shift shift;
 	
 	public Worker() {
 		super();
@@ -59,18 +59,18 @@ public class Worker implements Serializable{
 		this.workerName = w.workerName;
 		this.workerSurname = w.workerSurname;
 		this.specialtyId = w.specialtyId;
-		this.shiftId = w.shiftId;
+		this.shift = w.shift;
 		this.typeWorker = w.typeWorker;
 	}
 	
-	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, Integer shiftId,
+	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, Shift shift,
 			String typeWorker) {
 		super();
 		this.workerId = workerId;
 		this.workerName = workerName;
 		this.workerSurname = workerSurname;
 		this.specialtyId = specialtyId;
-		this.shiftId = shiftId;
+		this.shift = shift;
 		this.typeWorker = typeWorker;
 	}
 	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId,
@@ -83,14 +83,14 @@ public class Worker implements Serializable{
 		this.typeWorker = typeWorker;
 	}
 	
-	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, Integer shiftId,
+	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, Shift shift,
 			String typeWorker, Integer userId) {
 		super();
 		this.workerId = workerId;
 		this.workerName = workerName;
 		this.workerSurname = workerSurname;
 		this.specialtyId = specialtyId;
-		this.shiftId = shiftId;
+		this.shift = shift;
 		this.typeWorker = typeWorker;
 		this.userId = userId;
 	}
@@ -122,7 +122,7 @@ public class Worker implements Serializable{
 	@Override
 	public String toString() {
 		return "Worker [workerId=" + workerId + ", workerName=" + workerName + ", workerSurname=" + workerSurname
-				+ ", specialtyId=" + specialtyId + ", shiftId" + shiftId + ", typeWorker=" + typeWorker + "]";
+				+ ", specialtyId=" + specialtyId + ", shift" + shift + ", typeWorker=" + typeWorker + "]";
 	}
 	
 	//Getters + Setters
@@ -184,12 +184,13 @@ public class Worker implements Serializable{
 	}
 	
 	
-	public Integer getShiftId() {
-		return shiftId;
+
+	public Shift getShift() {
+		return shift;
 	}
 
-	public void setShiftId(Integer shiftId) {
-		this.shiftId = shiftId;
+	public void setShift(Shift shift) {
+		this.shift = shift;
 	}
 
 	/**
@@ -199,6 +200,7 @@ public class Worker implements Serializable{
 	public String getTypeWorker() {
 		return typeWorker;
 	}
+	
 	/**
 	 * Used to set the type of worker
 	 * @param typeWorker - Must be doctor, nurse, adStaff or technician.
