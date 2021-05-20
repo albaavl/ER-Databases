@@ -122,6 +122,7 @@ public class LogInController {
 
         AdStaffMenuController adStaffMenuController = loader.getController();
         adStaffMenuController.displayWelcomeText(jdbc.selectWorker(c, userId).getWorkerName());
+        
         // root = FXMLLoader.load(getClass().getResource("adStaffMenu.fxml")); //TODO - need to create the administration Staff menu fxml w scenebuilder
         stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
         scene = new Scene(root);
