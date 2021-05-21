@@ -1191,7 +1191,7 @@ public class Main {
 		}
 	}
 	public static void shiftXmlToHtml () {
-		XMLManager.simpleTransform("./xmls/Shift.xml", "./xmls/Shift-Style.xslt", "./xmls/Shift.html");
+		XMLManager.simpleTransform("./xmls/External-Shift.xml", "./xmls/Shift-Style.xslt", "./xmls/Shift.html");
 	}
 	
 	public static void xmlToWorker() {
@@ -1209,6 +1209,6 @@ public class Main {
 		}
 	}
 	public static void workerXmlToHtml () {
-		XMLManager.simpleTransform("./xmls/Worker.xml", "./xmls/Worker-Style.xslt", "./xmls/Worker.html");
+		XMLManager.simpleTransform("./xmls/External-Worker.xml", "./xmls/Worker-Style.xslt", "./xmls/Worker.html");
 	}
 }

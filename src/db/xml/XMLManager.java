@@ -167,7 +167,7 @@ public class XMLManager {
 		printWorkers();
 		System.out.print("Choose a worker (worker id) to turn into an XML file:");
 		int workerId = sc.nextInt();
-		Query q2 = em.createNativeQuery("SELECT * FROM workers WHERE id = ?", Worker.class);
+		Query q2 = em.createNativeQuery("SELECT * FROM workers WHERE workerId = ?", Worker.class);
 		q2.setParameter(1, workerId);
 		Shift s = (Shift) q2.getSingleResult();
 				
