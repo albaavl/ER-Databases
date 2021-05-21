@@ -136,7 +136,7 @@ public class XMLManager {
 	private static void printWorkers() {
 		Query q1 = em.createNativeQuery("SELECT * FROM workers", Worker.class);
 		List<Worker> w = (List<Worker>) q1.getResultList();
-		// Print the shifts
+		// Print the workers
 		for (Worker worker : w) {
 			System.out.println(worker);
 		}

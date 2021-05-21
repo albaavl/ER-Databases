@@ -25,12 +25,12 @@ public class Shift implements Serializable {
 	 */
 	private static final long serialVersionUID = -3588643268907504481L;
 	//Attributes
-/*
+
 	@Id
 	@GeneratedValue(generator="shifts")
 	@TableGenerator(name="shifts", table="sqlite_sequence",
-	    pkColumnName="workerId", valueColumnName="seq", pkColumnValue="shifts")
-*/	
+	    pkColumnName="shiftId", valueColumnName="seq", pkColumnValue="shifts")
+	
 	//we make the id transient to be able to import data from a XML file
 	@XmlTransient
 	private Integer shiftId;
