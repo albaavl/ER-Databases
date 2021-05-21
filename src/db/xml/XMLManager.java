@@ -1,6 +1,7 @@
 package db.xml;
 
 import java.io.*;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,7 +11,10 @@ import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.sqlite.JDBC;
+
 import db.pojos.*;
+import db.jdbc.*;
 
 public class XMLManager {
 	
@@ -82,8 +86,9 @@ public class XMLManager {
 		
 		// Choose the worker's shift to turn into an XML
 		printShifts();
-		System.out.print("Choose a worker's shift to turn into an XML file:");
-		int workerId = sc.nextInt();
+		System.out.print("Choose a worker's shift to turn into an XML file");
+		System.out.println("Introduce the worker's ID: ");
+		int workerId = sc.nextInt(); 
 		Query q2 = em.createNativeQuery("SELECT * FROM shifts WHERE doctor_id = ?", Shift.class);
 		q2.setParameter(1, workerId);
 		Shift s = (Shift) q2.getSingleResult();

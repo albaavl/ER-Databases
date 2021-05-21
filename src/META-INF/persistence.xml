@@ -13,6 +13,8 @@
 		<!-- Entity Class -->
 			<class>pojos.users.User</class>
 			<class>pojos.users.Role</class> 
+			<class>db.pojos.Worker</class> 
+			<class>db.pojos.Shift</class> 
 
 
 		<properties>	
