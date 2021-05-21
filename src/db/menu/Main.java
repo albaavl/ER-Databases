@@ -237,11 +237,11 @@ public class Main {
 					consultShifts(medStaff);
 					break;
 				case 3:
-					System.out.println(" Convert Shift to XML file");
+					System.out.println(" Convert Shifts to XML file");
 					shiftToXml();
 					break;
 				case 4:
-					System.out.println("Convert from XML to Shift");
+					System.out.println("Convert from XML to Shifts");
 					xmlToShift();
 					break; 
 				case 5:
@@ -293,11 +293,11 @@ public class Main {
 					editShift();
 					break;	
 				case 6:
-					System.out.println(" Convert Worker to XML file");
+					System.out.println(" Convert Workers to XML file");
 					workerToXml();
 					break;
 				case 7:
-					System.out.println("Convert from XML to Shift");
+					System.out.println("Convert from XML to Workers");
 					xmlToWorker();
 					break; 
 				case 8:
