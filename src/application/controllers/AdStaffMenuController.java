@@ -1,5 +1,6 @@
 package application.controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -7,7 +8,10 @@ import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -17,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class AdStaffMenuController implements Initializable {
     
@@ -152,8 +157,36 @@ public class AdStaffMenuController implements Initializable {
     }   
 
 
-    // private void errorPopup(int errorType) {
-        
-    // }
+    /**
+     * When called it displays a new window with an error msg in function of the int passed to the function
+     * <p> 0 - General error (unspecified) </p>
+     * <p> 1 - ur birthdate cant be tomorrow nor on any future date bruh
+     * <p> 2 - Please fill all the values lmao.
+     * <p> X - idk keep adding stuff here...
+
+     * @param errorType - int
+     * @throws IOException
+     */
+    private void errorPopup(int errorType) throws IOException {
+        Parent rootError;
+        Scene sceneError;
+        Stage stageError;
+        switch (errorType) {
+            case 0:
+                rootError = FXMLLoader.load(getClass().getResource("controllers/errorPopup.fxml")); //TODO - Cambiar este loader por el de error general
+			    sceneError = new Scene(rootError);
+                stageError = new Stage();
+                stageError.setScene(sceneError);
+                break;
+            case 1:
+                rootError = FXMLLoader.load(getClass().getResource("controllers/errorPopup.fxml")); //TODO - Cambiar este loader por el de fecha futura
+			    sceneError = new Scene(rootError);
+                stageError = new Stage();
+                stageError.setScene(sceneError);
+                break;
+            default:
+                break;
+        }
+    }
 }
 
