@@ -53,7 +53,6 @@ public class SQL implements SQLInterface{
 				   + " workerSurname     TEXT     NOT NULL, "
 				   + " specialtyId   TEXT, "
 				   + " typeWorker TEXT NOT NULL,"
-				   + " shiftId INTEGER REFERENCES shifts(shiftId) ON UPDATE CASCADE ON DELETE SET NULL,"
 				   + " userId INTEGER REFERENCES users(userId) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt3.executeUpdate(sql3);
 		stmt3.close();
@@ -80,10 +79,8 @@ public class SQL implements SQLInterface{
 				   + " medication    TEXT     NOT NULL,"				   
 				   + " start_date   DATE      NOT NULL,"
 				   + " advice       TEXT      NOT NULL,"
-				   + " duration   INTEGER     NOT NULL,"	
-				   + " doctor_id   INTEGER  REFERENCES workers(workerId) ON UPDATE CASCADE ON DELETE SET NULL,"
+				   + " duration   INTEGER     NOT NULL,"
 				   + " patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL)";
-				   //TODO - EL doctor_id q hacemos con el, en el pojo no se usa...
 		stmt6.executeUpdate(sql6);
 		stmt6.close(); 
 		Statement stmt7 = c.createStatement();
@@ -136,14 +133,13 @@ public class SQL implements SQLInterface{
 
 	@Override
 	public void addWorker(Worker w) throws SQLException{
-		String sq1 = "INSERT INTO workers (workerName, workerSurname, specialtyId, typeWorker, shiftId, userId) VALUES (?, ?, ?, ?, ?, ?)";
+		String sq1 = "INSERT INTO workers (workerName, workerSurname, specialtyId, typeWorker, userId) VALUES (?, ?, ?, ?, ?)";
 		PreparedStatement preparedStatement = c.prepareStatement(sq1);
 		preparedStatement.setString(1, w.getWorkerName());
 		preparedStatement.setString(2, w.getWorkerSurname());
 		preparedStatement.setString(3, w.getSpecialtyId());
 		preparedStatement.setString(4, w.getTypeWorker());
-		preparedStatement.setInt(5, w.getShift().getShiftId());
-		preparedStatement.setInt(6, w.getUserId());
+		preparedStatement.setInt(5, w.getUserId());
 		preparedStatement.executeUpdate();
 		preparedStatement.close();
 	}
@@ -246,7 +242,6 @@ public class SQL implements SQLInterface{
 	
 	@Override
 	public List<Shift> searchShiftByDate (Integer workerId, Date date) throws SQLException, Exception {
-		//TODO hay que editar la funcion o mas bien crear una nueva que busque por id del shift
 		String sql = "SELECT * FROM shifts WHERE doctor_id = ? AND date = ? ";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1, workerId);
@@ -689,7 +684,6 @@ public class SQL implements SQLInterface{
 	public Patient editPatient(Integer medCardNum, String name, String surname, String gender,
 			String bloodType, String allergies, String address, Date bdate, Date checkInDate, boolean hosp)
 			throws Exception {
-		// TODO Auto-generated method stub
 
 		String sql;
 		PreparedStatement pStatement;
@@ -746,8 +740,7 @@ public class SQL implements SQLInterface{
 	
 		}
 		
-		try {//TODO - need to check if this works (kaboom when the boolean == null) try on database thingy.
-
+		try {
 			sql = "UPDATE patients SET hospitalized = ? WHERE medical_card_number = ?";
 			pStatement = c.prepareStatement(sql);
 			pStatement.setBoolean(1, hosp);

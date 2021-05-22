@@ -183,7 +183,7 @@ public class LogInController {
 		byte[] hash = md.digest();
 		User user = new User(username, hash, role);
 		userman.newUser(user);
-		Worker worker = new Worker("admin","admin","none","adStaff");  
+		Worker worker = new Worker("admin","admin","none","adStaff", 1);  
 		jdbc.addWorker(worker);                             //TODO - Esto se ha jodido mucho por algun cambio en workers y el shiftId hace q haga chof
 		Worker created = new Worker(jdbc.selectWorker(1));     // ahora no me da la vida para ponerme con esto, por la noche le hecho un vistazo
 		jdbc.createLinkUserWorker(user.getUserId(), created.getWorkerId()); //e intento arreglar este truño

@@ -15,7 +15,6 @@ public class Treatment implements Serializable {
 	private Date startDate; //Date when the patient starts the treatment
 	private Integer duration; //Duration of the treatment in days
 	private Integer patientId;
-	//TODO - aqui deberíamos poner workerId/quitarlo de las tablas de sql.
 
 
 	//Builders

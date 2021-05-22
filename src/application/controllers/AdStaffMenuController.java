@@ -29,7 +29,7 @@ import javafx.stage.Stage;
 public class AdStaffMenuController implements Initializable {
     
     private SQL jdbc;
-    private ErrorPopup ErrorPopup;
+    private ErrorPopup ErrorPopup = new application.controllers.ErrorPopup();
 
     @FXML
     Text adStaffMenuWelcomeText;

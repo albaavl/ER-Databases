@@ -83,6 +83,16 @@ public class Worker implements Serializable{
 		this.typeWorker = typeWorker;
 	}
 	
+	public Worker(String workerName, String workerSurname, String specialtyId,
+			String typeWorker, Integer userId) {
+		super();
+		this.workerName = workerName;
+		this.workerSurname = workerSurname;
+		this.specialtyId = specialtyId;
+		this.typeWorker = typeWorker;
+		this.userId = userId;
+	}
+	//TODO cambiar constructor cuando se cambie lo de shifts @gisela
 	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, Shift shift,
 			String typeWorker, Integer userId) {
 		super();
