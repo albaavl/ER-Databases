@@ -121,7 +121,7 @@ public class LogInController {
         root = loader.load(); 
 
         AdStaffMenuController adStaffMenuController = loader.getController();
-        adStaffMenuController.displayWelcomeText(jdbc.selectWorker(c, userId).getWorkerName());
+        adStaffMenuController.displayWelcomeText(jdbc.selectWorker(c, userId).getWorkerName(), jdbc);
         
         // root = FXMLLoader.load(getClass().getResource("adStaffMenu.fxml")); //TODO - need to create the administration Staff menu fxml w scenebuilder
         stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
@@ -146,10 +146,10 @@ public class LogInController {
 
     public void connectDB() {
         try{
-			c = jdbc.connect();
+			jdbc.connect();
 			
 			try{
-				jdbc.create(c);			
+				jdbc.create();			
 				userman.connect();
 				firstlogin();
 			}catch(SQLException ex) {
@@ -166,7 +166,7 @@ public class LogInController {
     public void disconnectDB(){
 
         try {
-            jdbc.disconnect(c);
+            jdbc.disconnect();
             userman.disconnect();    
         } catch (Exception e) {
             e.printStackTrace();

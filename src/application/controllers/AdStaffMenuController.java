@@ -2,10 +2,15 @@ package application.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.NotBoundException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
+import org.sqlite.JDBC;
+
+import db.jdbc.SQL;
+import db.pojos.Patient;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +30,8 @@ import javafx.stage.Stage;
 
 public class AdStaffMenuController implements Initializable {
     
+    private SQL jdbc;
+
     @FXML
     Text adStaffMenuWelcomeText;
     //Patient menus
@@ -45,7 +52,8 @@ public class AdStaffMenuController implements Initializable {
     @FXML
     Pane paneWelcomeView;
 
-    public void displayWelcomeText(String name) {
+    public void displayWelcomeText(String name, SQL databasecontroller) {
+        jdbc = databasecontroller;
         adStaffMenuWelcomeText.setText("FUCK YEAH " + name +  " get fkd.\n It works!");
         
     }
@@ -117,37 +125,48 @@ public class AdStaffMenuController implements Initializable {
     @FXML
     private TextField addressTextField;
 
-    public void createPatient(ActionEvent actionEvent) { //TODO - quitar strings de prueba jej
+    public void createPatient(ActionEvent actionEvent) throws IOException, NotBoundException { //TODO - quitar strings de prueba jej
+
+        Patient p = new Patient();
 
         String name = nameTextField.getText();
+        p.setPatientName(name);
         System.out.println(name);
         String surname = surnameTextField.getText();
         System.out.println(surname);
+        p.setPatientSurname(surname);
         String gender = "";
         if (femaleRadioButton.isSelected()) {
             gender = "Female";
+            p.setGender(gender);
         } else if (maleRadioButton.isSelected()) {
             gender = "Male";
+            p.setGender(gender);
         } else {
             //TODO - needs to send an exception
         }
         System.out.println(gender);
         String bloodType = bloodTypeChoiceBox.getValue();
-
+        p.setBloodType(bloodType);
         Date bDate = Date.valueOf(birthDatePicker.getValue());
         if ((bDate.before(Date.valueOf(LocalDate.now()))) || bDate.equals(Date.valueOf(LocalDate.now()))) {
+            p.setbDate(bDate);
             System.out.println("yay");
             System.out.println(bDate.toString());
         } else {
+            errorPopup(1);
             System.out.println("nain"); //TODO - obviamente aqui va el popup de q la fecha ta mal
         }
         String allergies = allergiesTextArea.getText();
+        p.setAllergieType(allergies);
         System.out.println(allergies);
         String address = addressTextField.getText();
+        p.setPatientAddress(address);
         System.out.println(address);
 
         //Añadir patient a la db
 
+        // jdbc.addPatient(c, p);//Connection c, Patient p
         //Preguntar al subnormal de turno si quiere asignar un médico al paciente #popup
 
         //Congratulaciones has hecho las cosas bien y el paciente esta en la db! #popup y reset de todas las opciones
@@ -168,21 +187,41 @@ public class AdStaffMenuController implements Initializable {
      * @throws IOException
      */
     private void errorPopup(int errorType) throws IOException {
+        FXMLLoader loaderError;
         Parent rootError;
         Scene sceneError;
         Stage stageError;
+        ErrorPopupController errorPopupController;
         switch (errorType) {
             case 0:
-                rootError = FXMLLoader.load(getClass().getResource("controllers/errorPopup.fxml")); //TODO - Cambiar este loader por el de error general
+                loaderError = new FXMLLoader(getClass().getResource("controllers/errorPopup.fxml")); 
+                rootError = loaderError.load(); 
+                errorPopupController = loaderError.getController();
+                errorPopupController.displayErrorText("Something went wrong, please check everything and try again.");
 			    sceneError = new Scene(rootError);
                 stageError = new Stage();
                 stageError.setScene(sceneError);
+                stageError.show();
                 break;
             case 1:
-                rootError = FXMLLoader.load(getClass().getResource("controllers/errorPopup.fxml")); //TODO - Cambiar este loader por el de fecha futura
-			    sceneError = new Scene(rootError);
+                loaderError = new FXMLLoader(getClass().getResource("controllers/errorPopup.fxml")); 
+                rootError = loaderError.load(); 
+                errorPopupController = loaderError.getController();
+                errorPopupController.displayErrorText("Please, use a correct date.\nYour birthdate cant be on the future.");
+                sceneError = new Scene(rootError);
                 stageError = new Stage();
                 stageError.setScene(sceneError);
+                stageError.show();
+                break;
+            case 2:
+                loaderError = new FXMLLoader(getClass().getResource("controllers/errorPopup.fxml")); 
+                rootError = loaderError.load(); 
+                errorPopupController = loaderError.getController();
+                errorPopupController.displayErrorText("Please, fill all the options.");
+                sceneError = new Scene(rootError);
+                stageError = new Stage();
+                stageError.setScene(sceneError);
+                stageError.show();
                 break;
             default:
                 break;

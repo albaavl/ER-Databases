@@ -3,16 +3,19 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controllers.ErrorPopupController">
    <children>
       <ImageView fitHeight="61.0" fitWidth="60.0" layoutX="14.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/errorIcon.png" />
          </image>
       </ImageView>
-      <Text layoutX="227.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Text fx:id="errorDisplayText" layoutX="117.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font></Text>
    </children>
 </Pane>
