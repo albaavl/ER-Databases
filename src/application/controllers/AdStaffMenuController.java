@@ -7,8 +7,6 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import org.sqlite.JDBC;
-
 import db.jdbc.SQL;
 import db.pojos.Patient;
 import javafx.event.ActionEvent;
@@ -17,7 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
@@ -31,6 +29,7 @@ import javafx.stage.Stage;
 public class AdStaffMenuController implements Initializable {
     
     private SQL jdbc;
+    private ErrorPopup ErrorPopup;
 
     @FXML
     Text adStaffMenuWelcomeText;
@@ -97,6 +96,8 @@ public class AdStaffMenuController implements Initializable {
         paneEditShiftView.setVisible(true);
     }
 
+    //Patient options fxml objects
+
     @FXML
     private ToggleGroup genderRadioButton;
     @FXML
@@ -113,17 +114,26 @@ public class AdStaffMenuController implements Initializable {
     @FXML
     private ComboBox<String> bloodTypeChoiceBox;
     private String[] bloodTypeStrings = {"A+", "A-", "B+", "B-", "AB+", "AB-", "0+", "0-"};
-
-    @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {
-        bloodTypeChoiceBox.getItems().addAll(bloodTypeStrings);
-        
-    }
-
     @FXML
     private TextArea allergiesTextArea;
     @FXML
     private TextField addressTextField;
+
+    //Worker options fxml objects
+
+    @FXML 
+    private ComboBox<String> workerTypeComboBox;
+    private String[] workerTypeStrings = {}; //TODO - @me poner las opciones aqui :)
+
+    //Initialize function
+
+    @Override
+    public void initialize(URL arg0, ResourceBundle arg1) {
+        bloodTypeChoiceBox.getItems().addAll(bloodTypeStrings);
+        //workerTypeComboBox.getItems().addAll(workerTypeStrings);
+    }
+
+    //Menu functions
 
     public void createPatient(ActionEvent actionEvent) throws IOException, NotBoundException { //TODO - quitar strings de prueba jej
 
@@ -135,6 +145,7 @@ public class AdStaffMenuController implements Initializable {
         String surname = surnameTextField.getText();
         System.out.println(surname);
         p.setPatientSurname(surname);
+
         String gender = "";
         if (femaleRadioButton.isSelected()) {
             gender = "Female";
@@ -143,89 +154,110 @@ public class AdStaffMenuController implements Initializable {
             gender = "Male";
             p.setGender(gender);
         } else {
-            //TODO - needs to send an exception
+            ErrorPopup.errorPopup(2);
+            return;
         }
         System.out.println(gender);
-        String bloodType = bloodTypeChoiceBox.getValue();
-        p.setBloodType(bloodType);
-        Date bDate = Date.valueOf(birthDatePicker.getValue());
+
+
+        if( bloodTypeChoiceBox.getSelectionModel().isEmpty() ){
+            String bloodType = bloodTypeChoiceBox.getValue(); //TODO - ver q hace si no seleccionas nada.
+            p.setBloodType(bloodType);
+            System.out.println(bloodType);
+        } else {
+            System.out.println("aqui no hay na (blood)");
+            ErrorPopup.errorPopup(2);
+        }
+
+        Date bDate = Date.valueOf(birthDatePicker.getValue());  //TODO - añadir algo para controlar q pones algo en este coso.
         if ((bDate.before(Date.valueOf(LocalDate.now()))) || bDate.equals(Date.valueOf(LocalDate.now()))) {
             p.setbDate(bDate);
             System.out.println("yay");
             System.out.println(bDate.toString());
         } else {
-            errorPopup(1);
-            System.out.println("nain"); //TODO - obviamente aqui va el popup de q la fecha ta mal
+            ErrorPopup.errorPopup(1);
+            System.out.println("nain");
+            return;
         }
-        String allergies = allergiesTextArea.getText();
+
+
+        String allergies = allergiesTextArea.getText(); //TODO - ver q pasa si no pones nada
         p.setAllergieType(allergies);
         System.out.println(allergies);
-        String address = addressTextField.getText();
+
+        String address = addressTextField.getText(); //TODO - ver q pasa si no pones nada
         p.setPatientAddress(address);
         System.out.println(address);
 
-        //Añadir patient a la db
+        // jdbc.addPatient(p);
 
-        // jdbc.addPatient(c, p);//Connection c, Patient p
+        //Creo q voy a hacer q una vez salga el popup de añadido correctamente, mediante un boton de aceptar te pregunte si quieres añadir un doc
+        //en vez de hacer dos popup a la vez
+
         //Preguntar al subnormal de turno si quiere asignar un médico al paciente #popup
+        // addDoctorToPatientPopup(); 
 
         //Congratulaciones has hecho las cosas bien y el paciente esta en la db! #popup y reset de todas las opciones
+
+        //Con esto debería funcionar, not sure tho
         // nameTextField.clear();
         // surnameTextField.clear();
-        
+        // maleRadioButton.setSelected(false);
+        // femaleRadioButton.setSelected(false);
+        // bloodTypeChoiceBox.getSelectionModel().clearSelection();
+        // birthDatePicker.setValue(null);
+        // birthDatePicker.getEditor().clear();
+        // allergiesTextArea.clear();
+        // addressTextField.clear();
+
     }   
 
+    //LinkDocPopup Stuff here
+
+    //objects on linkDocPopup
+    @FXML
+    private Button yesLinkDocPopupButton;
+    @FXML
+    private Button noLinkDocPopupButton;
+    //methods for linkDocPopup
 
     /**
-     * When called it displays a new window with an error msg in function of the int passed to the function
-     * <p> 0 - General error (unspecified) </p>
-     * <p> 1 - ur birthdate cant be tomorrow nor on any future date bruh
-     * <p> 2 - Please fill all the values lmao.
-     * <p> X - idk keep adding stuff here...
-
-     * @param errorType - int
-     * @throws IOException
+     * Used to change the view into Assign a new doctor when user clicks yes.
+     * closes window when user clicks one of the options
+     * @param aEvent
      */
-    private void errorPopup(int errorType) throws IOException {
-        FXMLLoader loaderError;
-        Parent rootError;
-        Scene sceneError;
-        Stage stageError;
-        ErrorPopupController errorPopupController;
-        switch (errorType) {
-            case 0:
-                loaderError = new FXMLLoader(getClass().getResource("controllers/errorPopup.fxml")); 
-                rootError = loaderError.load(); 
-                errorPopupController = loaderError.getController();
-                errorPopupController.displayErrorText("Something went wrong, please check everything and try again.");
-			    sceneError = new Scene(rootError);
-                stageError = new Stage();
-                stageError.setScene(sceneError);
-                stageError.show();
-                break;
-            case 1:
-                loaderError = new FXMLLoader(getClass().getResource("controllers/errorPopup.fxml")); 
-                rootError = loaderError.load(); 
-                errorPopupController = loaderError.getController();
-                errorPopupController.displayErrorText("Please, use a correct date.\nYour birthdate cant be on the future.");
-                sceneError = new Scene(rootError);
-                stageError = new Stage();
-                stageError.setScene(sceneError);
-                stageError.show();
-                break;
-            case 2:
-                loaderError = new FXMLLoader(getClass().getResource("controllers/errorPopup.fxml")); 
-                rootError = loaderError.load(); 
-                errorPopupController = loaderError.getController();
-                errorPopupController.displayErrorText("Please, fill all the options.");
-                sceneError = new Scene(rootError);
-                stageError = new Stage();
-                stageError.setScene(sceneError);
-                stageError.show();
-                break;
-            default:
-                break;
-        }
+    private void onYesButton(ActionEvent aEvent) {
+        displayAssignANewDoctorView(aEvent);
+        Stage stage = (Stage) yesLinkDocPopupButton.getScene().getWindow();
+        stage.close();
     }
+
+    /**
+     * closes window when user clicks one of the options. Does nothing else at all xD
+     * @param aEvent
+     */
+    private void onNoButton(ActionEvent aEvent) {
+        Stage stage = (Stage) noLinkDocPopupButton.getScene().getWindow();
+        stage.close();
+    }
+
+    private void addDoctorToPatientPopup() throws IOException {
+        FXMLLoader loaderLinkDoc;
+        Parent rootLinkDoc;
+        Scene sceneLinkDoc;
+        Stage stageLinkDoc;
+        // LinkDocPopupController linkDocPopupController; //TODO - fuck me idk what to do w dis y ahora mismo me sobra mazo xD
+
+        loaderLinkDoc = new FXMLLoader(getClass().getResource("controllers/linkDocPopup.fxml")); 
+        rootLinkDoc = loaderLinkDoc.load();
+        // linkDocPopupController = loaderLinkDoc.getController();
+
+        sceneLinkDoc = new Scene(rootLinkDoc);
+        stageLinkDoc = new Stage();
+        stageLinkDoc.setScene(sceneLinkDoc);
+        stageLinkDoc.setTitle("Link a doctor to this patient");
+        stageLinkDoc.show();
+    }
+
 }
 

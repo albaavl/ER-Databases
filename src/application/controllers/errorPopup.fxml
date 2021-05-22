@@ -13,9 +13,9 @@
             <Image url="@../images/errorIcon.png" />
          </image>
       </ImageView>
-      <Text fx:id="errorDisplayText" layoutX="117.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+      <Text fx:id="errorDisplayText" layoutX="117.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
          <font>
-            <Font name="Arial" size="14.0" />
+            <Font name="Arial" size="18.0" />
          </font></Text>
    </children>
 </Pane>

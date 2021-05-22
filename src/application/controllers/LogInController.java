@@ -106,8 +106,8 @@ public class LogInController {
         root = loader.load(); 
 
         PatientMenuController patientMenuController =  loader.getController();
-        patientMenuController.displayUserName(jdbc.selectPatient(c, userId).getPatientName());
-        patientMenuController.displayUserName(jdbc.selectPatient(c, userId).getPatientSurname());
+        patientMenuController.displayUserName(jdbc.selectPatient(userId).getPatientName());
+        patientMenuController.displayUserName(jdbc.selectPatient(userId).getPatientSurname());
 
         stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -121,7 +121,7 @@ public class LogInController {
         root = loader.load(); 
 
         AdStaffMenuController adStaffMenuController = loader.getController();
-        adStaffMenuController.displayWelcomeText(jdbc.selectWorker(c, userId).getWorkerName(), jdbc);
+        adStaffMenuController.displayWelcomeText(jdbc.selectWorker(userId).getWorkerName(), jdbc);
         
         // root = FXMLLoader.load(getClass().getResource("adStaffMenu.fxml")); //TODO - need to create the administration Staff menu fxml w scenebuilder
         stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
@@ -183,10 +183,10 @@ public class LogInController {
 		byte[] hash = md.digest();
 		User user = new User(username, hash, role);
 		userman.newUser(user);
-		Worker worker = new Worker("admin","admin","none","adStaff");
-		jdbc.addWorker(c, worker);
-		Worker created = new Worker(jdbc.selectWorker(c, 1));
-		jdbc.createLinkUserWorker(c, user.getUserId(), created.getWorkerId());
+		Worker worker = new Worker("admin","admin","none","adStaff");  
+		jdbc.addWorker(worker);                             //TODO - Esto se ha jodido mucho por algun cambio en workers y el shiftId hace q haga chof
+		Worker created = new Worker(jdbc.selectWorker(1));     // ahora no me da la vida para ponerme con esto, por la noche le hecho un vistazo
+		jdbc.createLinkUserWorker(user.getUserId(), created.getWorkerId()); //e intento arreglar este truño
 		System.out.println("Admin created");
 		}catch(Exception ex) {
 			ex.printStackTrace();
