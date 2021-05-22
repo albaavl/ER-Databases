@@ -17,6 +17,7 @@ public class Pruebas {
 			
 		System.out.println(" Convert Worker to XML file");
 		XMLManager.java2XmlWorker();
+		XMLManager.java2XmlShift();
 
 	}
 }

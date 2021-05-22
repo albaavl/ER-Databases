@@ -121,8 +121,8 @@ public class Worker implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Worker [workerId=" + workerId + ", workerName=" + workerName + ", workerSurname=" + workerSurname
-				+ ", specialtyId=" + specialtyId + ", shift" + shift + ", typeWorker=" + typeWorker + "]";
+		return "Worker [workerId=" + this.workerId + ", workerName=" + this.workerName + ", workerSurname=" + this.workerSurname
+				+ ", specialtyId=" + this.specialtyId + ", shift" + this.shift + ", typeWorker=" + this.typeWorker + "]";
 	}
 	
 	//Getters + Setters

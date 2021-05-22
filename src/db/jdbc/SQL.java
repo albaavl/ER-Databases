@@ -5,8 +5,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import db.pojos.*;
+import db.xml.utils.SQLDateAdapter;
 
 
 public class SQL implements SQLInterface{
@@ -44,19 +47,19 @@ public class SQL implements SQLInterface{
 		stmt1.close();
 		Statement stmt3 = c.createStatement();
 		String sql3 = "CREATE TABLE workers "
-				   + "(id       INTEGER  PRIMARY KEY AUTOINCREMENT,"
-				   + " name     TEXT     NOT NULL, "
-				   + " surname     TEXT     NOT NULL, "
-				   + " specialty   TEXT, "
-				   + " role TEXT NOT NULL,"
-				   + " shiftId INTEGER REFERENCES shifts(id) ON UPDATE CASCADE ON DELETE SET NULL,"
+				   + "(workerId       INTEGER  PRIMARY KEY AUTOINCREMENT,"
+				   + " workerName     TEXT     NOT NULL, "
+				   + " workerSurname     TEXT     NOT NULL, "
+				   + " specialtyId   TEXT, "
+				   + " typeWorker TEXT NOT NULL,"
+				   + " shiftId INTEGER REFERENCES shifts(shiftId) ON UPDATE CASCADE ON DELETE SET NULL,"
 				   + " userId INTEGER REFERENCES users(userId) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt3.executeUpdate(sql3);
 		stmt3.close();
 		Statement stmt4 = c.createStatement();
 		String sql4 = "CREATE TABLE doctor_patient "
 				   + "(patient_id     INTEGER  REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL,"
-				   + " doctor_id   INTEGER  REFERENCES workers(id) ON UPDATE CASCADE ON DELETE SET NULL,"
+				   + " doctor_id   INTEGER  REFERENCES workers(workerId) ON UPDATE CASCADE ON DELETE SET NULL,"
 				   + " PRIMARY KEY (patient_id,doctor_id))";
 		stmt4.executeUpdate(sql4);
 		stmt4.close();
@@ -77,21 +80,20 @@ public class SQL implements SQLInterface{
 				   + " start_date   DATE      NOT NULL,"
 				   + " advice       TEXT      NOT NULL,"
 				   + " duration   INTEGER     NOT NULL,"	
-				   + " doctor_id   INTEGER  REFERENCES workers(id) ON UPDATE CASCADE ON DELETE SET NULL,"
+				   + " doctor_id   INTEGER  REFERENCES workers(workerId) ON UPDATE CASCADE ON DELETE SET NULL,"
 				   + " patient_id INTEGER REFERENCES patients(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL)";
 				   //TODO - EL doctor_id q hacemos con el, en el pojo no se usa...
 		stmt6.executeUpdate(sql6);
 		stmt6.close(); 
 		Statement stmt7 = c.createStatement();
 		String sql7 = "CREATE TABLE shifts "
-				   + "(id INTEGER  PRIMARY KEY AUTOINCREMENT,"
-				   + " shift    TEXT  NOT NULL,"
+				   + "(shiftId INTEGER  PRIMARY KEY AUTOINCREMENT,"
 				   + " date     DATE     NOT NULL, "
+				   + " turn    TEXT  NOT NULL,"
 				   + " room   INTEGER     NOT NULL,"
-		 		   + " doctor_id   INTEGER  REFERENCES workers(id) ON UPDATE CASCADE ON DELETE SET NULL)";
+		 		   + " doctor_id   INTEGER  REFERENCES workers(workerId) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt7.executeUpdate(sql7);
 		stmt7.close();		
-		
 		System.out.println("Tables created.");		
 	}
 
@@ -133,7 +135,7 @@ public class SQL implements SQLInterface{
 
 	@Override
 	public void addWorker(Connection c, Worker w) throws SQLException{
-		String sq1 = "INSERT INTO workers (name, surname, specialty, role, shiftId, userId) VALUES (?, ?, ?, ?, ?, ?)";
+		String sq1 = "INSERT INTO workers (workerName, workerSurname, specialtyId, typeWorker, shiftId, userId) VALUES (?, ?, ?, ?, ?, ?)";
 		PreparedStatement preparedStatement = c.prepareStatement(sq1);
 		preparedStatement.setString(1, w.getWorkerName());
 		preparedStatement.setString(2, w.getWorkerSurname());
@@ -173,7 +175,7 @@ public class SQL implements SQLInterface{
 	
 @Override
 	public void addShift(Connection c, Shift s) throws SQLException{
-		String sq1 = "INSERT INTO shifts (shift, date, room, doctor_id) VALUES (?,?,?,?)";
+		String sq1 = "INSERT INTO shifts (date, turn, room, doctor_id) VALUES (?,?,?,?)";
 		PreparedStatement preparedStatement = c.prepareStatement(sq1);
 		preparedStatement.setString(1, s.getTurn());
 		preparedStatement.setDate(2, s.getDate());
@@ -234,7 +236,7 @@ public class SQL implements SQLInterface{
 		List<Shift> shifts = new ArrayList<>();
 		Worker w = selectWorker(c, workerId);
 		if(rs.next()){ 
-			shifts.add(new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("shift"), w, rs.getInt("id")));		
+			shifts.add(new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("turn"), w, rs.getInt("shiftId")));		
 		}
 		p.close();
 		rs.close();
@@ -251,7 +253,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List<Shift> shifts = new ArrayList<>();
 		if(rs.next()){ 
-		shifts.add(new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("shift"), rs.getInt("doctor_id"))) ;		
+		shifts.add(new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("turn"), rs.getInt("doctor_id"))) ;		
 		}
 		p.close();
 		rs.close();
@@ -275,13 +277,13 @@ public class SQL implements SQLInterface{
 	
 	@Override
 	public List<Worker> searchWorker(Connection c, String surname) throws SQLException, NotBoundException {
-		String sql = "SELECT * FROM workers WHERE surname LIKE ?";
+		String sql = "SELECT * FROM workers WHERE workerSurname LIKE ?";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setString(1,"%" + surname + "%");
 		ResultSet rs = p.executeQuery();
 		List <Worker> wList = new ArrayList<Worker>();
 		while(rs.next()){ 
-			wList.add( new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getString("type")) );
+			wList.add( new Worker(rs.getInt("workerId"), rs.getString("workerName"), rs.getString("workerSurname"), rs.getString("specialtyId"), rs.getString("typeWorker")) );
 		}
 		p.close();
 		rs.close();
@@ -305,13 +307,13 @@ public class SQL implements SQLInterface{
 
 	@Override
 	public Worker selectWorker(Connection c, Integer workerId) throws SQLException, NotBoundException {
-		String sql = "SELECT * FROM workers WHERE id = ?";
+		String sql = "SELECT * FROM workers WHERE workerId = ?";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1,workerId);
 		ResultSet rs = p.executeQuery();
 		Worker worker = null;
 		if(rs.next()){
-			worker = new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"), rs.getString("role"));
+			worker = new Worker(rs.getInt("workerId"), rs.getString("workerName"), rs.getString("workerSurname"), rs.getString("specialtyId"), rs.getString("typeWorker"));
 		}
 		p.close();
 		rs.close();
@@ -320,13 +322,13 @@ public class SQL implements SQLInterface{
 	
 	@Override
 	public Shift selectShift(Connection c, Integer shiftId) throws SQLException, Exception {
-		String sql = "SELECT * FROM shifts WHERE id = ?";
+		String sql = "SELECT * FROM shifts WHERE shiftId = ?";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1,shiftId);
 		ResultSet rs = p.executeQuery();
 		Shift shift = null;
 		if(rs.next()){
-			shift = new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("shift"), rs.getInt("id"));
+			shift = new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("turn"), rs.getInt("shiftId"));
 		}
 		p.close();
 		rs.close();
@@ -426,7 +428,7 @@ public class SQL implements SQLInterface{
 
 			if(workerId != null){
 
-				sql = "UPDATE shifts SET docto_id = ? WHERE id = ?";
+				sql = "UPDATE shifts SET doctor_id = ? WHERE shiftId = ?";
 				p = c.prepareStatement(sql);
 				p.setInt(1, workerId);
 				p.setInt(2, shiftId);
@@ -434,7 +436,7 @@ public class SQL implements SQLInterface{
 		 
 			}if(shift != null){
 
-				sql = "UPDATE shifts SET shift = ? WHERE id = ?";
+				sql = "UPDATE shifts SET shift = ? WHERE shiftId = ?";
 				p = c.prepareStatement(sql);
 				p.setString(1, shift);
 				p.setInt(2, shiftId);
@@ -442,7 +444,7 @@ public class SQL implements SQLInterface{
 		 
 			}if(room != null){
 
-				sql = "UPDATE shifts SET room = ? WHERE id = ?";
+				sql = "UPDATE shifts SET room = ? WHERE shiftId = ?";
 				p = c.prepareStatement(sql);
 				p.setInt(1, room);
 				p.setInt(2, shiftId);
@@ -450,7 +452,7 @@ public class SQL implements SQLInterface{
 		 
 			}if(date != null){
 
-				sql = "UPDATE shifts SET date = ? WHERE id = ?";
+				sql = "UPDATE shifts SET date = ? WHERE shiftId = ?";
 				p = c.prepareStatement(sql);
 				p.setDate(1, date);
 				p.setInt(2, shiftId);
@@ -499,13 +501,13 @@ public class SQL implements SQLInterface{
 	/**
 	 * Deletes any worker with an id that matches the given id.
 	 * @param c - Database connection.
-	 * @param id - Id from the worker that will be deleted. (int)
+	 * @param workerId - Id from the worker that will be deleted. (int)
 	 * @throws SQLException
 	 */
 	
 	@Override
 	public void deleteWorkerById(Connection c, int workerId) throws SQLException {
-		String sql = "DELETE FROM workers WHERE id = ?";
+		String sql = "DELETE FROM workers WHERE workerId = ?";
 		PreparedStatement pStatement = c.prepareStatement(sql);
 		pStatement.setInt(1, workerId);
 		pStatement.executeUpdate();
@@ -535,7 +537,7 @@ public class SQL implements SQLInterface{
 	
 	@Override
 	public void deleteShiftById(Connection c, int shiftId) throws SQLException {
-		String sql = "DELETE FROM shifts WHERE id = ?";
+		String sql = "DELETE FROM shifts WHERE shiftId = ?";
 		PreparedStatement pStatement = c.prepareStatement(sql);
 		pStatement.setInt(1, shiftId);
 		pStatement.executeUpdate();
@@ -571,7 +573,7 @@ public class SQL implements SQLInterface{
 	
 	@Override
 	public void createLinkUserWorker(Connection c, int userId, int workerId) throws Exception {
-		String sql1 = "UPDATE workers SET userId = ? WHERE id = ? ";
+		String sql1 = "UPDATE workers SET userId = ? WHERE workerId = ? ";
 		PreparedStatement pStatement = c.prepareStatement(sql1);
 		pStatement.setInt(1, userId);
 		pStatement.setInt(2, workerId);
@@ -587,8 +589,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = pStatement.executeQuery();
 		Worker worker = null;
 		if(rs.next()){
-			worker = new Worker(rs.getInt("id"), rs.getString("name"), rs.getString("surname"), rs.getString("specialty"),  rs.getString("role"));
-			
+			worker = new Worker(rs.getInt("workerId"), rs.getString("workerName"), rs.getString("workerSurname"), rs.getString("specialtyId"),  rs.getString("typeWorker"));
 		}
 		pStatement.close();
 		rs.close();
