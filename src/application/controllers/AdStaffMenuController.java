@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,13 +24,14 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class AdStaffMenuController implements Initializable {
     
-    private SQL jdbc;
+    private static SQL jdbc;
     private ErrorPopup ErrorPopup = new application.controllers.ErrorPopup();
 
     @FXML
@@ -59,18 +61,21 @@ public class AdStaffMenuController implements Initializable {
     }
 
     public void displayCreatePatientView(ActionEvent aEvent) {
+        resetCreatePatientScene();
         paneWelcomeView.setVisible(false);
         paneCreatePatientView.setVisible(true);
         paneChangePatientDataView.setVisible(false);
         paneAssignANewDoctorView.setVisible(false);
     }
     public void displayChangePatientDataView(ActionEvent aEvent) {
+        resetCreatePatientScene();
         paneWelcomeView.setVisible(false);
         paneCreatePatientView.setVisible(false);
         paneChangePatientDataView.setVisible(true);
         paneAssignANewDoctorView.setVisible(false);
     }
     public void displayAssignANewDoctorView(ActionEvent aEvent) {
+        resetCreatePatientScene();
         paneWelcomeView.setVisible(false);
         paneCreatePatientView.setVisible(false);
         paneChangePatientDataView.setVisible(false);
@@ -78,19 +83,21 @@ public class AdStaffMenuController implements Initializable {
     }
 
     public void displayCreateWorkerView(ActionEvent actionEvent) {
-
+        resetCreatePatientScene();
         paneWelcomeView.setVisible(false);
         paneCreateWorkerView.setVisible(true);
         paneChangeWorkerDataView.setVisible(false);
         paneEditShiftView.setVisible(false);
     }
     public void displayChangeWorkerView(ActionEvent actionEvent) {
+        resetCreatePatientScene();
         paneWelcomeView.setVisible(false);
         paneCreateWorkerView.setVisible(false);
         paneChangeWorkerDataView.setVisible(true);
         paneEditShiftView.setVisible(false);
     }
     public void displayEditShiftView(ActionEvent actionEvent) {
+        resetCreatePatientScene();
         paneWelcomeView.setVisible(false);
         paneCreateWorkerView.setVisible(false);
         paneChangeWorkerDataView.setVisible(false);
@@ -198,10 +205,9 @@ public class AdStaffMenuController implements Initializable {
 
 
         String allergies = allergiesTextArea.getText();
-        // if (allergies == "") {
-        //     ErrorPopup.errorPopup(2);
-        //     return;
-        // }
+        if (allergies == "") {
+            allergies = "none";
+        }
         p.setAllergieType(allergies);
         System.out.println(allergies);
 
@@ -226,16 +232,7 @@ public class AdStaffMenuController implements Initializable {
         //Congratulaciones has hecho las cosas bien y el paciente esta en la db! #popup y reset de todas las opciones
 
         //Con esto debería funcionar, not sure tho
-        // nameTextField.clear();
-        // surnameTextField.clear();
-        // maleRadioButton.setSelected(false);
-        // femaleRadioButton.setSelected(false);
-        // bloodTypeChoiceBox.getSelectionModel().clearSelection();
-        // birthDatePicker.setValue(null);
-        // birthDatePicker.getEditor().clear();
-        // allergiesTextArea.clear();
-        // addressTextField.clear();
-
+        resetCreatePatientScene();
     }   
 
     //LinkDocPopup Stuff here
@@ -245,11 +242,12 @@ public class AdStaffMenuController implements Initializable {
         Parent rootLinkDoc;
         Scene sceneLinkDoc;
         Stage stageLinkDoc;
-        // linkDocPopupController linkDocPopupController; //TODO - fuck me idk what to do w dis y ahora mismo me sobra mazo xD
+        LinkDocPopupController linkDocPopupController;
 
         loaderLinkDoc = new FXMLLoader(getClass().getResource("linkDocPopup.fxml")); 
         rootLinkDoc = loaderLinkDoc.load();
-        // linkDocPopupController = loaderLinkDoc.getController();
+        linkDocPopupController = loaderLinkDoc.getController();
+        linkDocPopupController.setAdStaffController();
 
         sceneLinkDoc = new Scene(rootLinkDoc);
         stageLinkDoc = new Stage();
@@ -278,5 +276,32 @@ public class AdStaffMenuController implements Initializable {
     //     stageAddPatientSuccess.show();
 
     // }
+
+    //HardResetScene
+    
+    private void resetCreatePatientScene() {
+        nameTextField.clear();
+        surnameTextField.clear();
+        maleRadioButton.setSelected(false);
+        femaleRadioButton.setSelected(false);
+        bloodTypeChoiceBox.getSelectionModel().clearSelection();
+        birthDatePicker.setValue(null);
+        birthDatePicker.getEditor().clear();
+        allergiesTextArea.clear();
+        addressTextField.clear();
+
+    }
+
+    //Controller stuff
+
+    public static AdStaffMenuController thisAdStaffMenuController;
+
+    public void setAdStaffController( AdStaffMenuController adStaffMenuController ) {
+        thisAdStaffMenuController = adStaffMenuController;
+    }
+
+    public static AdStaffMenuController passAdStaffMenuController() {
+        return thisAdStaffMenuController;
+    }
 }
 
