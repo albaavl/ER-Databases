@@ -14,17 +14,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
+// import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+// import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.input.MouseEvent;
+// import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -131,7 +131,7 @@ public class AdStaffMenuController implements Initializable {
 
     @FXML 
     private ComboBox<String> workerTypeComboBox;
-    private String[] workerTypeStrings = {}; //TODO - @me poner las opciones aqui :)
+    // private String[] workerTypeStrings = {"Doctor", "Nurse", "Administation Staff", "Technician"}; //TODO - creo q technician sobra mucho pq era el de las ambulance y nunca lo llegamos a quitar, not sure tho
 
     //Initialize function
 
@@ -226,12 +226,8 @@ public class AdStaffMenuController implements Initializable {
         //Creo q voy a hacer q una vez salga el popup de añadido correctamente, mediante un boton de aceptar te pregunte si quieres añadir un doc
         //en vez de hacer dos popup a la vez
 
-        //Preguntar al subnormal de turno si quiere asignar un médico al paciente #popup
         addDoctorToPatientPopup(); 
 
-        //Congratulaciones has hecho las cosas bien y el paciente esta en la db! #popup y reset de todas las opciones
-
-        //Con esto debería funcionar, not sure tho
         resetCreatePatientScene();
     }   
 
@@ -277,7 +273,7 @@ public class AdStaffMenuController implements Initializable {
 
     // }
 
-    //HardResetScene
+    //HardResetScenes
     
     private void resetCreatePatientScene() {
         nameTextField.clear();
