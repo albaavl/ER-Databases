@@ -169,14 +169,14 @@ public class XMLManager {
 		int workerId = sc.nextInt();
 		Query q2 = em.createNativeQuery("SELECT * FROM workers WHERE workerId = ?", Worker.class);
 		q2.setParameter(1, workerId);
-		Shift s = (Shift) q2.getSingleResult();
+		Worker w = (Worker) q2.getSingleResult();
 				
 		// Use the Marshaller to marshal the Java object to a file
 		File file = new File("./xmls/External-Worker.xml");
 		// Use the Marshaller to marshal the Java object to a file
-		marshaller.marshal(s, file);
+		marshaller.marshal(w, file);
 		// Printout
-		marshaller.marshal(s, System.out);
+		marshaller.marshal(w, System.out);
 	} 
 	
 	/**

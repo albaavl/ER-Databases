@@ -1,8 +1,6 @@
 package db.pojos;
 
 import java.rmi.NotBoundException;
-
-
 import java.util.*;
 import javax.persistence.*;
 import java.io.*;
@@ -10,8 +8,8 @@ import javax.xml.bind.annotation.*;
 
 @Entity
 @Table(name = "workers")
-@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Worker")
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = { "specialtyId", "typeWorker"})
 public class Worker implements Serializable{
 	
@@ -20,7 +18,7 @@ public class Worker implements Serializable{
 	@Id
 	@GeneratedValue(generator = "workers")
 	@TableGenerator(name = "workers", table = "sqlite_sequence",
-		pkColumnName = "workerId", valueColumnName = "seq", pkColumnValue = "workers")
+		pkColumnName = "workerName", valueColumnName = "seq", pkColumnValue = "workers")
 	
 	@XmlTransient
 	private Integer workerId;
@@ -37,11 +35,14 @@ public class Worker implements Serializable{
 	@XmlElement
 	private String typeWorker;
 	//Can be doctor(1), nurse(2), administration staff(3), technician(4)
-	@XmlTransient
-	private Shift shift;
+	@OneToMany(mappedBy="worker")
+	@XmlElement(name = "Shift")
+    @XmlElementWrapper(name = "Shifts")
+	private List<Shift> shift;
 	
 	public Worker() {
 		super();
+		this.shift = new ArrayList<Shift>();
 	}
 	
 	public Worker(String workerName, String workerSurname, String specialtyId,
@@ -51,6 +52,7 @@ public class Worker implements Serializable{
 		this.workerSurname = workerSurname;
 		this.specialtyId = specialtyId;
 		this.typeWorker = typeWorker;
+		this.shift = new ArrayList<Shift>();
 	}
 	
 	public Worker(Worker w) throws Exception {
@@ -63,7 +65,7 @@ public class Worker implements Serializable{
 		this.typeWorker = w.typeWorker;
 	}
 	
-	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, Shift shift,
+	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, List<Shift> shift,
 			String typeWorker) {
 		super();
 		this.workerId = workerId;
@@ -81,6 +83,7 @@ public class Worker implements Serializable{
 		this.workerSurname = workerSurname;
 		this.specialtyId = specialtyId;
 		this.typeWorker = typeWorker;
+		this.shift = new ArrayList<Shift>();
 	}
 	
 	public Worker(String workerName, String workerSurname, String specialtyId,
@@ -91,9 +94,10 @@ public class Worker implements Serializable{
 		this.specialtyId = specialtyId;
 		this.typeWorker = typeWorker;
 		this.userId = userId;
+		this.shift = new ArrayList<Shift>();
 	}
-	//TODO cambiar constructor cuando se cambie lo de shifts @gisela
-	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, Shift shift,
+
+	public Worker(Integer workerId, String workerName, String workerSurname, String specialtyId, List<Shift> shift,
 			String typeWorker, Integer userId) {
 		super();
 		this.workerId = workerId;
@@ -195,12 +199,23 @@ public class Worker implements Serializable{
 	
 	
 
-	public Shift getShift() {
+	public List<Shift> getShift() {
 		return shift;
 	}
 
-	public void setShift(Shift shift) {
+	public void setShift(List<Shift> shift) {
 		this.shift = shift;
+	}
+	
+	public void addShift (Shift shifts) {
+		if(!shift.contains(shifts)) {
+			this.shift.add(shifts);
+		}
+	}
+	public void removeShift (Shift shifts) {
+		if(!shift.contains(shifts)) {
+			this.shift.remove(shifts);
+		}
 	}
 
 	/**

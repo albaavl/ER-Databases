@@ -29,7 +29,7 @@ public class Shift implements Serializable {
 	@Id
 	@GeneratedValue(generator="shifts")
 	@TableGenerator(name="shifts", table="sqlite_sequence",
-	    pkColumnName="shiftId", valueColumnName="seq", pkColumnValue="shifts")
+	    pkColumnName="turn", valueColumnName="seq", pkColumnValue="shifts")
 	
 	//we make the id transient to be able to import data from a XML file
 	@XmlTransient
@@ -41,6 +41,8 @@ public class Shift implements Serializable {
 	private String turn;
 	@XmlElement
 	private Integer room;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "workerId")
 	@XmlTransient
 	private Worker worker ;
 	
