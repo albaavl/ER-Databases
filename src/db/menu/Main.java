@@ -845,6 +845,7 @@ public class Main {
 		// }
 		s.setWorker(worker);
 		jdbc.addShift(s);
+		worker.addShift(s);
 		System.out.println("The shift was succesfully added.");
 	}
 
