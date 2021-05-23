@@ -46,11 +46,15 @@ public class Main {
 			do {
 				System.out.println("Welcome to the Quiron's ER");
 				System.out.println("1. Login");
+				System.out.println("2. Change password");
 				System.out.println("0. Exit");
 				int choice = sc.nextInt();
 				switch(choice) {
 				case 1:
 					login();
+					break;
+				case 2:
+					changePassword();
 					break;
 				case 0: 
 					jdbc.disconnect();
@@ -264,7 +268,7 @@ public class Main {
 
 			System.out.println("Hello Mr/Ms "+adStaff.getWorkerSurname());
 			System.out.println("Choose an option[0-5]:");
-			System.out.println(" 1. Register new worker\n 2. Register new patient \n  3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n 6. Convert Worker to XML file \n 7. Convert from XML to Worker \n 8.  Convert the XML file to HTML \n 0. Exit");
+			System.out.println(" 1. Register new worker\n 2. Register new patient \n  3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n6. Delete Worker \n 7. Delete Patient \n 8. Convert Worker to XML file \n 9. Convert from XML to Worker \n 10.  Convert the XML file to HTML \n 0. Exit");
 			option = sc.nextInt();
 	
 			switch (option) {
@@ -294,14 +298,22 @@ public class Main {
 					editShift();
 					break;	
 				case 6:
+					System.out.println("Delete Worker");
+					deleteWorker();
+					break;
+				case 7:
+					System.out.println("Delete Patient");
+					deletePatient();
+					break;
+				case 8:
 					System.out.println(" Convert Workers to XML file");
 					workerToXml();
 					break;
-				case 7:
+				case 9:
 					System.out.println("Convert from XML to Workers");
 					xmlToWorker();
 					break; 
-				case 8:
+				case 10:
 					System.out.println(" Convert the XML file to HTML");
 					workerXmlToHtml();
 					break; 
@@ -910,6 +922,21 @@ public class Main {
 		System.out.println("Medical test added");
 	}
 	
+	private static void deleteWorker() throws Exception {
+		sc = new Scanner (System.in);
+		Worker w = selectWorker();
+		User u = userman.getUser(w.getUserId());
+		jdbc.deleteWorkerById(w.getWorkerId());
+		userman.deleteUser(u);
+	}
+	
+	private static void deletePatient() throws Exception {
+		sc = new Scanner (System.in);
+		Patient p = selectPatient();
+		User u = userman.getUser(p.getUserId());
+		jdbc.deletePatientByMedicalCardId(p.getMedicalCardId());
+		userman.deleteUser(u);
+	}
 	
 	private static void adAccessToPatientsProfile() throws Exception { 
 		sc = new Scanner (System.in);
@@ -1201,13 +1228,13 @@ public class Main {
 		while(wList.isEmpty()) {
 		System.out.println("Enter the doctor's surname:");
 		String surname = sc.next();
-		wList = jdbc.searchWorker( surname); //(connection c, integer id)
+		wList = jdbc.searchWorker(surname);
 		}
 		while(w == null) {
 		System.out.println(wList.toString()); 
 		System.out.println("Enter the id of the chosen worker:");
 		Integer id = Integer.parseInt(sc.next());
-		w = new Worker(jdbc.selectWorker ( id)); //Connection c, Integer workerId
+		w = new Worker(jdbc.selectWorker (id));
 		}
 		return w;
 	}
@@ -1231,6 +1258,34 @@ public class Main {
 			ex.printStackTrace();
 		}
 	}
+	
+	public static void changePassword() {
+		sc = new Scanner (System.in);
+		try{
+			System.out.println("Please enter your username and password:");
+			System.out.println("Username:");
+			String username = sc.next();
+			System.out.println("Password:");
+			String password = sc.next();
+			User user = userman.checkPassword(username, password);
+			System.out.println("Introduce the new password: ");
+			String newPassword1 = sc.next();
+			System.out.println("Confirm your new password: ");
+			String newPassword2 = sc.next();
+			if(newPassword1.equals(newPassword2)) {
+				MessageDigest md = MessageDigest.getInstance("MD5");
+				md.update(newPassword1.getBytes());
+				byte[] hash = md.digest();
+				userman.updateUser(user, hash);
+				System.out.println("Password updated");
+			} else {
+				System.out.println("Error. Password confirmation does not match");
+			}
+			}catch(Exception ex) {
+				ex.printStackTrace();
+			}
+	}
+	
 	public static void shiftToXml() throws Exception {
 		XMLManager.java2XmlShift();
 	}

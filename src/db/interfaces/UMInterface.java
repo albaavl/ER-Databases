@@ -12,6 +12,9 @@ public interface UMInterface {
 	public Role getRole(int id);
 	public List<Role> getRoles();
 	public User checkPassword(String username, String password);
-	Role getRoleByName(String name);
+	public Role getRoleByName(String name);
+	public void deleteUser(User u);
+	public User getUser(int userId);
+	public void updateUser(User u, byte[] password);
 	
 }

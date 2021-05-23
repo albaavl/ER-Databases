@@ -38,6 +38,32 @@ public class JPAUserManager implements UMInterface {
 		em.persist(u);
 		em.getTransaction().commit();
 	}
+	
+	@Override
+	public User getUser(int userId) {
+		Query q = em.createNativeQuery("SELECT * FROM users WHERE userId = ?", User.class);
+		q.setParameter(1, userId);
+		return (User) q.getSingleResult();
+	}
+	
+	@Override
+	public void updateUser(User u, byte[] password) {
+		Query q = em.createNativeQuery("SELECT * FROM users WHERE userId = ?", User.class);
+		q.setParameter(1, u.getUserId());
+		User userToUpdate = (User) q.getSingleResult();
+		em.getTransaction().begin();
+		userToUpdate.setUsername(u.getUsername());
+		userToUpdate.setPassword(password);
+		userToUpdate.setRole(u.getRole());
+		em.getTransaction().commit();
+	}
+	
+	@Override
+	public void deleteUser(User u) {
+		em.getTransaction().begin();
+		em.remove(u);
+		em.getTransaction().commit();
+	}
 
 	@Override
 	public void newRole(Role r) {
@@ -66,6 +92,7 @@ public class JPAUserManager implements UMInterface {
 		Query q = em.createNativeQuery("SELECT * FROM roles", Role.class);
 		return (List<Role>) q.getResultList();
 	}
+	
 
 	@Override
 	public User checkPassword(String username, String password) {
