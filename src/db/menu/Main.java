@@ -102,6 +102,7 @@ public class Main {
 	} 
 	
 	private static void login() throws Exception{
+		sc = new Scanner (System.in);
 		System.out.println("Please enter your username and password:");
 		System.out.println("Username:");
 		String username = sc.next();
@@ -122,7 +123,7 @@ public class Main {
 
 	
 	public static void patientMenu(Integer userID) throws Exception{
-		
+		sc = new Scanner (System.in);
 		Patient patient = new Patient(jdbc.selectPatientByUserId(userID));
 		System.out.println("Hello Mr/Ms "+patient.getPatientSurname());
 		System.out.println("Consult my treatment");
@@ -212,7 +213,7 @@ public class Main {
 	}
 	
 	public static void medStaffMenu(Integer userID) throws Exception{
-		
+		sc = new Scanner (System.in);
 		Worker medStaff = new Worker(jdbc.selectWorkerByUserId(userID));
 
 		do{
@@ -256,7 +257,7 @@ public class Main {
 	}
 	
 	public static void adStaffMenu(Integer userID) throws Exception{
-		
+		sc = new Scanner (System.in);
 		Worker adStaff = new Worker(jdbc.selectWorkerByUserId(userID));
 		
 		do {
@@ -313,6 +314,7 @@ public class Main {
 	
 	private static void accessToAPatientsProfile(Worker medStaff) throws Exception {
 		Patient patient = selectPatient();
+		sc = new Scanner (System.in);
 		do {
 			System.out.println("Choose an option[0-3]:");
 			System.out.println("\n1. Consult medical test \n2. Add treatment and diagnosis \n3. Edit treatment and diagnosis \\n 0. Exit");
@@ -353,13 +355,14 @@ public class Main {
 	}
 	
 	private static void createDiagnosisAndTreatment(Patient patient) throws Exception {
+		sc = new Scanner (System.in);
 		System.out.println("Enter the diagnosis:");
 		String diagnosis = sc.nextLine();
 		System.out.println("Enter the medication:");
 		String medication = sc.nextLine();
 		System.out.println("Enter the start date in this format yyyy-mm-dd:");
 		Date startDate = null; 
-		try { //TODO - fuck me en q momento hize esta puta basura, btw hay q cambiar los setters tambien cuz reasons :) @me to @me
+		try { 
 			startDate = Date.valueOf(sc.next());
 		} catch (Exception e) {
 			int controlDate = 0;
@@ -392,6 +395,7 @@ public class Main {
 			System.out.println(treatments.toString());
 			Treatment t = null;
 			Integer id = null;
+			sc = new Scanner (System.in);
 			while (t == null) {
 			System.out.println("Enter the id of the treatment that you want to edit:");
 			id = sc.nextInt();
@@ -423,7 +427,7 @@ public class Main {
 				}
 			}
 			System.out.println("Enter the new medication, if you don't want to edit it enter a 0:");
-			String medication = sc.nextLine();
+			String medication = sc.next();
 			if(medication.equals("0")) {
 				medication = null;
 			}
@@ -433,7 +437,7 @@ public class Main {
 				duration = null;
 			}
 			System.out.println("Enter the new recommendations, if you don't want to edit them enter a 0:");
-			String recommendation = sc.nextLine();
+			String recommendation = sc.next();
 			if(recommendation.equals("0")) {
 				recommendation = null;
 			}
@@ -444,6 +448,7 @@ public class Main {
 	}
 	private static void editShift() throws Exception {
 		Worker worker = selectWorker();
+		sc = new Scanner (System.in);
 		System.out.println("These are the shifts associated to worker "+worker.getWorkerName()+ " " +worker.getWorkerSurname()+ " ordered by date: ");
 		consultShifts(worker);
 		Shift shift = new Shift();
@@ -491,6 +496,7 @@ public class Main {
 	
 	private static void consultShifts(Worker w) throws Exception {
 		System.out.println("Do you want to see your shifts for an specific date? [YES/NO]");
+		sc = new Scanner (System.in);
 		String answer = sc.next();
 		//para que busque el turno del trabajador para x dia
 		if(answer.equalsIgnoreCase("YES")) {
@@ -527,15 +533,15 @@ public class Main {
 	
 	public static void createPatient () throws NotBoundException, Exception {
 		//System.out.flush();
-
+		sc = new Scanner (System.in);
 		Patient p = new Patient();
 
 		System.out.println("Please, input the patient info:");
 		System.out.print("Name: "); 
-		String name = sc.nextLine();
+		String name = sc.next();
 		p.setPatientName(name);
 		System.out.print("Surname: "); 
-		String surname = sc.nextLine();
+		String surname = sc.next();
 		p.setPatientSurname(surname);
 		System.out.print("Medical card number: "); 
 		Integer medCardNumber; 
@@ -699,7 +705,7 @@ public class Main {
 		}
 
 		System.out.print("Address: ");				
-		String address = sc.nextLine();
+		String address = sc.next();
 		p.setPatientAddress(address);
 		Boolean hospitalized;
 		String hosp;
@@ -726,6 +732,7 @@ public class Main {
 	
 	public static void createWorker() throws Exception{
 		Worker w = new Worker();
+		sc = new Scanner (System.in);
 
 		System.out.println("Please, input the worker info:");
 		System.out.print("Name: ");
@@ -771,6 +778,7 @@ public class Main {
 	 */
 	public static void createShift(Worker worker) throws Exception{
 		Shift s = new Shift();
+		sc = new Scanner (System.in);
 		System.out.print("Start date for this shift [yyyy-mm-dd]:  ");
 		String startDate = sc.next();
 		Date date;
@@ -850,6 +858,8 @@ public class Main {
 	}
 
 	public static void addMedTest() throws Exception{
+		//TODO terminar de pedir todos los atributos CONTROLANDO EXCEPCIONES
+		sc = new Scanner (System.in);
 		Patient patient = new Patient(selectPatient());
 		MedicalTest medTest = new MedicalTest();
 		medTest.setPatientId(patient.getMedicalCardId());
@@ -862,8 +872,7 @@ public class Main {
 	
 	
 	private static void adAccessToPatientsProfile() throws Exception { 
-
-		System.out.flush();
+		sc = new Scanner (System.in);
 		System.out.println("Access to patient profile.");
 		System.out.println("Please, select one of the following option[0-2]");
 		System.out.println("1. Change patient data.");
@@ -880,7 +889,7 @@ public class Main {
 			switch (key) {
 				case 1: //Cambiar cosas del patient
 
-					System.out.flush();
+					sc = new Scanner (System.in);
 					System.out.println("Change Patient data.");
 					patient = selectPatient();
 					System.out.println("The selected patient is:");
@@ -905,13 +914,13 @@ public class Main {
 						switch (key2) { 
 							case 1: //nombre
 								System.out.print("Introduce the new name: ");
-								String newName = sc.nextLine();
+								String newName = sc.next();
 								jdbc.updatePatientName( patient.getMedicalCardId(), newName);
 								// ctrl2 = 1; //TODO - ns si dejar esto o si quitarlo para q se quede en el menu hasta q no le de a exit (por si quiere seguir haciendo cosas)
 								break;			//por favor puede alguien decir si si/no a esto? o se va a quedar aqui hasta el fin de los tiempos xD
 							case 2: //apellidos
 								System.out.print("Introduce the new surname: ");
-								String newSurname = sc.nextLine();
+								String newSurname = sc.next();
 								jdbc.updatePatientSurname( patient.getMedicalCardId(), newSurname);
 								// ctrl2 = 1; // lo mismo q arriba
 								break;
@@ -991,7 +1000,7 @@ public class Main {
 								break;
 							case 5: //alergias
 								System.out.print("Introduce the new allergies (none - if patient doesnt have): ");
-								String newAllergies = sc.nextLine();
+								String newAllergies = sc.next();
 								jdbc.updatePatientAllergies( patient.getMedicalCardId(), newAllergies);
 								// ctrl2 = 1; // lo mismo q arriba
 								break;
@@ -1080,7 +1089,7 @@ public class Main {
 								break;
 							case 8: //direccion
 								System.out.print("Introduce the new address: ");
-								String newAddress = sc.nextLine();
+								String newAddress = sc.next();
 								jdbc.updatePatientAddress( patient.getMedicalCardId(), newAddress);
 								// ctrl2 = 1; // lo mismo q arriba
 								break;
@@ -1105,7 +1114,7 @@ public class Main {
 					break;
 				case 2: //Añadir un doctor al patient
 
-					System.out.flush();
+					sc = new Scanner (System.in);
 					System.out.println("Add doctor to patient.");
 
 					patient = selectPatient();
@@ -1131,6 +1140,7 @@ public class Main {
 	private static Patient selectPatient() throws Exception {
 		List<Patient> patientList = new ArrayList<Patient>();
 		Patient patient = null;
+		sc = new Scanner (System.in);
 		while(patientList.isEmpty()) {
 		System.out.print("Enter the patient's surname: ");
 		String surname = sc.next();
@@ -1147,6 +1157,7 @@ public class Main {
 	private static Worker selectWorker() throws Exception {
 		List<Worker> wList = new ArrayList<Worker>();
 		Worker w = null;
+		sc = new Scanner (System.in);
 		while(wList.isEmpty()) {
 		System.out.println("Enter the doctor's surname:");
 		String surname = sc.next();
@@ -1171,7 +1182,7 @@ public class Main {
 		byte[] hash = md.digest();
 		User user = new User(username, hash, role);
 		userman.newUser(user);
-		Worker worker = new Worker("admin","admin","none","adStaff");
+		Worker worker = new Worker("admin","admin","none","adStaff",1);
 		jdbc.addWorker(worker );
 		Worker created = new Worker(jdbc.selectWorker(1));
 		jdbc.createLinkUserWorker(user.getUserId(), created.getWorkerId());
