@@ -2,17 +2,21 @@ package application.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class linkDocPopupController {
+public class LinkDocPopupController {
     @FXML
     private Button yesLinkDocPopupButton;
     @FXML
     private Button noLinkDocPopupButton;
     //methods for linkDocPopup
-    private AdStaffMenuController adStaffMenuController = new AdStaffMenuController();
     
+    private static AdStaffMenuController adStaffMenuController;
+
     /**
      * Used to change the view into Assign a new doctor when user clicks yes.
      * closes window when user clicks one of the options
@@ -20,9 +24,14 @@ public class linkDocPopupController {
      */
     @FXML
     private void onYesButton(ActionEvent aEvent) {
-        adStaffMenuController.displayAssignANewDoctorView(aEvent); //TODO - need tofix this bs @meto@me
+
+        adStaffMenuController.displayAssignANewDoctorView(aEvent);
         Stage stage = (Stage) yesLinkDocPopupButton.getScene().getWindow();
         stage.close();
+    }
+
+    public void setAdStaffController() {
+        adStaffMenuController = AdStaffMenuController.passAdStaffMenuController();
     }
 
     /**
