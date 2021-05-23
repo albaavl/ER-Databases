@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
@@ -135,16 +136,25 @@ public class AdStaffMenuController implements Initializable {
 
     //Menu functions
 
-    public void createPatient(ActionEvent actionEvent) throws IOException, NotBoundException { //TODO - quitar strings de prueba jej
+    public void createPatient(ActionEvent actionEvent) throws IOException, NotBoundException, SQLException { //TODO - quitar strings de prueba jej
 
         Patient p = new Patient();
 
         String name = nameTextField.getText();
+        if (name == "") {
+            ErrorPopup.errorPopup(2);
+            return;
+        }
         p.setPatientName(name);
         System.out.println(name);
+        
         String surname = surnameTextField.getText();
-        System.out.println(surname);
+        if (surname == "") {
+            ErrorPopup.errorPopup(2);
+            return;
+        } 
         p.setPatientSurname(surname);
+        System.out.println(surname);
 
         String gender = "";
         if (femaleRadioButton.isSelected()) {
@@ -160,16 +170,22 @@ public class AdStaffMenuController implements Initializable {
         System.out.println(gender);
 
 
-        if( bloodTypeChoiceBox.getSelectionModel().isEmpty() ){
-            String bloodType = bloodTypeChoiceBox.getValue(); //TODO - ver q hace si no seleccionas nada.
+        if( !bloodTypeChoiceBox.getSelectionModel().isEmpty() ){
+            String bloodType = bloodTypeChoiceBox.getValue(); 
             p.setBloodType(bloodType);
             System.out.println(bloodType);
         } else {
             System.out.println("aqui no hay na (blood)");
             ErrorPopup.errorPopup(2);
+            return;
+        }
+        
+        if(birthDatePicker.getEditor().getText() == ""){
+            ErrorPopup.errorPopup(2);
+            return;
         }
 
-        Date bDate = Date.valueOf(birthDatePicker.getValue());  //TODO - añadir algo para controlar q pones algo en este coso.
+        Date bDate = Date.valueOf(birthDatePicker.getValue());
         if ((bDate.before(Date.valueOf(LocalDate.now()))) || bDate.equals(Date.valueOf(LocalDate.now()))) {
             p.setbDate(bDate);
             System.out.println("yay");
@@ -181,13 +197,23 @@ public class AdStaffMenuController implements Initializable {
         }
 
 
-        String allergies = allergiesTextArea.getText(); //TODO - ver q pasa si no pones nada
+        String allergies = allergiesTextArea.getText();
+        // if (allergies == "") {
+        //     ErrorPopup.errorPopup(2);
+        //     return;
+        // }
         p.setAllergieType(allergies);
         System.out.println(allergies);
 
-        String address = addressTextField.getText(); //TODO - ver q pasa si no pones nada
+        String address = addressTextField.getText();
+        if (address == "") {
+            ErrorPopup.errorPopup(2);
+            return;
+        }
         p.setPatientAddress(address);
         System.out.println(address);
+
+        //TODO - @dumbfuck faltan cosas q añadir (Hospitalized, chech in date) lmao xD
 
         // jdbc.addPatient(p);
 
@@ -195,7 +221,7 @@ public class AdStaffMenuController implements Initializable {
         //en vez de hacer dos popup a la vez
 
         //Preguntar al subnormal de turno si quiere asignar un médico al paciente #popup
-        // addDoctorToPatientPopup(); 
+        addDoctorToPatientPopup(); 
 
         //Congratulaciones has hecho las cosas bien y el paciente esta en la db! #popup y reset de todas las opciones
 
@@ -214,41 +240,14 @@ public class AdStaffMenuController implements Initializable {
 
     //LinkDocPopup Stuff here
 
-    //objects on linkDocPopup
-    @FXML
-    private Button yesLinkDocPopupButton;
-    @FXML
-    private Button noLinkDocPopupButton;
-    //methods for linkDocPopup
-
-    /**
-     * Used to change the view into Assign a new doctor when user clicks yes.
-     * closes window when user clicks one of the options
-     * @param aEvent
-     */
-    private void onYesButton(ActionEvent aEvent) {
-        displayAssignANewDoctorView(aEvent);
-        Stage stage = (Stage) yesLinkDocPopupButton.getScene().getWindow();
-        stage.close();
-    }
-
-    /**
-     * closes window when user clicks one of the options. Does nothing else at all xD
-     * @param aEvent
-     */
-    private void onNoButton(ActionEvent aEvent) {
-        Stage stage = (Stage) noLinkDocPopupButton.getScene().getWindow();
-        stage.close();
-    }
-
     private void addDoctorToPatientPopup() throws IOException {
         FXMLLoader loaderLinkDoc;
         Parent rootLinkDoc;
         Scene sceneLinkDoc;
         Stage stageLinkDoc;
-        // LinkDocPopupController linkDocPopupController; //TODO - fuck me idk what to do w dis y ahora mismo me sobra mazo xD
+        // linkDocPopupController linkDocPopupController; //TODO - fuck me idk what to do w dis y ahora mismo me sobra mazo xD
 
-        loaderLinkDoc = new FXMLLoader(getClass().getResource("controllers/linkDocPopup.fxml")); 
+        loaderLinkDoc = new FXMLLoader(getClass().getResource("linkDocPopup.fxml")); 
         rootLinkDoc = loaderLinkDoc.load();
         // linkDocPopupController = loaderLinkDoc.getController();
 
@@ -259,5 +258,25 @@ public class AdStaffMenuController implements Initializable {
         stageLinkDoc.show();
     }
 
+    //Success! Stuff here
+
+    // private void addPatientSuccess() throws IOException {
+    //     FXMLLoader loaderAddPatientSuccess;
+    //     Parent rootAddPatientSuccess;
+    //     Scene sceneAddPatientSuccess;
+    //     Stage stageAddPatientSuccess;
+    //     // LinkDocPopupController linkDocPopupController; //TODO - hay q arreglar esto etc
+
+    //     loaderAddPatientSuccess = new FXMLLoader(getClass().getResource("AddPatientSuccess.fxml")); //TODO - jej
+    //     rootAddPatientSuccess = loaderAddPatientSuccess.load();
+    //     // linkDocPopupController = loaderLinkDoc.getController();
+
+    //     sceneAddPatientSuccess = new Scene(rootAddPatientSuccess);
+    //     stageAddPatientSuccess = new Stage();
+    //     stageAddPatientSuccess.setScene(sceneAddPatientSuccess);
+    //     stageAddPatientSuccess.setTitle("Success");
+    //     stageAddPatientSuccess.show();
+
+    // }
 }
 

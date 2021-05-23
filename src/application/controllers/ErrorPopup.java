@@ -27,7 +27,7 @@ public class ErrorPopup {
         ErrorPopupController errorPopupController;
         switch (errorType) {
             case 0:
-                loaderError = new FXMLLoader(getClass().getResource("controllers/errorPopup.fxml")); 
+                loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
                 rootError = loaderError.load(); 
                 errorPopupController = loaderError.getController();
                 errorPopupController.displayErrorText("Something went wrong, please check everything and try again.");
@@ -38,7 +38,7 @@ public class ErrorPopup {
                 stageError.show();
                 break;
             case 1:
-                loaderError = new FXMLLoader(getClass().getResource("controllers/errorPopup.fxml")); 
+                loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
                 rootError = loaderError.load(); 
                 errorPopupController = loaderError.getController();
                 errorPopupController.displayErrorText("Please, use a correct date.\nYour birthdate cant be on the future.");
@@ -49,7 +49,7 @@ public class ErrorPopup {
                 stageError.show();
                 break;
             case 2:
-                loaderError = new FXMLLoader(getClass().getResource("controllers/errorPopup.fxml")); 
+                loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
                 rootError = loaderError.load(); 
                 errorPopupController = loaderError.getController();
                 errorPopupController.displayErrorText("Please, fill all the options.");
