@@ -22,7 +22,6 @@ public class MedicalTest implements Serializable{
 	private Date dateMedTest;
 	private String type;
 	private String result; 
-	//private byte[] testImage;
 
 	public MedicalTest() {
 			super();
@@ -36,7 +35,7 @@ public class MedicalTest implements Serializable{
 		this.patient_id = patientId;
 	}
 	
-	public MedicalTest(int id, Date date, String type, String result, /*byte[] img,*/ int patientId) {
+	public MedicalTest(int id, Date date, String type, String result, int patientId) {
 		super();
 		this.id = id;
 		this.dateMedTest = date;
@@ -72,7 +71,7 @@ public class MedicalTest implements Serializable{
 	@Override
 	public String toString() {
 		return "MedicalTest [medicalTestId=" + id + ", dateMedTest=" + dateMedTest + ", testType=" + type
-				+ ", testResult=" + result + ", testImage="/* + Arrays.toString(testImage)*/ + ", patientId=" + id
+				+ ", testResult=" + result + ", patientId=" + id
 				+ "]";
 	}
 	/**
@@ -145,20 +144,6 @@ public class MedicalTest implements Serializable{
 	public void setTestResult(String testResult) {
 		this.result = testResult;
 	}
-	/**
-	 * Used to get the image (result) of the medical test.
-	 * @return [byte[]] The image obtained from the medical test
-	 */
-	/*public byte[]  getTestImage() {
-		return testImage;
-	}*/
-	/**
-	 * Used to set the result of the medical test
-	 * @param testImage- The image resulted from the medical test
-	 */
-	/*public void setTestImage(byte[] testImage) {
-		this.testImage = testImage;
-	}*/
 
 	public Integer getPatientId() {
 		return patient_id;

@@ -858,15 +858,55 @@ public class Main {
 	}
 
 	public static void addMedTest() throws Exception{
-		//TODO terminar de pedir todos los atributos CONTROLANDO EXCEPCIONES
 		sc = new Scanner (System.in);
 		Patient patient = new Patient(selectPatient());
 		MedicalTest medTest = new MedicalTest();
 		medTest.setPatientId(patient.getMedicalCardId());
+		System.out.print("Date for this medical test [yyyy-mm-dd]:  ");
+		String medTestDate = sc.next();
+		Date date;
+		try { 
+			date = Date.valueOf(medTestDate);
+			if (date.before(Date.valueOf(LocalDate.now())) || date.equals(Date.valueOf(LocalDate.now()))) {
+				medTest.setDateMedTest(date);
+			} else {
+				do {
+					System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");
+					medTestDate = sc.next();
+					date = Date.valueOf(medTestDate);
+				} while ( (!date.before(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now())));
+				medTest.setDateMedTest(date);
+			}
+		} catch (Exception e) {
+			int b=0;
+			do {
+				try {	
+					System.out.print("Please introduce a valid date format [yyyy-mm-dd]: ");
+					medTestDate = sc.next();
+					date = Date.valueOf(medTestDate); 
+			
+					if (date.before(Date.valueOf(LocalDate.now()))) {
+						medTest.setDateMedTest(date);
+					} else {
+						do {
+							System.out.print("Please introduce a valid date [yyyy-mm-dd]: ");							
+							medTestDate = sc.next();
+							date = Date.valueOf(medTestDate);
+						} while ((!date.before(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now())));
+						medTest.setDateMedTest(date);
+					}
+					b=1;
+				} catch (Exception e1) {
+				}
+			} while (b==0);
+		}
 		System.out.print("Type of medical test: ");
 		String type = sc.next();
 		medTest.setTestType(type);
-		jdbc.addMedicalTest(medTest);//Connection c, MedicalTest medtest
+		System.out.print("Result of the medical test: ");
+		String result = sc.next();
+		medTest.setTestResult(result);
+		jdbc.addMedicalTest(medTest);
 		System.out.println("Medical test added");
 	}
 	
