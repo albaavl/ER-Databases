@@ -43,7 +43,7 @@ public class SQL implements SQLInterface{
 				   + " allergies     TEXT,"
 				   + " check_in    DATE    NOT NULL,"
 				   + " hospitalized BOOLEAN,"
-				   + " userId INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL)";
+				   + " userId INTEGER REFERENCES users(USERID) ON UPDATE CASCADE ON DELETE SET NULL)";
 		stmt1.executeUpdate(sql1);
 		stmt1.close();
 		Statement stmt3 = c.createStatement();
@@ -98,7 +98,7 @@ public class SQL implements SQLInterface{
 	@Override
 	public void addPatient(Patient p) throws SQLException{
 		if (p.getAllergieType()==null) {
-			String sq1 = "INSERT INTO patients ( medical_card_number, name, surname, gender, birthdate,  address, blood_type, check_in, hospitalized, userId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String sq1 = "INSERT INTO patients ( medical_card_number, name, surname, gender, birthdate,  address, blood_type, check_in, hospitalized) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
 			preparedStatement.setInt(1, p.getMedicalCardId());
 			preparedStatement.setString(2, p.getPatientName());
@@ -109,11 +109,10 @@ public class SQL implements SQLInterface{
 			preparedStatement.setString(7, p.getBloodType());
 			preparedStatement.setDate(8, p.getCheckInDate());
 			preparedStatement.setBoolean(9, p.getHospitalized());
-			preparedStatement.setInt(10, p.getUserId());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 		}else {
-			String sq1 = "INSERT INTO patients ( medical_card_number, name, surname, gender, birthdate,  address, blood_type, allergies, check_in, hospitalized, userId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String sq1 = "INSERT INTO patients ( medical_card_number, name, surname, gender, birthdate,  address, blood_type, allergies, check_in, hospitalized) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
 			preparedStatement.setInt(1, p.getMedicalCardId());
 			preparedStatement.setString(2, p.getPatientName());
@@ -125,7 +124,6 @@ public class SQL implements SQLInterface{
 			preparedStatement.setString(8, p.getAllergieType());
 			preparedStatement.setDate(9, p.getCheckInDate());
 			preparedStatement.setBoolean(10, p.getHospitalized());
-			preparedStatement.setInt(11, p.getUserId());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 		}
@@ -559,7 +557,7 @@ public class SQL implements SQLInterface{
 	
 	@Override
 	public void createLinkUserPatient(int userId, int medCardNumber) throws Exception {
-		String sql1 = "UPDATE patients SET userId = ? WHERE id = ? ";
+		String sql1 = "UPDATE patients SET userId = ? WHERE medical_card_number = ? ";
 		PreparedStatement pStatement = c.prepareStatement(sql1);
 		pStatement.setInt(1, userId);
 		pStatement.setInt(2, medCardNumber);

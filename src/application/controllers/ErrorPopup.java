@@ -14,6 +14,8 @@ public class ErrorPopup {
      * <p> {@code 0} General error (unspecified)
      * <p> {@code 1} ur birthdate cant be tomorrow nor on any future date bruh
      * <p> {@code 2} Please fill all the values lmao.
+     * <p> {@code 3} Bruh u cant check in on the future.
+     * <p> {@code 4} Numeros, no letras ffs aint that hard.
      * <p> {@code X} idk keep adding stuff here...
 
      * @param errorType - int
@@ -57,6 +59,28 @@ public class ErrorPopup {
                 stageError = new Stage();
                 stageError.setScene(sceneError);
                 stageError.setTitle("Error: Fill all the options");
+                stageError.show();
+                break;
+            case 3:
+                loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
+                rootError = loaderError.load(); 
+                errorPopupController = loaderError.getController();
+                errorPopupController.displayErrorText("Please, use a correct date.\nCheck-in date cant be on the future.");
+                sceneError = new Scene(rootError);
+                stageError = new Stage();
+                stageError.setScene(sceneError);
+                stageError.setTitle("Error: Wrong date");
+                stageError.show();
+                break;
+            case 4:
+                loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
+                rootError = loaderError.load(); 
+                errorPopupController = loaderError.getController();
+                errorPopupController.displayErrorText("Please, put a number.");
+                sceneError = new Scene(rootError);
+                stageError = new Stage();
+                stageError.setScene(sceneError);
+                stageError.setTitle("Error: Wrong Id");
                 stageError.show();
                 break;
             default:
