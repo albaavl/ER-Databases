@@ -28,6 +28,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
 // import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -70,7 +71,9 @@ public class AdStaffMenuController implements Initializable {
         jdbc = databasecontroller;
         userman = userManager;
         adStaffMenuWelcomeText.setText("FUCK YEAH " + name +  " get fkd.\n It works!");
-        
+        hideAll();
+        paneWelcomeView.setVisible(true);
+        paneWelcomeView.setDisable(false);
     }
     /**
      * hide+disable every pane
@@ -321,16 +324,16 @@ public class AdStaffMenuController implements Initializable {
 
         String[] uspassw = register(p.getPatientName(),p.getPatientSurname(), p.getMedicalCardId(), 1);
 
-        
+        addPatientSuccess(uspassw);
 
-        addDoctorToPatientPopup(); 
+        // addDoctorToPatientPopup(); 
 
         resetCreatePatientScene();
     }   
 
     //LinkDocPopup Stuff here
 
-    private void addDoctorToPatientPopup() throws IOException {
+    public void addDoctorToPatientPopup() throws IOException {
         FXMLLoader loaderLinkDoc;
         Parent rootLinkDoc;
         Scene sceneLinkDoc;
@@ -345,30 +348,42 @@ public class AdStaffMenuController implements Initializable {
         sceneLinkDoc = new Scene(rootLinkDoc);
         stageLinkDoc = new Stage();
         stageLinkDoc.setScene(sceneLinkDoc);
+
+        Image icon = new Image("application/images/healthcare.png");
+        stageLinkDoc.getIcons().add(icon);	
+
+        stageLinkDoc.setResizable(false);
         stageLinkDoc.setTitle("Link a doctor to this patient");
         stageLinkDoc.show();
     }
 
     //Success! Stuff here
 
-    // private void addPatientSuccess() throws IOException {
-    //     FXMLLoader loaderAddPatientSuccess;
-    //     Parent rootAddPatientSuccess;
-    //     Scene sceneAddPatientSuccess;
-    //     Stage stageAddPatientSuccess;
-    //     // LinkDocPopupController linkDocPopupController; //TODO - hay q arreglar esto etc
+    private void addPatientSuccess(String[] uspass) throws IOException {
+        FXMLLoader loaderAddPatientSuccess;
+        Parent rootAddPatientSuccess;
+        Scene sceneAddPatientSuccess;
+        Stage stageAddPatientSuccess;
+        AddPatientSuccessController addPatientSuccessController;
 
-    //     loaderAddPatientSuccess = new FXMLLoader(getClass().getResource("AddPatientSuccess.fxml")); //TODO - jej
-    //     rootAddPatientSuccess = loaderAddPatientSuccess.load();
-    //     // linkDocPopupController = loaderLinkDoc.getController();
+        loaderAddPatientSuccess = new FXMLLoader(getClass().getResource("AddPatientSuccess.fxml"));
+        rootAddPatientSuccess = loaderAddPatientSuccess.load();
+        addPatientSuccessController = loaderAddPatientSuccess.getController();
+        addPatientSuccessController.setAdStaffController();
+        addPatientSuccessController.setUsernamePassword(uspass[0], uspass[1]);
 
-    //     sceneAddPatientSuccess = new Scene(rootAddPatientSuccess);
-    //     stageAddPatientSuccess = new Stage();
-    //     stageAddPatientSuccess.setScene(sceneAddPatientSuccess);
-    //     stageAddPatientSuccess.setTitle("Success");
-    //     stageAddPatientSuccess.show();
+        sceneAddPatientSuccess = new Scene(rootAddPatientSuccess);
+        stageAddPatientSuccess = new Stage();
+        stageAddPatientSuccess.setScene(sceneAddPatientSuccess);
 
-    // }
+        Image icon = new Image("application/images/healthcare.png");
+        stageAddPatientSuccess.getIcons().add(icon);	
+
+        stageAddPatientSuccess.setResizable(false);
+        stageAddPatientSuccess.setTitle("Success");
+        stageAddPatientSuccess.show();
+
+    }
 
     //HardResetScenes
     
