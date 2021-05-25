@@ -122,7 +122,7 @@ public class LogInController {
 
         AdStaffMenuController adStaffMenuController = loader.getController();
         adStaffMenuController.setAdStaffController(adStaffMenuController);
-        adStaffMenuController.displayWelcomeText(jdbc.selectWorker(userId).getWorkerName(), jdbc);
+        adStaffMenuController.displayWelcomeText(jdbc.selectWorker(userId).getWorkerName(), jdbc, userman);
         
         stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
         scene = new Scene(root);
