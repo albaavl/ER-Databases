@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
 import java.rmi.NotBoundException;
@@ -33,6 +34,10 @@ public class Main2 extends Application {
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
+
+			Image icon = new Image("application/images/healthcare.png");
+			primaryStage.getIcons().add(icon);	
+
 			primaryStage.setResizable(false);
 			primaryStage.setTitle("Quiron's ER Database");
 			primaryStage.show();
