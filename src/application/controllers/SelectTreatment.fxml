@@ -2,10 +2,11 @@
 
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -54,56 +55,33 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Pane fx:id="addTreatmentView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                  <Pane fx:id="selectTreatmentView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
-                        <Label fx:id="titleAddTreatment" layoutX="56.0" layoutY="22.0" prefHeight="83.0" prefWidth="631.0" text="Create Treatment to patient (medCard = ?)">
+                        <Label layoutX="151.0" layoutY="43.0" prefHeight="86.0" prefWidth="458.0" text="Please choose the treatment you would like to edit:">
                            <font>
-                              <Font name="Arial Bold" size="27.0" />
+                              <Font name="Arial" size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="duration" layoutX="153.0" layoutY="214.0" prefHeight="25.0" prefWidth="242.0" promptText="Leave it empty if you don't want to edit it" />
-                        <Label layoutX="58.0" layoutY="211.0" prefHeight="26.0" prefWidth="63.0" text="Duration">
-                           <font>
-                              <Font name="Arial" size="14.0" />
-                           </font>
-                        </Label>
-                        <DatePicker fx:id="startDate" layoutX="309.0" layoutY="148.0" prefHeight="16.0" prefWidth="267.0" promptText="Leave it empty if you don't want to edit it" />
-                        <Label layoutX="169.0" layoutY="144.0" prefHeight="28.0" prefWidth="88.0" text="Start Date">
-                           <font>
-                              <Font name="Arial" size="14.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="52.0" layoutY="289.0" prefHeight="31.0" prefWidth="84.0" text="Medication">
-                           <font>
-                              <Font name="Arial" size="14.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="medication" layoutX="152.0" layoutY="295.0" prefHeight="25.0" prefWidth="242.0" promptText="Leave it empty if you don't want to edit it" />
-                        <Label layoutX="416.0" layoutY="217.0" prefHeight="31.0" prefWidth="84.0" text="Diagnosis">
-                           <font>
-                              <Font name="Arial" size="14.0" />
-                           </font>
-                        </Label>
-                        <TextArea fx:id="diagnosis" layoutX="495.0" layoutY="209.0" prefHeight="161.0" prefWidth="227.0" promptText="Leave it empty if you don't want to edit it">
-                           <font>
-                              <Font name="Arial" size="15.0" />
-                           </font>
-                        </TextArea>
-                        <Label layoutX="53.0" layoutY="385.0" prefHeight="31.0" prefWidth="125.0" text="Recommendations">
-                           <font>
-                              <Font name="Arial" size="14.0" />
-                           </font>
-                        </Label>
-                        <TextArea fx:id="advice" layoutX="180.0" layoutY="383.0" prefHeight="161.0" prefWidth="285.0" promptText="Leave it empty if you don't want to edit it">
-                           <font>
-                              <Font name="Arial" size="15.0" />
-                           </font>
-                        </TextArea>
-                        <Button fx:id="addTreatment" layoutX="535.0" layoutY="457.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="128.0" style="-fx-border-radius: 5;" text="Add">
-                           <font>
-                              <Font name="Arial" size="14.0" />
-                           </font>
-                        </Button>
+                        <ScrollPane layoutX="121.0" layoutY="137.0" prefHeight="378.0" prefWidth="523.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="378.0" prefWidth="516.0">
+                                 <children>
+                                    <TableView fx:id="treatmentsTable" prefHeight="378.0" prefWidth="516.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columns>
+                                        <TableColumn prefWidth="44.929322600364685" text="ID" />
+                                        <TableColumn prefWidth="59.03182601928711" text="Date" />
+                                          <TableColumn prefWidth="70.30147552490234" text="Duration" />
+                                          <TableColumn prefWidth="98.87699890136719" text="Medication" />
+                                          <TableColumn prefWidth="98.77471923828125" text="Diagnosis" />
+                                          <TableColumn prefWidth="132.55868530273438" text="Recommendations" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                        <Button fx:id="selectTreatment" layoutX="429.0" layoutY="554.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="67.0" text="Select" />
+                        <TextField fx:id="treatmentID" layoutX="171.0" layoutY="552.0" prefHeight="34.0" prefWidth="211.0" promptText="Please, input the ID of the treatment" />
                      </children>
                   </Pane>
                </children>

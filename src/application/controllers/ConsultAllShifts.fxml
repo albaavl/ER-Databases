@@ -52,7 +52,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <ScrollPane prefHeight="647.3333333333334" prefWidth="744.0">
+                  <ScrollPane fx:id="allShiftsView" prefHeight="647.3333333333334" prefWidth="744.0">
                      <content>
                         <TableView fx:id="shiftsTable" prefHeight="640.0" prefWidth="741.0">
                            <columns>

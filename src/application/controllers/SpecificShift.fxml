@@ -54,7 +54,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Pane prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;">
+                  <Pane fx:id="specificShiftView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;">
                      <children>
                         <DatePicker fx:id="selectedDate" layoutX="255.0" layoutY="170.0" prefHeight="37.0" prefWidth="249.0" promptText="Date" />
                         <Label layoutX="155.0" layoutY="94.0" text="Please select the specific date:">

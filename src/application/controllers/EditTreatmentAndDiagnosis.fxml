@@ -54,9 +54,9 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Pane fx:id="addTreatmentView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                  <Pane fx:id="editTreatmentView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
-                        <Label fx:id="titleAddTreatment" layoutX="56.0" layoutY="22.0" prefHeight="83.0" prefWidth="631.0" text="Create Treatment to patient (medCard = ?)">
+                        <Label fx:id="titleTreatment" layoutX="231.0" layoutY="24.0" prefHeight="75.0" prefWidth="266.0" text="Edit treatment (id=?)">
                            <font>
                               <Font name="Arial Bold" size="27.0" />
                            </font>
@@ -99,7 +99,7 @@
                               <Font name="Arial" size="15.0" />
                            </font>
                         </TextArea>
-                        <Button fx:id="addTreatment" layoutX="535.0" layoutY="457.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="128.0" style="-fx-border-radius: 5;" text="Add">
+                        <Button fx:id="editTreatment" layoutX="535.0" layoutY="457.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="128.0" style="-fx-border-radius: 5;" text="Edit treatment">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
