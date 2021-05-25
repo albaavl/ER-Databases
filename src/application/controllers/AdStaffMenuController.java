@@ -118,6 +118,11 @@ public class AdStaffMenuController implements Initializable {
     private TextField surnameTextField;
     @FXML
     private DatePicker birthDatePicker;
+    @FXML
+    private DatePicker checkInDatePicker;
+    @FXML 
+    private ComboBox<String> hospitalizedChoiceBox;
+    private String[] hospOptionStrings = {"Yes","No"};
     //BLOODTYPE STUFF
     @FXML
     private ComboBox<String> bloodTypeChoiceBox;
@@ -138,6 +143,7 @@ public class AdStaffMenuController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         bloodTypeChoiceBox.getItems().addAll(bloodTypeStrings);
+        hospitalizedChoiceBox.getItems().addAll(hospOptionStrings);
         //workerTypeComboBox.getItems().addAll(workerTypeStrings);
     }
 
