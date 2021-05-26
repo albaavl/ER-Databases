@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.*;
 @Table(name = "workers")
 @XmlRootElement(name = "Worker")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = { "specialtyId", "typeWorker"})
+@XmlType(propOrder = { "specialtyId", "typeWorker", "shift"})
 public class Worker implements Serializable{
 	
 	private static final long serialVersionUID = 5053907057578582101L;
@@ -18,7 +18,7 @@ public class Worker implements Serializable{
 	@Id
 	@GeneratedValue(generator = "workers")
 	@TableGenerator(name = "workers", table = "sqlite_sequence",
-		pkColumnName = "workerName", valueColumnName = "seq", pkColumnValue = "workers")
+		pkColumnName = "name", valueColumnName = "seq", pkColumnValue = "workers")
 	
 	@XmlTransient
 	private Integer workerId;

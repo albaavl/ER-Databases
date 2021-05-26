@@ -4,12 +4,7 @@ import java.rmi.NotBoundException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.*;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import db.pojos.*;
-import db.xml.utils.SQLDateAdapter;
 
 
 public class SQL implements SQLInterface{
