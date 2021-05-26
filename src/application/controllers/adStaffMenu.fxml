@@ -70,12 +70,19 @@
                                           <Font name="Arial" size="12.0" />
                                        </font>
                                     </Button>
-                                    <Button layoutX="30.0" layoutY="55.0" mnemonicParsing="false" onAction="#displayChangePatientDataView" prefHeight="25.0" prefWidth="192.0" text="Change patient data">
+                                    <Button layoutX="29.0" layoutY="115.0" mnemonicParsing="false" onAction="#displayAssignANewDoctorView" prefHeight="25.0" prefWidth="192.0" text="Assign a new doctor">
                                        <font>
                                           <Font name="Arial" size="12.0" />
                                        </font>
                                     </Button>
-                                    <Button layoutX="30.0" layoutY="87.0" mnemonicParsing="false" onAction="#displayAssignANewDoctorView" prefHeight="25.0" prefWidth="192.0" text="Assign a new doctor">
+                                    <Button fx:id="addMedicalTestButton" layoutX="29.0" layoutY="146.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Add medical test" />
+                                    <Button fx:id="deletePatientButton" layoutX="29.0" layoutY="177.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Delete patient" />
+                                    <TitledPane fx:id="accessToPatientProfileButton" animated="false" layoutX="30.0" layoutY="53.0" prefHeight="25.0" prefWidth="192.0" text="Access to a patient's profile">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                      </content>
+                                    </TitledPane>
+                                    <Button layoutX="30.0" layoutY="85.0" mnemonicParsing="false" onAction="#displayChangePatientDataView" prefHeight="25.0" prefWidth="192.0" text="Change patient data">
                                        <font>
                                           <Font name="Arial" size="12.0" />
                                        </font>
@@ -102,7 +109,11 @@
                                     <Button layoutX="30.0" layoutY="23.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Register new worker" />
                                     <Button layoutX="30.0" layoutY="55.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Edit worker data" />
                                     <Button layoutX="30.0" layoutY="87.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Edit worker shift" />
+<<<<<<< HEAD
+                                    <Button fx:id="deleteWorkerButton" layoutX="30.0" layoutY="118.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Delete worker" />
+=======
                                     <Button layoutX="30.0" layoutY="119.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Delete Worker" />
+>>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
                                  </children>
                               </Pane>
                            </content>
@@ -130,9 +141,13 @@
                   </Pane>
                   <Pane fx:id="paneCreatePatientView" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
+<<<<<<< HEAD
+                        <Text layoutX="190.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Register new Patient" wrappingWidth="404.076171875">
+=======
                         <Text layoutX="190.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PatientCreate Screen" wrappingWidth="404.076171875">
+>>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
                            <font>
-                              <Font size="42.0" />
+                              <Font name="Arial" size="42.0" />
                            </font>
                         </Text>
                         <Text layoutX="159.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
@@ -192,12 +207,12 @@
                            </font>
                         </Text>
                         <TextField fx:id="addressTextField" layoutX="221.0" layoutY="457.0" prefHeight="25.0" prefWidth="400.0" />
-                        <Text layoutX="161.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Birthdate">
+                        <Text layoutX="153.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Birthdate">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
-                        <DatePicker fx:id="birthDatePicker" layoutX="239.0" layoutY="504.0" />
+                        <DatePicker fx:id="birthDatePicker" layoutX="226.0" layoutY="503.0" />
                         <Group layoutX="234.0" layoutY="197.0">
                            <children>
                               <RadioButton fx:id="maleRadioButton" mnemonicParsing="false" text="Male">
@@ -208,22 +223,38 @@
                               <RadioButton fx:id="femaleRadioButton" layoutX="81.0" mnemonicParsing="false" text="Female" toggleGroup="$genderRadioButton" />
                            </children>
                         </Group>
+<<<<<<< HEAD
+                        <Button layoutX="350.0" layoutY="585.0" mnemonicParsing="false" onAction="#createPatient" text="CREATE">
+=======
                         <Button layoutX="347.0" layoutY="591.0" mnemonicParsing="false" onAction="#createPatient" text="Porfavoooo">
+>>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
                            <font>
-                              <Font name="Arial" size="14.0" />
+                              <Font name="Arial" size="16.0" />
                            </font>
                         </Button>
+<<<<<<< HEAD
+                        <Text layoutX="125.0" layoutY="556.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check-in date">
+=======
                         <Text layoutX="142.0" layoutY="559.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check-in date">
+>>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
+<<<<<<< HEAD
+                        <DatePicker fx:id="checkInDatePicker" layoutX="227.0" layoutY="539.0" />
+                        <Text layoutX="426.0" layoutY="538.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hospitalized">
+=======
                         <DatePicker fx:id="checkInDatePicker" layoutX="240.0" layoutY="542.0" />
                         <Text layoutX="426.0" layoutY="534.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hospitalized">
+>>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
+<<<<<<< HEAD
+                        <ComboBox fx:id="hospitalizedChoiceBox" layoutX="518.0" layoutY="521.0" prefWidth="150.0" />
+=======
                         <ComboBox fx:id="hospitalizedChoiceBox" layoutX="510.0" layoutY="517.0" prefWidth="150.0" />
                         <Text layoutX="167.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Medical card">
                            <font>
@@ -231,6 +262,7 @@
                            </font>
                         </Text>
                         <TextField fx:id="patientIdTextField" layoutX="318.0" layoutY="122.0" promptText="Medical card id here" />
+>>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
                      </children>
                   </Pane>
                   <Pane fx:id="paneChangePatientDataView" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">

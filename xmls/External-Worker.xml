@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-
-<Worker>
-	<Worker workerId="1" workerName="Juan" workerSurname="Martinez" userId="1">
-     <specialtyId>dermatologist</specialtyId>
-     <typeWorker>doctor</typeWorker>
-  <Shifts>
-	  <Shift shiftId ="1">
-	  <date>2021-05-05</date>
-	  <turn>morning</turn>
-	  <room>1</room>
-      </Shift>
-  	  <Shift shiftId ="2">
-	  <date>2021-05-06</date>
-	  <turn>morning</turn>
-	  <room>2</room>
-     </Shift>
-  </Shifts> 
-  </Worker>
+<Worker workerName="admin" workerSurname="admin" userId="1">
+    <specialtyId>none</specialtyId>
+    <typeWorker>adStaff</typeWorker>
+    <Shifts/>
 </Worker>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controllers.AdStaffMenuController">
+   <children>
+      <SplitPane dividerPositions="0.2595190380761523" prefHeight="650.0" prefWidth="1000.0" style="-fx-background-color: darkred;">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: darkred;">
+               <children>
+                  <Accordion layoutX="78.0" layoutY="-1.0" prefHeight="285.0" prefWidth="256.0" AnchorPane.bottomAnchor="245.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
+                    <panes>
+                      <TitledPane fx:id="potato" animated="false" prefHeight="588.0" prefWidth="256.0" text="Patient Options">
+                           <content>
+                              <Pane prefHeight="572.0" prefWidth="341.0" style="-fx-background-color: DARKRED;">
+                                 <children>
+                                    <Button layoutX="30.0" layoutY="23.0" mnemonicParsing="false" onAction="#displayCreatePatientView" prefHeight="25.0" prefWidth="192.0" text="Create new patient">
+                                       <font>
+                                          <Font name="Arial" size="12.0" />
+                                       </font>
+                                    </Button>
+                                    <Button layoutX="30.0" layoutY="55.0" mnemonicParsing="false" onAction="#displayChangePatientDataView" prefHeight="25.0" prefWidth="192.0" text="Change patient data">
+                                       <font>
+                                          <Font name="Arial" size="12.0" />
+                                       </font>
+                                    </Button>
+                                    <Button layoutX="30.0" layoutY="87.0" mnemonicParsing="false" onAction="#displayAssignANewDoctorView" prefHeight="25.0" prefWidth="192.0" text="Assign a new doctor">
+                                       <font>
+                                          <Font name="Arial" size="12.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </Pane>
+                           </content>
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                      </TitledPane>
+                      <TitledPane animated="false" text="Worker Options">
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                           <content>
+                              <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: darkred;">
+                                 <children>
+                                    <Button layoutX="30.0" layoutY="23.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Register new worker" />
+                                    <Button layoutX="30.0" layoutY="55.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Edit worker data" />
+                                    <Button layoutX="30.0" layoutY="87.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Edit worker shift" />
+                                 </children>
+                              </Pane>
+                           </content>
+                      </TitledPane>
+                    </panes>
+                  </Accordion>
+                  <Button layoutX="80.0" layoutY="611.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="96.0" text="Log out">
+                     <font>
+                        <Font name="Arial" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                     <children>
+                        <Label layoutX="288.0" layoutY="95.0" text="Edit Shift">
+                           <font>
+                              <Font name="Arial Bold" size="42.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="163.0" layoutY="210.0" text="New turn">
+                           <font>
+                              <Font name="Arial Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <ChoiceBox fx:id="selectNewTurnChoiceBox" layoutX="283.0" layoutY="208.0" prefHeight="25.0" prefWidth="220.0" />
+                        <Label layoutX="154.0" layoutY="307.0" text="New room">
+                           <font>
+                              <Font name="Arial Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="newRoomTextField" layoutX="283.0" layoutY="303.0" prefHeight="30.0" prefWidth="221.0" promptText="Introduce the new room">
+                           <font>
+                              <Font name="Arial" size="16.0" />
+                           </font></TextField>
+                        <Label layoutX="166.0" layoutY="392.0" text="New date">
+                           <font>
+                              <Font name="Arial Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <DatePicker fx:id="newDateShiftDatePicker" layoutX="281.0" layoutY="389.0" prefHeight="25.0" prefWidth="227.0" promptText="Select the new date" />
+                        <Button fx:id="updateShiftButton" layoutX="329.0" layoutY="495.0" mnemonicParsing="false" text="UPDATE">
+                           <font>
+                              <Font name="Arial Bold" size="16.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</Pane>

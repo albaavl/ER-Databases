@@ -41,7 +41,7 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="230.0" prefWidth="245.0" style="-fx-background-color: darkred;">
                                  <children>
-                                    <Button fx:id="specificDate" layoutX="72.0" layoutY="14.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="88.0" text="Specific date" />
+                                    <Button fx:id="specificShift" layoutX="72.0" layoutY="14.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="88.0" text="Specific date" />
                                     <Button fx:id="allShifts" layoutX="70.0" layoutY="59.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="All my shifts" />
                                     <Button fx:id="shiftsToXML" layoutX="70.0" layoutY="103.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="Shifts to XML" />
                                     <Button layoutX="70.0" layoutY="149.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="XML to shifts" fx:id="xmlToShift" />
@@ -82,7 +82,7 @@
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="385.0" prefWidth="668.0">
                                  <children>
-                                    <TableView fx:id="patientTable" prefHeight="378.0" prefWidth="516.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <TableView fx:id="patientsTable" prefHeight="378.0" prefWidth="516.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <columns>
                                           <TableColumn fx:id="medicalCard" prefWidth="79.93090188503265" text="Medical Card" />
                                           <TableColumn fx:id="patientName" prefWidth="51.54365539550781" text="Name" />
@@ -259,7 +259,7 @@
                            </content>
                         </ScrollPane>
                         <Button fx:id="selectTreatment" layoutX="429.0" layoutY="554.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="67.0" text="Select" />
-                        <TextField fx:id="chosenTreatmentID" layoutX="171.0" layoutY="552.0" prefHeight="34.0" prefWidth="211.0" promptText="Please, input the ID of the treatment" />
+                        <TextField fx:id="chosenTreatmentId" layoutX="171.0" layoutY="552.0" prefHeight="34.0" prefWidth="211.0" promptText="Please, input the ID of the treatment" />
                      </children>
                   </Pane>
                   <ScrollPane fx:id="allShiftsView" prefHeight="647.3333333333334" prefWidth="744.0" visible="false">
@@ -276,13 +276,13 @@
                   </ScrollPane>
                   <Pane fx:id="specificShiftView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" visible="false">
                      <children>
-                        <DatePicker fx:id="selectedDate" layoutX="255.0" layoutY="170.0" prefHeight="37.0" prefWidth="249.0" promptText="Date" />
+                        <DatePicker fx:id="ssSelectedDate" layoutX="255.0" layoutY="170.0" prefHeight="37.0" prefWidth="249.0" promptText="Date" />
                         <Label layoutX="155.0" layoutY="94.0" text="Please select the specific date:">
                            <font>
                               <Font name="Arial" size="30.0" />
                            </font>
                         </Label>
-                        <TableView fx:id="shiftTable" layoutX="147.0" layoutY="249.0" prefHeight="292.0" prefWidth="466.0">
+                        <TableView fx:id="ssShiftTable" layoutX="147.0" layoutY="249.0" prefHeight="292.0" prefWidth="466.0">
                            <columns>
                               <TableColumn fx:id="ssId" prefWidth="51.606658935546875" text="ID" />
                               <TableColumn fx:id="ssDate" prefWidth="135.7266387939453" text="Date" />

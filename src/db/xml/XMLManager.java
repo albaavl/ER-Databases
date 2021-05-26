@@ -2,6 +2,7 @@ package db.xml;
 
 import java.io.*;
 
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -155,7 +156,7 @@ public class XMLManager {
 		em.getTransaction().commit();
 				
 		// Create the JAXBContext
-		JAXBContext jaxbContext = JAXBContext.newInstance(Shift.class);
+		JAXBContext jaxbContext = JAXBContext.newInstance(Worker.class);
 		// Get the marshaller
 		Marshaller marshaller = jaxbContext.createMarshaller();
 		
@@ -170,7 +171,7 @@ public class XMLManager {
 		Query q2 = em.createNativeQuery("SELECT * FROM workers WHERE workerId = ?", Worker.class);
 		q2.setParameter(1, workerId);
 		Worker w = (Worker) q2.getSingleResult();
-				
+		System.out.println(w);		
 		// Use the Marshaller to marshal the Java object to a file
 		File file = new File("./xmls/External-Worker.xml");
 		// Use the Marshaller to marshal the Java object to a file
