@@ -18,6 +18,7 @@ public class ErrorPopup {
      * <p> {@code 3} Bruh u cant check in on the future.
      * <p> {@code 4} Numeros, no letras ffs aint that hard.
      * <p> {@code 5} Wrong Username or password.
+     * <p> {@code 6} No shift to display bruh.
      * <p> {@code X} idk keep adding stuff here...
 
      * @param errorType - int
@@ -106,7 +107,7 @@ public class ErrorPopup {
                 stageError.setTitle("Error: Wrong Id");
                 stageError.show();
                 break;
-            case 5:
+                case 5:
                 loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
                 rootError = loaderError.load(); 
                 errorPopupController = loaderError.getController();
@@ -119,6 +120,21 @@ public class ErrorPopup {
 
                 stageError.setScene(sceneError);
                 stageError.setTitle("Error: Wrong username or password");
+                stageError.show();
+                break;
+            case 6:
+                loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
+                rootError = loaderError.load(); 
+                errorPopupController = loaderError.getController();
+                errorPopupController.displayErrorText("There're no shifts added on the database.\nPlease try again.");
+                sceneError = new Scene(rootError);
+                stageError = new Stage();
+
+                icon = new Image("application/images/errorIcon.png");
+                stageError.getIcons().add(icon);	        
+
+                stageError.setScene(sceneError);
+                stageError.setTitle("Error: No shifts");
                 stageError.show();
                 break;
             default:
