@@ -8,6 +8,7 @@ import java.security.SecureRandom;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Observable;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -15,6 +16,7 @@ import java.util.ResourceBundle;
 import db.jdbc.SQL;
 import db.jpa.JPAUserManager;
 import db.pojos.Patient;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,6 +27,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 // import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -190,7 +193,7 @@ public class AdStaffMenuController implements Initializable {
         }
         userman.disconnect();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("logInMenu.fxml")); //TODO - need to create the patient menu fxml w scenebuilder
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("logInMenu.fxml"));
         root = loader.load();
         stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -428,48 +431,55 @@ public class AdStaffMenuController implements Initializable {
 
     }
 
+    //Delete Patient View
+
+    @FXML
+    private Button deletePatientButton;
+    @FXML
+    private Button deleteChangePatientButton;
+    @FXML
+    private Button deleteGoBackPatientButton;
+    @FXML
+    private TableView<Patient> currentDeletePatient;
+
     //Select patient view
 
     private static Patient currentSelectedPatient = null;
 
     @FXML
-    TextField selectPatientTextField;
+    private TextField selectPatientTextField;
     @FXML
-    TableView<Patient> selectPatientTableView;
-    @FXML
-    TableColumn<Patient,String> selectPatientTableColumnName;
-    @FXML
-    TableColumn<Patient,String> selectPatientTableColumnSurname;
-    @FXML
-    TableColumn<Patient,Integer> selectPatientTableColumnPatientId;
-    @FXML
-    TableColumn<Patient,String> selectPatientTableColumnGender;
-    @FXML
-    TableColumn<Patient,String> selectPatientTableColumnBloodtype;
-    @FXML
-    TableColumn<Patient,String> selectPatientTableColumnAllergies;
-    @FXML
-    TableColumn<Patient,String> selectPatientTableColumnAddress;
-    @FXML
-    TableColumn<Patient,Date> selectPatientTableColumnBirthDate;
-    @FXML
-    TableColumn<Patient,Date> selectPatientTableColumnCheckInDate;
-    @FXML
-    TableColumn<Patient,Boolean> selectPatientTableColumnHospitalized;
-    
-    public ObservableList<Patient> setSelectPatients(){
-        ObservableList<Patient> patients = FXCollections.observableArrayList();
-        // for (Patient patient : patients) {
-        //     patients.add();
-        // }
-        return patients;
-    }
+    private TableView<Patient> selectPatientTableView;
 
     //MedicalCard, name, surename, gender, bloodtype, allergies, bdate, checkin, address, hospitalized
 
     @FXML
     public void setPatientTables(ActionEvent actionEvent){
-        
+
+        List<Patient> patientList = jdbc.selectAllPatients();
+
+        TableColumn<Patient,String> columnName = new TableColumn<>("Name");
+        TableColumn<Patient,String> columnSurname = new TableColumn<>("Surname");
+        TableColumn<Patient,String> columnPatientId = new TableColumn<>("Medical Card");
+        TableColumn<Patient,String> columnGender = new TableColumn<>("Gender");
+        TableColumn<Patient,String> columnBloodtype = new TableColumn<>("Blood Type");
+        TableColumn<Patient,String> columnAllergies = new TableColumn<>("Allergies");
+        TableColumn<Patient,String> columnAddress = new TableColumn<>("Address");
+        TableColumn<Patient,String> columnBirthDate = new TableColumn<>("Birthdate");
+        TableColumn<Patient,String> columnCheckInDate = new TableColumn<>("Check-in");
+        TableColumn<Patient,String> columnHospitalized = new TableColumn<>("Hospitalized");
+        columnName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
+        columnSurname.setCellValueFactory(new PropertyValueFactory<>("patientSurname"));
+        columnAllergies.setCellValueFactory(new PropertyValueFactory<>("allergieType"));
+        columnGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        columnBloodtype.setCellValueFactory(new PropertyValueFactory<>("bloodType"));
+        columnAddress.setCellValueFactory(new PropertyValueFactory<>("patientAddress"));
+        columnCheckInDate.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getMedicalCardId())));
+        columnBirthDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getbDate().toString()));
+        columnPatientId.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCheckInDate().toString()));
+
+        selectPatientTableView.getColumns().addAll(columnPatientId, columnName, columnSurname, columnGender, columnBloodtype, columnAllergies, columnBirthDate, columnCheckInDate, columnAddress, columnHospitalized);
+        selectPatientTableView.getItems().addAll(patientList);
     }
 
     @FXML
