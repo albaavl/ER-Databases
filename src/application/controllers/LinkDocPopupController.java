@@ -25,7 +25,7 @@ public class LinkDocPopupController {
     @FXML
     private void onYesButton(ActionEvent aEvent) {
 
-        adStaffMenuController.displayAssignANewDoctorView(aEvent);
+        adStaffMenuController.displayAssignANewDoctorView();
         Stage stage = (Stage) yesLinkDocPopupButton.getScene().getWindow();
         stage.close();
     }

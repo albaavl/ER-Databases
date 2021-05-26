@@ -31,6 +31,7 @@ public class LogInController {
 	static Connection c ;
 	static SQL jdbc = new SQL();
 	private static JPAUserManager userman = new JPAUserManager();
+    private ErrorPopup ErrorPopup = new application.controllers.ErrorPopup();
 
     @FXML
     TextField usernameTextfieldLogIn;
@@ -57,7 +58,7 @@ public class LogInController {
             User user = userman.checkPassword(username, password);
             if(user == null) {
     
-                // System.out.println("Wrong username or password"); TODO - popup: wrong username or password.
+                ErrorPopup.errorPopup(5);
                 
             } else if(user.getRole().getRole().equalsIgnoreCase("patient")){
     

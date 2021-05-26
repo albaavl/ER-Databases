@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class ErrorPopup {
@@ -16,6 +17,7 @@ public class ErrorPopup {
      * <p> {@code 2} Please fill all the values lmao.
      * <p> {@code 3} Bruh u cant check in on the future.
      * <p> {@code 4} Numeros, no letras ffs aint that hard.
+     * <p> {@code 5} Wrong Username or password.
      * <p> {@code X} idk keep adding stuff here...
 
      * @param errorType - int
@@ -26,6 +28,7 @@ public class ErrorPopup {
         Parent rootError;
         Scene sceneError;
         Stage stageError;
+        Image icon;
         ErrorPopupController errorPopupController;
         switch (errorType) {
             case 0:
@@ -36,6 +39,10 @@ public class ErrorPopup {
 			    sceneError = new Scene(rootError);
                 stageError = new Stage();
                 stageError.setScene(sceneError);
+
+                icon = new Image("application/images/errorIcon.png");
+                stageError.getIcons().add(icon);	        
+
                 stageError.setTitle("Error 0");
                 stageError.show();
                 break;
@@ -46,6 +53,10 @@ public class ErrorPopup {
                 errorPopupController.displayErrorText("Please, use a correct date.\nYour birthdate cant be on the future.");
                 sceneError = new Scene(rootError);
                 stageError = new Stage();
+                 
+                icon = new Image("application/images/errorIcon.png");
+                stageError.getIcons().add(icon);	        
+
                 stageError.setScene(sceneError);
                 stageError.setTitle("Error: Wrong date");
                 stageError.show();
@@ -57,6 +68,10 @@ public class ErrorPopup {
                 errorPopupController.displayErrorText("Please, fill all the options.");
                 sceneError = new Scene(rootError);
                 stageError = new Stage();
+                 
+                icon = new Image("application/images/errorIcon.png");
+                stageError.getIcons().add(icon);	        
+
                 stageError.setScene(sceneError);
                 stageError.setTitle("Error: Fill all the options");
                 stageError.show();
@@ -68,6 +83,10 @@ public class ErrorPopup {
                 errorPopupController.displayErrorText("Please, use a correct date.\nCheck-in date cant be on the future.");
                 sceneError = new Scene(rootError);
                 stageError = new Stage();
+                 
+                icon = new Image("application/images/errorIcon.png");
+                stageError.getIcons().add(icon);	        
+
                 stageError.setScene(sceneError);
                 stageError.setTitle("Error: Wrong date");
                 stageError.show();
@@ -79,8 +98,27 @@ public class ErrorPopup {
                 errorPopupController.displayErrorText("Please, put a number.");
                 sceneError = new Scene(rootError);
                 stageError = new Stage();
+                
+                icon = new Image("application/images/errorIcon.png");
+                stageError.getIcons().add(icon);	        
+
                 stageError.setScene(sceneError);
                 stageError.setTitle("Error: Wrong Id");
+                stageError.show();
+                break;
+            case 5:
+                loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
+                rootError = loaderError.load(); 
+                errorPopupController = loaderError.getController();
+                errorPopupController.displayErrorText("Wrong username or password.\nPlease try again.");
+                sceneError = new Scene(rootError);
+                stageError = new Stage();
+
+                icon = new Image("application/images/errorIcon.png");
+                stageError.getIcons().add(icon);	        
+
+                stageError.setScene(sceneError);
+                stageError.setTitle("Error: Wrong username or password");
                 stageError.show();
                 break;
             default:

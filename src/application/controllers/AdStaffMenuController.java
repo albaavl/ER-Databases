@@ -8,26 +8,23 @@ import java.security.SecureRandom;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Observable;
 import java.util.Random;
 import java.util.ResourceBundle;
 
 import db.jdbc.SQL;
 import db.jpa.JPAUserManager;
 import db.pojos.Patient;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-// import javafx.scene.Node;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-// import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 // import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -40,7 +37,14 @@ public class AdStaffMenuController implements Initializable {
     
     private static SQL jdbc;
     private static JPAUserManager userman;
-    private ErrorPopup ErrorPopup = new application.controllers.ErrorPopup();
+    private ErrorPopup ErrorPopup = new ErrorPopup();
+    // /**
+    //  * <p>{@code -1} Reset
+    //  * <p>{@code 0} Delete
+    //  * <p>{@code 1} Change patient data
+    //  * <p>{@code 2} Assign new doctor
+    //  */
+    // public int currentSelectOption = -1; 
 
     @FXML
     Text adStaffMenuWelcomeText;
@@ -48,9 +52,9 @@ public class AdStaffMenuController implements Initializable {
     @FXML
     Pane paneCreatePatientView;
     @FXML
-    Pane paneChangePatientDataView;
+    Pane paneChangePatientDataView; 
     @FXML
-    Pane paneAssignANewDoctorView;
+    Pane paneAssignANewDoctorView; 
     //Worker menus
     @FXML
     Pane paneCreateWorkerView;
@@ -59,9 +63,11 @@ public class AdStaffMenuController implements Initializable {
     @FXML
     Pane paneEditShiftView;
     @FXML
-    Pane paneDeletePatient;
+    Pane paneDeletePatient; 
     @FXML
     Pane paneDeleteWorker;
+    @FXML
+    Pane paneSelectPatient;
 
     //welcome screen
     @FXML
@@ -70,6 +76,7 @@ public class AdStaffMenuController implements Initializable {
     public void displayWelcomeText(String name, SQL databasecontroller, JPAUserManager userManager) {
         jdbc = databasecontroller;
         userman = userManager;
+        // currentSelectOption = -1;
         adStaffMenuWelcomeText.setText("FUCK YEAH " + name +  " get fkd.\n It works!");
         hideAll();
         paneWelcomeView.setVisible(true);
@@ -79,6 +86,10 @@ public class AdStaffMenuController implements Initializable {
      * hide+disable every pane
      */
     private void hideAll(){
+
+        // if(currentSelectOption == -1){
+        //     currentSelectedPatient = null;
+        // }
 
         paneWelcomeView.setVisible(false);
         paneWelcomeView.setDisable(true);
@@ -102,57 +113,90 @@ public class AdStaffMenuController implements Initializable {
         paneDeleteWorker.setDisable(true);
 
     }
+    private void resetAll(){
+        resetCreatePatientScene();
+    }
 
     public void displayCreatePatientView(ActionEvent aEvent) {
         hideAll();
-        resetCreatePatientScene();
+        resetAll();
         paneCreatePatientView.setDisable(false);
         paneCreatePatientView.setVisible(true);
 
     }
-    public void displayChangePatientDataView(ActionEvent aEvent) {
+    public void displayChangePatientDataView() {
         hideAll();
-        resetCreatePatientScene();
+        resetAll();
         paneChangePatientDataView.setDisable(false);
         paneChangePatientDataView.setVisible(true);
     }
-    public void displayAssignANewDoctorView(ActionEvent aEvent) {
+    public void displaySelectPatient(){
         hideAll();
-        resetCreatePatientScene();
+        resetAll();
+        paneSelectPatient.setDisable(false);
+        paneSelectPatient.setVisible(true);
+    }
+    public void displayAssignANewDoctorView() {
+        hideAll();
+        resetAll();
         paneAssignANewDoctorView.setDisable(false);
         paneAssignANewDoctorView.setVisible(true);
     }
 
     public void displayCreateWorkerView(ActionEvent actionEvent) {
         hideAll();
-        resetCreatePatientScene();
+        resetAll();
         paneCreateWorkerView.setDisable(false);
         paneCreateWorkerView.setVisible(true);
     }
     public void displayChangeWorkerView(ActionEvent actionEvent) {
         hideAll();
-        resetCreatePatientScene();
+        resetAll();
         paneChangePatientDataView.setDisable(false);
         paneChangeWorkerDataView.setVisible(true);
     }
     public void displayEditShiftView(ActionEvent actionEvent) {
         hideAll();
-        resetCreatePatientScene();
+        resetAll();
         paneEditShiftView.setDisable(false);
         paneEditShiftView.setVisible(true);
     }
 
-    public void displayDeletePatient(ActionEvent aEvent) {
+    public void displayDeletePatient() {
         hideAll();
-        resetCreatePatientScene();
+        resetAll();
         paneDeletePatient.setDisable(false);
         paneDeletePatient.setVisible(true);
     }
     public void displayDeleteWorker(ActionEvent aEvent) {
         hideAll();
-        resetCreatePatientScene();
+        resetAll();
         paneDeleteWorker.setDisable(false);
         paneDeleteWorker.setVisible(true);
+    }
+
+    private Parent root;
+    private Stage stage;
+    private Scene scene;
+
+    @FXML
+    public void logOut(ActionEvent actionEvent) throws IOException {
+        try {
+            jdbc.disconnect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ErrorPopup.errorPopup(0);
+            return;
+        }
+        userman.disconnect();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("logInMenu.fxml")); //TODO - need to create the patient menu fxml w scenebuilder
+        root = loader.load();
+        stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+
     }
 
     //Patient options fxml objects
@@ -321,12 +365,11 @@ public class AdStaffMenuController implements Initializable {
 
         
         jdbc.addPatient(p);
+        // currentSelectedPatient = p;
 
         String[] uspassw = register(p.getPatientName(),p.getPatientSurname(), p.getMedicalCardId(), 1);
 
         addPatientSuccess(uspassw);
-
-        // addDoctorToPatientPopup(); 
 
         resetCreatePatientScene();
     }   
@@ -384,6 +427,90 @@ public class AdStaffMenuController implements Initializable {
         stageAddPatientSuccess.show();
 
     }
+
+    //Select patient view
+
+    private static Patient currentSelectedPatient = null;
+
+    @FXML
+    TextField selectPatientTextField;
+    @FXML
+    TableView<Patient> selectPatientTableView;
+    @FXML
+    TableColumn<Patient,String> selectPatientTableColumnName;
+    @FXML
+    TableColumn<Patient,String> selectPatientTableColumnSurname;
+    @FXML
+    TableColumn<Patient,Integer> selectPatientTableColumnPatientId;
+    @FXML
+    TableColumn<Patient,String> selectPatientTableColumnGender;
+    @FXML
+    TableColumn<Patient,String> selectPatientTableColumnBloodtype;
+    @FXML
+    TableColumn<Patient,String> selectPatientTableColumnAllergies;
+    @FXML
+    TableColumn<Patient,String> selectPatientTableColumnAddress;
+    @FXML
+    TableColumn<Patient,Date> selectPatientTableColumnBirthDate;
+    @FXML
+    TableColumn<Patient,Date> selectPatientTableColumnCheckInDate;
+    @FXML
+    TableColumn<Patient,Boolean> selectPatientTableColumnHospitalized;
+    
+    public ObservableList<Patient> setSelectPatients(){
+        ObservableList<Patient> patients = FXCollections.observableArrayList();
+        // for (Patient patient : patients) {
+        //     patients.add();
+        // }
+        return patients;
+    }
+
+    //MedicalCard, name, surename, gender, bloodtype, allergies, bdate, checkin, address, hospitalized
+
+    @FXML
+    public void setPatientTables(ActionEvent actionEvent){
+        
+    }
+
+    @FXML
+    public void selectPatient(ActionEvent actionEvent) throws IOException {
+        
+        Integer patientId = null;
+
+        try {
+            patientId = Integer.parseInt(selectPatientTextField.getText());
+            currentSelectedPatient = jdbc.selectPatient(patientId);
+        } catch (Exception e) {
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+
+        // switch (currentSelectOption) {
+        //     case 0://Delete patient
+        //         displayDeletePatient();
+        //         break;
+        //     case 1://Change patient data
+        //         displayChangePatientDataView();
+        //         break;
+        //     case 2://Assign new doc (not from create. if from create pasar select desde successfull shit)
+        //         displayAssignANewDoctorView();
+        //         break;
+        //     default:
+        //         break;
+        // }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     //HardResetScenes
     
