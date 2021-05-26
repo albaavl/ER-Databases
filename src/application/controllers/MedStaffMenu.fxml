@@ -27,9 +27,9 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: darkred;">
                                  <children>
-                                    <Button fx:id="consultMedicalTest" layoutX="63.0" layoutY="22.0" mnemonicParsing="false" text="Consult medical test" />
-                                    <Button fx:id="addTreatmentDiagnosis" layoutX="39.0" layoutY="84.0" mnemonicParsing="false" text="Add treatment and diagnosis" />
-                                    <Button fx:id="editTreatmentDiagnosis" layoutX="42.0" layoutY="149.0" mnemonicParsing="false" text="Edit treatment and diagnosis" />
+                                    <Button fx:id="consultMedicalTest" layoutX="63.0" layoutY="22.0" mnemonicParsing="false" onAction="#displaySelectPatientView" text="Consult medical test" />
+                                    <Button fx:id="addTreatmentDiagnosis" layoutX="39.0" layoutY="84.0" mnemonicParsing="false" onAction="#displaySelectPatientView" text="Add treatment and diagnosis" />
+                                    <Button fx:id="editTreatmentDiagnosis" layoutX="42.0" layoutY="149.0" mnemonicParsing="false" onAction="#displaySelectPatientView" text="Edit treatment and diagnosis" />
                                  </children>
                               </AnchorPane>
                         </content>
@@ -41,8 +41,8 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="230.0" prefWidth="245.0" style="-fx-background-color: darkred;">
                                  <children>
-                                    <Button fx:id="specificShift" layoutX="72.0" layoutY="14.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="88.0" text="Specific date" />
-                                    <Button fx:id="allShifts" layoutX="70.0" layoutY="59.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="All my shifts" />
+                                    <Button fx:id="specificShift" layoutX="72.0" layoutY="14.0" mnemonicParsing="false" onAction="#displaySpecificShiftView" prefHeight="31.0" prefWidth="88.0" text="Specific date" />
+                                    <Button fx:id="allShifts" layoutX="70.0" layoutY="59.0" mnemonicParsing="false" onAction="#displayAllShiftsView" prefHeight="30.0" prefWidth="91.0" text="All my shifts" />
                                     <Button fx:id="shiftsToXML" layoutX="70.0" layoutY="103.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="Shifts to XML" />
                                     <Button layoutX="70.0" layoutY="149.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="XML to shifts" fx:id="xmlToShift" />
                                     <Button layoutX="70.0" layoutY="192.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="XML to HTML" fx:id="xmlToHTML" />
@@ -52,7 +52,7 @@
                       </TitledPane>
                     </panes>
                   </Accordion>
-                  <Button fx:id="logOut" layoutX="90.0" layoutY="572.0" mnemonicParsing="false" text="Log out" />
+                  <Button fx:id="logOut" layoutX="90.0" layoutY="572.0" mnemonicParsing="false" onAction="#logOut" text="Log out" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
@@ -100,8 +100,10 @@
                               </AnchorPane>
                            </content>
                         </ScrollPane>
-                        <Button fx:id="selectPatient" layoutX="493.0" layoutY="555.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="67.0" text="Select" />
+                        <Button fx:id="selectPatient1" layoutX="493.0" layoutY="555.0" mnemonicParsing="false" onAction="#displayConsultMedicalTestsView" prefHeight="32.0" prefWidth="67.0" text="Select" />
                         <TextField fx:id="chosenPatientID" layoutX="151.0" layoutY="553.0" prefHeight="34.0" prefWidth="295.0" promptText="Please, input the medical card number of the patient" />
+                        <Button fx:id="selectPatient2" layoutX="493.0" layoutY="553.0" mnemonicParsing="false" onAction="#displayAddTreatmentView" prefHeight="32.0" prefWidth="67.0" style="-fx-background-color: black;" text="Select" textFill="WHITE" visible="false" />
+                        <Button fx:id="selectPatient3" layoutX="491.0" layoutY="552.0" mnemonicParsing="false" onAction="#displaySelectTreatmentView" prefHeight="32.0" prefWidth="67.0" style="-fx-background-color: darkred;" text="Select" textFill="WHITE" visible="false" />
                      </children>
                   </Pane>
                   <Pane fx:id="consultMedicalTestsView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" visible="false">
@@ -258,7 +260,7 @@
                               </AnchorPane>
                            </content>
                         </ScrollPane>
-                        <Button fx:id="selectTreatment" layoutX="429.0" layoutY="554.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="67.0" text="Select" />
+                        <Button fx:id="selectTreatment" layoutX="429.0" layoutY="554.0" mnemonicParsing="false" onAction="#displayEditTreatmentView" prefHeight="32.0" prefWidth="67.0" text="Select" />
                         <TextField fx:id="chosenTreatmentId" layoutX="171.0" layoutY="552.0" prefHeight="34.0" prefWidth="211.0" promptText="Please, input the ID of the treatment" />
                      </children>
                   </Pane>

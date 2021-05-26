@@ -265,10 +265,53 @@ public class SQL implements SQLInterface{
 	}
 	
 	@Override
+	public List<Patient> searchPatientByDoctor(Integer workerId)throws SQLException, NotBoundException {
+		String sql ="SELECT * FROM patients AS p JOIN doctor_patient AS dp ON p.medical_card_number=dp.patient_id JOIN workers AS w ON w.workerId=dp.doctor_id WHERE w.workerId = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1,workerId);
+		ResultSet rs = p.executeQuery();
+		List <Patient> pList = new ArrayList<Patient>();
+		while(rs.next()){
+			pList.add( new Patient(rs.getString("name"), rs.getString("surname"), rs.getString("gender"), rs.getString("blood_type"), rs.getString("allergies"), rs.getString("address"), rs.getDate("birthdate"), rs.getDate("check_in"), rs.getBoolean("hospitalized"), rs.getInt("medical_card_number")) );
+		}
+		p.close();
+		rs.close();
+		return pList;
+	}
+	
+	@Override
 	public List<Worker> searchWorker(String surname) throws SQLException, NotBoundException {
 		String sql = "SELECT * FROM workers WHERE workerSurname LIKE ?";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setString(1,"%" + surname + "%");
+		ResultSet rs = p.executeQuery();
+		List <Worker> wList = new ArrayList<Worker>();
+		while(rs.next()){ 
+			wList.add( new Worker(rs.getInt("workerId"), rs.getString("workerName"), rs.getString("workerSurname"), rs.getString("specialtyId"), rs.getString("typeWorker")) );
+		}
+		p.close();
+		rs.close();
+		return wList;
+	}
+	
+	@Override
+	public List<Patient> selectAllPatients(String surname) throws SQLException, NotBoundException {
+		String sql = "SELECT * FROM patients";
+		PreparedStatement p = c.prepareStatement(sql);
+		ResultSet rs = p.executeQuery();
+		List <Patient> pList = new ArrayList<Patient>();
+		while(rs.next()){
+			pList.add( new Patient(rs.getString("name"), rs.getString("surname"), rs.getString("gender"), rs.getString("blood_type"), rs.getString("allergies"), rs.getString("address"), rs.getDate("birthdate"), rs.getDate("check_in"), rs.getBoolean("hospitalized"), rs.getInt("medical_card_number")) );
+		}
+		p.close();
+		rs.close();
+		return pList;
+	}
+	
+	@Override
+	public List<Worker> selectAllWorkers(String surname) throws SQLException, NotBoundException {
+		String sql = "SELECT * FROM workers";
+		PreparedStatement p = c.prepareStatement(sql);
 		ResultSet rs = p.executeQuery();
 		List <Worker> wList = new ArrayList<Worker>();
 		while(rs.next()){ 

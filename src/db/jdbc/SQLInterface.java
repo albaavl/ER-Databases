@@ -27,11 +27,13 @@ public interface SQLInterface {
 	public List<Shift> searchShiftByWorkerId ( Integer workerId) throws SQLException, Exception;
 	public List<Shift> searchShiftByDate ( Integer workerId, Date date) throws SQLException, Exception;
 	public List<Patient> searchPatient( String surname) throws SQLException, NotBoundException;
+	public List<Patient> searchPatientByDoctor(Integer workerId) throws SQLException, NotBoundException;
 	public List<Worker> searchWorker( String surname) throws SQLException, NotBoundException;
 	public List<Treatment> searchTreatmentByMed(Patient patient, String med) throws Exception;
 	public List<Treatment> searchTreatmentsByMedCard( Integer medCard) throws Exception;
 	
-	
+	public List<Worker> selectAllWorkers(String surname) throws SQLException, NotBoundException;
+	public List<Patient> selectAllPatients(String surname) throws SQLException, NotBoundException;
 	public Patient selectPatient( Integer medCard) throws SQLException, NotBoundException;
 	public Worker selectWorker( Integer workerId) throws SQLException, NotBoundException;
 	public Shift selectShift( Integer shiftId) throws SQLException, Exception;
