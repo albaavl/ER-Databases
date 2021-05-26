@@ -1,7 +1,11 @@
 package application.controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import db.jdbc.SQL;
@@ -9,15 +13,21 @@ import db.jpa.JPAUserManager;
 import db.pojos.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class MedStaffMenuController{
 	
 	private static SQL jdbc;
     private static JPAUserManager userman;
     private ErrorPopup ErrorPopup = new application.controllers.ErrorPopup();
+    private static Worker medStaff;
 
 	
 	@FXML
@@ -132,7 +142,11 @@ public class MedStaffMenuController{
     @FXML
     TableColumn<Patient, Boolean> patientHospitalized;
     @FXML
-    Button selectPatient;
+    Button selectPatient1;
+    @FXML
+    Button selectPatient2;
+    @FXML
+    Button selectPatient3;
     @FXML
     TextField chosenPatientId;
     
@@ -232,6 +246,12 @@ public class MedStaffMenuController{
         ssSelectedDate.getEditor().clear();
     }
     
+    private void hideButtons() {
+    	selectPatient1.setVisible(false);
+    	selectPatient2.setVisible(false);
+    	selectPatient3.setVisible(false);
+    }
+    
     public void displayAddTreatmentView(ActionEvent aEvent) {
         hideAll();
         resetAll();
@@ -256,11 +276,33 @@ public class MedStaffMenuController{
 
     }
     
-    public void displaySelectPatientView(ActionEvent aEvent) {
+    public void displaySelectPatientView1(ActionEvent aEvent) {
         hideAll();
         resetAll();
+        hideButtons();
         selectPatientView.setDisable(false);
         selectPatientView.setVisible(true);
+        selectPatient1.setVisible(true);
+
+    }
+    
+    public void displaySelectPatientView2(ActionEvent aEvent) {
+        hideAll();
+        resetAll();
+        hideButtons();
+        selectPatientView.setDisable(false);
+        selectPatientView.setVisible(true);
+        selectPatient2.setVisible(true);
+
+    }
+    
+    public void displaySelectPatientView3(ActionEvent aEvent) {
+        hideAll();
+        resetAll();
+        hideButtons();
+        selectPatientView.setDisable(false);
+        selectPatientView.setVisible(true);
+        selectPatient3.setVisible(true);
 
     }
     
@@ -276,7 +318,14 @@ public class MedStaffMenuController{
         hideAll();
         resetAll();
         allShiftsView.setDisable(false);
+        try {
+			allShifts();
+		} catch (Exception e) {
+			// TODO error popup
+			e.printStackTrace();
+		}
         allShiftsView.setVisible(true);
+        
 
     }
     
@@ -288,7 +337,58 @@ public class MedStaffMenuController{
 
     }
     
-    //TODO descubrir como hacer que se sepa desde que boton se ha ido al pane selectPatient para saber a que opcion se llama luego probably habra que hacer 3 paneles de seleccion de paciente
-	
+    private Parent root;
+    private Stage stage;
+    private Scene scene;
+    
+    public void logOut(ActionEvent actionEvent) throws IOException {
+        try {
+            jdbc.disconnect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ErrorPopup.errorPopup(0);
+            return;
+        }
+        userman.disconnect();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("logInMenu.fxml"));
+        root = loader.load();
+        stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+
+    }
+    
+    //database functions
+    
+    public void displayWelcomeText(Worker w, SQL sqlman, JPAUserManager userm) {
+    	try {
+			medStaff = new Worker(w);
+			jdbc = sqlman;
+			userman = userm;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public void addTreatment(ActionEvent aE)throws Exception{
+    	
+    }
+    
+    public void editTreatment(ActionEvent aE)throws Exception{
+    	
+    }
+    
+    private void allShifts() throws Exception{
+    	List<Shift> shiftsList = new ArrayList<>();
+    	shiftsList.addAll(jdbc.searchShiftByWorkerId(medStaff.getWorkerId()));
+    	
+    }
+    
+    public void selectedShift(ActionEvent aE) throws Exception{
+    	
+    }
     
 }
