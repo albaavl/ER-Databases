@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -75,6 +76,10 @@ public class MedStaffMenuController{
     Button xmlToShift;
     @FXML
     Button xmlToHTML;
+    
+    //Welcome
+    @FXML
+    Label userName;
     
     //ConsultMedTestView
     @FXML
@@ -275,6 +280,7 @@ public class MedStaffMenuController{
     public void displayEditTreatmentView(ActionEvent aEvent) {
         hideAll();
         resetAll();
+        titleEditTreatment.setText("Edit treatment (ID ="+currentTreatment.getTreatmentId()+")");
         editTreatmentView.setDisable(false);
         editTreatmentView.setVisible(true);
 
@@ -365,12 +371,15 @@ public class MedStaffMenuController{
     }
     
     //database functions
+    private static Treatment currentTreatment = new Treatment();
+    private static Patient currentPatient = new Patient();
     
     public void displayWelcomeText(Worker w, SQL sqlman, JPAUserManager userm) {
     	try {
 			medStaff = new Worker(w);
 			jdbc = sqlman;
 			userman = userm;
+			userName.setText(w.getWorkerSurname());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -378,16 +387,51 @@ public class MedStaffMenuController{
     }
     
     public void addTreatment(ActionEvent aE)throws Exception{
+    	Treatment newTreatment = new Treatment();
+    	if(diagnosisCTreatment.getText().equalsIgnoreCase("")|| durationCTreatment.getText().equalsIgnoreCase("")||
+   			 medicationCTreatment.getText().equalsIgnoreCase("")|| adviceCTreatment.getText().equalsIgnoreCase("")
+   			 || startDateCTreatment.getEditor().getText() == "") {
+    		ErrorPopup.errorPopup(2);
+    		return;
+   	}
+    	Date startDate = Date.valueOf(startDateCTreatment.getValue());
+    	if(!startDate.after(Date.valueOf(LocalDate.now()))) {
+    		//TODO popup error fecha tiene que ser despues de la actual
+    		return;
+    	}
+    	newTreatment.setStartDate(startDate);
     	
+    	String diagnosis = diagnosisCTreatment.getText();
+		newTreatment.setDiagnosis(diagnosis);
+    	
+    	String medication = medicationCTreatment.getText();
+		newTreatment.setMedication(medication);
+		
+    	Integer duration = Integer.parseInt(durationCTreatment.getText());
+    	newTreatment.setDuration(duration);
+    	
+    	String advice = adviceETreatment.getText();
+    	newTreatment.setRecommendation(advice);
+    	
+    	jdbc.addTreatment(newTreatment);
+    	//TODO popup de treatment añadido correctamente
     }
     
     public void editTreatment(ActionEvent aE)throws Exception{
-    	
+    	Date startDate = Date.valueOf(startDateETreatment.getValue());
+    	String diagnosis = diagnosisETreatment.getText();
+    	String medication = medicationETreatment.getText();
+    	Integer duration = Integer.parseInt(durationETreatment.getText());
+    	String advice = adviceETreatment.getText();
+    	jdbc.editTreatment(currentTreatment.getTreatmentId(), diagnosis, medication,startDate , duration, advice);
+    	//TODO popup de treatment added y comprobar qq los getValue y getText devuelven null si no hay nada escrito
     }
     
     private void allShifts() throws Exception{
     	List<Shift> shiftsList = new ArrayList<>();
     	shiftsList.addAll(jdbc.searchShiftByWorkerId(medStaff.getWorkerId()));
+    	shiftsTable.getItems().clear();
+    	shiftsTable.getColumns().clear();
     	shiftsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     	shiftId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getShiftId())));
     	DateFormat dateformat=new SimpleDateFormat("yyyy-MM-dd");
@@ -396,13 +440,17 @@ public class MedStaffMenuController{
     	shiftRoom.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getRoom())));
     	shiftsTable.getColumns().addAll(shiftId, shiftDate, shiftTurn, shiftRoom);
         shiftsTable.getItems().addAll(shiftsList);
-        //TODO comprobar que funciona
+        //TODO comprobar que funciona y crear un popup de error si no hay shifts para el worker
     }
     
     public void selectedShift(ActionEvent aE) throws Exception{
+    	Date shiftDate = Date.valueOf(ssSelectedDate.getValue());
+    	if(shiftDate.after(Date.valueOf(LocalDate.now()))) {
     	List<Shift> shiftsList = new ArrayList<>();
-    	shiftsList.addAll(jdbc.searchShiftByDate(medStaff.getWorkerId(), new Date(0)));//TODO meter la date del date picker cuando pulse el boton de select
-    	this.ssShiftTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    	shiftsList.addAll(jdbc.searchShiftByDate(medStaff.getWorkerId(), shiftDate));//TODO meter la date del date picker cuando pulse el boton de select
+    	ssShiftTable.getItems().clear();
+    	ssShiftTable.getColumns().clear();
+    	ssShiftTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     	ssId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getShiftId())));
     	DateFormat dateformat=new SimpleDateFormat("yyyy-MM-dd");
     	ssDate.setCellValueFactory(data -> new SimpleStringProperty(dateformat.format(data.getValue().getDate())));
@@ -410,6 +458,24 @@ public class MedStaffMenuController{
     	ssRoom.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getRoom())));
     	ssShiftTable.getColumns().addAll(ssId, ssDate, ssTurn, ssRoom);
         ssShiftTable.getItems().addAll(shiftsList);
+    	} else {
+    		//TODO POPUP EXCEPTION se pueden seleccionar solo turnos futuros
+    	}
+    }
+    
+    private void selectPatient() {
+    	 patientName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
+         patientSurname.setCellValueFactory(new PropertyValueFactory<>("patientSurname"));
+         patientAllergies.setCellValueFactory(new PropertyValueFactory<>("allergieType"));
+         patientGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
+         patientBlood.setCellValueFactory(new PropertyValueFactory<>("bloodType"));
+         patientAddress.setCellValueFactory(new PropertyValueFactory<>("patientAddress"));
+         medicalCard.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getMedicalCardId())));
+         patientBirthdate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getbDate().toString()));
+         patientCheckIn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCheckInDate().toString()));
+         patientHospitalized.setCellValueFactory(data -> new SimpleStringProperty(Boolean.toString(data.getValue().getHospitalized())));
+         
+     
     }
     
 }

@@ -107,8 +107,7 @@ public class LogInController {
         root = loader.load(); 
 
         PatientMenuController patientMenuController =  loader.getController();
-        patientMenuController.displayUserName(jdbc.selectPatient(userId).getPatientName());
-        patientMenuController.displayUserName(jdbc.selectPatient(userId).getPatientSurname());
+        patientMenuController.displayPatientView(jdbc.selectPatient(userId),jdbc,userman);
 
         stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
         scene = new Scene(root);

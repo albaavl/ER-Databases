@@ -7,28 +7,25 @@ package application.controllers;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+
+import db.jdbc.*;
+import db.jpa.*;
+import db.pojos.*;
 
 // import db.jdbc.*;
 
 
-public class PatientMenuController implements Initializable {
+public class PatientMenuController {
 
     @FXML
-    private Label userName;
-    @FXML
-    private ComboBox<String> orderByComboBox;
-    private String[] orderByStrings = {""}; //TODO - @me rellenar esto jeje
+    private Label welcomeText;
 
-    @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {
-        orderByComboBox.getItems().addAll(orderByStrings);    
-    } 
+    private static SQL jdbc;
+    private static JPAUserManager userman;
 
 
-    public void displayUserName(String surname) {
-        userName.setText(surname);
+    public void displayPatientView(Patient p, SQL sqlman, JPAUserManager jpaman) {
+        welcomeText.setText("");
     }
 
     
