@@ -643,7 +643,7 @@ public class SQL implements SQLInterface{
 	
 	@Override
 	public Patient selectPatientByUserId(Integer userId) throws SQLException, NotBoundException {
-		String sql = "SELECT * FROM patients userId = ?";
+		String sql = "SELECT * FROM patients WHERE userId = ?";
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1,userId);
 		ResultSet rs = p.executeQuery();

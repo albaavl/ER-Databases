@@ -53,6 +53,17 @@ public class PatientMenuController {
     TableColumn<Treatment, String> adviceTreatment;
     @FXML
     TableColumn<Treatment, String> diagnosisTreatment;
+    
+    //Controller stuff
+    public static PatientMenuController thisPatientMenuController;
+
+    public void setPatientController( PatientMenuController patientMenuController ) {
+    	thisPatientMenuController = patientMenuController;
+    }
+
+    public static PatientMenuController passPatientMenuController() {
+        return thisPatientMenuController;
+    }
 
     public void displayPatientWelcomeTextView(Patient p, SQL sqlman, JPAUserManager userm) {
         welcomeText.setText("Please, Mr/Mrs " + p.getPatientName() + " here are your treatments");
@@ -65,6 +76,7 @@ public class PatientMenuController {
 			e.printStackTrace();
 		}
     }
+    //TODO gisel no se crea la tabla pqq nunca llamas a las funciones en el display que es a donde accede javafx y hay que cambiar los ajustes del label pqq no se ve el nombre
     private void selectTreatment() {
     	treatmentId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getTreatmentId())));
     	dateTreatment.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStartDate().toString()));

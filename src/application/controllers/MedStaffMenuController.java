@@ -395,8 +395,8 @@ public class MedStaffMenuController{
     		return;
    	}
     	Date startDate = Date.valueOf(startDateCTreatment.getValue());
-    	if(!startDate.after(Date.valueOf(LocalDate.now()))) {
-    		//TODO popup error fecha tiene que ser despues de la actual
+    	if(startDate.before(Date.valueOf(LocalDate.now()))){
+    		ErrorPopup.errorPopup(8);
     		return;
     	}
     	newTreatment.setStartDate(startDate);
@@ -430,6 +430,10 @@ public class MedStaffMenuController{
     private void allShifts() throws Exception{
     	List<Shift> shiftsList = new ArrayList<>();
     	shiftsList.addAll(jdbc.searchShiftByWorkerId(medStaff.getWorkerId()));
+    	if(shiftsList.isEmpty()) {
+    		ErrorPopup.errorPopup(6);//no shifts for this worker
+    		displayWelcomeText(medStaff, jdbc, userman);
+    	}else {
     	shiftsTable.getItems().clear();
     	shiftsTable.getColumns().clear();
     	shiftsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -440,7 +444,7 @@ public class MedStaffMenuController{
     	shiftRoom.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getRoom())));
     	shiftsTable.getColumns().addAll(shiftId, shiftDate, shiftTurn, shiftRoom);
         shiftsTable.getItems().addAll(shiftsList);
-        //TODO comprobar que funciona y crear un popup de error si no hay shifts para el worker
+    }
     }
     
     public void selectedShift(ActionEvent aE) throws Exception{
@@ -459,6 +463,7 @@ public class MedStaffMenuController{
     	ssShiftTable.getColumns().addAll(ssId, ssDate, ssTurn, ssRoom);
         ssShiftTable.getItems().addAll(shiftsList);
     	} else {
+    		ErrorPopup.errorPopup(8);
     		//TODO POPUP EXCEPTION se pueden seleccionar solo turnos futuros
     	}
     }
@@ -475,7 +480,7 @@ public class MedStaffMenuController{
          patientCheckIn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCheckInDate().toString()));
          patientHospitalized.setCellValueFactory(data -> new SimpleStringProperty(Boolean.toString(data.getValue().getHospitalized())));
          
-     
+     //TODO terminarlo
     }
     
 }

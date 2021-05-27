@@ -154,6 +154,21 @@ public class ErrorPopup {
                 stageError.setTitle("Error: No treatments");
                 stageError.show();
                 break;
+            case 8:
+                loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
+                rootError = loaderError.load(); 
+                errorPopupController = loaderError.getController();
+                errorPopupController.displayErrorText("The date of the shift must be in the future");
+			    sceneError = new Scene(rootError);
+                stageError = new Stage();
+                stageError.setScene(sceneError);
+
+                icon = new Image("application/images/errorIcon.png");
+                stageError.getIcons().add(icon);	        
+
+                stageError.setTitle("Date error");
+                stageError.show();
+                break;
             default:
                 break;
         }

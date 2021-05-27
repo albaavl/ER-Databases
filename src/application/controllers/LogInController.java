@@ -107,7 +107,8 @@ public class LogInController {
         root = loader.load(); 
 
         PatientMenuController patientMenuController =  loader.getController();
-        patientMenuController.displayPatientWelcomeTextView(jdbc.selectPatient(userId),jdbc,userman);
+        patientMenuController.setPatientController(patientMenuController);
+        patientMenuController.displayPatientWelcomeTextView(jdbc.selectPatientByUserId(userId),jdbc,userman);
 
         stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -133,7 +134,7 @@ public class LogInController {
 
     private void switchToWorkerMenu(ActionEvent aEvent, Integer userId) throws IOException, SQLException, NotBoundException{
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("PatientMenu.fxml")); 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MedStaffMenu.fxml")); 
         root = loader.load(); 
 
         MedStaffMenuController medStaffMenuController = loader.getController();
