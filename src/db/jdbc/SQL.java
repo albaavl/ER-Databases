@@ -321,6 +321,19 @@ public class SQL implements SQLInterface{
 		rs.close();
 		return wList;
 	}
+	@Override
+	public List<Treatment> selectAllTreatments() throws Exception {
+		String sql = "SELECT * FROM treatments";
+		PreparedStatement p = c.prepareStatement(sql);
+		ResultSet rs = p.executeQuery();
+		List <Treatment> tList = new ArrayList<Treatment>();
+		while(rs.next()){ 
+			tList.add(new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")));
+		}
+		p.close();
+		rs.close();
+		return tList;
+	}
 
 	@Override
 	public Patient selectPatient(Integer medCard) throws SQLException, NotBoundException {

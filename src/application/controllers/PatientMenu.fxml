@@ -19,12 +19,12 @@
                         <Font name="Arial" size="12.0" />
                      </font>
                   </Label>
-                  <Button layoutX="67.0" layoutY="586.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="92.0" text="Log out" />
+                  <Button fx:id="logOut" layoutX="67.0" layoutY="586.0" mnemonicParsing="false" onAction="#logOut" prefHeight="36.0" prefWidth="92.0" text="Log out" />
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <AnchorPane fx:id="consultTreatmentsView" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <TableView prefHeight="639.3333333333334" prefWidth="745.3333333333334" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="treatmentsTable" prefHeight="639.3333333333334" prefWidth="745.3333333333334" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
                       <TableColumn prefWidth="45.69903552532196" text="ID" />
                       <TableColumn prefWidth="130.30093383789062" text="Start Date" />
