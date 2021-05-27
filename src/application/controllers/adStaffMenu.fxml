@@ -39,10 +39,8 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -70,24 +68,17 @@
                                           <Font name="Arial" size="12.0" />
                                        </font>
                                     </Button>
-                                    <Button layoutX="29.0" layoutY="115.0" mnemonicParsing="false" onAction="#displayAssignANewDoctorView" prefHeight="25.0" prefWidth="192.0" text="Assign a new doctor">
+                                    <Button layoutX="30.0" layoutY="55.0" mnemonicParsing="false" onAction="#displayChangePatientDataView" prefHeight="25.0" prefWidth="192.0" text="Change patient data">
                                        <font>
                                           <Font name="Arial" size="12.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="addMedicalTestButton" layoutX="29.0" layoutY="146.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Add medical test" />
-                                    <Button fx:id="deletePatientButton" layoutX="29.0" layoutY="177.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Delete patient" />
-                                    <TitledPane fx:id="accessToPatientProfileButton" animated="false" layoutX="30.0" layoutY="53.0" prefHeight="25.0" prefWidth="192.0" text="Access to a patient's profile">
-                                      <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                      </content>
-                                    </TitledPane>
-                                    <Button layoutX="30.0" layoutY="85.0" mnemonicParsing="false" onAction="#displayChangePatientDataView" prefHeight="25.0" prefWidth="192.0" text="Change patient data">
+                                    <Button layoutX="30.0" layoutY="87.0" mnemonicParsing="false" onAction="#displayAssignANewDoctorView" prefHeight="25.0" prefWidth="192.0" text="Assign a new doctor">
                                        <font>
                                           <Font name="Arial" size="12.0" />
                                        </font>
                                     </Button>
-                                    <Button layoutX="30.0" layoutY="119.0" mnemonicParsing="false" onAction="#displayCreatePatientView" prefHeight="25.0" prefWidth="192.0" text="Delete patient">
+                                    <Button layoutX="30.0" layoutY="119.0" mnemonicParsing="false" onAction="#displayDeletePatient" prefHeight="25.0" prefWidth="192.0" text="Delete patient">
                                        <font>
                                           <Font name="Arial" size="12.0" />
                                        </font>
@@ -109,11 +100,7 @@
                                     <Button layoutX="30.0" layoutY="23.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Register new worker" />
                                     <Button layoutX="30.0" layoutY="55.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Edit worker data" />
                                     <Button layoutX="30.0" layoutY="87.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Edit worker shift" />
-<<<<<<< HEAD
-                                    <Button fx:id="deleteWorkerButton" layoutX="30.0" layoutY="118.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Delete worker" />
-=======
                                     <Button layoutX="30.0" layoutY="119.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Delete Worker" />
->>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
                                  </children>
                               </Pane>
                            </content>
@@ -131,7 +118,7 @@
                <children>
                   <Pane fx:id="paneWelcomeView" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
-                        <Text fx:id="adStaffMenuWelcomeText" layoutX="76.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LogInScreen">
+                        <Text fx:id="adStaffMenuWelcomeText" layoutX="295.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LogInScreen">
                            <font>
                               <Font name="Arial" size="24.0" />
                            </font>
@@ -141,36 +128,27 @@
                   </Pane>
                   <Pane fx:id="paneCreatePatientView" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
-<<<<<<< HEAD
-                        <Text layoutX="190.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Register new Patient" wrappingWidth="404.076171875">
-=======
-                        <Text layoutX="190.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PatientCreate Screen" wrappingWidth="404.076171875">
->>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
-                           <font>
-                              <Font name="Arial" size="42.0" />
-                           </font>
-                        </Text>
-                        <Text layoutX="159.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
+                        <Text layoutX="163.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
-                        <Text layoutX="392.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Surname">
+                        <Text layoutX="398.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Surname">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
-                        <Text layoutX="105.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient basic info">
+                        <Text layoutX="117.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient basic info">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
-                        <Text layoutX="93.0" layoutY="240.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Medical information">
+                        <Text layoutX="93.0" layoutY="285.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Medical information">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
-                        <Text layoutX="142.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Blood Type">
+                        <Text layoutX="140.0" layoutY="324.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Blood Type">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
@@ -180,39 +158,39 @@
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
-                        <Text layoutX="150.0" layoutY="314.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Allergies">
+                        <Text layoutX="153.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Allergies">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
-                        <TextField fx:id="nameTextField" layoutX="212.0" layoutY="156.0" />
-                        <TextField fx:id="surnameTextField" layoutX="469.0" layoutY="156.0" />
-                        <Separator layoutX="234.0" layoutY="104.0" prefWidth="400.0" />
-                        <Separator layoutX="234.0" layoutY="234.0" prefWidth="400.0" />
-                        <ComboBox fx:id="bloodTypeChoiceBox" layoutX="240.0" layoutY="262.0" prefWidth="150.0" promptText="Chose a blood type" visibleRowCount="8" />
-                        <TextArea fx:id="allergiesTextArea" layoutX="234.0" layoutY="309.0" prefHeight="77.0" prefWidth="388.0" promptText="Please, introduce the patient allergies here. Leave it empty if none">
+                        <TextField fx:id="nameTextField" layoutX="230.0" layoutY="156.0" />
+                        <TextField fx:id="surnameTextField" layoutX="464.0" layoutY="156.0" />
+                        <Separator layoutX="238.0" layoutY="99.0" prefWidth="400.0" />
+                        <Separator layoutX="234.0" layoutY="279.0" prefWidth="400.0" />
+                        <ComboBox fx:id="bloodTypeChoiceBox" layoutX="238.0" layoutY="307.0" prefWidth="150.0" promptText="Chose a blood type" visibleRowCount="8" />
+                        <TextArea fx:id="allergiesTextArea" layoutX="238.0" layoutY="356.0" prefHeight="77.0" prefWidth="388.0" promptText="Please, introduce the patient allergies here. Leave it empty if none">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </TextArea>
-                        <Text layoutX="131.0" layoutY="428.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aditional info">
+                        <Text layoutX="140.0" layoutY="462.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aditional info">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
-                        <Separator layoutX="234.0" layoutY="421.0" prefWidth="400.0" />
-                        <Text layoutX="159.0" layoutY="474.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address">
+                        <Separator layoutX="243.0" layoutY="455.0" prefWidth="400.0" />
+                        <Text layoutX="167.0" layoutY="503.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
-                        <TextField fx:id="addressTextField" layoutX="221.0" layoutY="457.0" prefHeight="25.0" prefWidth="400.0" />
-                        <Text layoutX="153.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Birthdate">
+                        <TextField fx:id="addressTextField" layoutX="229.0" layoutY="486.0" prefHeight="25.0" prefWidth="400.0" />
+                        <Text layoutX="154.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Birthdate">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
-                        <DatePicker fx:id="birthDatePicker" layoutX="226.0" layoutY="503.0" />
+                        <DatePicker fx:id="birthDatePicker" layoutX="230.0" layoutY="231.0" />
                         <Group layoutX="234.0" layoutY="197.0">
                            <children>
                               <RadioButton fx:id="maleRadioButton" mnemonicParsing="false" text="Male">
@@ -220,59 +198,39 @@
                                     <ToggleGroup fx:id="genderRadioButton" />
                                  </toggleGroup>
                               </RadioButton>
-                              <RadioButton fx:id="femaleRadioButton" layoutX="81.0" mnemonicParsing="false" text="Female" toggleGroup="$genderRadioButton" />
+                              <RadioButton fx:id="femaleRadioButton" layoutX="79.0" mnemonicParsing="false" text="Female" toggleGroup="$genderRadioButton" />
                            </children>
                         </Group>
-<<<<<<< HEAD
-                        <Button layoutX="350.0" layoutY="585.0" mnemonicParsing="false" onAction="#createPatient" text="CREATE">
-=======
                         <Button layoutX="347.0" layoutY="591.0" mnemonicParsing="false" onAction="#createPatient" text="Porfavoooo">
->>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
                            <font>
-                              <Font name="Arial" size="16.0" />
+                              <Font name="Arial" size="14.0" />
                            </font>
                         </Button>
-<<<<<<< HEAD
-                        <Text layoutX="125.0" layoutY="556.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check-in date">
-=======
-                        <Text layoutX="142.0" layoutY="559.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check-in date">
->>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
+                        <Text layoutX="131.0" layoutY="554.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check-in date">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
-<<<<<<< HEAD
-                        <DatePicker fx:id="checkInDatePicker" layoutX="227.0" layoutY="539.0" />
-                        <Text layoutX="426.0" layoutY="538.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hospitalized">
-=======
-                        <DatePicker fx:id="checkInDatePicker" layoutX="240.0" layoutY="542.0" />
-                        <Text layoutX="426.0" layoutY="534.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hospitalized">
->>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
+                        <DatePicker fx:id="checkInDatePicker" layoutX="229.0" layoutY="537.0" />
+                        <Text layoutX="421.0" layoutY="554.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hospitalized">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
-<<<<<<< HEAD
-                        <ComboBox fx:id="hospitalizedChoiceBox" layoutX="518.0" layoutY="521.0" prefWidth="150.0" />
-=======
-                        <ComboBox fx:id="hospitalizedChoiceBox" layoutX="510.0" layoutY="517.0" prefWidth="150.0" />
-                        <Text layoutX="167.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Medical card">
+                        <ComboBox fx:id="hospitalizedChoiceBox" layoutX="505.0" layoutY="537.0" prefWidth="150.0" />
+                        <Text layoutX="131.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Medical card">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Text>
-                        <TextField fx:id="patientIdTextField" layoutX="318.0" layoutY="122.0" promptText="Medical card id here" />
->>>>>>> branch 'master' of https://github.com/albaavl/ER-Databases
+                        <TextField fx:id="patientIdTextField" layoutX="230.0" layoutY="122.0" promptText="Medical card id here" />
+                        <Label layoutX="286.0" layoutY="39.0" text="Create New Patient">
+                           <font>
+                              <Font name="Arial" size="24.0" />
+                           </font>
+                        </Label>
                      </children>
                   </Pane>
-                  <Pane fx:id="paneChangePatientDataView" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-                     <children>
-                        <Text layoutX="187.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Change patient data">
-                           <font>
-                              <Font name="Arial" size="37.0" />
-                           </font>
-                        </Text>
-                     </children></Pane>
                   <Pane fx:id="paneAssignANewDoctorView" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
                         <Text layoutX="140.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="AssignANewDoctorView">
@@ -296,16 +254,11 @@
                         <Text layoutX="331.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="EditShiftView" />
                      </children>
                   </Pane>
-                  <Pane fx:id="paneDeleteWorker" layoutX="30.0" layoutY="30.0" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-                     <children>
-                        <Text layoutX="331.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="deleteworker" />
-                     </children>
-                  </Pane>
                   <Pane fx:id="paneDeletePatient" layoutX="40.0" layoutY="40.0" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
-                        <Label layoutX="289.0" layoutY="54.0" text="Delete patient">
+                        <Label layoutX="283.0" layoutY="54.0" text="Delete patient">
                            <font>
-                              <Font name="Arial" size="24.0" />
+                              <Font name="Arial" size="26.0" />
                            </font>
                         </Label>
                         <Separator layoutX="161.0" layoutY="92.0" prefHeight="3.0" prefWidth="404.0" />
@@ -314,21 +267,7 @@
                               <Font name="Arial" size="18.0" />
                            </font>
                         </Label>
-                        <Label layoutX="259.0" layoutY="171.0" text="No Patient Selected" textFill="#800000">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <TableView layoutX="22.0" layoutY="164.0" prefHeight="62.0" prefWidth="675.0">
-                          <columns>
-                            <TableColumn prefWidth="116.0" text="medCardNumber" />
-                            <TableColumn prefWidth="107.0" text="Name" />
-                              <TableColumn prefWidth="107.0" text="Surname" />
-                              <TableColumn prefWidth="82.0" text="Blood Type" />
-                              <TableColumn text="Gender" />
-                              <TableColumn prefWidth="88.0" text="BirthDate" />
-                              <TableColumn prefWidth="93.0" text="Check-in Date" />
-                          </columns>
+                        <TableView fx:id="currentDeletePatientTableView" layoutX="22.0" layoutY="164.0" prefHeight="62.0" prefWidth="675.0">
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
@@ -338,22 +277,22 @@
                               <Font name="Arial" size="18.0" />
                            </font>
                         </Label>
-                        <Button layoutX="214.0" layoutY="350.0" mnemonicParsing="false" style="-fx-background-radius: 10;" text="Delete">
+                        <Button layoutX="214.0" layoutY="350.0" mnemonicParsing="false" onAction="#executeDeletePatient" style="-fx-background-radius: 10;" text="Delete">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="304.0" layoutY="350.0" mnemonicParsing="false" style="-fx-background-radius: 10;" text="Change Patient">
+                        <Button fx:id="deletePatientChangePatient" layoutX="304.0" layoutY="350.0" mnemonicParsing="false" onAction="#displaySelectPatientFromDelete" style="-fx-background-radius: 10;" text="Change Patient">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="452.0" layoutY="350.0" mnemonicParsing="false" style="-fx-background-radius: 10;" text="Return">
+                        <Button layoutX="452.0" layoutY="350.0" mnemonicParsing="false" onAction="#cancelDeletePatient" style="-fx-background-radius: 10;" text="Cancel">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="311.0" layoutY="350.0" mnemonicParsing="false" style="-fx-background-radius: 10;" text="Select Patient" visible="false">
+                        <Button fx:id="deletePatientSelectPatient" layoutX="311.0" layoutY="350.0" mnemonicParsing="false" onAction="#displaySelectPatientFromDelete" style="-fx-background-radius: 10;" text="Select Patient" visible="false">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
@@ -367,32 +306,63 @@
                               <Font name="Arial" size="20.0" />
                            </font>
                         </Label>
-                        <ScrollPane layoutX="36.0" layoutY="134.0" prefHeight="381.0" prefWidth="675.0">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="385.0" prefWidth="668.0">
-                                 <children>
-                                    <TableView fx:id="patientTable" prefHeight="378.0" prefWidth="516.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <columns>
-                                          <TableColumn prefWidth="79.93090188503265" text="Medical Card" />
-                                          <TableColumn prefWidth="51.54365539550781" text="Name" />
-                                          <TableColumn prefWidth="65.6348876953125" text="Surname" />
-                                          <TableColumn prefWidth="49.31111145019531" text="Gender" />
-                                          <TableColumn prefWidth="49.31111145019531" text="Blood Type" />
-                                          <TableColumn prefWidth="63.41363525390625" text="Allergies" />
-                                          <TableColumn prefWidth="68.456298828125" text="Birthdate" />
-                                          <TableColumn prefWidth="77.31124877929688" text="Check-in" />
-                                          <TableColumn prefWidth="66.65005493164062" text="Address" />
-                                          <TableColumn prefWidth="95.35003662109375" text="Hospitalized" />
-                                       </columns>
-                                    </TableView>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </ScrollPane>
-                        <Button layoutX="493.0" layoutY="555.0" mnemonicParsing="false" onAction="#selectPatient" prefHeight="32.0" prefWidth="67.0" text="Select" />
+                        <Button fx:id="fromDeleteSelectPatientButton" layoutX="493.0" layoutY="555.0" mnemonicParsing="false" onAction="#selectPatientBackToDelete" prefHeight="32.0" prefWidth="67.0" text="Select" />
                         <TextField fx:id="selectPatientTextField" layoutX="151.0" layoutY="553.0" prefHeight="34.0" prefWidth="295.0" promptText="Please, input the medical card number of the patient" />
+                        <AnchorPane layoutX="29.0" layoutY="129.0" minHeight="0.0" minWidth="0.0" prefHeight="385.0" prefWidth="668.0">
+                           <children>
+                              <TableView fx:id="selectPatientTableView" prefHeight="378.0" prefWidth="516.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                        <Button fx:id="fromEditSelectPatientButton" layoutX="493.0" layoutY="555.0" mnemonicParsing="false" onAction="#selectPatientBackToEdit" prefHeight="32.0" prefWidth="67.0" text="Select" />
+                        <Button fx:id="fromLinkDocSelectPatientButton" layoutX="493.0" layoutY="555.0" mnemonicParsing="false" onAction="#selectPatientBackToLinkDoc" prefHeight="32.0" prefWidth="67.0" text="Select" />
                      </children>
                   </Pane>
+                  <Pane fx:id="paneChangePatientDataView" layoutX="15.0" layoutY="15.0" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                     <children>
+                        <Label layoutX="289.0" layoutY="54.0" text="Edit patient data">
+                           <font>
+                              <Font name="Arial" size="24.0" />
+                           </font>
+                        </Label>
+                        <Separator layoutX="161.0" layoutY="92.0" prefHeight="3.0" prefWidth="404.0" />
+                        <Label layoutX="63.0" layoutY="131.0" text="Current selected patient:">
+                           <font>
+                              <Font name="Arial" size="18.0" />
+                           </font>
+                        </Label>
+                        <TableView fx:id="currentEditPatientTableView" layoutX="22.0" layoutY="164.0" prefHeight="62.0" prefWidth="675.0">
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <Label layoutX="239.0" layoutY="298.0" text="Would you like to edit this patient?">
+                           <font>
+                              <Font name="Arial" size="18.0" />
+                           </font>
+                        </Label>
+                        <Button layoutX="194.0" layoutY="350.0" mnemonicParsing="false" onAction="#executeEditPatient" style="-fx-background-radius: 10;" text="Edit Patient Data">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="editPatientChangePatient" layoutX="337.0" layoutY="350.0" mnemonicParsing="false" onAction="#displaySelectPatientFromEdit" style="-fx-background-radius: 10;" text="Change Patient">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="493.0" layoutY="350.0" mnemonicParsing="false" onAction="#cancelEditPatient" style="-fx-background-radius: 10;" text="Return">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="editPatientSelectPatient" layoutX="342.0" layoutY="350.0" mnemonicParsing="false" onAction="#displaySelectPatientFromEdit" style="-fx-background-radius: 10;" text="Select Patient" visible="false">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="paneDeleteWorker" prefHeight="200.0" prefWidth="200.0" />
                </children>
             </AnchorPane>
         </items>

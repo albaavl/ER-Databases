@@ -105,6 +105,8 @@ public class AdStaffMenuController implements Initializable {
         paneAssignANewDoctorView.setDisable(true);
         paneDeletePatient.setVisible(false);
         paneDeletePatient.setDisable(true);
+        paneSelectPatient.setVisible(false);
+        paneSelectPatient.setDisable(true);
         //WorkerViewOptions
         paneCreateWorkerView.setVisible(false);
         paneCreateWorkerView.setDisable(true);
@@ -127,18 +129,111 @@ public class AdStaffMenuController implements Initializable {
         paneCreatePatientView.setVisible(true);
 
     }
+
+    @FXML
+    private Button editPatientSelectPatient;
+    @FXML
+    private Button editPatientChangePatient;
+
     public void displayChangePatientDataView() {
         hideAll();
         resetAll();
+
+        editPatientSelectPatient.setVisible(true);
+        editPatientChangePatient.setVisible(false);
+        editPatientChangePatient.setDisable(true);
+        editPatientSelectPatient.setDisable(false);
+
+        if(currentSelectedPatient != null){
+            setCurrentEditPatientTable();
+            editPatientSelectPatient.setVisible(false);
+            editPatientChangePatient.setVisible(true);
+            editPatientChangePatient.setDisable(false);
+            editPatientSelectPatient.setDisable(true);
+        }
+
         paneChangePatientDataView.setDisable(false);
         paneChangePatientDataView.setVisible(true);
     }
-    public void displaySelectPatient(){
+
+    //TODO - Truño here - Todos los distintos display para el select patient (Delete, link doc, edit)
+    @FXML
+    private Button fromDeleteSelectPatientButton;
+    @FXML
+    private Button fromEditSelectPatientButton;
+    @FXML
+    private Button fromLinkDocSelectPatientButton;
+
+    private void hideAllPatientSelectButton() {
+        fromDeleteSelectPatientButton.setVisible(false);
+        fromDeleteSelectPatientButton.setDisable(true);
+        fromEditSelectPatientButton.setVisible(false);
+        fromEditSelectPatientButton.setDisable(true);
+        fromLinkDocSelectPatientButton.setVisible(false);
+        fromLinkDocSelectPatientButton.setDisable(true);
+    }
+
+    public void displaySelectPatientFromDelete() throws IOException{
         hideAll();
         resetAll();
+
+        try {
+            setPatientTables();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            ErrorPopup.errorPopup(0);
+        }
+
         paneSelectPatient.setDisable(false);
         paneSelectPatient.setVisible(true);
+        
+        hideAllPatientSelectButton();
+        fromDeleteSelectPatientButton.setVisible(true);
+        fromDeleteSelectPatientButton.setDisable(false);
+
     }
+    public void displaySelectPatientFromEdit() throws IOException{
+        hideAll();
+        resetAll();
+    
+        try {
+            setPatientTables();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            ErrorPopup.errorPopup(0);
+        }
+
+        paneSelectPatient.setDisable(false);
+        paneSelectPatient.setVisible(true);
+
+        hideAllPatientSelectButton();
+        fromEditSelectPatientButton.setVisible(true);
+        fromEditSelectPatientButton.setDisable(false);
+
+    }
+    public void displaySelectPatientFromLinkDoc() throws IOException{
+        hideAll();
+        resetAll();
+
+        try {
+            setPatientTables();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            ErrorPopup.errorPopup(0);
+        }
+
+        paneSelectPatient.setDisable(false);
+        paneSelectPatient.setVisible(true);
+        
+        hideAllPatientSelectButton();
+        fromLinkDocSelectPatientButton.setVisible(true);
+        fromLinkDocSelectPatientButton.setDisable(false);
+
+    }
+
     public void displayAssignANewDoctorView() {
         hideAll();
         resetAll();
@@ -165,9 +260,27 @@ public class AdStaffMenuController implements Initializable {
         paneEditShiftView.setVisible(true);
     }
 
+    @FXML
+    private Button deletePatientSelectPatient;
+    @FXML
+    private Button deletePatientChangePatient;
+
     public void displayDeletePatient() {
         hideAll();
         resetAll();
+        deletePatientSelectPatient.setVisible(true);
+        deletePatientChangePatient.setVisible(false);
+        deletePatientChangePatient.setDisable(true);
+        deletePatientSelectPatient.setDisable(false);
+
+        if(currentSelectedPatient != null){
+            setCurrentDeletePatientTable();
+            deletePatientSelectPatient.setVisible(false);
+            deletePatientChangePatient.setVisible(true);
+            deletePatientChangePatient.setDisable(false);
+            deletePatientSelectPatient.setDisable(true);
+        }
+
         paneDeletePatient.setDisable(false);
         paneDeletePatient.setVisible(true);
     }
@@ -248,6 +361,16 @@ public class AdStaffMenuController implements Initializable {
         bloodTypeChoiceBox.getItems().addAll(bloodTypeStrings);
         hospitalizedChoiceBox.getItems().addAll(hospOptionStrings);
         //workerTypeComboBox.getItems().addAll(workerTypeStrings);
+        columnName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
+        columnSurname.setCellValueFactory(new PropertyValueFactory<>("patientSurname"));
+        columnAllergies.setCellValueFactory(new PropertyValueFactory<>("allergieType"));
+        columnGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        columnBloodtype.setCellValueFactory(new PropertyValueFactory<>("bloodType"));
+        columnAddress.setCellValueFactory(new PropertyValueFactory<>("patientAddress"));
+        columnPatientId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getMedicalCardId())));
+        columnBirthDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getbDate().toString()));
+        columnCheckInDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCheckInDate().toString()));
+        columnHospitalized.setCellValueFactory(data -> new SimpleStringProperty(Boolean.toString(data.getValue().getHospitalized()))); 
     }
 
     //Menu functions
@@ -434,14 +557,61 @@ public class AdStaffMenuController implements Initializable {
     //Delete Patient View
 
     @FXML
-    private Button deletePatientButton;
-    @FXML
-    private Button deleteChangePatientButton;
-    @FXML
-    private Button deleteGoBackPatientButton;
-    @FXML
-    private TableView<Patient> currentDeletePatient;
+    private TableView<Patient> currentDeletePatientTableView;
 
+    private void setCurrentDeletePatientTable(){
+        currentDeletePatientTableView.getItems().clear();
+        currentDeletePatientTableView.getColumns().clear();
+        currentDeletePatientTableView.getColumns().addAll(columnPatientId, columnName, columnSurname, columnGender, columnBloodtype, columnAllergies, columnBirthDate, columnCheckInDate, columnAddress, columnHospitalized);
+        currentDeletePatientTableView.getItems().add(currentSelectedPatient);
+    }
+    @FXML
+    public void executeDeletePatient(){
+        try {
+            jdbc.deletePatientByMedicalCardId(currentSelectedPatient.getMedicalCardId());
+            //TODO - #successDelete popup!
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block #Error popup
+            e.printStackTrace();
+            return;
+        }
+        cancelDeletePatient();
+    }
+    @FXML
+    public void cancelDeletePatient(){
+        currentDeletePatientTableView.getItems().clear();
+        currentSelectedPatient = null;
+    }
+
+    //Edit patient view
+
+    @FXML
+    private TableView<Patient> currentEditPatientTableView;
+
+    private void setCurrentEditPatientTable(){
+        currentEditPatientTableView.getItems().clear();
+        currentEditPatientTableView.getColumns().clear();
+        currentEditPatientTableView.getColumns().addAll(columnPatientId, columnName, columnSurname, columnGender, columnBloodtype, columnAllergies, columnBirthDate, columnCheckInDate, columnAddress, columnHospitalized);
+        currentEditPatientTableView.getItems().add(currentSelectedPatient);
+    }
+    @FXML
+    public void executeEditPatient(){
+        // try {
+        //     jdbc.deletePatientByMedicalCardId(currentSelectedPatient.getMedicalCardId()); //TODO - heh
+        //     //TODO - #successDelete popup!
+        // } catch (SQLException e) {
+        //     // TODO Auto-generated catch block #Error popup
+        //     e.printStackTrace();
+        //     return;
+        // }
+        cancelEditPatient();
+    }
+    @FXML
+    public void cancelEditPatient(){
+        currentEditPatientTableView.getItems().clear();
+        currentSelectedPatient = null;
+    }
+    
     //Select patient view
 
     private static Patient currentSelectedPatient = null;
@@ -451,41 +621,35 @@ public class AdStaffMenuController implements Initializable {
     @FXML
     private TableView<Patient> selectPatientTableView;
 
+    TableColumn<Patient,String> columnName = new TableColumn<>("Name");
+    TableColumn<Patient,String> columnSurname = new TableColumn<>("Surname");
+    TableColumn<Patient,String> columnPatientId = new TableColumn<>("Medical Card");
+    TableColumn<Patient,String> columnGender = new TableColumn<>("Gender");
+    TableColumn<Patient,String> columnBloodtype = new TableColumn<>("Blood Type");
+    TableColumn<Patient,String> columnAllergies = new TableColumn<>("Allergies");
+    TableColumn<Patient,String> columnAddress = new TableColumn<>("Address");
+    TableColumn<Patient,String> columnBirthDate = new TableColumn<>("Birthdate");
+    TableColumn<Patient,String> columnCheckInDate = new TableColumn<>("Check-in");
+    TableColumn<Patient,String> columnHospitalized = new TableColumn<>("Hospitalized");
+
     //MedicalCard, name, surename, gender, bloodtype, allergies, bdate, checkin, address, hospitalized
 
-    @FXML
-    public void setPatientTables(ActionEvent actionEvent){
+    // @SuppressWarnings("unchecked")
+    private void setPatientTables() throws SQLException, NotBoundException{
 
         List<Patient> patientList = jdbc.selectAllPatients();
-
-        TableColumn<Patient,String> columnName = new TableColumn<>("Name");
-        TableColumn<Patient,String> columnSurname = new TableColumn<>("Surname");
-        TableColumn<Patient,String> columnPatientId = new TableColumn<>("Medical Card");
-        TableColumn<Patient,String> columnGender = new TableColumn<>("Gender");
-        TableColumn<Patient,String> columnBloodtype = new TableColumn<>("Blood Type");
-        TableColumn<Patient,String> columnAllergies = new TableColumn<>("Allergies");
-        TableColumn<Patient,String> columnAddress = new TableColumn<>("Address");
-        TableColumn<Patient,String> columnBirthDate = new TableColumn<>("Birthdate");
-        TableColumn<Patient,String> columnCheckInDate = new TableColumn<>("Check-in");
-        TableColumn<Patient,String> columnHospitalized = new TableColumn<>("Hospitalized");
-        columnName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
-        columnSurname.setCellValueFactory(new PropertyValueFactory<>("patientSurname"));
-        columnAllergies.setCellValueFactory(new PropertyValueFactory<>("allergieType"));
-        columnGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
-        columnBloodtype.setCellValueFactory(new PropertyValueFactory<>("bloodType"));
-        columnAddress.setCellValueFactory(new PropertyValueFactory<>("patientAddress"));
-        columnCheckInDate.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getMedicalCardId())));
-        columnBirthDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getbDate().toString()));
-        columnPatientId.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCheckInDate().toString()));
-
+        selectPatientTableView.getItems().clear();
+        selectPatientTableView.getColumns().clear();
         selectPatientTableView.getColumns().addAll(columnPatientId, columnName, columnSurname, columnGender, columnBloodtype, columnAllergies, columnBirthDate, columnCheckInDate, columnAddress, columnHospitalized);
         selectPatientTableView.getItems().addAll(patientList);
+
     }
 
     @FXML
-    public void selectPatient(ActionEvent actionEvent) throws IOException {
+    public void selectPatientBackToDelete(ActionEvent actionEvent) throws IOException {
         
         Integer patientId = null;
+        currentSelectedPatient = null;
 
         try {
             patientId = Integer.parseInt(selectPatientTextField.getText());
@@ -494,30 +658,47 @@ public class AdStaffMenuController implements Initializable {
             ErrorPopup.errorPopup(4);
             return;
         }
-
-        // switch (currentSelectOption) {
-        //     case 0://Delete patient
-        //         displayDeletePatient();
-        //         break;
-        //     case 1://Change patient data
-        //         displayChangePatientDataView();
-        //         break;
-        //     case 2://Assign new doc (not from create. if from create pasar select desde successfull shit)
-        //         displayAssignANewDoctorView();
-        //         break;
-        //     default:
-        //         break;
-        // }
-
+        selectPatientTextField.clear();
+        hideAll();
+        displayDeletePatient();
     }
+    @FXML
+    public void selectPatientBackToEdit(ActionEvent actionEvent) throws IOException {
+        
+        Integer patientId = null;
+        currentSelectedPatient = null;
 
+        try {
+            patientId = Integer.parseInt(selectPatientTextField.getText());
+            currentSelectedPatient = jdbc.selectPatient(patientId);
+        } catch (Exception e) {
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+        selectPatientTextField.clear();
+        hideAll();
+        displayChangePatientDataView();
+    }
+    @FXML
+    public void selectPatientBackToLinkDoc(ActionEvent actionEvent) throws IOException {
+        
+        Integer patientId = null;
+        currentSelectedPatient = null;
 
-
-
-
-
-
-
+        try {
+            patientId = Integer.parseInt(selectPatientTextField.getText()); //TODO - Need halp cuz this no works and idk why
+            currentSelectedPatient = jdbc.selectPatient(patientId);         //pq esto no peta si buscas un id q no existe? alguien me explica?
+        } catch (Exception e) {
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+        if(currentSelectedPatient.equals(null)){  //BRO GTFO PQ ESTO NO FUNCIONA FUUUCK
+            System.out.println("fuck off bro");
+        }
+        selectPatientTextField.clear();
+        hideAll();
+        displayDeletePatient();
+    }
 
 
 

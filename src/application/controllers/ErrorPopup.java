@@ -16,7 +16,7 @@ public class ErrorPopup {
      * <p> {@code 1} ur birthdate cant be tomorrow nor on any future date bruh
      * <p> {@code 2} Please fill all the values lmao.
      * <p> {@code 3} Bruh u cant check in on the future.
-     * <p> {@code 4} Numeros, no letras ffs aint that hard.
+     * <p> {@code 4} Numeros, no letras ffs aint that hard + #noteinventescosasbro(El id no existe).
      * <p> {@code 5} Wrong Username or password.
      * <p> {@code 6} No shift to display bruh.
      * <p> {@code X} idk keep adding stuff here...
@@ -96,7 +96,7 @@ public class ErrorPopup {
                 loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
                 rootError = loaderError.load(); 
                 errorPopupController = loaderError.getController();
-                errorPopupController.displayErrorText("Please, put a number.");
+                errorPopupController.displayErrorText("No match found.\nPlease try again.");
                 sceneError = new Scene(rootError);
                 stageError = new Stage();
                 
@@ -107,7 +107,7 @@ public class ErrorPopup {
                 stageError.setTitle("Error: Wrong Id");
                 stageError.show();
                 break;
-                case 5:
+            case 5:
                 loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
                 rootError = loaderError.load(); 
                 errorPopupController = loaderError.getController();

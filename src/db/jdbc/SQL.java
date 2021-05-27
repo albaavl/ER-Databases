@@ -295,7 +295,7 @@ public class SQL implements SQLInterface{
 	}
 	
 	@Override
-	public List<Patient> selectAllPatients(String surname) throws SQLException, NotBoundException {
+	public List<Patient> selectAllPatients() throws SQLException, NotBoundException {
 		String sql = "SELECT * FROM patients";
 		PreparedStatement p = c.prepareStatement(sql);
 		ResultSet rs = p.executeQuery();
@@ -309,7 +309,7 @@ public class SQL implements SQLInterface{
 	}
 	
 	@Override
-	public List<Worker> selectAllWorkers(String surname) throws SQLException, NotBoundException {
+	public List<Worker> selectAllWorkers() throws SQLException, NotBoundException {
 		String sql = "SELECT * FROM workers";
 		PreparedStatement p = c.prepareStatement(sql);
 		ResultSet rs = p.executeQuery();
