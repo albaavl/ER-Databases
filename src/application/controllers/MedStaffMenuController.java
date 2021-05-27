@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -11,6 +13,8 @@ import java.util.ResourceBundle;
 import db.jdbc.SQL;
 import db.jpa.JPAUserManager;
 import db.pojos.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -78,9 +82,9 @@ public class MedStaffMenuController{
     @FXML
     TableView<MedicalTest> medicalTestsTable;
     @FXML
-    TableColumn<MedicalTest, Integer> medicalTestId;
+    TableColumn<MedicalTest, String> medicalTestId;
     @FXML
-    TableColumn<MedicalTest, Date> medicalTestDate;
+    TableColumn<MedicalTest, String> medicalTestDate;
     @FXML
     TableColumn<MedicalTest, String> medicalTestType;
     @FXML
@@ -122,7 +126,7 @@ public class MedStaffMenuController{
     @FXML
     TableView<Patient> patientsTable;
     @FXML
-    TableColumn<Patient, Integer> medicalCard;
+    TableColumn<Patient, String> medicalCard;
     @FXML
     TableColumn<Patient, String> patientName;
     @FXML
@@ -136,11 +140,11 @@ public class MedStaffMenuController{
     @FXML
     TableColumn<Patient, String> patientAddress;
     @FXML
-    TableColumn<Patient, Date> patientBirthdate;
+    TableColumn<Patient, String> patientBirthdate;
     @FXML
-    TableColumn<Patient, Date> patientCheckIn;
+    TableColumn<Patient, String> patientCheckIn;
     @FXML
-    TableColumn<Patient, Boolean> patientHospitalized;
+    TableColumn<Patient, String> patientHospitalized;
     @FXML
     Button selectPatient1;
     @FXML
@@ -154,9 +158,9 @@ public class MedStaffMenuController{
     @FXML
     TableView<Treatment> treatmentsTable;
     @FXML
-    TableColumn<Treatment, Integer> treatmentId;
+    TableColumn<Treatment, String> treatmentId;
     @FXML
-    TableColumn<Treatment, Date> dateTreatment;
+    TableColumn<Treatment, String> dateTreatment;
     @FXML
     TableColumn<Treatment, String> durationTreatment;
     @FXML
@@ -175,13 +179,13 @@ public class MedStaffMenuController{
     @FXML
     TableView<Shift> shiftsTable;
     @FXML
-    TableColumn<Shift, Integer> shiftId;
+    TableColumn<Shift, String> shiftId;
     @FXML
-    TableColumn<Shift, Date> shiftDate;
+    TableColumn<Shift, String> shiftDate;
     @FXML
     TableColumn<Shift, String> shiftTurn;
     @FXML
-    TableColumn<Shift, Integer> shiftRoom;
+    TableColumn<Shift, String> shiftRoom;
     
     //SpecificShift
     @FXML
@@ -189,13 +193,13 @@ public class MedStaffMenuController{
     @FXML
     TableView<Shift> ssShiftTable;
     @FXML
-    TableColumn<Shift, Integer> ssId;
+    TableColumn<Shift, String> ssId;
     @FXML
-    TableColumn<Shift, Date> ssDate;
+    TableColumn<Shift, String> ssDate;
     @FXML
     TableColumn<Shift, String> ssTurn;
     @FXML
-    TableColumn<Shift, Integer> ssRoom;
+    TableColumn<Shift, String> ssRoom;
     
   //Controller stuff
     public static MedStaffMenuController thisMedStaffMenuController;
@@ -384,11 +388,28 @@ public class MedStaffMenuController{
     private void allShifts() throws Exception{
     	List<Shift> shiftsList = new ArrayList<>();
     	shiftsList.addAll(jdbc.searchShiftByWorkerId(medStaff.getWorkerId()));
-    	
+    	shiftsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    	shiftId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getShiftId())));
+    	DateFormat dateformat=new SimpleDateFormat("yyyy-MM-dd");
+    	shiftDate.setCellValueFactory(data -> new SimpleStringProperty(dateformat.format(data.getValue().getDate())));
+    	shiftTurn.setCellValueFactory(new PropertyValueFactory<>("turn"));
+    	shiftRoom.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getRoom())));
+    	shiftsTable.getColumns().addAll(shiftId, shiftDate, shiftTurn, shiftRoom);
+        shiftsTable.getItems().addAll(shiftsList);
+        //TODO comprobar que funciona
     }
     
     public void selectedShift(ActionEvent aE) throws Exception{
-    	
+    	List<Shift> shiftsList = new ArrayList<>();
+    	shiftsList.addAll(jdbc.searchShiftByDate(medStaff.getWorkerId(), new Date(0)));//TODO meter la date del date picker cuando pulse el boton de select
+    	this.ssShiftTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    	ssId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getShiftId())));
+    	DateFormat dateformat=new SimpleDateFormat("yyyy-MM-dd");
+    	ssDate.setCellValueFactory(data -> new SimpleStringProperty(dateformat.format(data.getValue().getDate())));
+    	ssTurn.setCellValueFactory(new PropertyValueFactory<>("turn"));
+    	ssRoom.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getRoom())));
+    	ssShiftTable.getColumns().addAll(ssId, ssDate, ssTurn, ssRoom);
+        ssShiftTable.getItems().addAll(shiftsList);
     }
     
 }
