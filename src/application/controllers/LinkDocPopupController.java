@@ -25,6 +25,7 @@ public class LinkDocPopupController {
     @FXML
     private void onYesButton(ActionEvent aEvent) {
 
+        adStaffMenuController.setLastCreatedAsCurrent();
         adStaffMenuController.displayAssignANewDoctorView();
         Stage stage = (Stage) yesLinkDocPopupButton.getScene().getWindow();
         stage.close();
@@ -40,6 +41,8 @@ public class LinkDocPopupController {
      */
     @FXML
     private void onNoButton(ActionEvent aEvent) {
+
+        adStaffMenuController.setLastCreatedNull();
         Stage stage = (Stage) noLinkDocPopupButton.getScene().getWindow();
         stage.close();
     }
