@@ -139,7 +139,12 @@ public class LogInController {
 
         MedStaffMenuController medStaffMenuController = loader.getController();
         medStaffMenuController.setMedStaffController(medStaffMenuController);
-        medStaffMenuController.displayWelcomeText(jdbc.selectWorker(userId), jdbc, userman);
+        try {
+			medStaffMenuController.displayWelcomeText(jdbc.selectWorkerByUserId(userId), jdbc, userman);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         
         stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();

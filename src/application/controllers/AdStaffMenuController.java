@@ -209,8 +209,8 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         paneEditPatientDataView.setDisable(true);
         paneChangeWorkerDataView.setVisible(false);
         paneChangeWorkerDataView.setDisable(true);
-        paneChangeShiftView.setVisible(false);
-        paneChangeShiftView.setDisable(true);
+        // paneChangeShiftView.setVisible(false); TODO ESTE PANE NO EXISTE POR ESO DA NULLPOINTEREXCEPTION
+        // paneChangeShiftView.setDisable(true);
         paneEditShiftView.setVisible(false);
         paneEditShiftView.setDisable(true);
         paneDeleteWorker.setVisible(false);

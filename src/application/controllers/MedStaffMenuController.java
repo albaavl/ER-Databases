@@ -2,6 +2,7 @@ package application.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.NotBoundException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -131,25 +132,25 @@ public class MedStaffMenuController{
     @FXML
     TableView<Patient> patientsTable;
     @FXML
-    TableColumn<Patient, String> medicalCard;
+    TableColumn<Patient, String> medicalCard = new TableColumn<>("Medical card");
     @FXML
-    TableColumn<Patient, String> patientName;
+    TableColumn<Patient, String> patientName = new TableColumn<>("Name");
     @FXML
-    TableColumn<Patient, String> patientSurname;
+    TableColumn<Patient, String> patientSurname= new TableColumn<>("Surname");
     @FXML
-    TableColumn<Patient, String> patientGender;
+    TableColumn<Patient, String> patientGender= new TableColumn<>("Gender");
     @FXML
-    TableColumn<Patient, String> patientBlood;
+    TableColumn<Patient, String> patientBlood= new TableColumn<>("Blood type");
     @FXML
-    TableColumn<Patient, String> patientAllergies;
+    TableColumn<Patient, String> patientAllergies= new TableColumn<>("Allergies");
     @FXML
-    TableColumn<Patient, String> patientAddress;
+    TableColumn<Patient, String> patientAddress= new TableColumn<>("Address");
     @FXML
-    TableColumn<Patient, String> patientBirthdate;
+    TableColumn<Patient, String> patientBirthdate= new TableColumn<>("Birthdate");
     @FXML
-    TableColumn<Patient, String> patientCheckIn;
+    TableColumn<Patient, String> patientCheckIn= new TableColumn<>("Check-in");
     @FXML
-    TableColumn<Patient, String> patientHospitalized;
+    TableColumn<Patient, String> patientHospitalized= new TableColumn<>("Hospitalized");
     @FXML
     Button selectPatient1;
     @FXML
@@ -269,12 +270,17 @@ public class MedStaffMenuController{
 
     }
     
-    public void displayConsultMedicalTestsView(ActionEvent aEvent) {
+    public void displayConsultMedicalTestsView(ActionEvent aEvent) throws NumberFormatException, NotBoundException, SQLException, IOException {
         hideAll();
         resetAll();
         consultMedicalTestsView.setDisable(false);
         consultMedicalTestsView.setVisible(true);
-
+        currentPatient = new Patient(jdbc.selectPatient(Integer.parseInt(chosenPatientId.getText())));
+   	 if(currentPatient == null) {
+   		 ErrorPopup.errorPopup(4);
+   		 return;
+   	 }
+//TODO funcion de consultMedicalTest
     }
     
     public void displayEditTreatmentView(ActionEvent aEvent) {
@@ -286,33 +292,50 @@ public class MedStaffMenuController{
 
     }
     
-    public void displaySelectPatientView1(ActionEvent aEvent) {
+    public void displaySelectPatientView1(ActionEvent aEvent) throws IOException {
         hideAll();
         resetAll();
         hideButtons();
         selectPatientView.setDisable(false);
         selectPatientView.setVisible(true);
         selectPatient1.setVisible(true);
+        try {
+        selectPatient();
+        }catch(Exception e) {
+        	ErrorPopup.errorPopup(0);//TODO error que imprima los mitic errores de sql y blah blah o dejarlo en generico
+        return;
+        }
 
     }
     
-    public void displaySelectPatientView2(ActionEvent aEvent) {
+    public void displaySelectPatientView2(ActionEvent aEvent) throws IOException {
         hideAll();
         resetAll();
         hideButtons();
         selectPatientView.setDisable(false);
         selectPatientView.setVisible(true);
         selectPatient2.setVisible(true);
+        try {
+            selectPatient();
+            }catch(Exception e) {
+            	ErrorPopup.errorPopup(0);//TODO error que imprima los mitic errores de sql y blah blah o dejarlo en generico
+            return;
+            }
 
     }
     
-    public void displaySelectPatientView3(ActionEvent aEvent) {
+    public void displaySelectPatientView3(ActionEvent aEvent) throws IOException {
         hideAll();
         resetAll();
         hideButtons();
         selectPatientView.setDisable(false);
         selectPatientView.setVisible(true);
         selectPatient3.setVisible(true);
+        try {
+            selectPatient();
+            }catch(Exception e) {
+            	ErrorPopup.errorPopup(0);//TODO error que imprima los mitic errores de sql y blah blah o dejarlo en generico
+            return;}
 
     }
     
@@ -375,6 +398,10 @@ public class MedStaffMenuController{
     private static Patient currentPatient = new Patient();
     
     public void displayWelcomeText(Worker w, SQL sqlman, JPAUserManager userm) {
+    	hideAll();
+        resetAll();
+        mainMedStaffView.setVisible(true);
+        mainMedStaffView.setDisable(false);
     	try {
 			medStaff = new Worker(w);
 			jdbc = sqlman;
@@ -387,7 +414,13 @@ public class MedStaffMenuController{
     }
     
     public void addTreatment(ActionEvent aE)throws Exception{
+    	 currentPatient = new Patient(jdbc.selectPatient(Integer.parseInt(chosenPatientId.getText())));
+    	 if(currentPatient == null) {
+    		 ErrorPopup.errorPopup(4);
+    		 return;
+    	 }
     	Treatment newTreatment = new Treatment();
+    	newTreatment.setPatientId(currentPatient.getMedicalCardId());
     	if(diagnosisCTreatment.getText().equalsIgnoreCase("")|| durationCTreatment.getText().equalsIgnoreCase("")||
    			 medicationCTreatment.getText().equalsIgnoreCase("")|| adviceCTreatment.getText().equalsIgnoreCase("")
    			 || startDateCTreatment.getEditor().getText() == "") {
@@ -449,11 +482,15 @@ public class MedStaffMenuController{
     
     public void selectedShift(ActionEvent aE) throws Exception{
     	Date shiftDate = Date.valueOf(ssSelectedDate.getValue());
-    	if(shiftDate.after(Date.valueOf(LocalDate.now()))) {
+    	if(!shiftDate.before(Date.valueOf(LocalDate.now()))) {
     	List<Shift> shiftsList = new ArrayList<>();
-    	shiftsList.addAll(jdbc.searchShiftByDate(medStaff.getWorkerId(), shiftDate));//TODO meter la date del date picker cuando pulse el boton de select
     	ssShiftTable.getItems().clear();
     	ssShiftTable.getColumns().clear();
+    	shiftsList.addAll(jdbc.searchShiftByDate(medStaff.getWorkerId(), shiftDate));
+    	if(shiftsList.isEmpty()) {
+    		ErrorPopup.errorPopup(10);
+    		return;
+    	}
     	ssShiftTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     	ssId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getShiftId())));
     	DateFormat dateformat=new SimpleDateFormat("yyyy-MM-dd");
@@ -468,7 +505,15 @@ public class MedStaffMenuController{
     	}
     }
     
-    private void selectPatient() {
+    private void selectPatient() throws IOException, SQLException, NotBoundException {
+    	List<Patient> patients = new ArrayList<>();
+    	patients.addAll(jdbc.searchPatientByDoctor(medStaff.getWorkerId()));
+    	if(patients.isEmpty()) {
+			ErrorPopup.errorPopup(9);
+			displayWelcomeText(medStaff,jdbc,userman);
+		}else {
+			patientsTable.getItems().clear();
+			patientsTable.getColumns().clear();
     	 patientName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
          patientSurname.setCellValueFactory(new PropertyValueFactory<>("patientSurname"));
          patientAllergies.setCellValueFactory(new PropertyValueFactory<>("allergieType"));
@@ -479,8 +524,47 @@ public class MedStaffMenuController{
          patientBirthdate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getbDate().toString()));
          patientCheckIn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCheckInDate().toString()));
          patientHospitalized.setCellValueFactory(data -> new SimpleStringProperty(Boolean.toString(data.getValue().getHospitalized())));
-         
+         patientsTable.getColumns().addAll( medicalCard,patientName, patientSurname, patientBirthdate, patientGender,patientBlood,patientCheckIn,patientAddress,patientAllergies,patientHospitalized);
+		
+		patientsTable.getItems().addAll(patients);}
      //TODO terminarlo
+    }
+    
+    private void selectTreatment() throws IOException, NumberFormatException, NotBoundException, SQLException {
+    	currentPatient = new Patient(jdbc.selectPatient(Integer.parseInt(chosenPatientId.getText())));
+   	 if(currentPatient == null) {
+   		 ErrorPopup.errorPopup(4);
+   		 return;
+   	 }
+   	List<Treatment> treatments = new ArrayList<>();
+	try {
+		treatments.addAll(jdbc.searchTreatmentsByMedCard(currentPatient.getMedicalCardId()));
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+	if(treatments.isEmpty()) {
+		ErrorPopup.errorPopup(9);
+		displayWelcomeText(medStaff,jdbc,userman);
+	}else {
+		treatmentsTable.getItems().clear();
+		treatmentsTable.getColumns().clear();
+   	dateTreatment.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStartDate().toString()));
+   	durationTreatment.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getDuration())));
+   	medicationTreatment.setCellValueFactory(new PropertyValueFactory<>("medication"));
+   	adviceTreatment.setCellValueFactory(new PropertyValueFactory<>("advice"));
+   	diagnosisTreatment.setCellValueFactory(new PropertyValueFactory<>("diagnosis"));
+   	treatmentId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getTreatmentId())));
+   	
+   	try {
+    	
+    	treatmentsTable.getColumns().addAll( treatmentId,dateTreatment, durationTreatment, medicationTreatment, diagnosisTreatment,adviceTreatment);
+		
+    	treatmentsTable.getItems().addAll(treatments);
+		} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}}
     }
     
 }

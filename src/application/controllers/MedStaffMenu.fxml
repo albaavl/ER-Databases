@@ -26,9 +26,9 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: darkred;">
                                  <children>
-                                    <Button fx:id="consultMedicalTest" layoutX="63.0" layoutY="22.0" mnemonicParsing="false" onAction="#displaySelectPatientView" text="Consult medical test" />
-                                    <Button fx:id="addTreatmentDiagnosis" layoutX="39.0" layoutY="84.0" mnemonicParsing="false" onAction="#displaySelectPatientView" text="Add treatment and diagnosis" />
-                                    <Button fx:id="editTreatmentDiagnosis" layoutX="42.0" layoutY="149.0" mnemonicParsing="false" onAction="#displaySelectPatientView" text="Edit treatment and diagnosis" />
+                                    <Button fx:id="consultMedicalTest" layoutX="63.0" layoutY="22.0" mnemonicParsing="false" onAction="#displaySelectPatientView1" text="Consult medical test" />
+                                    <Button fx:id="addTreatmentDiagnosis" layoutX="39.0" layoutY="84.0" mnemonicParsing="false" onAction="#displaySelectPatientView2" text="Add treatment and diagnosis" />
+                                    <Button fx:id="editTreatmentDiagnosis" layoutX="42.0" layoutY="149.0" mnemonicParsing="false" onAction="#displaySelectPatientView3" text="Edit treatment and diagnosis" />
                                  </children>
                               </AnchorPane>
                         </content>
@@ -87,7 +87,7 @@
                            </content>
                         </ScrollPane>
                         <Button fx:id="selectPatient1" layoutX="493.0" layoutY="555.0" mnemonicParsing="false" onAction="#displayConsultMedicalTestsView" prefHeight="32.0" prefWidth="67.0" text="Select" />
-                        <TextField fx:id="chosenPatientID" layoutX="151.0" layoutY="553.0" prefHeight="34.0" prefWidth="295.0" promptText="Please, input the medical card number of the patient" />
+                        <TextField fx:id="chosenPatientId" layoutX="151.0" layoutY="553.0" prefHeight="34.0" prefWidth="295.0" promptText="Please, input the medical card number of the patient" />
                         <Button fx:id="selectPatient2" layoutX="493.0" layoutY="553.0" mnemonicParsing="false" onAction="#displayAddTreatmentView" prefHeight="32.0" prefWidth="67.0" style="-fx-background-color: black;" text="Select" textFill="WHITE" visible="false" />
                         <Button fx:id="selectPatient3" layoutX="491.0" layoutY="552.0" mnemonicParsing="false" onAction="#displaySelectTreatmentView" prefHeight="32.0" prefWidth="67.0" style="-fx-background-color: darkred;" text="Select" textFill="WHITE" visible="false" />
                      </children>
@@ -216,29 +216,25 @@
                   </Pane>
                   <Pane fx:id="selectTreatmentView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" visible="false">
                      <children>
+                        <Pane>
+                           <children>
+                              <TableView fx:id="treatmentsTable" prefHeight="378.0" prefWidth="516.0" />
+                           </children>
+                        </Pane>
                         <Label layoutX="151.0" layoutY="43.0" prefHeight="86.0" prefWidth="458.0" text="Please choose the treatment you would like to edit:">
                            <font>
                               <Font name="Arial" size="20.0" />
                            </font>
                         </Label>
-                        <ScrollPane layoutX="121.0" layoutY="137.0" prefHeight="378.0" prefWidth="523.0">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="378.0" prefWidth="516.0">
-                                 <children>
-                                    <TableView fx:id="treatmentsTable" prefHeight="378.0" prefWidth="516.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </ScrollPane>
                         <Button fx:id="selectTreatment" layoutX="429.0" layoutY="554.0" mnemonicParsing="false" onAction="#displayEditTreatmentView" prefHeight="32.0" prefWidth="67.0" text="Select" />
                         <TextField fx:id="chosenTreatmentId" layoutX="171.0" layoutY="552.0" prefHeight="34.0" prefWidth="211.0" promptText="Please, input the ID of the treatment" />
                      </children>
                   </Pane>
-                  <ScrollPane fx:id="allShiftsView" prefHeight="647.3333333333334" prefWidth="744.0" visible="false">
-                     <content>
-                        <TableView fx:id="shiftsTable" prefHeight="640.0" prefWidth="741.0" />
-                     </content>
-                  </ScrollPane>
+                  <Pane fx:id="allShiftsView" visible="false">
+                     <children>
+                        <TableView fx:id="shiftsTable" prefHeight="650.0" prefWidth="745.0" />
+                     </children>
+                  </Pane>
                   <Pane fx:id="specificShiftView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" visible="false">
                      <children>
                         <DatePicker fx:id="ssSelectedDate" layoutX="255.0" layoutY="170.0" onAction="#selectedShift" prefHeight="37.0" prefWidth="249.0" promptText="Date" />
