@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class SuccessPopup {
-    
 
     /**
      * When called displays a new window with a success msg in function of the int passed to the function
@@ -43,11 +42,11 @@ public class SuccessPopup {
                 stageError = new Stage();
                 stageError.setScene(sceneError);
 
-                icon = new Image("application/images/successIcon.png");
-                stageError.getIcons().add(icon);	        
+			icon = new Image("application/images/successIcon.png");
+			stageError.getIcons().add(icon);
 
-                stageError.setTitle("Success");
-                stageError.show();
+			stageError.setTitle("Success");
+			stageError.show();
 
                 break;
             case 1:
