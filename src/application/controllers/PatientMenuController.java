@@ -24,23 +24,16 @@ import db.pojos.*;
 
 // import db.jdbc.*;
 
-
 public class PatientMenuController {
 
-    private static SQL jdbc;
-    private static JPAUserManager userman;
-    private ErrorPopup ErrorPopup = new application.controllers.ErrorPopup();
-    private static Patient patient;
-    
-    @FXML
-    private Label welcomeText;
-    
-    @FXML
-    Pane consultTreatmentsView;
+	private static SQL jdbc;
+	private static JPAUserManager userman;
+	private ErrorPopup ErrorPopup = new application.controllers.ErrorPopup();
+	private static Patient patient;
 
-    @FXML
-    Button LogOut;
-    
+	@FXML
+	private Label welcomeText;
+	
   //SelectTreatment
     @FXML
     TableView<Treatment> treatmentsTable;
@@ -56,20 +49,27 @@ public class PatientMenuController {
     TableColumn<Treatment, String> diagnosisTreatment;
     @FXML
     TableColumn<Treatment, String> adviceTreatment;
-    
-    //Controller stuff
-    public static PatientMenuController thisPatientMenuController;
 
-    public void setPatientController( PatientMenuController patientMenuController ) {
-    	thisPatientMenuController = patientMenuController;
-    }
+	@FXML
+	Pane consultTreatmentsView;
 
-    public static PatientMenuController passPatientMenuController() {
-        return thisPatientMenuController;
-    }
+	@FXML
+	Button LogOut;
 
-    public void displayPatientWelcomeText(Patient p, SQL sqlman, JPAUserManager userm) {
-         try {
+
+	// Controller stuff
+	public static PatientMenuController thisPatientMenuController;
+
+	public void setPatientController(PatientMenuController patientMenuController) {
+		thisPatientMenuController = patientMenuController;
+	}
+
+	public static PatientMenuController passPatientMenuController() {
+		return thisPatientMenuController;
+	}
+
+	public void displayPatientWelcomeText(Patient p, SQL sqlman, JPAUserManager userm) {
+		try {
 			patient = new Patient(p);
 			jdbc = sqlman;
 			userman = userm;
@@ -88,7 +88,7 @@ public class PatientMenuController {
     	diagnosisTreatment.setCellValueFactory(new PropertyValueFactory<>("diagnosisTreatment"));
    }*/
     private void setTreatmentTables() throws Exception{
-
+    	
         List<Treatment> treatmentList = new ArrayList<>();
         treatmentList.addAll(jdbc.selectAllTreatments(patient.getMedicalCardId()));
         if (treatmentList.isEmpty()) {
@@ -109,6 +109,7 @@ public class PatientMenuController {
         treatmentsTable.getItems().addAll(treatmentList);
         }
     }
+
     public void displayAllTreatmentsView(ActionEvent aEvent) {
     	consultTreatmentsView.setVisible(false);
         consultTreatmentsView.setDisable(false);
@@ -120,27 +121,27 @@ public class PatientMenuController {
         consultTreatmentsView.setVisible(true);
     }
    
-    private Parent root;
-    private Stage stage;
-    private Scene scene;
-    
-    public void logOut(ActionEvent actionEvent) throws IOException {
-        try {
-            jdbc.disconnect();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            ErrorPopup.errorPopup(0);
-            return;
-        }
-        userman.disconnect();
+	private Parent root;
+	private Stage stage;
+	private Scene scene;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("logInMenu.fxml"));
-        root = loader.load();
-        stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+	public void logOut(ActionEvent actionEvent) throws IOException {
+		try {
+			jdbc.disconnect();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			ErrorPopup.errorPopup(0);
+			return;
+		}
+		userman.disconnect();
 
-    }
-     
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("logInMenu.fxml"));
+		root = loader.load();
+		stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+
+	}
+
 }

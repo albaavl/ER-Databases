@@ -173,7 +173,7 @@ public class Worker implements Serializable{
 	 * @return [String] The worker's surname
 	 */
 	public String getWorkerSurname() {
-		return workerName;
+		return workerSurname;
 	}
 	/**
 	 * Used to set the worker's surname.

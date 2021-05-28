@@ -422,7 +422,7 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		List<Treatment> rList = new ArrayList<Treatment>();
 		while (rs.next()) {
-			rList.add(new Treatment(rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"), medCard));
+			rList.add(new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"), medCard));
 		}
 		p.close();
 		rs.close();
