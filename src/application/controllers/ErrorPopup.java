@@ -20,6 +20,8 @@ public class ErrorPopup {
      * <p> {@code 5} Wrong Username or password.
      * <p> {@code 6} No shift to display bruh.
      * <p> {@code 7} No treatment to display.
+     * <p> {@code 9} No patient selected on linkdocpatient
+     * <p> {@code 10} No worker selected
      * <p> {@code X} idk keep adding stuff here...
 
      * @param errorType - int
@@ -154,7 +156,7 @@ public class ErrorPopup {
                 stageError.setTitle("Error: No treatments");
                 stageError.show();
                 break;
-            case 8:
+                case 8:
                 loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
                 rootError = loaderError.load(); 
                 errorPopupController = loaderError.getController();
@@ -167,6 +169,36 @@ public class ErrorPopup {
                 stageError.getIcons().add(icon);	        
 
                 stageError.setTitle("Date error");
+                stageError.show();
+                break;
+            case 9:
+                loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
+                rootError = loaderError.load(); 
+                errorPopupController = loaderError.getController();
+                errorPopupController.displayErrorText("Pick a patient");
+			    sceneError = new Scene(rootError);
+                stageError = new Stage();
+                stageError.setScene(sceneError);
+
+                icon = new Image("application/images/errorIcon.png");
+                stageError.getIcons().add(icon);	        
+
+                stageError.setTitle("Error");
+                stageError.show();
+                break;
+            case 10:
+                loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
+                rootError = loaderError.load(); 
+                errorPopupController = loaderError.getController();
+                errorPopupController.displayErrorText("Pick a worker");
+			    sceneError = new Scene(rootError);
+                stageError = new Stage();
+                stageError.setScene(sceneError);
+
+                icon = new Image("application/images/errorIcon.png");
+                stageError.getIcons().add(icon);	        
+
+                stageError.setTitle("Error");
                 stageError.show();
                 break;
             default:

@@ -76,6 +76,8 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
     Pane paneSelectPatient;
     @FXML
     Pane paneSelectWorker;
+    @FXML
+    Pane paneSelectShift;
     //welcome screen
     @FXML
     Pane paneWelcomeView;
@@ -215,6 +217,8 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         paneDeleteWorker.setDisable(true);
         paneSelectWorker.setVisible(false);
         paneSelectWorker.setDisable(true);
+        paneSelectShift.setDisable(true);
+        paneSelectShift.setVisible(false);
 
     }
     private void resetAll(){
@@ -433,9 +437,40 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         fromEditShiftSelectWorkerButton.setDisable(false);
     }
 
+    //TODO - display shift bs
+
+    public void displaySelectShifts() throws IOException{
+
+        if(currentSelectedWorker != null){
+            hideAll();
+            resetAll();
+        
+            try {
+                setShiftTables();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            ErrorPopup.errorPopup(10);
+            return;
+        }
+
+        paneSelectShift.setVisible(true);
+        paneSelectShift.setDisable(false);
+    }
+
     public void displayAssignANewDoctorView() {
         hideAll();
         resetAll();
+
+        if (currentSelectedPatient != null) {
+            setLinkDocSelectedPatientTable();
+        }
+
+        if (currentSelectedWorker != null) {
+            setLinkDocSelectedWorkerTable();
+        }        
+
         paneAssignANewDoctorView.setDisable(false);
         paneAssignANewDoctorView.setVisible(true);
     }
@@ -462,7 +497,7 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         editWorkerSelectButton.setDisable(false);
 
         if(currentSelectedWorker != null){
-            setCurrentEditWorkerTable(); //TODO
+            setCurrentEditWorkerTable();
             editWorkerSelectButton.setVisible(false);
             editWorkerChangeButton.setVisible(true);
             editWorkerChangeButton.setDisable(false);
@@ -503,7 +538,20 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         editShiftSelectButton.setDisable(false);
 
         if(currentSelectedWorker != null){
-            setCurrentEditShiftTable(); //TODO
+            try {
+                setCurrentWorkerEditShiftTables();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(currentSelectedShift != null && currentSelectedWorker != null){
+            try {
+                setCurrentWorkerEditShiftTables();
+            } catch (SQLException | NotBoundException e) {
+                e.printStackTrace();
+            }
+            setCurrentEditShiftTable(); 
             editShiftSelectButton.setVisible(false);
             editShiftNewShiftButton.setVisible(false);
             editShiftModifyExistingButton.setVisible(true);
@@ -519,6 +567,27 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         paneChangeShiftView.setVisible(true);
     }
 
+    public void selectShift() throws IOException { 
+        Integer shiftId = null;
+        currentSelectedShift = null;
+
+        try {
+            shiftId = Integer.parseInt(selectShiftTextField.getText());
+            currentSelectedShift = jdbc.selectShift(shiftId);
+        } catch (Exception e) {
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+        if(currentSelectedShift == null){  
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+
+        selectShiftTextField.clear();
+        hideAll();
+        displayChangeShiftDataView();
+        
+    }
 
     public void displayEditShiftView() { //TODO - here (actual edit)
         hideAll();
@@ -1082,7 +1151,7 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         }
         selectPatientTextField.clear();
         hideAll();
-        displayDeletePatient();
+        displayAssignANewDoctorView();
     }
 
     public void createWorker() throws Exception { 
@@ -1178,6 +1247,21 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         currentLinkDocWorkerTableView.getColumns().clear();
         currentLinkDocWorkerTableView.getColumns().addAll(columnWorkerId, columnWorkerName, columnWorkerSurname, columnWorkerType, columnWorkerSpecialtyId);
         currentLinkDocWorkerTableView.getItems().add(currentSelectedWorker);
+    }
+
+    public void linkDocPatient() throws SQLException, IOException{ //TODO - falta por crear la vista (Combinar los dos view de edits y poner un button q haga esta funcion)
+        if (currentSelectedWorker == null) { 
+            ErrorPopup.errorPopup(10);
+            return;
+        } else if (currentSelectedPatient == null) {
+            ErrorPopup.errorPopup(9);
+            return;
+        } else {
+            jdbc.createLinkDoctorPatient(currentSelectedPatient.getMedicalCardId(), currentSelectedWorker.getWorkerId());
+            currentSelectedPatient = null;
+            currentSelectedWorker = null;
+            displayAssignANewDoctorView();
+        }
     }
 
     //SELECT WORKER
@@ -1398,6 +1482,64 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         displayDeleteWorker();
     }
 
+    //SHIFT BS Edit 
+
+    private Shift currentSelectedShift = null;
+
+    @FXML
+    private TextField selectShiftTextField;
+    @FXML
+    private TableView<Shift> selectShiftTableView;
+
+    
+    @SuppressWarnings("unchecked")
+    private void setShiftTables() throws Exception{
+
+        List<Shift> shiftList = jdbc.searchShiftByWorkerId(currentSelectedWorker.getUserId()); 
+        selectShiftTableView.getItems().clear();
+        selectShiftTableView.getColumns().clear();
+        selectShiftTableView.getColumns().addAll(columnShiftId, columnShiftWorkerId, columnShiftRoomER, columnShiftTurn, columnShiftDate);
+        selectShiftTableView.getItems().addAll(shiftList);
+
+    }
+
+    @FXML
+    private TableView<Shift> currentSelectedShiftTableView;
+    @FXML
+    private TableView<Worker> currentSelectedWorkerEditShiftTableView;
+    
+    @SuppressWarnings("unchecked")
+    private void setCurrentEditShiftTable(){
+        currentSelectedShiftTableView.getItems().clear();
+        currentSelectedShiftTableView.getColumns().clear();
+        currentSelectedShiftTableView.getColumns().addAll(columnShiftId, columnShiftWorkerId, columnShiftRoomER, columnShiftTurn, columnShiftDate);
+        currentSelectedShiftTableView.getItems().add(currentSelectedShift);
+    }
+
+    @FXML
+    public void cancelEditShift(){
+        currentDeleteWorkerTableView.getItems().clear();
+        currentSelectedShift = null;
+        displayChangeShiftDataView();
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void setCurrentWorkerEditShiftTables() throws SQLException, NotBoundException{
+
+        currentSelectedWorkerEditShiftTableView.getItems().clear();
+        currentSelectedWorkerEditShiftTableView.getColumns().clear();
+        currentSelectedWorkerEditShiftTableView.getColumns().addAll(columnWorkerId, columnWorkerName, columnWorkerSurname, columnWorkerType, columnWorkerSpecialtyId);
+        currentSelectedWorkerEditShiftTableView.getItems().addAll(currentSelectedWorker);
+
+    }
+
+    @FXML
+    public void cancelEditShiftWorker(){
+        currentSelectedWorkerEditShiftTableView.getItems().clear();
+        currentSelectedWorker = null;
+        displayChangeShiftDataView();
+    }
+
     //HardResetScenes
     
     private void resetCreatePatientScene() {
@@ -1502,3 +1644,5 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
 
 }
 
+//   28/5/2021: Hugo: "No pienso volver a escribir una linea mas de esta puta basura
+//                     comunmente conocica como Java, en lo q me queda de vida"
