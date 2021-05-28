@@ -68,7 +68,6 @@ public class LogInController {
 				switchToWorkerMenu(aEvent, user.getUserId());
 
 			} else if (user.getRole().getRole().equalsIgnoreCase("adStaff")) {
-
 				switchToAdStaffMenu(aEvent, user.getUserId());
 
 			}
@@ -110,7 +109,7 @@ public class LogInController {
 
 		PatientMenuController patientMenuController = loader.getController();
 		patientMenuController.setPatientController(patientMenuController);
-		patientMenuController.displayPatientWelcomeTextView(jdbc.selectPatientByUserId(userId), jdbc, userman);
+		patientMenuController.displayPatientWelcomeText(jdbc.selectPatientByUserId(userId), jdbc, userman);
 
 		stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
 		scene = new Scene(root);

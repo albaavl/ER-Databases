@@ -8,7 +8,7 @@ public class Treatment implements Serializable {
 
 	private static final long serialVersionUID = 5733730131671999655L;
 
-	private Integer treatmentId; //Unique for each treatment for each patient - can be repeated
+	private Integer treatmentId; //Unique for each treatment for each patient - cant be repeated
 	private String diagnosis;
 	private String medication;
 	private String recommendation;
@@ -133,8 +133,9 @@ public class Treatment implements Serializable {
 	 */
 	public void setStartDate(Date startDate) throws Exception {
 		
-		if(startDate.toLocalDate().isAfter(LocalDate.now())) {
+		if(startDate.toLocalDate().isAfter(LocalDate.now())||startDate.toLocalDate().isEqual(LocalDate.now())) {
 			this.startDate = startDate;
+		
 		} else {
 			throw new Exception("Not valid Date");
 		}

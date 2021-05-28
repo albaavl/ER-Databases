@@ -13,6 +13,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.jdbc.*;
@@ -30,6 +33,22 @@ public class PatientMenuController {
 
 	@FXML
 	private Label welcomeText;
+	
+  //SelectTreatment
+    @FXML
+    TableView<Treatment> treatmentsTable;
+    @FXML
+    TableColumn<Treatment, String> treatmentId;
+    @FXML
+    TableColumn<Treatment, String> dateTreatment;
+    @FXML
+    TableColumn<Treatment, String> durationTreatment;
+    @FXML
+    TableColumn<Treatment, String> medicationTreatment;
+    @FXML
+    TableColumn<Treatment, String> diagnosisTreatment;
+    @FXML
+    TableColumn<Treatment, String> adviceTreatment;
 
 	@FXML
 	Pane consultTreatmentsView;
@@ -37,21 +56,6 @@ public class PatientMenuController {
 	@FXML
 	Button LogOut;
 
-	// SelectTreatment
-	@FXML
-	TableView<Treatment> treatmentsTable;
-	@FXML
-	TableColumn<Treatment, String> treatmentId;
-	@FXML
-	TableColumn<Treatment, String> dateTreatment;
-	@FXML
-	TableColumn<Treatment, String> durationTreatment;
-	@FXML
-	TableColumn<Treatment, String> medicationTreatment;
-	@FXML
-	TableColumn<Treatment, String> adviceTreatment;
-	@FXML
-	TableColumn<Treatment, String> diagnosisTreatment;
 
 	// Controller stuff
 	public static PatientMenuController thisPatientMenuController;
@@ -64,46 +68,59 @@ public class PatientMenuController {
 		return thisPatientMenuController;
 	}
 
-	public void displayPatientWelcomeTextView(Patient p, SQL sqlman, JPAUserManager userm) {
-		welcomeText.setText("Please, Mr/Mrs " + p.getPatientName() + " here are your treatments");
+	public void displayPatientWelcomeText(Patient p, SQL sqlman, JPAUserManager userm) {
 		try {
 			patient = new Patient(p);
 			jdbc = sqlman;
 			userman = userm;
-			// userName.setText(p.getPatientName());
+			welcomeText.setText("Mr/Mrs " + p.getPatientName() + ", here are your treatments");
+     	} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+    //TODO gisel no se crea la tabla pqq nunca llamas a las funciones en el display que es a donde accede javafx y hay que cambiar los ajustes del label pqq no se ve el nombre
+   /* private void selectTreatment() {
+    	treatmentId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getTreatmentId())));
+    	dateTreatment.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStartDate().toString()));
+    	durationTreatment.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getDuration())));
+    	medicationTreatment.setCellValueFactory(new PropertyValueFactory<>("medicationTreatment"));
+    	adviceTreatment.setCellValueFactory(new PropertyValueFactory<>("adviceTreatment"));
+    	diagnosisTreatment.setCellValueFactory(new PropertyValueFactory<>("diagnosisTreatment"));
+   }*/
+    private void setTreatmentTables() throws Exception{
+    	
+        List<Treatment> treatmentList = new ArrayList<>();
+        treatmentList.addAll(jdbc.selectAllTreatments(patient.getMedicalCardId()));
+        if (treatmentList.isEmpty()) {
+        	ErrorPopup.errorPopup(7);
+        	displayPatientWelcomeText(patient, jdbc, userman);
+        } else {
+        treatmentsTable.getItems().clear();
+        treatmentsTable.getColumns().clear();
+        treatmentsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        treatmentId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getTreatmentId())));
+        DateFormat dateformat=new SimpleDateFormat("yyyy-MM-dd");
+    	dateTreatment.setCellValueFactory(data -> new SimpleStringProperty(dateformat.format(data.getValue().getStartDate())));
+    	durationTreatment.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getDuration())));
+    	medicationTreatment.setCellValueFactory(new PropertyValueFactory<>("medicationTreatment"));
+    	adviceTreatment.setCellValueFactory(new PropertyValueFactory<>("adviceTreatment"));
+    	diagnosisTreatment.setCellValueFactory(new PropertyValueFactory<>("diagnosisTreatment"));
+        treatmentsTable.getColumns().addAll(treatmentId, dateTreatment, durationTreatment, medicationTreatment, diagnosisTreatment, adviceTreatment);
+        treatmentsTable.getItems().addAll(treatmentList);
+        }
+    }
+
+    public void displayAllTreatmentsView(ActionEvent aEvent) {
+    	consultTreatmentsView.setVisible(false);
+        consultTreatmentsView.setDisable(false);
+        try {
+			setTreatmentTables();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	// TODO gisel no se crea la tabla pqq nunca llamas a las funciones en el display
-	// que es a donde accede javafx y hay que cambiar los ajustes del label pqq no
-	// se ve el nombre
-	private void selectTreatment() {
-		treatmentId.setCellValueFactory(
-				data -> new SimpleStringProperty(Integer.toString(data.getValue().getTreatmentId())));
-		dateTreatment.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStartDate().toString()));
-		durationTreatment
-				.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getDuration())));
-		medicationTreatment.setCellValueFactory(new PropertyValueFactory<>("medicationTreatment"));
-		adviceTreatment.setCellValueFactory(new PropertyValueFactory<>("adviceTreatment"));
-		diagnosisTreatment.setCellValueFactory(new PropertyValueFactory<>("diagnosisTreatment"));
-	}
-
-	private void setTreatmentTables() throws Exception {
-
-		List<Treatment> treatmentList = jdbc.selectAllTreatments();
-		if (treatmentList.isEmpty()) {
-			ErrorPopup.errorPopup(0);
-		} else {
-			treatmentsTable.getItems().clear();
-			treatmentsTable.getColumns().clear();
-			treatmentsTable.getColumns().addAll(treatmentId, dateTreatment, durationTreatment, medicationTreatment,
-					adviceTreatment, diagnosisTreatment);
-			treatmentsTable.getItems().addAll(treatmentList);
-		}
-	}
-
+        consultTreatmentsView.setVisible(true);
+    }
+   
 	private Parent root;
 	private Stage stage;
 	private Scene scene;
