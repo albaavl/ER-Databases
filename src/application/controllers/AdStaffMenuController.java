@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 
+import com.gluonhq.impl.charm.a.b.b.j;
+import com.gluonhq.impl.charm.a.b.b.t;
+
 import db.jdbc.SQL;
 import db.jpa.JPAUserManager;
 import db.pojos.Patient;
@@ -35,15 +38,16 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class AdStaffMenuController implements Initializable {
+public class AdStaffMenuController implements Initializable { //TODO - quitar strings de prueba jej
     
     private static SQL jdbc;
     private static JPAUserManager userman;
     private ErrorPopup ErrorPopup = new ErrorPopup();
+    private SuccessPopup SuccessPopup = new SuccessPopup();
 
     @FXML
     Text adStaffMenuWelcomeText;
-    //Patient menus
+    //Patient menu views
     @FXML
     Pane paneCreatePatientView;
     @FXML
@@ -52,20 +56,26 @@ public class AdStaffMenuController implements Initializable {
     Pane paneEditPatientDataView; //Here u update the patient data
     @FXML
     Pane paneAssignANewDoctorView; 
-    //Worker menus
+    //Worker menu views
     @FXML
     Pane paneCreateWorkerView;
     @FXML
-    Pane paneChangeWorkerDataView;
+    Pane paneChangeWorkerDataView; //Select a worker to update
     @FXML
-    Pane paneEditShiftView;
+    Pane paneEditWorkerDataView; //Actual edit
+    @FXML
+    Pane paneChangeShiftView; //Select a woker and create a new or update an existing shift
+    @FXML
+    Pane paneEditShiftView; //Actual edit/create
     @FXML
     Pane paneDeletePatient; 
     @FXML
     Pane paneDeleteWorker;
+    //Select Views
     @FXML
     Pane paneSelectPatient;
-
+    @FXML
+    Pane paneSelectWorker;
     //welcome screen
     @FXML
     Pane paneWelcomeView;
@@ -93,6 +103,72 @@ public class AdStaffMenuController implements Initializable {
     private TableColumn<Shift,String> columnShiftTurn = new TableColumn<>("Turn");
     private TableColumn<Shift,String> columnShiftDate = new TableColumn<>("Date");
     private TableColumn<Shift,String> columnShiftWorkerId = new TableColumn<>("Worker assignated");
+
+    //Patient options fxml objects
+    @FXML
+    private TextField patientIdTextField;
+    @FXML
+    private ToggleGroup genderRadioButton;
+    @FXML
+    private RadioButton maleRadioButton;
+    @FXML
+    private RadioButton femaleRadioButton;
+    @FXML
+    private TextField nameTextField;
+    @FXML
+    private TextField surnameTextField;
+    @FXML
+    private DatePicker birthDatePicker;
+    @FXML
+    private DatePicker checkInDatePicker;
+    @FXML 
+    private ComboBox<String> hospitalizedChoiceBox;
+    private String[] hospOptionStrings = {"Yes","No"};
+    //BLOODTYPE STUFF
+    @FXML
+    private ComboBox<String> bloodTypeChoiceBox;
+    private String[] bloodTypeStrings = {"A+", "A-", "B+", "B-", "AB+", "AB-", "0+", "0-"};
+    @FXML
+    private TextArea allergiesTextArea;
+    @FXML
+    private TextField addressTextField;
+
+    //Edit patient objects
+    @FXML
+    private TextField editPatientIdTextField;
+    @FXML
+    private ToggleGroup genderRadioButtonEdit;
+    @FXML
+    private RadioButton editMaleRadioButton;
+    @FXML
+    private RadioButton editFemaleRadioButton;
+    @FXML
+    private TextField editNameTextField;
+    @FXML
+    private TextField editSurnameTextField;
+    @FXML
+    private DatePicker editBirthDatePicker;
+    @FXML
+    private DatePicker editCheckInDatePicker;
+    @FXML 
+    private ComboBox<String> editHospitalizedChoiceBox;
+    @FXML
+    private ComboBox<String> editBloodTypeChoiceBox;
+    @FXML
+    private TextArea editAllergiesTextArea;
+    @FXML
+    private TextField editAddressTextField;
+
+    //Worker options fxml objects
+    @FXML
+    private TextField workerNameTextField;
+    @FXML
+    private TextField workerSurnameTextField;
+    @FXML
+    private TextField workerSpecialtyTextField;
+    @FXML 
+    private ComboBox<String> workerTypeComboBox;
+    private String[] workerTypeStrings = {"Doctor", "Nurse", "Administration Staff", "Technician"}; 
 
 
     public void displayWelcomeText(String name, SQL databasecontroller, JPAUserManager userManager) {
@@ -127,16 +203,30 @@ public class AdStaffMenuController implements Initializable {
         //WorkerViewOptions
         paneCreateWorkerView.setVisible(false);
         paneCreateWorkerView.setDisable(true);
+        paneEditPatientDataView.setVisible(false);
+        paneEditPatientDataView.setDisable(true);
         paneChangeWorkerDataView.setVisible(false);
         paneChangeWorkerDataView.setDisable(true);
+        paneChangeShiftView.setVisible(false);
+        paneChangeShiftView.setDisable(true);
         paneEditShiftView.setVisible(false);
         paneEditShiftView.setDisable(true);
         paneDeleteWorker.setVisible(false);
         paneDeleteWorker.setDisable(true);
+        paneSelectWorker.setVisible(false);
+        paneSelectWorker.setDisable(true);
 
     }
     private void resetAll(){
         resetCreatePatientScene();
+        clearCurrentEditPatientTable();
+    }
+
+    public void displayWelcomeView() {
+        hideAll();
+        resetAll();
+        paneWelcomeView.setDisable(false);
+        paneWelcomeView.setVisible(true);
     }
 
     public void displayCreatePatientView(ActionEvent aEvent) {
@@ -173,7 +263,6 @@ public class AdStaffMenuController implements Initializable {
         paneChangePatientDataView.setVisible(true);
     }
 
-    //TODO - Truño here - Todos los distintos display para el select patient (Delete, link doc, edit)
     @FXML
     private Button fromDeleteSelectPatientButton;
     @FXML
@@ -197,7 +286,6 @@ public class AdStaffMenuController implements Initializable {
         try {
             setPatientTables();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             ErrorPopup.errorPopup(0);
         }
@@ -217,7 +305,6 @@ public class AdStaffMenuController implements Initializable {
         try {
             setPatientTables();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             ErrorPopup.errorPopup(0);
         }
@@ -237,7 +324,6 @@ public class AdStaffMenuController implements Initializable {
         try {
             setPatientTables();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             ErrorPopup.errorPopup(0);
         }
@@ -249,6 +335,102 @@ public class AdStaffMenuController implements Initializable {
         fromLinkDocSelectPatientButton.setVisible(true);
         fromLinkDocSelectPatientButton.setDisable(false);
 
+    }
+
+    //TODO - truño here - display select worker from functions (EditWorkerData, EditWorkerShifts, DeleteWorker, LinkPatient)
+    
+    @FXML
+    private Button fromDeleteSelectWorkerButton;
+    @FXML
+    private Button fromEditSelectWorkerButton;
+    @FXML
+    private Button fromLinkDocSelectWorkerButton;
+    @FXML
+    private Button fromEditShiftSelectWorkerButton;
+
+    private void hideAllWorkerSelectButton() {
+        fromDeleteSelectWorkerButton.setVisible(false);
+        fromDeleteSelectWorkerButton.setDisable(true);
+        fromEditSelectWorkerButton.setVisible(false);
+        fromEditSelectWorkerButton.setDisable(true);
+        fromLinkDocSelectWorkerButton.setVisible(false);
+        fromLinkDocSelectWorkerButton.setDisable(true);
+        fromEditShiftSelectWorkerButton.setVisible(false);
+        fromEditShiftSelectWorkerButton.setDisable(true);
+    }
+
+    
+    public void displaySelectWorkerFromDelete() throws IOException {
+        hideAll();
+        resetAll();
+
+        try {
+            setWorkerTables();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorPopup.errorPopup(0);
+        } 
+
+        paneSelectWorker.setVisible(true);
+        paneSelectWorker.setDisable(false);
+
+        hideAllWorkerSelectButton();
+        fromDeleteSelectWorkerButton.setVisible(true);
+        fromDeleteSelectWorkerButton.setDisable(false);
+    }
+    public void displaySelectWorkerFromEdit() throws IOException {
+        hideAll();
+        resetAll();
+
+        try {
+            setWorkerTables();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorPopup.errorPopup(0);
+        } 
+
+        paneSelectWorker.setVisible(true);
+        paneSelectWorker.setDisable(false);
+
+        hideAllWorkerSelectButton();
+        fromEditSelectWorkerButton.setVisible(true);
+        fromEditSelectWorkerButton.setDisable(false);
+    }
+    public void displaySelectWorkerFromLinkDoc() throws IOException {
+        hideAll();
+        resetAll();
+
+        try {
+            setWorkerTables();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorPopup.errorPopup(0);
+        } 
+
+        paneSelectWorker.setVisible(true);
+        paneSelectWorker.setDisable(false);
+
+        hideAllWorkerSelectButton();
+        fromLinkDocSelectWorkerButton.setVisible(true);
+        fromLinkDocSelectWorkerButton.setDisable(false);
+    }
+    public void displaySelectWorkerFromEditShift() throws IOException {
+        hideAll();
+        resetAll();
+
+        try {
+            setWorkerTables();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorPopup.errorPopup(0);
+        } 
+
+        paneSelectWorker.setVisible(true);
+        paneSelectWorker.setDisable(false);
+
+        hideAllWorkerSelectButton();
+        fromEditShiftSelectWorkerButton.setVisible(true);
+        fromEditShiftSelectWorkerButton.setDisable(false);
     }
 
     public void displayAssignANewDoctorView() {
@@ -264,13 +446,81 @@ public class AdStaffMenuController implements Initializable {
         paneCreateWorkerView.setDisable(false);
         paneCreateWorkerView.setVisible(true);
     }
-    public void displayChangeWorkerView(ActionEvent actionEvent) {
+
+    @FXML
+    private Button editWorkerSelectButton;
+    @FXML
+    private Button editWorkerChangeButton;
+
+    public void displayChangeWorkerDataView() {
         hideAll();
         resetAll();
-        paneChangePatientDataView.setDisable(false);
+
+        editWorkerSelectButton.setVisible(true);
+        editWorkerChangeButton.setVisible(false);
+        editWorkerChangeButton.setDisable(true);
+        editWorkerSelectButton.setDisable(false);
+
+        if(currentSelectedWorker != null){
+            setCurrentEditWorkerTable(); //TODO
+            editWorkerSelectButton.setVisible(false);
+            editWorkerChangeButton.setVisible(true);
+            editWorkerChangeButton.setDisable(false);
+            editWorkerSelectButton.setDisable(true);
+        }
+
+        paneChangeWorkerDataView.setDisable(false);
         paneChangeWorkerDataView.setVisible(true);
     }
-    public void displayEditShiftView(ActionEvent actionEvent) {
+
+    public void displayEditWorkerView() { //TODO - here (Actual edit)
+        hideAll();
+        resetAll();
+        paneEditWorkerDataView.setDisable(false);
+        paneEditWorkerDataView.setVisible(true);
+    }
+    
+    @FXML
+    private Button editShiftSelectButton;
+    @FXML
+    private Button editShiftChangeButton;
+    @FXML
+    private Button editShiftNewShiftButton;
+    @FXML
+    private Button editShiftModifyExistingButton;
+
+    public void displayChangeShiftDataView() {
+        hideAll();
+        resetAll();
+
+        editShiftSelectButton.setVisible(true);
+        editShiftNewShiftButton.setVisible(true);
+        editShiftChangeButton.setVisible(false);
+        editShiftModifyExistingButton.setVisible(false);
+        editShiftChangeButton.setDisable(true);
+        editShiftModifyExistingButton.setDisable(true);
+        editShiftNewShiftButton.setDisable(false);
+        editShiftSelectButton.setDisable(false);
+
+        if(currentSelectedWorker != null){
+            setCurrentEditShiftTable(); //TODO
+            editShiftSelectButton.setVisible(false);
+            editShiftNewShiftButton.setVisible(false);
+            editShiftModifyExistingButton.setVisible(true);
+            editShiftChangeButton.setVisible(true);
+            editShiftChangeButton.setDisable(false);
+            editShiftSelectButton.setDisable(true);
+            editShiftModifyExistingButton.setDisable(false);
+            editShiftNewShiftButton.setDisable(true);
+    
+        }
+
+        paneChangeShiftView.setDisable(false);
+        paneChangeShiftView.setVisible(true);
+    }
+
+
+    public void displayEditShiftView() { //TODO - here (actual edit)
         hideAll();
         resetAll();
         paneEditShiftView.setDisable(false);
@@ -291,6 +541,7 @@ public class AdStaffMenuController implements Initializable {
         deletePatientSelectPatient.setDisable(false);
 
         if(currentSelectedPatient != null){
+
             setCurrentDeletePatientTable();
             deletePatientSelectPatient.setVisible(false);
             deletePatientChangePatient.setVisible(true);
@@ -301,9 +552,29 @@ public class AdStaffMenuController implements Initializable {
         paneDeletePatient.setDisable(false);
         paneDeletePatient.setVisible(true);
     }
-    public void displayDeleteWorker(ActionEvent aEvent) {
+
+    @FXML
+    private Button deleteWorkerSelect;
+    @FXML
+    private Button deleteWorkerChange;
+
+    public void displayDeleteWorker() {
         hideAll();
         resetAll();
+        deleteWorkerSelect.setVisible(true);
+        deleteWorkerSelect.setDisable(false);
+        deleteWorkerChange.setVisible(false);
+        deleteWorkerChange.setDisable(true);
+        
+        if(currentSelectedWorker != null){
+            
+            setCurrentDeleteWorkerTable();
+            deleteWorkerSelect.setVisible(false);
+            deleteWorkerSelect.setDisable(true);
+            deleteWorkerChange.setVisible(true);
+            deleteWorkerChange.setDisable(false);
+        }
+
         paneDeleteWorker.setDisable(false);
         paneDeleteWorker.setVisible(true);
     }
@@ -331,75 +602,6 @@ public class AdStaffMenuController implements Initializable {
         stage.show();
 
     }
-
-    //Patient options fxml objects
-
-    @FXML
-    private TextField patientIdTextField;
-    @FXML
-    private ToggleGroup genderRadioButton;
-    @FXML
-    private RadioButton maleRadioButton;
-    @FXML
-    private RadioButton femaleRadioButton;
-    @FXML
-    private TextField nameTextField;
-    @FXML
-    private TextField surnameTextField;
-    @FXML
-    private DatePicker birthDatePicker;
-    @FXML
-    private DatePicker checkInDatePicker;
-    @FXML 
-    private ComboBox<String> hospitalizedChoiceBox;
-    private String[] hospOptionStrings = {"Yes","No"};
-    //BLOODTYPE STUFF
-    @FXML
-    private ComboBox<String> bloodTypeChoiceBox;
-    private String[] bloodTypeStrings = {"A+", "A-", "B+", "B-", "AB+", "AB-", "0+", "0-"};
-    @FXML
-    private TextArea allergiesTextArea;
-    @FXML
-    private TextField addressTextField;
-
-    //Edit patient objects
-
-    @FXML
-    private TextField editPatientIdTextField;
-    @FXML
-    private ToggleGroup genderRadioButtonEdit;
-    @FXML
-    private RadioButton editMaleRadioButton;
-    @FXML
-    private RadioButton editFemaleRadioButton;
-    @FXML
-    private TextField editNameTextField;
-    @FXML
-    private TextField editSurnameTextField;
-    @FXML
-    private DatePicker editBirthDatePicker;
-    @FXML
-    private DatePicker editCheckInDatePicker;
-    @FXML 
-    private ComboBox<String> editHospitalizedChoiceBox;
-    @FXML
-    private ComboBox<String> editBloodTypeChoiceBox;
-    @FXML
-    private TextArea editAllergiesTextArea;
-    @FXML
-    private TextField editAddressTextField;
-
-
-    //Worker options fxml objects
-    @FXML
-    private TextField workerNameTextField;
-    @FXML
-    private TextField workerSurnameTextField;
-    @FXML
-    private TextField workerSpecialtyTextField;
-    @FXML 
-    private ComboBox<String> workerTypeComboBox;
-    private String[] workerTypeStrings = {"Doctor", "Nurse", "Administration Staff", "Technician"}; //TODO - creo q technician sobra mucho pq era el de las ambulance y nunca lo llegamos a quitar, not sure tho
 
     //Initialize function
 
@@ -437,7 +639,7 @@ public class AdStaffMenuController implements Initializable {
 
     //Menu functions
 
-    public void createPatient(ActionEvent actionEvent) throws Exception { //TODO - quitar strings de prueba jej
+    public void createPatient(ActionEvent actionEvent) throws Exception { 
 
         Patient p = new Patient();
 
@@ -629,12 +831,11 @@ public class AdStaffMenuController implements Initializable {
         currentDeletePatientTableView.getItems().add(currentSelectedPatient);
     }
     @FXML
-    public void executeDeletePatient(){
+    public void executeDeletePatient() throws IOException{
         try {
             jdbc.deletePatientByMedicalCardId(currentSelectedPatient.getMedicalCardId());
-            //TODO - #successDelete popup!
+            SuccessPopup.successPopup(7);
         } catch (SQLException e) {
-            // TODO Auto-generated catch block #Error popup
             e.printStackTrace();
             return;
         }
@@ -659,6 +860,12 @@ public class AdStaffMenuController implements Initializable {
         currentEditPatientTableView.getColumns().addAll(columnPatientId, columnPatientName, columnPatientSurname, columnPatientGender, columnPatientBloodtype, columnPatientAllergies, columnPatientBirthDate, columnPatientCheckInDate, columnPatientAddress, columnPatientHospitalized);
         currentEditPatientTableView.getItems().add(currentSelectedPatient);
     }
+    
+    public void clearCurrentEditPatientTable() {
+        currentEditPatientTableView.getItems().clear();
+        currentEditPatientTableView.getColumns().clear();
+    }
+
     @FXML
     public void executeEditPatient(){
 
@@ -690,7 +897,6 @@ public class AdStaffMenuController implements Initializable {
             }
 
         } catch (Exception e) {
-            //TODO: handle exception
         }
 
         paneEditPatientDataView.setVisible(true);
@@ -699,17 +905,7 @@ public class AdStaffMenuController implements Initializable {
     }
 
     @FXML
-    public void editPatient() throws Exception {  //asdf
-
-        // Patient p = new Patient();
-
-        // // try {
-        // //     int patientId = Integer.parseInt( patientIdTextField.getText());
-        // //     p.setMedicalCardId(patientId);
-        // // } catch (Exception e) {
-        // //     ErrorPopup.errorPopup(4);
-        // //     return;
-        // // }
+    public void editPatient() throws Exception { 
 
         String name = editNameTextField.getText();
         if (name == "") {
@@ -786,7 +982,9 @@ public class AdStaffMenuController implements Initializable {
         }
 
         jdbc.editPatient(currentSelectedPatient.getMedicalCardId(), name, surname, gender, bloodType, allergies, address, bDate, cInDate, hospitalized);
-        //TODO - Success popup!
+
+        SuccessPopup.successPopup(1);
+
         resetEditPatientScene();
         hideAll();
         currentSelectedPatient = null;
@@ -801,7 +999,7 @@ public class AdStaffMenuController implements Initializable {
         displayChangePatientDataView();
     }
     
-    //Select patient view
+    //Select patient view TODO look here for help
 
     private static Patient currentSelectedPatient = null;
 
@@ -835,7 +1033,7 @@ public class AdStaffMenuController implements Initializable {
             ErrorPopup.errorPopup(4);
             return;
         }
-        if(currentSelectedPatient == null){  //BRO GTFO PQ ESTO NO FUNCIONA FUUUCK
+        if(currentSelectedPatient == null){  
             ErrorPopup.errorPopup(4);
             return;
         }
@@ -857,7 +1055,7 @@ public class AdStaffMenuController implements Initializable {
             ErrorPopup.errorPopup(4);
             return;
         }
-        if(currentSelectedPatient == null){  //BRO GTFO PQ ESTO NO FUNCIONA FUUUCK
+        if(currentSelectedPatient == null){  
             ErrorPopup.errorPopup(4);
             return;
         }
@@ -872,13 +1070,13 @@ public class AdStaffMenuController implements Initializable {
         currentSelectedPatient = null;
 
         try {
-            patientId = Integer.parseInt(selectPatientTextField.getText()); //TODO - Need halp cuz this no works and idk why
-            currentSelectedPatient = jdbc.selectPatient(patientId);         //pq esto no peta si buscas un id q no existe? alguien me explica?
+            patientId = Integer.parseInt(selectPatientTextField.getText()); 
+            currentSelectedPatient = jdbc.selectPatient(patientId);        
         } catch (Exception e) {
             ErrorPopup.errorPopup(4);
             return;
         }
-        if(currentSelectedPatient == null){  //BRO GTFO PQ ESTO NO FUNCIONA FUUUCK
+        if(currentSelectedPatient == null){  
             ErrorPopup.errorPopup(4);
             return;
         }
@@ -941,7 +1139,7 @@ public class AdStaffMenuController implements Initializable {
         Parent rootAddWorkerSuccess;
         Scene sceneAddWorkerSuccess;
         Stage stageAddWorkerSuccess;
-        AddPatientSuccessController addWorkerSuccessController;
+        AddWorkerSuccessController addWorkerSuccessController;
 
         loaderAddWorkerSuccess = new FXMLLoader(getClass().getResource("AddWorkerSuccess.fxml"));
         rootAddWorkerSuccess = loaderAddWorkerSuccess.load();
@@ -961,6 +1159,143 @@ public class AdStaffMenuController implements Initializable {
 
     }
 
+    //SELECT WORKER
+
+    private static Worker currentSelectedWorker = null;
+
+    @FXML
+    private TextField selectWorkerTextField;
+    @FXML
+    private TableView<Worker> selectWorkerTableView;
+
+    
+    @SuppressWarnings("unchecked")
+    private void setWorkerTables() throws SQLException, NotBoundException{
+
+        List<Worker> workerList = jdbc.selectAllWorkers();
+        selectWorkerTableView.getItems().clear();
+        selectWorkerTableView.getColumns().clear();
+        selectWorkerTableView.getColumns().addAll(columnWorkerId, columnWorkerName, columnWorkerSurname, columnWorkerType, columnWorkerSpecialtyId);
+        selectWorkerTableView.getItems().addAll(workerList);
+
+    }
+
+    @FXML
+    public void selectWorkerBackToDelete(ActionEvent actionEvent) throws IOException {
+        
+        Integer workerId = null;
+        currentSelectedWorker = null;
+
+        try {
+            workerId = Integer.parseInt(selectWorkerTextField.getText());
+            currentSelectedWorker = jdbc.selectWorker(workerId);
+        } catch (Exception e) {
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+        if(currentSelectedWorker == null){  
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+
+        selectWorkerTextField.clear();
+        hideAll();
+        displayDeleteWorker();
+    }
+    @FXML
+    public void selectWorkerBackToEdit(ActionEvent actionEvent) throws IOException {
+        
+        Integer workerId = null;
+        currentSelectedWorker = null;
+
+        try {
+            workerId = Integer.parseInt(selectWorkerTextField.getText());
+            currentSelectedWorker = jdbc.selectWorker(workerId);
+        } catch (Exception e) {
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+        if(currentSelectedWorker == null){  
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+        selectWorkerTextField.clear();
+        hideAll();
+        displayChangeWorkerDataView();
+    }
+    @FXML
+    public void selectWorkerBackToEditShift(ActionEvent actionEvent) throws IOException {
+        
+        Integer workerId = null;
+        currentSelectedWorker = null;
+
+        try {
+            workerId = Integer.parseInt(selectWorkerTextField.getText());
+            currentSelectedWorker = jdbc.selectWorker(workerId);
+        } catch (Exception e) {
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+        if(currentSelectedWorker == null){  
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+        selectWorkerTextField.clear();
+        hideAll();
+        displayChangeShiftDataView();
+    }
+    @FXML
+    public void selectWorkerBackToLinkDoc(ActionEvent actionEvent) throws IOException {
+        
+        Integer workerId = null;
+        currentSelectedWorker = null;
+
+        try {
+            workerId = Integer.parseInt(selectWorkerTextField.getText()); 
+            currentSelectedWorker = jdbc.selectWorker(workerId);        
+        } catch (Exception e) {
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+        if(currentSelectedWorker == null){  
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+        selectWorkerTextField.clear();
+        hideAll();
+        displayAssignANewDoctorView();
+    }
+
+    //Delete Worker View
+
+    @FXML
+    private TableView<Worker> currentDeleteWorkerTableView;
+
+    @SuppressWarnings("unchecked")
+    private void setCurrentDeleteWorkerTable(){
+        currentDeleteWorkerTableView.getItems().clear();
+        currentDeleteWorkerTableView.getColumns().clear();
+        currentDeleteWorkerTableView.getColumns().addAll(columnWorkerId, columnWorkerName, columnWorkerSurname, columnWorkerType, columnWorkerSpecialtyId);
+        currentDeleteWorkerTableView.getItems().add(currentSelectedWorker);
+    }
+
+    @FXML
+    public void executeDeleteWorker() throws IOException{
+        try {
+            jdbc.deleteWorkerById(currentSelectedWorker.getWorkerId());
+            SuccessPopup.successPopup(8);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+        cancelDeleteWorker();
+    }
+    @FXML
+    public void cancelDeleteWorker(){
+        currentDeleteWorkerTableView.getItems().clear();
+        currentSelectedWorker = null;
+        displayDeleteWorker();
+    }
 
     //HardResetScenes
     
@@ -995,6 +1330,7 @@ public class AdStaffMenuController implements Initializable {
         editBirthDatePicker.setValue(null);
         editCheckInDatePicker.setValue(null);
     }
+
     //Controller stuff
 
     public static AdStaffMenuController thisAdStaffMenuController;
