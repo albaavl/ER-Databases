@@ -9,16 +9,18 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Observable;
 import java.util.Random;
 import java.util.ResourceBundle;
 
 import db.jdbc.SQL;
 import db.jpa.JPAUserManager;
 import db.pojos.Patient;
+import db.pojos.Shift;
+import db.pojos.Worker;
+import pojos.users.Role;
+import pojos.users.User;
+
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,25 +31,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-// import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import pojos.users.Role;
-import pojos.users.User;
 
 public class AdStaffMenuController implements Initializable {
     
     private static SQL jdbc;
     private static JPAUserManager userman;
     private ErrorPopup ErrorPopup = new ErrorPopup();
-    // /**
-    //  * <p>{@code -1} Reset
-    //  * <p>{@code 0} Delete
-    //  * <p>{@code 1} Change patient data
-    //  * <p>{@code 2} Assign new doctor
-    //  */
-    // public int currentSelectOption = -1; 
 
     @FXML
     Text adStaffMenuWelcomeText;
@@ -55,7 +47,9 @@ public class AdStaffMenuController implements Initializable {
     @FXML
     Pane paneCreatePatientView;
     @FXML
-    Pane paneChangePatientDataView; 
+    Pane paneChangePatientDataView; //Here u get the patient
+    @FXML
+    Pane paneEditPatientDataView; //Here u update the patient data
     @FXML
     Pane paneAssignANewDoctorView; 
     //Worker menus
@@ -76,6 +70,31 @@ public class AdStaffMenuController implements Initializable {
     @FXML
     Pane paneWelcomeView;
 
+    //PATIENT TABLES
+    private TableColumn<Patient,String> columnPatientName = new TableColumn<>("Name");
+    private TableColumn<Patient,String> columnPatientSurname = new TableColumn<>("Surname");
+    private TableColumn<Patient,String> columnPatientId = new TableColumn<>("Medical Card");
+    private TableColumn<Patient,String> columnPatientGender = new TableColumn<>("Gender");
+    private TableColumn<Patient,String> columnPatientBloodtype = new TableColumn<>("Blood Type");
+    private TableColumn<Patient,String> columnPatientAllergies = new TableColumn<>("Allergies");
+    private TableColumn<Patient,String> columnPatientAddress = new TableColumn<>("Address");
+    private TableColumn<Patient,String> columnPatientBirthDate = new TableColumn<>("Birthdate");
+    private TableColumn<Patient,String> columnPatientCheckInDate = new TableColumn<>("Check-in");
+    private TableColumn<Patient,String> columnPatientHospitalized = new TableColumn<>("Hospitalized");
+    //WORKER TABLES
+    private TableColumn<Worker,String> columnWorkerName = new TableColumn<>("Name");
+    private TableColumn<Worker,String> columnWorkerSurname = new TableColumn<>("Surname");
+    private TableColumn<Worker,String> columnWorkerId = new TableColumn<>("Id");
+    private TableColumn<Worker,String> columnWorkerSpecialtyId = new TableColumn<>("Specialty");
+    private TableColumn<Worker,String> columnWorkerType = new TableColumn<>("Worker Type");
+    //SHIFT TABLES 
+    private TableColumn<Shift,String> columnShiftId = new TableColumn<>("Id");
+    private TableColumn<Shift,String> columnShiftRoomER = new TableColumn<>("Room ER");
+    private TableColumn<Shift,String> columnShiftTurn = new TableColumn<>("Turn");
+    private TableColumn<Shift,String> columnShiftDate = new TableColumn<>("Date");
+    private TableColumn<Shift,String> columnShiftWorkerId = new TableColumn<>("Worker assignated");
+
+
     public void displayWelcomeText(String name, SQL databasecontroller, JPAUserManager userManager) {
         jdbc = databasecontroller;
         userman = userManager;
@@ -90,10 +109,6 @@ public class AdStaffMenuController implements Initializable {
      */
     private void hideAll(){
 
-        // if(currentSelectOption == -1){
-        //     currentSelectedPatient = null;
-        // }
-
         paneWelcomeView.setVisible(false);
         paneWelcomeView.setDisable(true);
         //PatientViewOptions
@@ -101,6 +116,8 @@ public class AdStaffMenuController implements Initializable {
         paneCreatePatientView.setDisable(true);
         paneChangePatientDataView.setVisible(false);
         paneChangePatientDataView.setDisable(true);
+        paneEditPatientDataView.setVisible(false);
+        paneEditPatientDataView.setDisable(true);
         paneAssignANewDoctorView.setVisible(false);
         paneAssignANewDoctorView.setDisable(true);
         paneDeletePatient.setVisible(false);
@@ -345,14 +362,44 @@ public class AdStaffMenuController implements Initializable {
     @FXML
     private TextField addressTextField;
 
+    //Edit patient objects
+
+    @FXML
+    private TextField editPatientIdTextField;
+    @FXML
+    private ToggleGroup genderRadioButtonEdit;
+    @FXML
+    private RadioButton editMaleRadioButton;
+    @FXML
+    private RadioButton editFemaleRadioButton;
+    @FXML
+    private TextField editNameTextField;
+    @FXML
+    private TextField editSurnameTextField;
+    @FXML
+    private DatePicker editBirthDatePicker;
+    @FXML
+    private DatePicker editCheckInDatePicker;
+    @FXML 
+    private ComboBox<String> editHospitalizedChoiceBox;
+    @FXML
+    private ComboBox<String> editBloodTypeChoiceBox;
+    @FXML
+    private TextArea editAllergiesTextArea;
+    @FXML
+    private TextField editAddressTextField;
+
+
     //Worker options fxml objects
     @FXML
     private TextField workerNameTextField;
     @FXML
     private TextField workerSurnameTextField;
+    @FXML
+    private TextField workerSpecialtyTextField;
     @FXML 
     private ComboBox<String> workerTypeComboBox;
-    // private String[] workerTypeStrings = {"Doctor", "Nurse", "Administation Staff", "Technician"}; //TODO - creo q technician sobra mucho pq era el de las ambulance y nunca lo llegamos a quitar, not sure tho
+    private String[] workerTypeStrings = {"Doctor", "Nurse", "Administration Staff", "Technician"}; //TODO - creo q technician sobra mucho pq era el de las ambulance y nunca lo llegamos a quitar, not sure tho
 
     //Initialize function
 
@@ -360,17 +407,32 @@ public class AdStaffMenuController implements Initializable {
     public void initialize(URL arg0, ResourceBundle arg1) {
         bloodTypeChoiceBox.getItems().addAll(bloodTypeStrings);
         hospitalizedChoiceBox.getItems().addAll(hospOptionStrings);
-        //workerTypeComboBox.getItems().addAll(workerTypeStrings);
-        columnName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
-        columnSurname.setCellValueFactory(new PropertyValueFactory<>("patientSurname"));
-        columnAllergies.setCellValueFactory(new PropertyValueFactory<>("allergieType"));
-        columnGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
-        columnBloodtype.setCellValueFactory(new PropertyValueFactory<>("bloodType"));
-        columnAddress.setCellValueFactory(new PropertyValueFactory<>("patientAddress"));
+        editBloodTypeChoiceBox.getItems().addAll(bloodTypeStrings);
+        editHospitalizedChoiceBox.getItems().addAll(hospOptionStrings);
+        workerTypeComboBox.getItems().addAll(workerTypeStrings);
+
+        columnPatientName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
+        columnPatientSurname.setCellValueFactory(new PropertyValueFactory<>("patientSurname"));
+        columnPatientAllergies.setCellValueFactory(new PropertyValueFactory<>("allergieType"));
+        columnPatientGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        columnPatientBloodtype.setCellValueFactory(new PropertyValueFactory<>("bloodType"));
+        columnPatientAddress.setCellValueFactory(new PropertyValueFactory<>("patientAddress"));
         columnPatientId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getMedicalCardId())));
-        columnBirthDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getbDate().toString()));
-        columnCheckInDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCheckInDate().toString()));
-        columnHospitalized.setCellValueFactory(data -> new SimpleStringProperty(Boolean.toString(data.getValue().getHospitalized()))); 
+        columnPatientBirthDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getbDate().toString()));
+        columnPatientCheckInDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCheckInDate().toString()));
+        columnPatientHospitalized.setCellValueFactory(data -> new SimpleStringProperty(Boolean.toString(data.getValue().getHospitalized()))); 
+    
+        columnWorkerId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getWorkerId())));
+        columnWorkerName.setCellValueFactory(new PropertyValueFactory<>("workerName"));
+        columnWorkerSurname.setCellValueFactory(new PropertyValueFactory<>("workerSurname"));
+        columnWorkerSpecialtyId.setCellValueFactory(new PropertyValueFactory<>("specialtyId"));
+        columnWorkerType.setCellValueFactory(new PropertyValueFactory<>("typeWorker"));
+        
+        columnShiftId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getShiftId())));
+        columnShiftWorkerId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getWorker().getWorkerId())));
+        columnShiftDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate().toString()));
+        columnShiftTurn.setCellValueFactory(new PropertyValueFactory<>("turn"));
+        columnShiftRoomER.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getRoom())));
     }
 
     //Menu functions
@@ -559,10 +621,11 @@ public class AdStaffMenuController implements Initializable {
     @FXML
     private TableView<Patient> currentDeletePatientTableView;
 
+    @SuppressWarnings("unchecked")
     private void setCurrentDeletePatientTable(){
         currentDeletePatientTableView.getItems().clear();
         currentDeletePatientTableView.getColumns().clear();
-        currentDeletePatientTableView.getColumns().addAll(columnPatientId, columnName, columnSurname, columnGender, columnBloodtype, columnAllergies, columnBirthDate, columnCheckInDate, columnAddress, columnHospitalized);
+        currentDeletePatientTableView.getColumns().addAll(columnPatientId, columnPatientName, columnPatientSurname, columnPatientGender, columnPatientBloodtype, columnPatientAllergies, columnPatientBirthDate, columnPatientCheckInDate, columnPatientAddress, columnPatientHospitalized);
         currentDeletePatientTableView.getItems().add(currentSelectedPatient);
     }
     @FXML
@@ -581,6 +644,7 @@ public class AdStaffMenuController implements Initializable {
     public void cancelDeletePatient(){
         currentDeletePatientTableView.getItems().clear();
         currentSelectedPatient = null;
+        displayDeletePatient();
     }
 
     //Edit patient view
@@ -588,28 +652,153 @@ public class AdStaffMenuController implements Initializable {
     @FXML
     private TableView<Patient> currentEditPatientTableView;
 
+    @SuppressWarnings("unchecked")
     private void setCurrentEditPatientTable(){
         currentEditPatientTableView.getItems().clear();
         currentEditPatientTableView.getColumns().clear();
-        currentEditPatientTableView.getColumns().addAll(columnPatientId, columnName, columnSurname, columnGender, columnBloodtype, columnAllergies, columnBirthDate, columnCheckInDate, columnAddress, columnHospitalized);
+        currentEditPatientTableView.getColumns().addAll(columnPatientId, columnPatientName, columnPatientSurname, columnPatientGender, columnPatientBloodtype, columnPatientAllergies, columnPatientBirthDate, columnPatientCheckInDate, columnPatientAddress, columnPatientHospitalized);
         currentEditPatientTableView.getItems().add(currentSelectedPatient);
     }
     @FXML
     public void executeEditPatient(){
-        // try {
-        //     jdbc.deletePatientByMedicalCardId(currentSelectedPatient.getMedicalCardId()); //TODO - heh
-        //     //TODO - #successDelete popup!
-        // } catch (SQLException e) {
-        //     // TODO Auto-generated catch block #Error popup
-        //     e.printStackTrace();
-        //     return;
-        // }
-        cancelEditPatient();
+
+        hideAll();
+        //prepare the editPatientDataView with the current data of the selected patient
+        try {
+            editPatientIdTextField.setText(currentSelectedPatient.getMedicalCardId().toString());
+            editPatientIdTextField.setEditable(false);
+            editNameTextField.setPromptText(currentSelectedPatient.getPatientName());
+            editSurnameTextField.setPromptText(currentSelectedPatient.getPatientSurname());
+            editBirthDatePicker.setPromptText(currentSelectedPatient.getbDate().toString());
+            editCheckInDatePicker.setPromptText(currentSelectedPatient.getCheckInDate().toString());
+            editBloodTypeChoiceBox.getSelectionModel().select(currentSelectedPatient.getBloodType());
+            if (currentSelectedPatient.getHospitalized()) {
+                editHospitalizedChoiceBox.getSelectionModel().select("Yes");
+            } else {
+                editHospitalizedChoiceBox.getSelectionModel().select("No");
+            }
+            if(currentSelectedPatient.getGender().equalsIgnoreCase("female")){
+                editMaleRadioButton.setSelected(false);
+                editFemaleRadioButton.setSelected(true);
+            } else {
+                editFemaleRadioButton.setSelected(false);
+                editMaleRadioButton.setSelected(true);
+            }
+            editAddressTextField.setPromptText(currentSelectedPatient.getPatientAddress());
+            if (currentSelectedPatient.getAllergieType() != null) {
+                editAllergiesTextArea.setPromptText(currentSelectedPatient.getAllergieType());
+            }
+
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+
+        paneEditPatientDataView.setVisible(true);
+        paneEditPatientDataView.setDisable(false);
+
     }
+
+    @FXML
+    public void editPatient() throws Exception {  //asdf
+
+        // Patient p = new Patient();
+
+        // // try {
+        // //     int patientId = Integer.parseInt( patientIdTextField.getText());
+        // //     p.setMedicalCardId(patientId);
+        // // } catch (Exception e) {
+        // //     ErrorPopup.errorPopup(4);
+        // //     return;
+        // // }
+
+        String name = editNameTextField.getText();
+        if (name == "") {
+            name = null;
+        }
+        
+        String surname = editSurnameTextField.getText();
+        if (surname == "") {
+            surname = null;
+        } 
+
+        String gender = "";
+        if (editFemaleRadioButton.isSelected()) {
+            gender = "Female";
+        } else if (editMaleRadioButton.isSelected()) {
+            gender = "Male";
+        } else {
+            gender = null;
+        }
+
+        String bloodType;
+        if( !editBloodTypeChoiceBox.getSelectionModel().isEmpty() ){
+            bloodType = editBloodTypeChoiceBox.getValue(); 
+        } else {
+            bloodType = null;
+        }
+        
+        Date bDate;
+        if(editBirthDatePicker.getEditor().getText() == ""){
+            bDate = null;
+        } else {
+            bDate = Date.valueOf(editBirthDatePicker.getValue());
+            if (!((bDate.before(Date.valueOf(LocalDate.now()))) || bDate.equals(Date.valueOf(LocalDate.now())))) {
+                ErrorPopup.errorPopup(1);
+                System.out.println("nain");
+                return;
+            }  
+        }
+
+        Date cInDate;
+        if(editCheckInDatePicker.getEditor().getText() == ""){
+            cInDate = null;
+        } else {
+            cInDate = Date.valueOf(editCheckInDatePicker.getValue());
+            if (!((cInDate.before(Date.valueOf(LocalDate.now()))) || cInDate.equals(Date.valueOf(LocalDate.now())))) {
+                ErrorPopup.errorPopup(3);
+                System.out.println("nain");
+                return;
+            } 
+    
+        }
+
+        Boolean hospitalized;
+        if( !editHospitalizedChoiceBox.getSelectionModel().isEmpty() ){
+            String hosp = editHospitalizedChoiceBox.getValue(); 
+            if (hosp.equalsIgnoreCase("yes")) {
+                hospitalized = true;
+            } else {
+                hospitalized = false;
+            }
+            System.out.println(hosp);
+        } else {
+            hospitalized = currentSelectedPatient.getHospitalized();
+        }
+
+        String allergies = editAllergiesTextArea.getText();
+        if (allergies == "") {
+            allergies = null;
+        }
+
+        String address = editAddressTextField.getText();
+        if (address == "") {
+            address= null;
+        }
+
+        jdbc.editPatient(currentSelectedPatient.getMedicalCardId(), name, surname, gender, bloodType, allergies, address, bDate, cInDate, hospitalized);
+        //TODO - Success popup!
+        resetEditPatientScene();
+        hideAll();
+        currentSelectedPatient = null;
+        displayChangePatientDataView();
+
+    }
+
     @FXML
     public void cancelEditPatient(){
         currentEditPatientTableView.getItems().clear();
         currentSelectedPatient = null;
+        displayChangePatientDataView();
     }
     
     //Select patient view
@@ -621,26 +810,14 @@ public class AdStaffMenuController implements Initializable {
     @FXML
     private TableView<Patient> selectPatientTableView;
 
-    TableColumn<Patient,String> columnName = new TableColumn<>("Name");
-    TableColumn<Patient,String> columnSurname = new TableColumn<>("Surname");
-    TableColumn<Patient,String> columnPatientId = new TableColumn<>("Medical Card");
-    TableColumn<Patient,String> columnGender = new TableColumn<>("Gender");
-    TableColumn<Patient,String> columnBloodtype = new TableColumn<>("Blood Type");
-    TableColumn<Patient,String> columnAllergies = new TableColumn<>("Allergies");
-    TableColumn<Patient,String> columnAddress = new TableColumn<>("Address");
-    TableColumn<Patient,String> columnBirthDate = new TableColumn<>("Birthdate");
-    TableColumn<Patient,String> columnCheckInDate = new TableColumn<>("Check-in");
-    TableColumn<Patient,String> columnHospitalized = new TableColumn<>("Hospitalized");
-
-    //MedicalCard, name, surename, gender, bloodtype, allergies, bdate, checkin, address, hospitalized
-
-    // @SuppressWarnings("unchecked")
+    
+    @SuppressWarnings("unchecked")
     private void setPatientTables() throws SQLException, NotBoundException{
 
         List<Patient> patientList = jdbc.selectAllPatients();
         selectPatientTableView.getItems().clear();
         selectPatientTableView.getColumns().clear();
-        selectPatientTableView.getColumns().addAll(columnPatientId, columnName, columnSurname, columnGender, columnBloodtype, columnAllergies, columnBirthDate, columnCheckInDate, columnAddress, columnHospitalized);
+        selectPatientTableView.getColumns().addAll(columnPatientId, columnPatientName, columnPatientSurname, columnPatientGender, columnPatientBloodtype, columnPatientAllergies, columnPatientBirthDate, columnPatientCheckInDate, columnPatientAddress, columnPatientHospitalized);
         selectPatientTableView.getItems().addAll(patientList);
 
     }
@@ -658,6 +835,11 @@ public class AdStaffMenuController implements Initializable {
             ErrorPopup.errorPopup(4);
             return;
         }
+        if(currentSelectedPatient == null){  //BRO GTFO PQ ESTO NO FUNCIONA FUUUCK
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+
         selectPatientTextField.clear();
         hideAll();
         displayDeletePatient();
@@ -672,6 +854,10 @@ public class AdStaffMenuController implements Initializable {
             patientId = Integer.parseInt(selectPatientTextField.getText());
             currentSelectedPatient = jdbc.selectPatient(patientId);
         } catch (Exception e) {
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+        if(currentSelectedPatient == null){  //BRO GTFO PQ ESTO NO FUNCIONA FUUUCK
             ErrorPopup.errorPopup(4);
             return;
         }
@@ -692,15 +878,88 @@ public class AdStaffMenuController implements Initializable {
             ErrorPopup.errorPopup(4);
             return;
         }
-        if(currentSelectedPatient.equals(null)){  //BRO GTFO PQ ESTO NO FUNCIONA FUUUCK
-            System.out.println("fuck off bro");
+        if(currentSelectedPatient == null){  //BRO GTFO PQ ESTO NO FUNCIONA FUUUCK
+            ErrorPopup.errorPopup(4);
+            return;
         }
         selectPatientTextField.clear();
         hideAll();
         displayDeletePatient();
     }
 
+    public void createWorker() throws Exception { 
 
+        Worker nWorker = new Worker();
+
+        String name = workerNameTextField.getText();
+        if(name == ""){
+            ErrorPopup.errorPopup(2);
+            return;
+        }
+        nWorker.setWorkerName(name);
+
+        String surename = workerSurnameTextField.getText();
+        if(surename == ""){
+            ErrorPopup.errorPopup(2);
+            return;
+        }
+        nWorker.setWorkerSurname(surename);
+
+        String specitalty = workerSpecialtyTextField.getText();
+        if(specitalty == ""){
+            specitalty = null;
+        }
+        nWorker.setSpecialtyId(specitalty);
+
+        int roleId;
+        if(!workerTypeComboBox.getSelectionModel().isEmpty()){
+            String workerType = workerTypeComboBox.getSelectionModel().getSelectedItem();
+            nWorker.setTypeWorker(workerType);
+            if(workerType.equalsIgnoreCase("Administration Staff")){ 
+                roleId = 3;//Adstaff
+            } else {
+                roleId = 2;//Non-adStaff
+            }
+        } else {
+            ErrorPopup.errorPopup(2);
+            return;
+        }
+
+        jdbc.addWorker(nWorker);
+        nWorker.setWorkerId(jdbc.getLastIdIntroduced());
+        System.out.println();
+        String[] uspassw = register(nWorker.getWorkerName(), nWorker.getWorkerSurname(), nWorker.getWorkerId(), roleId);
+
+        addWorkerSuccess(uspassw);
+
+        resetCreateWorkerScene();
+
+    }
+
+    private void addWorkerSuccess(String[] uspass) throws IOException {
+        FXMLLoader loaderAddWorkerSuccess;
+        Parent rootAddWorkerSuccess;
+        Scene sceneAddWorkerSuccess;
+        Stage stageAddWorkerSuccess;
+        AddPatientSuccessController addWorkerSuccessController;
+
+        loaderAddWorkerSuccess = new FXMLLoader(getClass().getResource("AddWorkerSuccess.fxml"));
+        rootAddWorkerSuccess = loaderAddWorkerSuccess.load();
+        addWorkerSuccessController = loaderAddWorkerSuccess.getController();
+        addWorkerSuccessController.setUsernamePassword(uspass[0], uspass[1]);
+
+        sceneAddWorkerSuccess = new Scene(rootAddWorkerSuccess);
+        stageAddWorkerSuccess = new Stage();
+        stageAddWorkerSuccess.setScene(sceneAddWorkerSuccess);
+
+        Image icon = new Image("application/images/healthcare.png");
+        stageAddWorkerSuccess.getIcons().add(icon);	
+
+        stageAddWorkerSuccess.setResizable(false);
+        stageAddWorkerSuccess.setTitle("Success");
+        stageAddWorkerSuccess.show();
+
+    }
 
 
     //HardResetScenes
@@ -721,6 +980,21 @@ public class AdStaffMenuController implements Initializable {
         addressTextField.clear();
     }
 
+    private void resetCreateWorkerScene() {
+        workerNameTextField.clear();
+        workerSurnameTextField.clear();
+        workerSpecialtyTextField.clear();
+        workerTypeComboBox.getSelectionModel().clearSelection();
+    }
+
+    public void resetEditPatientScene() {
+        editMaleRadioButton.setSelected(false);
+        editFemaleRadioButton.setSelected(false);
+        editBloodTypeChoiceBox.getSelectionModel().clearSelection();
+        editHospitalizedChoiceBox.getSelectionModel().clearSelection();
+        editBirthDatePicker.setValue(null);
+        editCheckInDatePicker.setValue(null);
+    }
     //Controller stuff
 
     public static AdStaffMenuController thisAdStaffMenuController;
@@ -743,7 +1017,7 @@ public class AdStaffMenuController implements Initializable {
      * @param name self explanatory
      * @param surname I mean...
      * @param idUser ehem
-     * @param id look up
+     * @param id ROL ID look up
      * @throws Exception
      */
     private static String[] register(String name, String surname, Integer idUser, int id) throws Exception {
@@ -771,7 +1045,7 @@ public class AdStaffMenuController implements Initializable {
 		System.out.println("The autogenerated password is:"+ password);
 		if(user.getRole().getRole().equalsIgnoreCase("patient")) {
 			jdbc.createLinkUserPatient(user.getUserId(), idUser); 
-		} else if(user.getRole().getRole().equalsIgnoreCase("medstaff")||user.getRole().getRole().equalsIgnoreCase("adstaff")) {
+		} else {
 			jdbc.createLinkUserWorker(user.getUserId(), idUser); 
 		} 
         String[] userpass = {username, password};

@@ -11,6 +11,7 @@ public interface SQLInterface {
 	public void connect() throws SQLException, ClassNotFoundException;
 	public void disconnect() throws SQLException;
 	
+	public int getLastIdIntroduced() throws SQLException;
 	
 	public void create() throws SQLException;
 	

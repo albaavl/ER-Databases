@@ -22,7 +22,7 @@ public class JPAUserManager implements UMInterface {
 		List<Role> existingRoles = this.getRoles();
 		if(existingRoles.size() < 3) {
 			this.newRole(new Role("patient")); 
-			this.newRole(new Role("medicalStaff"));
+			this.newRole(new Role("medstaff"));
 			this.newRole(new Role("adStaff"));
 		}
 	}

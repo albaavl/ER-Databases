@@ -126,15 +126,33 @@ public class SQL implements SQLInterface{
 
 	@Override
 	public void addWorker(Worker w) throws SQLException{
-		String sq1 = "INSERT INTO workers (workerName, workerSurname, specialtyId, typeWorker, userId) VALUES (?, ?, ?, ?, ?)";
-		PreparedStatement preparedStatement = c.prepareStatement(sq1);
-		preparedStatement.setString(1, w.getWorkerName());
-		preparedStatement.setString(2, w.getWorkerSurname());
-		preparedStatement.setString(3, w.getSpecialtyId());
-		preparedStatement.setString(4, w.getTypeWorker());
-		preparedStatement.setInt(5, w.getUserId());
-		preparedStatement.executeUpdate();
-		preparedStatement.close();
+		if (w.getSpecialtyId() == null) {
+			String sq1 = "INSERT INTO workers (workerName, workerSurname, typeWorker) VALUES (?, ?, ?)";
+			PreparedStatement preparedStatement = c.prepareStatement(sq1);
+			preparedStatement.setString(1, w.getWorkerName());
+			preparedStatement.setString(2, w.getWorkerSurname());
+			preparedStatement.setString(3, w.getTypeWorker());
+			preparedStatement.executeUpdate();
+			preparedStatement.close();	
+		} else {
+			String sq1 = "INSERT INTO workers (workerName, workerSurname, specialtyId, typeWorker) VALUES (?, ?, ?, ?)";
+			PreparedStatement preparedStatement = c.prepareStatement(sq1);
+			preparedStatement.setString(1, w.getWorkerName());
+			preparedStatement.setString(2, w.getWorkerSurname());
+			preparedStatement.setString(3, w.getSpecialtyId());
+			preparedStatement.setString(4, w.getTypeWorker());
+			preparedStatement.executeUpdate();
+			preparedStatement.close();	
+		}
+	}
+
+	@Override
+	public int getLastIdIntroduced() throws SQLException {
+		String query = "SELECT last_insert_rowid() AS lastId";
+		PreparedStatement p = c.prepareStatement(query);
+		ResultSet rs = p.executeQuery();
+		Integer lastId = rs.getInt("lastId");
+		return lastId;
 	}
 
 	@Override
