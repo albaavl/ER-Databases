@@ -177,7 +177,8 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         jdbc = databasecontroller;
         userman = userManager;
         // currentSelectOption = -1;
-        adStaffMenuWelcomeText.setText("FUCK YEAH " + name +  " get fkd.\n It works!");
+        adStaffMenuWelcomeText.setText("Welcome " + name +  ", thank you for using Quiron's ER database.\n"
+                                      + "On the right side you can find all of your aviable options.");
         hideAll();
         paneWelcomeView.setVisible(true);
         paneWelcomeView.setDisable(false);
@@ -209,8 +210,8 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         paneEditPatientDataView.setDisable(true);
         paneChangeWorkerDataView.setVisible(false);
         paneChangeWorkerDataView.setDisable(true);
-        // paneChangeShiftView.setVisible(false); TODO ESTE PANE NO EXISTE POR ESO DA NULLPOINTEREXCEPTION
-        // paneChangeShiftView.setDisable(true);
+        paneChangeShiftView.setVisible(false);
+        paneChangeShiftView.setDisable(true);
         paneEditShiftView.setVisible(false);
         paneEditShiftView.setDisable(true);
         paneDeleteWorker.setVisible(false);
@@ -451,7 +452,7 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
                 e.printStackTrace();
             }
         } else {
-            ErrorPopup.errorPopup(10);
+            ErrorPopup.errorPopup(12);
             return;
         }
 
@@ -824,7 +825,7 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
 
         
         jdbc.addPatient(p);
-        // currentSelectedPatient = p;
+        lastCreatedPatient = p;
 
         String[] uspassw = register(p.getPatientName(),p.getPatientSurname(), p.getMedicalCardId(), 1);
 
@@ -1071,6 +1072,13 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
     //Select patient view TODO look here for help
 
     private static Patient currentSelectedPatient = null;
+    private static Patient lastCreatedPatient = null;
+    public void setLastCreatedAsCurrent() {
+        currentSelectedPatient = lastCreatedPatient;
+    }
+    public void setLastCreatedNull() {
+        lastCreatedPatient = null;
+    }
 
     @FXML
     private TextField selectPatientTextField;
@@ -1249,19 +1257,25 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         currentLinkDocWorkerTableView.getItems().add(currentSelectedWorker);
     }
 
-    public void linkDocPatient() throws SQLException, IOException{ //TODO - falta por crear la vista (Combinar los dos view de edits y poner un button q haga esta funcion)
+    public void linkDocPatient() throws SQLException, IOException{
         if (currentSelectedWorker == null) { 
-            ErrorPopup.errorPopup(10);
+            ErrorPopup.errorPopup(12);
             return;
         } else if (currentSelectedPatient == null) {
-            ErrorPopup.errorPopup(9);
+            ErrorPopup.errorPopup(11);
             return;
         } else {
             jdbc.createLinkDoctorPatient(currentSelectedPatient.getMedicalCardId(), currentSelectedWorker.getWorkerId());
+            SuccessPopup.successPopup(3);
             currentSelectedPatient = null;
             currentSelectedWorker = null;
             displayAssignANewDoctorView();
         }
+    }
+
+    public void cancelLinkDocPatient(){
+        currentSelectedPatient = null;
+        currentSelectedWorker = null;
     }
 
     //SELECT WORKER
@@ -1484,7 +1498,7 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
 
     //SHIFT BS Edit 
 
-    private Shift currentSelectedShift = null;
+    private static Shift currentSelectedShift = null;
 
     @FXML
     private TextField selectShiftTextField;
