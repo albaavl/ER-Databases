@@ -183,7 +183,7 @@ public class SQL implements SQLInterface{
 	
 @Override
 	public void addShift(Shift s) throws SQLException{
-		String sq1 = "INSERT INTO shifts (date, turn, room, doctor_id) VALUES (?,?,?,?)";
+		String sq1 = "INSERT INTO shifts (turn, date, room, doctor_id) VALUES (?,?,?,?)";
 		PreparedStatement preparedStatement = c.prepareStatement(sq1);
 		preparedStatement.setString(1, s.getTurn());
 		preparedStatement.setDate(2, s.getDate());

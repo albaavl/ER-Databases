@@ -229,6 +229,7 @@ public class ErrorPopup {
                 stageError.getIcons().add(icon);	        
 
                 stageError.setTitle("Error");
+                stageError.show();
 
             default:
                 break;

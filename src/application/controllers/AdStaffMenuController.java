@@ -78,6 +78,8 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
     Pane paneSelectWorker;
     @FXML
     Pane paneSelectShift;
+    @FXML
+    Pane paneCreateShift;
     //welcome screen
     @FXML
     Pane paneWelcomeView;
@@ -172,6 +174,21 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
     private ComboBox<String> workerTypeComboBox;
     private String[] workerTypeStrings = {"Doctor", "Nurse", "Administration Staff", "Technician"}; 
 
+    //CreateShift View Stuff
+    @FXML
+    private TextField rooomERTextField;
+    @FXML
+    private DatePicker shiftDatePicker;
+    @FXML
+    private ComboBox<String> shiftTurnComboBox;
+    @FXML
+    private TextField editRooomERTextField;
+    @FXML
+    private DatePicker editShiftDatePicker;
+    @FXML
+    private ComboBox<String> editShiftTurnComboBox;
+    
+    private String[] shiftTurnStrings = {"Morning", "Afternoon", "Night"};
 
     public void displayWelcomeText(String name, SQL databasecontroller, JPAUserManager userManager) {
         jdbc = databasecontroller;
@@ -220,6 +237,8 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         paneSelectWorker.setDisable(true);
         paneSelectShift.setDisable(true);
         paneSelectShift.setVisible(false);
+        paneCreateShift.setDisable(true);
+        paneCreateShift.setVisible(false);
 
     }
     private void resetAll(){
@@ -341,8 +360,6 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         fromLinkDocSelectPatientButton.setDisable(false);
 
     }
-
-    //TODO - truño here - display select worker from functions (EditWorkerData, EditWorkerShifts, DeleteWorker, LinkPatient)
     
     @FXML
     private Button fromDeleteSelectWorkerButton;
@@ -438,8 +455,6 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         fromEditShiftSelectWorkerButton.setDisable(false);
     }
 
-    //TODO - display shift bs
-
     public void displaySelectShifts() throws IOException{
 
         if(currentSelectedWorker != null){
@@ -509,7 +524,7 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         paneChangeWorkerDataView.setVisible(true);
     }
 
-    public void displayEditWorkerView() { //TODO - here (Actual edit)
+    public void displayEditWorkerView() {
         hideAll();
         resetAll();
         paneEditWorkerDataView.setDisable(false);
@@ -544,26 +559,30 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            editShiftChangeButton.setVisible(true);
+            editShiftChangeButton.setDisable(false);
+            editShiftSelectButton.setDisable(true);
+            editShiftSelectButton.setVisible(false);
+        } else {
+            currentSelectedWorkerEditShiftTableView.getItems().clear();
         }
 
-        if(currentSelectedShift != null && currentSelectedWorker != null){
+        if(currentSelectedShift != null){
             try {
                 setCurrentWorkerEditShiftTables();
             } catch (SQLException | NotBoundException e) {
                 e.printStackTrace();
             }
             setCurrentEditShiftTable(); 
-            editShiftSelectButton.setVisible(false);
             editShiftNewShiftButton.setVisible(false);
             editShiftModifyExistingButton.setVisible(true);
-            editShiftChangeButton.setVisible(true);
-            editShiftChangeButton.setDisable(false);
-            editShiftSelectButton.setDisable(true);
             editShiftModifyExistingButton.setDisable(false);
             editShiftNewShiftButton.setDisable(true);
     
+        } else {
+            currentSelectedShiftTableView.getItems().clear();
         }
-
+        
         paneChangeShiftView.setDisable(false);
         paneChangeShiftView.setVisible(true);
     }
@@ -590,12 +609,19 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         
     }
 
-    public void displayEditShiftView() { //TODO - here (actual edit)
+    public void displayCreateShift() throws IOException{ 
+
+        if(currentSelectedWorker == null) {
+            ErrorPopup.errorPopup(12);
+            return;
+        }
+
         hideAll();
         resetAll();
-        paneEditShiftView.setDisable(false);
-        paneEditShiftView.setVisible(true);
+        paneCreateShift.setDisable(false);
+        paneCreateShift.setVisible(true);
     }
+
 
     @FXML
     private Button deletePatientSelectPatient;
@@ -682,6 +708,8 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         editBloodTypeChoiceBox.getItems().addAll(bloodTypeStrings);
         editHospitalizedChoiceBox.getItems().addAll(hospOptionStrings);
         workerTypeComboBox.getItems().addAll(workerTypeStrings);
+        shiftTurnComboBox.getItems().addAll(shiftTurnStrings);
+        editShiftTurnComboBox.getItems().addAll(shiftTurnStrings);
 
         columnPatientName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
         columnPatientSurname.setCellValueFactory(new PropertyValueFactory<>("patientSurname"));
@@ -1509,7 +1537,7 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
     @SuppressWarnings("unchecked")
     private void setShiftTables() throws Exception{
 
-        List<Shift> shiftList = jdbc.searchShiftByWorkerId(currentSelectedWorker.getUserId()); 
+        List<Shift> shiftList = jdbc.searchShiftByWorkerId(currentSelectedWorker.getWorkerId()); 
         selectShiftTableView.getItems().clear();
         selectShiftTableView.getColumns().clear();
         selectShiftTableView.getColumns().addAll(columnShiftId, columnShiftWorkerId, columnShiftRoomER, columnShiftTurn, columnShiftDate);
@@ -1554,6 +1582,110 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         displayChangeShiftDataView();
     }
 
+    public void executeUpdateShift() {
+
+        if(currentSelectedShift != null){
+            hideAll();
+            resetAll();
+    
+            editRooomERTextField.setPromptText(Integer.toString(currentSelectedShift.getRoom()));
+            editShiftDatePicker.setPromptText(currentSelectedShift.getDate().toString());
+            editShiftTurnComboBox.getSelectionModel().select(currentSelectedShift.getTurn());
+        } 
+
+        paneEditShiftView.setDisable(false);
+        paneEditShiftView.setVisible(true);
+    
+    }
+
+    @FXML
+    public void editShift() throws NumberFormatException, Exception {
+        String roomER = editRooomERTextField.getText();
+        if(roomER == ""){
+            roomER = null;
+        } 
+        Integer roomInt = null;
+        try {
+            roomInt = Integer.parseInt(roomER);
+        } catch (Exception e) {
+            ErrorPopup.errorPopup(4);
+        }
+        String shiftTurn;
+        if(editShiftTurnComboBox.getSelectionModel().isEmpty()){
+            shiftTurn = null;
+        } else {
+            shiftTurn = editShiftTurnComboBox.getSelectionModel().getSelectedItem();
+        }
+        Date date;
+        if(editShiftDatePicker.getEditor().getText() == ""){
+            date = null;
+        } else {
+            date = Date.valueOf(editShiftDatePicker.getValue());
+            if (!((date.before(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now())))) {
+                ErrorPopup.errorPopup(3);
+                System.out.println("nain");
+                return;
+            } 
+        }
+
+        jdbc.editShift(currentSelectedShift.getShiftId(), currentSelectedShift.getWorker().getWorkerId(), shiftTurn, roomInt, date);
+    
+        SuccessPopup.successPopup(4);
+        resetEditShiftScene();
+        hideAll();
+
+        currentSelectedShift = null;
+        currentSelectedWorker = null;
+        displayChangeShiftDataView();
+    }
+
+    @FXML
+    public void createShift() throws Exception {
+        Shift nShift = new Shift();
+        String room = rooomERTextField.getText();
+        if(room == ""){
+            ErrorPopup.errorPopup(2);
+            return;
+        } else {
+            try {
+                nShift.setRoom(Integer.parseInt(room));
+            } catch (Exception e) {
+                ErrorPopup.errorPopup(4);
+                return;
+            }
+        }
+
+        if(shiftTurnComboBox.getSelectionModel().isEmpty()){
+            ErrorPopup.errorPopup(2);
+            return;
+        } else {
+           nShift.setTurn(shiftTurnComboBox.getSelectionModel().getSelectedItem());
+        }
+
+        if(shiftDatePicker.getEditor().getText() == ""){
+            ErrorPopup.errorPopup(2);
+            return;
+        } 
+        
+        Date date = Date.valueOf(shiftDatePicker.getValue());
+        if (!((date.after(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now())))) {
+            ErrorPopup.errorPopup(3);
+            System.out.println("nain");
+            return;
+        } 
+        nShift.setDate(date);
+        nShift.setWorker(currentSelectedWorker);
+
+        jdbc.addShift(nShift);
+        SuccessPopup.successPopup(5);
+
+        resetCreateShift();
+        hideAll();
+
+        currentSelectedShift = null;
+        currentSelectedWorker = null;
+        displayChangeShiftDataView();
+    }
     //HardResetScenes
     
     private void resetCreatePatientScene() {
@@ -1597,6 +1729,21 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         workerEditSurnameTextField.clear();
         workerSpecialtyTextField.clear();
         workerEditRoleComboBox.getSelectionModel().clearSelection();
+    }
+
+    private void resetEditShiftScene(){
+        editShiftDatePicker.setValue(null);
+        editShiftTurnComboBox.getSelectionModel().clearSelection();
+        editRooomERTextField.clear();
+    }
+
+    private void resetCreateShift() {
+        shiftDatePicker.setValue(null);
+        shiftDatePicker.getEditor().clear();
+        shiftTurnComboBox.getSelectionModel().clearSelection();
+        rooomERTextField.clear();
+        cancelEditShiftWorker();
+        cancelEditShift();
     }
 
     //Controller stuff
