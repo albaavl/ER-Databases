@@ -177,6 +177,22 @@ public class SuccessPopup {
                 stageError.show();
 
                 break;
+            case 9:
+                loaderError = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootError = loaderError.load(); 
+                successPopupController = loaderError.getController();
+                successPopupController.displaySuccessText("Treatment successfully saved in the database");
+                sceneError = new Scene(rootError);
+                stageError = new Stage();
+                stageError.setScene(sceneError);
+
+                icon = new Image("application/images/successIcon.png");
+                stageError.getIcons().add(icon);	        
+
+                stageError.setTitle("Success");
+                stageError.show();
+
+                break;
             default:
                 loaderError = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
                 rootError = loaderError.load(); 

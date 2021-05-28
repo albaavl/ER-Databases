@@ -94,7 +94,7 @@
                   </Pane>
                   <Pane fx:id="consultMedicalTestsView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" visible="false">
                      <children>
-                        <Label fx:id="titleMedicalTests" layoutX="109.0" layoutY="26.0" prefHeight="67.0" prefWidth="545.0" text="Medical tests of Mr/Ms Surname">
+                        <Label fx:id="titleMedicalTest" layoutX="109.0" layoutY="26.0" prefHeight="67.0" prefWidth="545.0" text="Medical tests of Mr/Ms Surname">
                            <font>
                               <Font name="Arial Bold" size="35.0" />
                            </font>
@@ -216,11 +216,6 @@
                   </Pane>
                   <Pane fx:id="selectTreatmentView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" visible="false">
                      <children>
-                        <Pane>
-                           <children>
-                              <TableView fx:id="treatmentsTable" prefHeight="378.0" prefWidth="516.0" />
-                           </children>
-                        </Pane>
                         <Label layoutX="151.0" layoutY="43.0" prefHeight="86.0" prefWidth="458.0" text="Please choose the treatment you would like to edit:">
                            <font>
                               <Font name="Arial" size="20.0" />
@@ -228,6 +223,7 @@
                         </Label>
                         <Button fx:id="selectTreatment" layoutX="429.0" layoutY="554.0" mnemonicParsing="false" onAction="#displayEditTreatmentView" prefHeight="32.0" prefWidth="67.0" text="Select" />
                         <TextField fx:id="chosenTreatmentId" layoutX="171.0" layoutY="552.0" prefHeight="34.0" prefWidth="211.0" promptText="Please, input the ID of the treatment" />
+                        <TableView fx:id="treatmentsTable" layoutX="123.0" layoutY="120.0" prefHeight="378.0" prefWidth="516.0" />
                      </children>
                   </Pane>
                   <Pane fx:id="allShiftsView" visible="false">
