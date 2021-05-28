@@ -169,6 +169,36 @@ public class ErrorPopup {
                 stageError.setTitle("Date error");
                 stageError.show();
                 break;
+            case 9:
+                loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
+                rootError = loaderError.load(); 
+                errorPopupController = loaderError.getController();
+                errorPopupController.displayErrorText("No current patients for you");
+			    sceneError = new Scene(rootError);
+                stageError = new Stage();
+                stageError.setScene(sceneError);
+
+                icon = new Image("application/images/errorIcon.png");
+                stageError.getIcons().add(icon);	        
+
+                stageError.setTitle("Patient error");
+                stageError.show();
+                break;
+            case 10:
+            	loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
+                rootError = loaderError.load(); 
+                errorPopupController = loaderError.getController();
+                errorPopupController.displayErrorText("There is no shift on the selected date");
+			    sceneError = new Scene(rootError);
+                stageError = new Stage();
+                stageError.setScene(sceneError);
+
+                icon = new Image("application/images/errorIcon.png");
+                stageError.getIcons().add(icon);	        
+
+                stageError.setTitle("Shift error");
+                stageError.show();
+                break;
             default:
                 break;
         }
