@@ -59,5 +59,6 @@ public interface SQLInterface {
 	
 	public Worker selectWorkerByUserId( Integer userID) throws Exception;
 	public Patient selectPatientByUserId( Integer userId) throws SQLException, NotBoundException;
+	public List<Treatment> selectAllTreatments() throws Exception;
 	
 }

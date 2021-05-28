@@ -207,7 +207,7 @@
                               <Font name="Arial" size="15.0" />
                            </font>
                         </TextArea>
-                        <Button fx:id="editTreatment" layoutX="535.0" layoutY="457.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="128.0" style="-fx-border-radius: 5;" text="Edit treatment">
+                        <Button fx:id="editTreatment" layoutX="535.0" layoutY="457.0" mnemonicParsing="false" onAction="#editTreatment" prefHeight="50.0" prefWidth="128.0" style="-fx-border-radius: 5;" text="Edit treatment">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
@@ -241,7 +241,7 @@
                   </ScrollPane>
                   <Pane fx:id="specificShiftView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" visible="false">
                      <children>
-                        <DatePicker fx:id="ssSelectedDate" layoutX="255.0" layoutY="170.0" prefHeight="37.0" prefWidth="249.0" promptText="Date" />
+                        <DatePicker fx:id="ssSelectedDate" layoutX="255.0" layoutY="170.0" onAction="#selectedShift" prefHeight="37.0" prefWidth="249.0" promptText="Date" />
                         <Label layoutX="155.0" layoutY="94.0" text="Please select the specific date:">
                            <font>
                               <Font name="Arial" size="30.0" />

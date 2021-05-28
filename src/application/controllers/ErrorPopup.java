@@ -19,6 +19,7 @@ public class ErrorPopup {
      * <p> {@code 4} Numeros, no letras ffs aint that hard + #noteinventescosasbro(El id no existe).
      * <p> {@code 5} Wrong Username or password.
      * <p> {@code 6} No shift to display bruh.
+     * <p> {@code 7} No treatment to display.
      * <p> {@code X} idk keep adding stuff here...
 
      * @param errorType - int
@@ -135,6 +136,37 @@ public class ErrorPopup {
 
                 stageError.setScene(sceneError);
                 stageError.setTitle("Error: No shifts");
+                stageError.show();
+                break;
+                
+            case 7:
+                loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
+                rootError = loaderError.load(); 
+                errorPopupController = loaderError.getController();
+                errorPopupController.displayErrorText("Something went wrong, please check everything and try again.");
+			    sceneError = new Scene(rootError);
+                stageError = new Stage();
+                stageError.setScene(sceneError);
+
+                icon = new Image("application/images/errorIcon.png");
+                stageError.getIcons().add(icon);	        
+
+                stageError.setTitle("Error: No treatments");
+                stageError.show();
+                break;
+            case 8:
+                loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
+                rootError = loaderError.load(); 
+                errorPopupController = loaderError.getController();
+                errorPopupController.displayErrorText("The date of the shift must be in the future");
+			    sceneError = new Scene(rootError);
+                stageError = new Stage();
+                stageError.setScene(sceneError);
+
+                icon = new Image("application/images/errorIcon.png");
+                stageError.getIcons().add(icon);	        
+
+                stageError.setTitle("Date error");
                 stageError.show();
                 break;
             default:

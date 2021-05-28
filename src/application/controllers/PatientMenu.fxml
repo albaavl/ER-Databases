@@ -1,57 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PatientMenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controllers.PatientMenuController">
    <children>
       <SplitPane dividerPositions="0.23897058823529416" prefHeight="650.0" prefWidth="1000.0" style="-fx-background-color: DARKRED;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <ChoiceBox fx:id="order" layoutX="-1.0" layoutY="98.0" prefHeight="33.0" prefWidth="222.0" AnchorPane.bottomAnchor="516.0" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="98.0" />
-                  <Label layoutX="12.0" layoutY="-88.0" prefHeight="239.0" prefWidth="112.0" text="Please, Mr/Ms" textFill="WHITE" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="-88.0">
+                  <Label fx:id="welcomeText" layoutX="12.0" layoutY="-88.0" prefHeight="239.0" prefWidth="112.0" text="Please, Mr/Ms" textFill="WHITE" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="-88.0">
                      <font>
                         <Font name="Arial" size="12.0" />
                      </font>
                   </Label>
-                  <Label fx:id="userName" layoutX="93.0" layoutY="21.0" prefHeight="19.0" prefWidth="140.0" text="Surname" textFill="WHITE" />
-                  <Label layoutX="8.0" layoutY="40.0" prefHeight="49.0" prefWidth="212.0" text="choose the order for your treatments:" textFill="WHITE">
-                     <font>
-                        <Font name="Arial" size="12.0" />
-                     </font>
-                  </Label>
-                  <Button layoutX="67.0" layoutY="586.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="92.0" text="Log out" />
+                  <Button fx:id="logOut" layoutX="67.0" layoutY="586.0" mnemonicParsing="false" onAction="#logOut" prefHeight="36.0" prefWidth="92.0" text="Log out" />
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <AnchorPane fx:id="consultTreatmentsView" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <ScrollPane prefHeight="647.3333333333334" prefWidth="756.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="639.0" prefWidth="745.0">
-                           <children>
-                              <TableView layoutX="22.0" layoutY="21.0" prefHeight="639.3333333333334" prefWidth="745.3333333333334" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <columns>
-                                  <TableColumn prefWidth="45.69903552532196" text="ID" />
-                                  <TableColumn prefWidth="130.30093383789062" text="Start Date" />
-                                    <TableColumn prefWidth="73.59150695800781" text="Duration" />
-                                    <TableColumn prefWidth="138.53768920898438" text="Medication" />
-                                    <TableColumn prefWidth="159.39794921875" text="Diagnosis" />
-                                    <TableColumn prefWidth="199.26910400390625" text="Recommendations" />
-                                </columns>
-                              </TableView>
-                           </children>
-                        </AnchorPane>
-                    </content>
-                  </ScrollPane>
+                  <TableView fx:id="treatmentsTable" prefHeight="639.3333333333334" prefWidth="745.3333333333334" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                      <TableColumn prefWidth="45.69903552532196" text="ID" />
+                      <TableColumn prefWidth="130.30093383789062" text="Start Date" />
+                        <TableColumn prefWidth="73.59150695800781" text="Duration" />
+                        <TableColumn prefWidth="138.53768920898438" text="Medication" />
+                        <TableColumn prefWidth="159.39794921875" text="Diagnosis" />
+                        <TableColumn prefWidth="199.26910400390625" text="Recommendations" />
+                    </columns>
+                  </TableView>
                </children>
             </AnchorPane>
         </items>
