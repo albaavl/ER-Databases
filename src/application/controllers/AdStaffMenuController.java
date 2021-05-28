@@ -1159,6 +1159,27 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
 
     }
 
+    @FXML
+    private TableView<Worker> currentLinkDocWorkerTableView;
+    @FXML
+    private TableView<Patient> currentLinkDocPatientTableView;
+
+    @SuppressWarnings("unchecked")
+    private void setLinkDocSelectedPatientTable(){
+        currentLinkDocPatientTableView.getItems().clear();
+        currentLinkDocPatientTableView.getColumns().clear();
+        currentLinkDocPatientTableView.getColumns().addAll(columnPatientId, columnPatientName, columnPatientSurname, columnPatientGender, columnPatientBloodtype, columnPatientAllergies, columnPatientBirthDate, columnPatientCheckInDate, columnPatientAddress, columnPatientHospitalized);
+        currentLinkDocPatientTableView.getItems().add(currentSelectedPatient);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void setLinkDocSelectedWorkerTable(){
+        currentLinkDocWorkerTableView.getItems().clear();
+        currentLinkDocWorkerTableView.getColumns().clear();
+        currentLinkDocWorkerTableView.getColumns().addAll(columnWorkerId, columnWorkerName, columnWorkerSurname, columnWorkerType, columnWorkerSpecialtyId);
+        currentLinkDocWorkerTableView.getItems().add(currentSelectedWorker);
+    }
+
     //SELECT WORKER
 
     private static Worker currentSelectedWorker = null;
@@ -1266,6 +1287,86 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         displayAssignANewDoctorView();
     }
 
+    //Edit worker
+
+    @FXML
+    private TableView<Worker> currentEditWorkerTableView;
+
+    @SuppressWarnings("unchecked")
+    private void setCurrentEditWorkerTable(){
+        currentEditWorkerTableView.getItems().clear();
+        currentEditWorkerTableView.getColumns().clear();
+        currentEditWorkerTableView.getColumns().addAll(columnWorkerId, columnWorkerName, columnWorkerSurname, columnWorkerType, columnWorkerSpecialtyId);
+        currentEditWorkerTableView.getItems().add(currentSelectedWorker);
+    }
+    
+    @FXML
+    TextField workerEditNameTextField;
+    @FXML
+    TextField workerEditSurnameTextField;
+    @FXML
+    TextField workerEditSpecialtyTextField;
+    @FXML
+    ComboBox<String> workerEditRoleComboBox;
+
+    @FXML
+    public void executeUpdateWorker() {
+        hideAll();
+        
+        try {
+            workerEditNameTextField.setPromptText(currentSelectedWorker.getWorkerName());
+            workerEditSurnameTextField.setPromptText(currentSelectedWorker.getWorkerSurname());
+            workerEditSpecialtyTextField.setPromptText(currentSelectedWorker.getSpecialtyId());
+            workerEditRoleComboBox.getSelectionModel().select(currentSelectedWorker.getTypeWorker());
+        } catch (Exception e) {
+        }
+
+        paneEditWorkerDataView.setVisible(true);
+        paneEditWorkerDataView.setDisable(false);
+    }
+
+    @FXML
+    public void editWorker() throws IOException {
+        String name = workerEditNameTextField.getText();
+        if(name == ""){
+            name = null;
+        }
+        
+        String surName = workerEditSurnameTextField.getText();
+        if(surName == ""){
+            surName = null;
+        }
+
+        String specialty = workerEditSpecialtyTextField.getText();
+        if(specialty == ""){
+            specialty = null;
+        }
+
+        String workerType;
+        if(!workerEditRoleComboBox.getSelectionModel().isEmpty()){
+            workerType = workerTypeComboBox.getSelectionModel().getSelectedItem();
+        } else {
+            workerType = null;
+        }
+
+        //TODO - edit worker on db here.
+        
+        SuccessPopup.successPopup(2);
+
+        resetEditWorkerScene();
+        hideAll();
+        currentSelectedWorker = null;
+        displayChangeWorkerDataView();
+
+    }
+
+    @FXML
+    public void cancelEditWorker(){
+        currentEditWorkerTableView.getItems().clear();
+        currentSelectedWorker = null;
+        displayEditWorkerView();
+    }
+
     //Delete Worker View
 
     @FXML
@@ -1323,12 +1424,23 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
     }
 
     public void resetEditPatientScene() {
+        editAddressTextField.clear();
+        editNameTextField.clear();
+        editSurnameTextField.clear();
+        editAllergiesTextArea.clear();
         editMaleRadioButton.setSelected(false);
         editFemaleRadioButton.setSelected(false);
         editBloodTypeChoiceBox.getSelectionModel().clearSelection();
         editHospitalizedChoiceBox.getSelectionModel().clearSelection();
         editBirthDatePicker.setValue(null);
         editCheckInDatePicker.setValue(null);
+    }
+
+    public void resetEditWorkerScene(){
+        workerEditNameTextField.clear();
+        workerEditSurnameTextField.clear();
+        workerSpecialtyTextField.clear();
+        workerEditRoleComboBox.getSelectionModel().clearSelection();
     }
 
     //Controller stuff
