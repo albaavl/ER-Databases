@@ -143,7 +143,7 @@ public class ErrorPopup {
                 loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml")); 
                 rootError = loaderError.load(); 
                 errorPopupController = loaderError.getController();
-                errorPopupController.displayErrorText("Something went wrong, please check everything and try again.");
+                errorPopupController.displayErrorText("There are no treatments to display");
 			    sceneError = new Scene(rootError);
                 stageError = new Stage();
                 stageError.setScene(sceneError);

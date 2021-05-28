@@ -340,13 +340,14 @@ public class SQL implements SQLInterface{
 		return wList;
 	}
 	@Override
-	public List<Treatment> selectAllTreatments() throws Exception {
-		String sql = "SELECT * FROM treatments";
+	public List<Treatment> selectAllTreatments(Integer patient_id) throws Exception {
+		String sql = "SELECT * FROM treatments WHERE patient_id = ?";
 		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1,patient_id);
 		ResultSet rs = p.executeQuery();
 		List <Treatment> tList = new ArrayList<Treatment>();
 		while(rs.next()){ 
-			tList.add(new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration")));
+			tList.add(new Treatment(rs.getInt("id"), rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"), patient_id));
 		}
 		p.close();
 		rs.close();
