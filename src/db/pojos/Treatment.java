@@ -37,7 +37,7 @@ public class Treatment implements Serializable {
 		super();
 		setDiagnosis(diagnosis);
 		setMedication(medication);
-		setStartDate(startDate);
+		this.startDate= startDate;
 		setRecommendation(recommendation);
 		setDuration(duration);
 		setPatientId(patientId);
@@ -48,7 +48,7 @@ public class Treatment implements Serializable {
 		this.setTreatmentId(id);
 		setDiagnosis(diagnosis);
 		setMedication(medication);
-		setStartDate(startDate);
+		this.startDate= startDate;
 		setRecommendation(recommendation);
 		setDuration(duration);
 	}
@@ -57,7 +57,7 @@ public class Treatment implements Serializable {
 		setTreatmentId(treatmentId);
 		setDiagnosis(diagnosis);
 		setMedication(medication);		
-		setStartDate(startDate);		
+		this.startDate= startDate;		
 		setRecommendation(recommendation);
 		setDuration(duration);
 		setPatientId(patientId);
@@ -67,7 +67,7 @@ public class Treatment implements Serializable {
 		setTreatmentId(t.treatmentId);
 		setDiagnosis(t.diagnosis);
 		setRecommendation(t.recommendation);
-		setStartDate(t.startDate);
+		this.startDate= t.startDate;
 		setMedication(t.medication);
 		setDuration(t.duration);
 		setPatientId(t.patientId);

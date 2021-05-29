@@ -388,6 +388,7 @@ try {
 		hideAll();
 		resetAll();
 		allShiftsView.setDisable(false);
+		allShiftsView.setVisible(true);
 		try {
 			allShifts();
 		} catch (Exception e) {
@@ -395,7 +396,6 @@ try {
 			e.printStackTrace();
 			return;
 		}
-		allShiftsView.setVisible(true);
 
 	}
 
@@ -553,7 +553,7 @@ try {
 			shiftRoom
 					.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getRoom())));
 			shiftsTable.getColumns().addAll(shiftId, shiftDate, shiftTurn, shiftRoom);
-			shiftsTable.getItems().addAll(shiftsList);
+			shiftsTable.getItems().addAll(jdbc.searchShiftByWorkerId(medStaff.getWorkerId()));
 		}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -563,11 +563,15 @@ try {
 	}
 
 	public void selectedShift(ActionEvent aE) throws IOException{
-		try{Date shiftDate = Date.valueOf(ssSelectedDate.getValue());
+		try{
+			ssShiftTable.getItems().clear();
+		ssShiftTable.getColumns().clear();
+		if(ssSelectedDate.getEditor().getText()=="") {
+			return;
+		}
+			Date shiftDate = Date.valueOf(ssSelectedDate.getValue());
 		if (!shiftDate.before(Date.valueOf(LocalDate.now()))) {
 			List<Shift> shiftsList = new ArrayList<>();
-			ssShiftTable.getItems().clear();
-			ssShiftTable.getColumns().clear();
 			shiftsList.addAll(jdbc.searchShiftByDate(medStaff.getWorkerId(), shiftDate));
 			if (shiftsList.isEmpty()) {
 				ErrorPopup.errorPopup(10);

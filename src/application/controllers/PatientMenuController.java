@@ -25,7 +25,7 @@ import db.pojos.*;
 
 
 
-public class PatientMenuController implements Initializable{
+public class PatientMenuController {
 
 	private static SQL jdbc;
 	private static JPAUserManager userman;
@@ -82,6 +82,7 @@ public class PatientMenuController implements Initializable{
 			jdbc = sqlman;
 			userman = userm;
 			welcomeText.setText("Mr/Mrs " + p.getPatientName() + ", here are your treatments");
+			setTreatmentTables();
      	} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -90,13 +91,13 @@ public class PatientMenuController implements Initializable{
 	private static Patient currentPatient = new Patient();
 	
 	private void setTreatmentTables() throws IOException, NumberFormatException, NotBoundException, SQLException {
-		if (currentPatient == null) {
+		if (patient == null) {
 			ErrorPopup.errorPopup(4);
 			return;
 		}
 		List<Treatment> treatments = new ArrayList<>();
 		try {
-			treatments.addAll(jdbc.selectAllTreatments(currentPatient.getMedicalCardId()));
+			treatments.addAll(jdbc.selectAllTreatments(patient.getMedicalCardId()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorPopup.errorPopup(0);
@@ -104,7 +105,7 @@ public class PatientMenuController implements Initializable{
 		}
 		if (treatments.isEmpty()) {
 			ErrorPopup.errorPopup(7);
-			displayPatientWelcomeText(patient, jdbc, userman);
+			return;
 		} else {
 			treatmentsTable.getItems().clear();
 			treatmentsTable.getColumns().clear();
@@ -132,18 +133,7 @@ public class PatientMenuController implements Initializable{
 		}
 	}
 
-	public void displayAllTreatmentsView(ActionEvent aEvent) throws IOException {
-		hideAll();
-		consultTreatmentsView.setDisable(false);
-		consultTreatmentsView.setVisible(true);
-		try {
-			setTreatmentTables();
-		} catch (Exception e) {
-			ErrorPopup.errorPopup(0);
-			e.printStackTrace();
-			return;
-		}
-	}
+	
    
 	private Parent root;
 	private Stage stage;
@@ -168,16 +158,6 @@ public class PatientMenuController implements Initializable{
 
 	}
 
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		
-		treatmentId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getTreatmentId())));
-		startDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStartDate().toString()));
-		duration.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getDuration())));
-    	medication.setCellValueFactory(new PropertyValueFactory<>("medication"));
-    	recommendation.setCellValueFactory(new PropertyValueFactory<>("adviceTreatment"));
-    	diagnosis.setCellValueFactory(new PropertyValueFactory<>("diagnosis"));
-		
-	}
+	
 
 }

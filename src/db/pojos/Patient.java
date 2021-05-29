@@ -55,9 +55,9 @@ public class Patient implements Serializable{
 	 */
 	public Patient(String pnam, String psnam, String pgen, String btype, String allerg, String paddress, Date bdat, Date cIndat, boolean hosp, Integer medCardId ) throws NotBoundException{
 		this.setAllergieType( allerg);
-		this.setbDate(bdat);
+		this.bDate = bdat;
 		this.setBloodType(btype);
-		this.setCheckInDate(cIndat);
+		this.checkInDate = cIndat;
 		this.setGender(pgen);
 		this.setHospitalized(hosp); 
 		this.setPatientName(pnam);
@@ -68,9 +68,9 @@ public class Patient implements Serializable{
 	
 	public Patient(String pnam, String psnam, String pgen, String btype, String allerg, String paddress, Date bdat, Date cIndat, boolean hosp, Integer medCardId, Integer userId ) throws NotBoundException{
 		this.setAllergieType( allerg);
-		this.setbDate(bdat);
+		this.bDate = bdat;
 		this.setBloodType(btype);
-		this.setCheckInDate(cIndat);
+		this.checkInDate = cIndat;
 		this.setGender(pgen);
 		this.setHospitalized(hosp); 
 		this.setPatientName(pnam);
@@ -82,9 +82,9 @@ public class Patient implements Serializable{
 	
 	public Patient(Patient p) throws NotBoundException {
 		this.setAllergieType(p.allergieType);
-		this.setbDate(p.bDate);
+		this.bDate = p.bDate;
 		this.setBloodType(p.bloodType);
-		this.setCheckInDate(p.checkInDate);
+		this.checkInDate = p.checkInDate;
 		this.setGender(p.gender);
 		this.setHospitalized(p.hospitalized); 
 		this.setPatientName(p.patientName);

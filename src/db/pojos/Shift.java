@@ -54,14 +54,14 @@ public class Shift implements Serializable {
 	
 	public Shift(Date date, Integer room, String turn, Worker worker) throws Exception {
 		super();
-		this.setDate(date);
+		this.date = date;
 		this.setRoom(room);
 		this.setTurn(turn);
 		this.setWorker(worker);	
 	}
 	public Shift(Date date, Integer room, String turn, Integer shiftId) throws Exception {
 		super();
-		this.setDate(date);
+		this.date = date;
 		this.setRoom(room);
 		this.setTurn(turn);
 		this.setShiftId(shiftId);
@@ -69,7 +69,7 @@ public class Shift implements Serializable {
 	
 	public Shift(Date date, Integer room, String turn, Worker worker, Integer shiftId) throws Exception {
 		super();
-		this.setDate(date);
+		this.date = date;
 		this.setRoom(room);
 		this.setTurn(turn);
 		this.setWorker(worker);
@@ -78,7 +78,7 @@ public class Shift implements Serializable {
 
 	public Shift(Shift s) throws Exception {
 		super();
-		this.setDate(s.date);
+		this.date = s.date;
 		this.setRoom(s.room);
 		this.setTurn(s.turn);
 		this.setWorker(s.worker);
