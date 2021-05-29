@@ -1621,8 +1621,8 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
             date = null;
         } else {
             date = Date.valueOf(editShiftDatePicker.getValue());
-            if (!((date.before(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now())))) {
-                ErrorPopup.errorPopup(3);
+            if (!((date.after(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now())))) {
+                ErrorPopup.errorPopup(14);
                 System.out.println("nain");
                 return;
             } 
@@ -1669,7 +1669,7 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         
         Date date = Date.valueOf(shiftDatePicker.getValue());
         if (!((date.after(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now())))) {
-            ErrorPopup.errorPopup(3);
+            ErrorPopup.errorPopup(14);
             System.out.println("nain");
             return;
         } 

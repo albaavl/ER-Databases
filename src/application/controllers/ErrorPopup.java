@@ -36,6 +36,8 @@ public class ErrorPopup {
 	 * <p>
 	 * {@code 12} No worker selected
 	 * <p>
+	 * {@code 14} Date needs to be on future/today
+	 * <p>
 	 * {@code X} idk keep adding stuff here...
 	 * 
 	 * @param errorType - int
@@ -257,6 +259,21 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("Error");
+			stageError.show();
+			break;
+		case 14:
+			loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml"));
+			rootError = loaderError.load();
+			errorPopupController = loaderError.getController();
+			errorPopupController.displayErrorText("Date must be today or in the future.");
+			sceneError = new Scene(rootError);
+			stageError = new Stage();
+			stageError.setScene(sceneError);
+
+			icon = new Image("application/images/errorIcon.png");
+			stageError.getIcons().add(icon);
+
+			stageError.setTitle("Wrong date");
 			stageError.show();
 			break;
 

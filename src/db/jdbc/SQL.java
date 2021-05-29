@@ -251,7 +251,7 @@ public class SQL implements SQLInterface{
 		return shifts;
 	}
 	
-	@Override
+	@Override //TODO - pq coño hay un doctor_id aqui? xD
 	public List<Shift> searchShiftByDate (Integer workerId, Date date) throws SQLException, Exception {
 		String sql = "SELECT * FROM shifts WHERE doctor_id = ? AND date = ? ";
 		PreparedStatement p = c.prepareStatement(sql);
@@ -392,7 +392,8 @@ public class SQL implements SQLInterface{
 		ResultSet rs = p.executeQuery();
 		Shift shift = null;
 		if(rs.next()){
-			shift = new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("turn"), rs.getInt("shiftId"));
+			Worker w = selectWorker(rs.getInt("doctor_id"));
+			shift = new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("turn"), w, rs.getInt("shiftId"));
 		}
 		p.close();
 		rs.close();
