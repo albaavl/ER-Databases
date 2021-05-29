@@ -241,9 +241,9 @@ public class SQL implements SQLInterface{
 		PreparedStatement p = c.prepareStatement(sql);
 		p.setInt(1, workerId);
 		ResultSet rs = p.executeQuery();
-		List<Shift> shifts = new ArrayList<>();
+		List<Shift> shifts = new ArrayList<Shift>();
 		Worker w = selectWorker(workerId);
-		if(rs.next()){ 
+		while(rs.next()){ 
 			shifts.add(new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("turn"), w, rs.getInt("shiftId")));		
 		}
 		p.close();
@@ -259,7 +259,7 @@ public class SQL implements SQLInterface{
 		p.setDate(2, date);
 		ResultSet rs = p.executeQuery();
 		List<Shift> shifts = new ArrayList<>();
-		if(rs.next()){ 
+		while(rs.next()){ 
 		shifts.add(new Shift(rs.getDate("date"), rs.getInt("room"), rs.getString("turn"), rs.getInt("doctor_id"))) ;		
 		}
 		p.close();
