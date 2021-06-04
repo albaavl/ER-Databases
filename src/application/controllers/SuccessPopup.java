@@ -26,187 +26,251 @@ public class SuccessPopup {
      * @throws IOException
      */
     public void successPopup(int successType) throws IOException {
-        FXMLLoader loaderError;
-        Parent rootError;
-        Scene sceneError;
-        Stage stageError;
+        FXMLLoader loaderSuccess;
+        Parent rootSuccess;
+        Scene sceneSuccess;
+        Stage stageSuccess;
         Image icon;
         SuccessPopupController successPopupController;
         switch (successType) {
             case 0:
-                loaderError = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
-                rootError = loaderError.load(); 
-                successPopupController = loaderError.getController();
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
                 successPopupController.displaySuccessText("Success :).");
-                sceneError = new Scene(rootError);
-                stageError = new Stage();
-                stageError.setScene(sceneError);
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
 
 			icon = new Image("application/images/successIcon.png");
-			stageError.getIcons().add(icon);
+			stageSuccess.getIcons().add(icon);
 
-			stageError.setTitle("Success");
-			stageError.show();
+			stageSuccess.setTitle("Success");
+			stageSuccess.show();
 
                 break;
             case 1:
-                loaderError = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
-                rootError = loaderError.load(); 
-                successPopupController = loaderError.getController();
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
                 successPopupController.displaySuccessText("Edited Patient Correctly.");
-                sceneError = new Scene(rootError);
-                stageError = new Stage();
-                stageError.setScene(sceneError);
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
 
                 icon = new Image("application/images/successIcon.png");
-                stageError.getIcons().add(icon);	        
+                stageSuccess.getIcons().add(icon);	        
 
-                stageError.setTitle("Success");
-                stageError.show();
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
 
                 break;
             case 2:
-                loaderError = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
-                rootError = loaderError.load(); 
-                successPopupController = loaderError.getController();
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
                 successPopupController.displaySuccessText("Edited Worker Correctly.");
-                sceneError = new Scene(rootError);
-                stageError = new Stage();
-                stageError.setScene(sceneError);
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
 
                 icon = new Image("application/images/successIcon.png");
-                stageError.getIcons().add(icon);	        
+                stageSuccess.getIcons().add(icon);	        
 
-                stageError.setTitle("Success");
-                stageError.show();
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
 
                 break;
             case 3:
-                loaderError = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
-                rootError = loaderError.load(); 
-                successPopupController = loaderError.getController();
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
                 successPopupController.displaySuccessText("Linked Patient and Worker Correctly.");
-                sceneError = new Scene(rootError);
-                stageError = new Stage();
-                stageError.setScene(sceneError);
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
 
                 icon = new Image("application/images/successIcon.png");
-                stageError.getIcons().add(icon);	        
+                stageSuccess.getIcons().add(icon);	        
 
-                stageError.setTitle("Success");
-                stageError.show();
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
 
                 break;
             case 4:
-                loaderError = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
-                rootError = loaderError.load(); 
-                successPopupController = loaderError.getController();
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
                 successPopupController.displaySuccessText("Edited Shift Correctly.");
-                sceneError = new Scene(rootError);
-                stageError = new Stage();
-                stageError.setScene(sceneError);
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
 
                 icon = new Image("application/images/successIcon.png");
-                stageError.getIcons().add(icon);	        
+                stageSuccess.getIcons().add(icon);	        
 
-                stageError.setTitle("Success");
-                stageError.show();
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
 
                 break;
             case 5:
-                loaderError = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
-                rootError = loaderError.load(); 
-                successPopupController = loaderError.getController();
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
                 successPopupController.displaySuccessText("Created Shift Correctly.");
-                sceneError = new Scene(rootError);
-                stageError = new Stage();
-                stageError.setScene(sceneError);
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
 
                 icon = new Image("application/images/successIcon.png");
-                stageError.getIcons().add(icon);	        
+                stageSuccess.getIcons().add(icon);	        
 
-                stageError.setTitle("Success");
-                stageError.show();
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
 
                 break;
             case 6:
-                loaderError = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
-                rootError = loaderError.load(); 
-                successPopupController = loaderError.getController();
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
                 successPopupController.displaySuccessText("Deleted Patient Correctly.");
-                sceneError = new Scene(rootError);
-                stageError = new Stage();
-                stageError.setScene(sceneError);
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
 
                 icon = new Image("application/images/successIcon.png");
-                stageError.getIcons().add(icon);	        
+                stageSuccess.getIcons().add(icon);	        
 
-                stageError.setTitle("Success");
-                stageError.show();
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
 
                 break;
             case 7:
-                loaderError = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
-                rootError = loaderError.load(); 
-                successPopupController = loaderError.getController();
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
                 successPopupController.displaySuccessText("Delete Worker Correctly.");
-                sceneError = new Scene(rootError);
-                stageError = new Stage();
-                stageError.setScene(sceneError);
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
 
                 icon = new Image("application/images/successIcon.png");
-                stageError.getIcons().add(icon);	        
+                stageSuccess.getIcons().add(icon);	        
 
-                stageError.setTitle("Success");
-                stageError.show();
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
 
                 break;
             case 8:
-                loaderError = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
-                rootError = loaderError.load(); 
-                successPopupController = loaderError.getController();
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
                 successPopupController.displaySuccessText("Success :).");
-                sceneError = new Scene(rootError);
-                stageError = new Stage();
-                stageError.setScene(sceneError);
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
 
                 icon = new Image("application/images/successIcon.png");
-                stageError.getIcons().add(icon);	        
+                stageSuccess.getIcons().add(icon);	        
 
-                stageError.setTitle("Success");
-                stageError.show();
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
 
                 break;
             case 9:
-                loaderError = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
-                rootError = loaderError.load(); 
-                successPopupController = loaderError.getController();
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
                 successPopupController.displaySuccessText("Treatment successfully saved in the database");
-                sceneError = new Scene(rootError);
-                stageError = new Stage();
-                stageError.setScene(sceneError);
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
 
                 icon = new Image("application/images/successIcon.png");
-                stageError.getIcons().add(icon);	        
+                stageSuccess.getIcons().add(icon);	        
 
-                stageError.setTitle("Success");
-                stageError.show();
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
+
+                break;
+            case 10:
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
+                successPopupController.displaySuccessText("Shifts successfully exported to XML file");
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
+
+                icon = new Image("application/images/successIcon.png");
+                stageSuccess.getIcons().add(icon);	        
+
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
+
+                break;
+            case 11:
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
+                successPopupController.displaySuccessText("Shifts from XML successfully added to the database");
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
+
+                icon = new Image("application/images/successIcon.png");
+                stageSuccess.getIcons().add(icon);	        
+
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
+
+                break;
+            case 12:
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
+                successPopupController.displaySuccessText("Password successfully updated");
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
+
+                icon = new Image("application/images/successIcon.png");
+                stageSuccess.getIcons().add(icon);	        
+
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
+
+                break;
+            case 13:
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
+                successPopupController.displaySuccessText("XML successfully converted into HTML");
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
+
+                icon = new Image("application/images/successIcon.png");
+                stageSuccess.getIcons().add(icon);	        
+
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
 
                 break;
             default:
-                loaderError = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
-                rootError = loaderError.load(); 
-                successPopupController = loaderError.getController();
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
                 successPopupController.displaySuccessText("Success :).");
-                sceneError = new Scene(rootError);
-                stageError = new Stage();
-                stageError.setScene(sceneError);
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
 
                 icon = new Image("application/images/successIcon.png");
-                stageError.getIcons().add(icon);	        
+                stageSuccess.getIcons().add(icon);	        
 
-                stageError.setTitle("Success");
-                stageError.show();
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
 
                 break;
         }

@@ -16,6 +16,7 @@ import db.jdbc.SQL;
 import application.controllers.*;
 import db.jpa.JPAUserManager;
 import db.pojos.*;
+import db.xml.XMLManager;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -405,6 +406,38 @@ try {
 		specificShiftView.setDisable(false);
 		specificShiftView.setVisible(true);
 
+	}
+	
+	public void displayShiftsToXML(ActionEvent aEvent) {
+		resetAll();
+		try{
+			XMLManager.java2XmlShift(medStaff);
+			SuccessPopup.successPopup(10);
+		}catch(Exception ex) {
+			ErrorPopup.errorPopup(15);
+		}
+
+	}
+	
+	public void displayXMLToShifts(ActionEvent aEvent) throws IOException {
+		resetAll();
+		try{
+			XMLManager.xml2JavaShift();
+			SuccessPopup.successPopup(11);
+		}catch(Exception ex) {
+			ErrorPopup.errorPopup(16);
+		}
+	}
+	
+	public void displayXMLToHTML(ActionEvent aEvent) throws IOException {
+		resetAll();
+		try{
+			XMLManager.simpleTransform("./xmls/External-Shift.xml", "./xmls/Shift-Style.xslt", "./xmls/Shift.html");
+
+			SuccessPopup.successPopup(13);
+		}catch(Exception ex) {
+			ErrorPopup.errorPopup(17);
+		}
 	}
 
 	private Parent root;
