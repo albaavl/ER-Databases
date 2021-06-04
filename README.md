@@ -8,7 +8,7 @@ The aim of this database is to provide an easy way for regulating all patients a
 **PRESETTINGS**
 
 The interaction will be different depending on who is accessing to the database. Before everyone can use the application, there will be an administration staff user (username: admin, password: admin) defined by default, so it can introduce the data of new workers and patients that will then have access to the application.
-In order to have access to the capabilities of this database, every worker and patient must have been registered by an administration staff user. This register operation will automatically generate a unique username and a specific password for each new worker and patient. Once the patients and workers receive their own username and password, they will be ready to use the database and corresponding interface.
+In order to have access to the capabilities of this database, every worker and patient must have been registered by an administration staff user. This register operation will automatically generate a unique username and a specific password for each new worker and patient. Once the patients and workers receive their own username and password, they will be ready to use the database and corresponding interface. Moreover the users can update their password to one of their own in the log-in menu.
 
 
 **USER INTERFACE**
