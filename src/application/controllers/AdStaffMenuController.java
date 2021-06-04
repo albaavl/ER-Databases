@@ -1096,8 +1096,6 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         currentSelectedPatient = null;
         displayChangePatientDataView();
     }
-    
-    //Select patient view TODO look here for help
 
     private static Patient currentSelectedPatient = null;
     private static Patient lastCreatedPatient = null;
@@ -1147,6 +1145,7 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         hideAll();
         displayDeletePatient();
     }
+    
     @FXML
     public void selectPatientBackToEdit(ActionEvent actionEvent) throws IOException {
         

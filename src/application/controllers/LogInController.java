@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 // import javafx.scene.text.Text;
 import javafx.stage.Stage;
 //Stuff
@@ -152,6 +153,27 @@ public class LogInController {
 		scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
+	}
+
+	public void switchToChangePassword() throws IOException{
+		Scene sceneChangePass;
+		Stage stageChangePass;
+		FXMLLoader loaderChangePass = new FXMLLoader(getClass().getResource("ChangePassword.fxml"));
+		Parent rootChangePass = loaderChangePass.load();
+
+		ChangePasswordController changePasswordController = loaderChangePass.getController();
+		changePasswordController.setUserman(userman);
+
+		sceneChangePass = new Scene(rootChangePass);
+		stageChangePass = new Stage();
+		stageChangePass.setScene(sceneChangePass);
+
+		Image icon = new Image("application/images/healthcare.png");
+		stageChangePass.getIcons().add(icon);	
+
+		stageChangePass.setResizable(false);
+		stageChangePass.setTitle("Change Password");
+		stageChangePass.show();
 	}
 
 	// Database connection, disconnection and setup.
