@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -42,7 +43,18 @@
                   <Font name="Arial" size="49.0" />
                </font>
             </Text>
-            <Button layoutX="180.0" layoutY="477.0" mnemonicParsing="false" onAction="#logInMenuOK" prefHeight="25.0" prefWidth="48.0" text="Go" />
+            <Button layoutX="180.0" layoutY="477.0" mnemonicParsing="false" onAction="#logInMenuOK" prefHeight="25.0" prefWidth="48.0" text="Go">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button layoutX="137.0" layoutY="512.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Change Password" textFill="WHITE" underline="true">
+               <font>
+                  <Font name="Arial" size="14.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
          </children>
       </Pane>
    </children>
