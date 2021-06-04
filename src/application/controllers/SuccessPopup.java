@@ -257,6 +257,54 @@ public class SuccessPopup {
                 stageSuccess.show();
 
                 break;
+            case 14:
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
+                successPopupController.displaySuccessText("Workers successfully exported to XML file");
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
+
+                icon = new Image("application/images/successIcon.png");
+                stageSuccess.getIcons().add(icon);	        
+
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
+
+                break;
+            case 15:
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
+                successPopupController.displaySuccessText("Workers from XML successfully added to the database");
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
+
+                icon = new Image("application/images/successIcon.png");
+                stageSuccess.getIcons().add(icon);	        
+
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
+
+                break;
+            case 16:
+                loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
+                rootSuccess = loaderSuccess.load(); 
+                successPopupController = loaderSuccess.getController();
+                successPopupController.displaySuccessText("Treatment successfully saved in the database");
+                sceneSuccess = new Scene(rootSuccess);
+                stageSuccess = new Stage();
+                stageSuccess.setScene(sceneSuccess);
+
+                icon = new Image("application/images/successIcon.png");
+                stageSuccess.getIcons().add(icon);	        
+
+                stageSuccess.setTitle("Success");
+                stageSuccess.show();
+
+                break;
             default:
                 loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
                 rootSuccess = loaderSuccess.load(); 

@@ -12,14 +12,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-import com.gluonhq.impl.charm.a.b.b.j;
-import com.gluonhq.impl.charm.a.b.b.t;
-
 import db.jdbc.SQL;
 import db.jpa.JPAUserManager;
+import db.pojos.MedicalTest;
 import db.pojos.Patient;
 import db.pojos.Shift;
 import db.pojos.Worker;
+import db.xml.XMLManager;
 import pojos.users.Role;
 import pojos.users.User;
 
@@ -38,7 +37,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class AdStaffMenuController implements Initializable { //TODO - quitar strings de prueba jej
+public class AdStaffMenuController implements Initializable { 
     
     private static SQL jdbc;
     private static JPAUserManager userman;
@@ -56,6 +55,8 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
     Pane paneEditPatientDataView; //Here u update the patient data
     @FXML
     Pane paneAssignANewDoctorView; 
+    @FXML
+    Pane paneCreateMedicalTest;
     //Worker menu views
     @FXML
     Pane paneCreateWorkerView;
@@ -193,7 +194,7 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
     public void displayWelcomeText(String name, SQL databasecontroller, JPAUserManager userManager) {
         jdbc = databasecontroller;
         userman = userManager;
-        // currentSelectOption = -1;
+
         adStaffMenuWelcomeText.setText("Welcome " + name +  ", thank you for using Quiron's ER database.\n"
                                       + "On the right side you can find all of your aviable options.");
         hideAll();
@@ -301,6 +302,8 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         fromEditSelectPatientButton.setDisable(true);
         fromLinkDocSelectPatientButton.setVisible(false);
         fromLinkDocSelectPatientButton.setDisable(true);
+        fromMedTestSelectPatientButton.setVisible(false);
+        fromMedTestSelectPatientButton.setDisable(true);
     }
 
     public void displaySelectPatientFromDelete() throws IOException{
@@ -755,7 +758,6 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
             return;
         }
         p.setPatientName(name);
-        System.out.println(name);
         
         String surname = surnameTextField.getText();
         if (surname == "") {
@@ -763,7 +765,6 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
             return;
         } 
         p.setPatientSurname(surname);
-        System.out.println(surname);
 
         String gender = "";
         if (femaleRadioButton.isSelected()) {
@@ -776,15 +777,12 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
             ErrorPopup.errorPopup(2);
             return;
         }
-        System.out.println(gender);
 
 
         if( !bloodTypeChoiceBox.getSelectionModel().isEmpty() ){
             String bloodType = bloodTypeChoiceBox.getValue(); 
             p.setBloodType(bloodType);
-            System.out.println(bloodType);
         } else {
-            System.out.println("aqui no hay na (blood)");
             ErrorPopup.errorPopup(2);
             return;
         }
@@ -797,11 +795,8 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         Date bDate = Date.valueOf(birthDatePicker.getValue());
         if ((bDate.before(Date.valueOf(LocalDate.now()))) || bDate.equals(Date.valueOf(LocalDate.now()))) {
             p.setbDate(bDate);
-            System.out.println("yay");
-            System.out.println(bDate.toString());
         } else {
             ErrorPopup.errorPopup(1);
-            System.out.println("nain");
             return;
         }
 
@@ -813,11 +808,8 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         Date cInDate = Date.valueOf(checkInDatePicker.getValue());
         if ((cInDate.before(Date.valueOf(LocalDate.now()))) || cInDate.equals(Date.valueOf(LocalDate.now()))) {
             p.setCheckInDate(cInDate);
-            System.out.println("yay");
-            System.out.println(cInDate.toString());
         } else {
             ErrorPopup.errorPopup(3);
-            System.out.println("nain");
             return;
         }
 
@@ -828,9 +820,7 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
             } else {
                 p.setHospitalized(false);
             }
-            System.out.println(hosp);
         } else {
-            System.out.println("aqui no hay na (hosp)");
             ErrorPopup.errorPopup(2);
             return;
         }
@@ -841,7 +831,6 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
             allergies = null;
         }
         p.setAllergieType(allergies);
-        System.out.println(allergies);
 
         String address = addressTextField.getText();
         if (address == "") {
@@ -849,7 +838,6 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
             return;
         }
         p.setPatientAddress(address);
-        System.out.println(address);
 
         
         jdbc.addPatient(p);
@@ -1038,7 +1026,6 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
             bDate = Date.valueOf(editBirthDatePicker.getValue());
             if (!((bDate.before(Date.valueOf(LocalDate.now()))) || bDate.equals(Date.valueOf(LocalDate.now())))) {
                 ErrorPopup.errorPopup(1);
-                System.out.println("nain");
                 return;
             }  
         }
@@ -1050,7 +1037,6 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
             cInDate = Date.valueOf(editCheckInDatePicker.getValue());
             if (!((cInDate.before(Date.valueOf(LocalDate.now()))) || cInDate.equals(Date.valueOf(LocalDate.now())))) {
                 ErrorPopup.errorPopup(3);
-                System.out.println("nain");
                 return;
             } 
     
@@ -1064,7 +1050,6 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
             } else {
                 hospitalized = false;
             }
-            System.out.println(hosp);
         } else {
             hospitalized = currentSelectedPatient.getHospitalized();
         }
@@ -1450,40 +1435,40 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         paneEditWorkerDataView.setDisable(false);
     }
 
-    @FXML
-    public void editWorker() throws IOException {
-        String name = workerEditNameTextField.getText();
-        if(name == ""){
-            name = null;
-        }
+    // @FXML
+    // public void editWorker() throws IOException {
+    //     String name = workerEditNameTextField.getText();
+    //     if(name == ""){
+    //         name = null;
+    //     }
         
-        String surName = workerEditSurnameTextField.getText();
-        if(surName == ""){
-            surName = null;
-        }
+    //     String surName = workerEditSurnameTextField.getText();
+    //     if(surName == ""){
+    //         surName = null;
+    //     }
 
-        String specialty = workerEditSpecialtyTextField.getText();
-        if(specialty == ""){
-            specialty = null;
-        }
+    //     String specialty = workerEditSpecialtyTextField.getText();
+    //     if(specialty == ""){
+    //         specialty = null;
+    //     }
 
-        String workerType;
-        if(!workerEditRoleComboBox.getSelectionModel().isEmpty()){
-            workerType = workerTypeComboBox.getSelectionModel().getSelectedItem();
-        } else {
-            workerType = null;
-        }
+    //     String workerType;
+    //     if(!workerEditRoleComboBox.getSelectionModel().isEmpty()){
+    //         workerType = workerTypeComboBox.getSelectionModel().getSelectedItem();
+    //     } else {
+    //         workerType = null;
+    //     }
 
-        //TODO - edit worker on db here.
+    //     //todo - edit worker on db here.
         
-        SuccessPopup.successPopup(2);
+    //     SuccessPopup.successPopup(2);
 
-        resetEditWorkerScene();
-        hideAll();
-        currentSelectedWorker = null;
-        displayChangeWorkerDataView();
+    //     resetEditWorkerScene();
+    //     hideAll();
+    //     currentSelectedWorker = null;
+    //     displayChangeWorkerDataView();
 
-    }
+    // }
 
     @FXML
     public void cancelEditWorker(){
@@ -1622,7 +1607,6 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
             date = Date.valueOf(editShiftDatePicker.getValue());
             if (!((date.after(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now())))) {
                 ErrorPopup.errorPopup(14);
-                System.out.println("nain");
                 return;
             } 
         }
@@ -1669,7 +1653,6 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         Date date = Date.valueOf(shiftDatePicker.getValue());
         if (!((date.after(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now())))) {
             ErrorPopup.errorPopup(14);
-            System.out.println("nain");
             return;
         } 
         nShift.setDate(date);
@@ -1730,6 +1713,12 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         workerEditRoleComboBox.getSelectionModel().clearSelection();
     }
 
+    public void resetCreateMedTest() {
+        typeMedTestTextField.clear();
+        resultMedTestTextArea.clear();
+        medicaltestDatePicker.setValue(null); 
+    }
+
     private void resetEditShiftScene(){
         editShiftDatePicker.setValue(null);
         editShiftTurnComboBox.getSelectionModel().clearSelection();
@@ -1767,7 +1756,7 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
      * @param name self explanatory
      * @param surname I mean...
      * @param idUser ehem
-     * @param id ROL ID look up
+     * @param id ROL ID, look up
      * @throws Exception
      */
     private static String[] register(String name, String surname, Integer idUser, int id) throws Exception {
@@ -1802,7 +1791,156 @@ public class AdStaffMenuController implements Initializable { //TODO - quitar st
         return userpass;
 	} 
 
-}
+    //TODO -  No he probado absolutamente nada de esto por lo q quizás se me ha olvidado cambiar algo en scenebuilder
+    //         o quizas me he olvidado de cambiar algo al hacer todo esto. Si lo podeis probar me haceis un gran favor.
+    //   Al final no he terminado la parte de Workers -> XML pq no se si al final exportamos todo o solo 1.
 
-//   28/5/2021: Hugo: "No pienso volver a escribir una linea mas de esta puta basura
-//                     comunmente conocica como Java, en lo q me queda de vida"
+    @FXML
+    private TableView<Patient> currentCreateMTPatientTableView;
+
+    @SuppressWarnings("unchecked")
+    private void setCurrentCreateMTPatientTable(){
+        currentCreateMTPatientTableView.getItems().clear();
+        currentCreateMTPatientTableView.getColumns().clear();
+        currentCreateMTPatientTableView.getColumns().addAll(columnPatientId, columnPatientName, columnPatientSurname, columnPatientGender, columnPatientBloodtype, columnPatientAllergies, columnPatientBirthDate, columnPatientCheckInDate, columnPatientAddress, columnPatientHospitalized);
+        currentCreateMTPatientTableView.getItems().add(currentSelectedPatient);
+    }
+
+    @FXML
+    private Button fromMedTestSelectPatientButton;
+
+    public void displaySelectPatientFromMedTest() throws IOException {
+        hideAll();
+        resetAll();
+
+        try {
+            setPatientTables();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorPopup.errorPopup(0);
+        }
+
+        paneSelectPatient.setDisable(false);
+        paneSelectPatient.setVisible(true);
+        
+        hideAllPatientSelectButton();
+        fromMedTestSelectPatientButton.setVisible(true);
+        fromMedTestSelectPatientButton.setDisable(false);
+    }
+
+    @FXML
+    public void selectPatientBackToMedTest() throws IOException{
+        
+        Integer patientId = null;
+        currentSelectedPatient = null;
+
+        try {
+            patientId = Integer.parseInt(selectPatientTextField.getText()); 
+            currentSelectedPatient = jdbc.selectPatient(patientId);        
+        } catch (Exception e) {
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+        if(currentSelectedPatient == null){  
+            ErrorPopup.errorPopup(4);
+            return;
+        }
+        selectPatientTextField.clear();
+        hideAll();
+        displayCreateMedicalTest();
+
+    }
+
+    public void displayCreateMedicalTest() {
+        hideAll();
+        resetAll();
+
+        if(currentSelectedPatient != null){
+            setCurrentCreateMTPatientTable();
+        }
+
+        paneCreateMedicalTest.setVisible(true);
+        paneCreateMedicalTest.setDisable(false);
+    }
+
+    @FXML
+    private DatePicker medicaltestDatePicker;
+    @FXML
+    private TextField typeMedTestTextField;
+    @FXML TextArea resultMedTestTextArea;
+
+    @FXML
+    public void createMedicalTest() throws IOException, SQLException {
+        if (currentSelectedPatient == null) {
+            ErrorPopup.errorPopup(11);
+            return;
+        }
+        String type = typeMedTestTextField.getText();
+        if (type == "") {
+            ErrorPopup.errorPopup(2);
+            return;
+        }
+        String result = resultMedTestTextArea.getText();
+        if(result == ""){
+            ErrorPopup.errorPopup(2);
+            return;
+        }
+
+        if(medicaltestDatePicker.getEditor().getText() == ""){
+            ErrorPopup.errorPopup(2);
+            return;
+        }
+
+        Date date = Date.valueOf(medicaltestDatePicker.getValue());
+        if ((date.before(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now()))) { //TODO - not sure bout this (atm esta igual q en el main)
+            ErrorPopup.errorPopup(1);
+            return;
+        } 
+
+
+        MedicalTest medtest = new MedicalTest(date, type, result, currentSelectedPatient.getMedicalCardId());
+        jdbc.addMedicalTest(medtest);
+
+        SuccessPopup.successPopup(16); 
+
+        resetCreateMedTest();
+        hideAll();
+        currentSelectedPatient = null;
+        displayCreateMedicalTest();
+    }
+
+    @FXML
+    public void convertWorkersToXML() throws IOException {
+        //TODO - Al final aqui hago q se pueda elegir el worker o q pille a todos de golpe?
+
+        try {
+            // XMLManager.
+            SuccessPopup.successPopup(14);
+        } catch (Exception e) {
+            ErrorPopup.errorPopup(20);
+        }
+    }
+
+    @FXML
+    public void importWorkerFromXML() throws IOException {
+
+        try {
+            XMLManager.xml2JavaWorker();
+            SuccessPopup.successPopup(15);
+        } catch (Exception e) {
+            ErrorPopup.errorPopup(19);
+        }
+    }
+
+    @FXML
+    public void convertXMLToHTML() throws IOException{
+
+        try {
+            XMLManager.simpleTransform("./xmls/External-Worker.xml", "./xmls/Worker-Style.xslt", "./xmls/Worker.html");
+            SuccessPopup.successPopup(13);
+        } catch (Exception e) {
+            ErrorPopup.errorPopup(18);
+        }
+    }
+
+}

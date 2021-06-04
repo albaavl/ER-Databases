@@ -98,9 +98,11 @@
                               <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: darkred;">
                                  <children>
                                     <Button layoutX="30.0" layoutY="23.0" mnemonicParsing="false" onAction="#displayCreateWorkerView" prefHeight="25.0" prefWidth="192.0" text="Register new worker" />
-                                    <Button layoutX="30.0" layoutY="55.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="192.0" text="Edit worker data" />
+                                    <Button layoutX="30.0" layoutY="55.0" mnemonicParsing="false" onAction="#importWorkerFromXML" prefHeight="25.0" prefWidth="192.0" text="Import from XML" />
                                     <Button layoutX="30.0" layoutY="87.0" mnemonicParsing="false" onAction="#displayChangeShiftDataView" prefHeight="25.0" prefWidth="192.0" text="Edit worker shift" />
                                     <Button layoutX="30.0" layoutY="119.0" mnemonicParsing="false" onAction="#displayDeleteWorker" prefHeight="25.0" prefWidth="192.0" text="Delete Worker" />
+                                    <Button layoutX="30.0" layoutY="151.0" mnemonicParsing="false" onAction="#convertWorkersToXML" prefHeight="25.0" prefWidth="192.0" text="Export to XML" />
+                                    <Button layoutX="30.0" layoutY="183.0" mnemonicParsing="false" onAction="#convertXMLToHTML" prefHeight="25.0" prefWidth="192.0" text="Convert XML to HTML" />
                                  </children>
                               </Pane>
                            </content>
@@ -419,7 +421,7 @@
                         </Button>
                      </children>
                   </Pane>
-                  <Pane fx:id="paneSelectPatient" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                  <Pane fx:id="paneSelectPatient" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
                         <Label layoutX="151.0" layoutY="43.0" prefHeight="86.0" prefWidth="458.0" text="Please choose the patient :">
                            <font>
@@ -435,6 +437,7 @@
                         </AnchorPane>
                         <Button fx:id="fromEditSelectPatientButton" layoutX="493.0" layoutY="555.0" mnemonicParsing="false" onAction="#selectPatientBackToEdit" prefHeight="32.0" prefWidth="67.0" text="Select" />
                         <Button fx:id="fromLinkDocSelectPatientButton" layoutX="493.0" layoutY="555.0" mnemonicParsing="false" onAction="#selectPatientBackToLinkDoc" prefHeight="32.0" prefWidth="67.0" text="Select" />
+                        <Button fx:id="fromMedTestSelectPatientButton" layoutX="493.0" layoutY="554.0" mnemonicParsing="false" onAction="#selectPatientBackToMedTest" prefHeight="32.0" prefWidth="67.0" text="Select" />
                      </children>
                   </Pane>
                   <Pane fx:id="paneChangePatientDataView" layoutX="15.0" layoutY="15.0" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
@@ -758,6 +761,49 @@
                         <TextField fx:id="rooomERTextField" layoutX="328.0" layoutY="208.0" />
                         <DatePicker fx:id="shiftDatePicker" layoutX="316.0" layoutY="298.0" />
                         <Button layoutX="337.0" layoutY="378.0" mnemonicParsing="false" onAction="#createShift" text="Confirm" />
+                     </children>
+                  </Pane>
+                  <Pane fx:id="paneCreateMedicalTest" layoutX="10.0" layoutY="10.0" prefHeight="647.3333333333334" prefWidth="736.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                     <children>
+                        <TableView fx:id="currentCreateMTPatientTableView" layoutX="79.0" layoutY="124.0" prefHeight="86.0" prefWidth="569.0" />
+                        <Label layoutX="263.0" layoutY="45.0" prefHeight="27.0" prefWidth="201.0" text="New Medical Test" wrapText="true">
+                           <font>
+                              <Font name="Arial" size="24.0" />
+                           </font>
+                        </Label>
+                        <Button layoutX="549.0" layoutY="210.0" mnemonicParsing="false" onAction="#displaySelectPatientFromMedTest" style="-fx-background-radius: 5;" text="Change Patient">
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                        </Button>
+                        <Label layoutX="79.0" layoutY="98.0" text="Current selected patient">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Label>
+                        <DatePicker fx:id="medicaltestDatePicker" layoutX="322.0" layoutY="255.0" />
+                        <TextField fx:id="typeMedTestTextField" layoutX="334.0" layoutY="298.0" />
+                        <TextArea fx:id="resultMedTestTextArea" layoutX="128.0" layoutY="359.0" prefHeight="200.0" prefWidth="470.0" />
+                        <Label layoutX="128.0" layoutY="339.0" text="Result of the medical test">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="151.0" layoutY="258.0" text="Date for the medical test">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="153.0" layoutY="300.0" text="Type of Medical test">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Button layoutX="302.0" layoutY="577.0" mnemonicParsing="false" onAction="#createMedicalTest" style="-fx-background-radius: 10;" text="Create Medical Test">
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                        </Button>
                      </children>
                   </Pane>
                </children>
