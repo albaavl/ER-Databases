@@ -15,8 +15,8 @@ import pojos.users.User;
 public class ChangePasswordController {
     
     private static JPAUserManager userManager;
-    private ErrorPopup errorPopup;
-    private SuccessPopup successPopup;
+    private ErrorPopup errorPopup = new ErrorPopup();
+    private SuccessPopup successPopup = new SuccessPopup();
 	@FXML
 	private TextField usernameTextField;
 	@FXML

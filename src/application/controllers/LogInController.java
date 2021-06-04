@@ -156,12 +156,18 @@ public class LogInController {
 	}
 
 	public void switchToChangePassword() throws IOException{
+
+		connectDB();
+
+		FXMLLoader loaderChangePass;
+		Parent rootChangePass;
 		Scene sceneChangePass;
 		Stage stageChangePass;
-		FXMLLoader loaderChangePass = new FXMLLoader(getClass().getResource("ChangePassword.fxml"));
-		Parent rootChangePass = loaderChangePass.load();
+		ChangePasswordController changePasswordController;
 
-		ChangePasswordController changePasswordController = loaderChangePass.getController();
+		loaderChangePass = new FXMLLoader(getClass().getResource("ChangePassword.fxml"));
+		rootChangePass = loaderChangePass.load();
+		changePasswordController = loaderChangePass.getController();
 		changePasswordController.setUserman(userman);
 
 		sceneChangePass = new Scene(rootChangePass);
