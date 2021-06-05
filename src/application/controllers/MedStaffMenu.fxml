@@ -42,9 +42,9 @@
                                  <children>
                                     <Button fx:id="specificShift" layoutX="72.0" layoutY="14.0" mnemonicParsing="false" onAction="#displaySpecificShiftView" prefHeight="31.0" prefWidth="88.0" text="Specific date" />
                                     <Button fx:id="allShifts" layoutX="70.0" layoutY="59.0" mnemonicParsing="false" onAction="#displayAllShiftsView" prefHeight="30.0" prefWidth="91.0" text="All my shifts" />
-                                    <Button fx:id="shiftsToXML" layoutX="70.0" layoutY="103.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="Shifts to XML" />
-                                    <Button layoutX="70.0" layoutY="149.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="XML to shifts" fx:id="xmlToShift" />
-                                    <Button layoutX="70.0" layoutY="192.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="91.0" text="XML to HTML" fx:id="xmlToHTML" />
+                                    <Button fx:id="shiftsToXML" layoutX="70.0" layoutY="103.0" mnemonicParsing="false" onAction="#displayShiftsToXML" prefHeight="30.0" prefWidth="91.0" text="Shifts to XML" />
+                                    <Button layoutX="70.0" layoutY="149.0" mnemonicParsing="false" onAction="#displayXMLToShifts" prefHeight="30.0" prefWidth="91.0" text="XML to shifts" fx:id="xmlToShift" />
+                                    <Button layoutX="70.0" layoutY="192.0" mnemonicParsing="false" onAction="#displayXMLToHTML" prefHeight="30.0" prefWidth="91.0" text="XML to HTML" fx:id="xmlToHTML" />
                                  </children>
                               </AnchorPane>
                         </content>
