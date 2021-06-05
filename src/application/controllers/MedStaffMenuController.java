@@ -499,7 +499,7 @@ try {
 		}
 		Date startDate = Date.valueOf(startDateCTreatment.getValue());
 		if (startDate.before(Date.valueOf(LocalDate.now()))) {
-			ErrorPopup.errorPopup(8);
+			ErrorPopup.errorPopup(14);
 			return;
 		}
 		newTreatment.setStartDate(startDate);
@@ -677,7 +677,7 @@ try {
 			return;
 		}
 		if (treatments.isEmpty()) {
-			ErrorPopup.errorPopup(9);
+			ErrorPopup.errorPopup(7);
 			displayWelcomeText(medStaff, jdbc, userman);
 		} else {
 			treatmentsTable.getItems().clear();

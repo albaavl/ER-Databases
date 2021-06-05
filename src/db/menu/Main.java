@@ -1293,7 +1293,7 @@ public class Main {
 	
 	public static void xmlToShift(Worker medStaff) {
 		try {
-			XMLManager.xml2JavaShift(jdbc); 
+			XMLManager.xml2JavaShift(); 
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -1304,7 +1304,7 @@ public class Main {
 	
 	public static void xmlToWorker() {
 		try {
-			XMLManager.xml2JavaWorker(jdbc);  
+			XMLManager.xml2JavaWorker();  
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
