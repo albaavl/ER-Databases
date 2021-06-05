@@ -2,6 +2,7 @@ package db.menu;
  
 
 import java.io.File;
+
 import java.rmi.NotBoundException;
 
 import java.security.*;
@@ -243,11 +244,11 @@ public class Main {
 					break;
 				case 3:
 					System.out.println(" Convert Shifts to XML file");
-					shiftToXml();
+					shiftToXml(medStaff);
 					break;
 				case 4:
 					System.out.println("Convert from XML to Shifts");
-					xmlToShift();
+					xmlToShift(medStaff);
 					break; 
 				case 5:
 					System.out.println(" Convert the XML file to HTML");
@@ -267,7 +268,7 @@ public class Main {
 		do {
 
 			System.out.println("Hello Mr/Ms "+adStaff.getWorkerSurname());
-			System.out.println("Choose an option[0-5]:");
+			System.out.println("Choose an option[0-10]:");
 			System.out.println(" 1. Register new worker\n 2. Register new patient \n  3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n6. Delete Worker \n 7. Delete Patient \n 8. Convert Worker to XML file \n 9. Convert from XML to Worker \n 10.  Convert the XML file to HTML \n 0. Exit");
 			option = sc.nextInt();
 	
@@ -1286,11 +1287,11 @@ public class Main {
 			}
 	}
 	
-	public static void shiftToXml() throws Exception {
-		XMLManager.java2XmlShift();
+	public static void shiftToXml(Worker medStaff) throws Exception {
+		XMLManager.java2XmlShift(medStaff);
 	}
 	
-	public static void xmlToShift() {
+	public static void xmlToShift(Worker medStaff) {
 		try {
 			XMLManager.xml2JavaShift(); 
 		}catch(Exception e) {

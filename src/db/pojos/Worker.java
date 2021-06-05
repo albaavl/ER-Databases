@@ -38,7 +38,8 @@ public class Worker implements Serializable{
 	@OneToMany(mappedBy="worker")
 	@XmlElement(name = "Shift")
     @XmlElementWrapper(name = "Shifts")
-	private List<Shift> shift;
+	private List<Shift> shift = null;
+	
 	
 	public Worker() {
 		super();

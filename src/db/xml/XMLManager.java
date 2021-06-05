@@ -1,8 +1,9 @@
 package db.xml;
 
 import java.io.*;
-
-
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,7 +25,7 @@ public class XMLManager {
 	private static EntityManager em;
 	static Scanner sc = new Scanner(System.in);
 
-	public static void xml2JavaShift() throws JAXBException {
+	public static void xml2JavaShift() throws Exception {
 		//Create the JAXBContext
 		JAXBContext jaxbContext = JAXBContext.newInstance(Shift.class);
 		// Get the unmarshaller
@@ -32,13 +33,17 @@ public class XMLManager {
 
 		// Use the Unmarshaller to unmarshall the XML document from a file
 		File file = new File("./xmls/External-Shift.xml");
-		Shift shift = (Shift) unmarshaller.unmarshal(file);
+		List <Shift> shift =  (List<Shift>) unmarshaller.unmarshal(file);
+
+		if(shift.isEmpty()) {
+			throw new Exception("XML file is empty. Check that there are shifts linked to this worker and try again.");
+		} else {
+			System.out.println(shift.toString());
+			for (Shift s : shift) {
+				s = new Shift ( s.getDate(), s.getRoom(), s.getTurn(), s.getShiftId());
+			}		
+		}
 		
-		// Print the shift
-		System.out.println("Shift:");
-		System.out.println("Date: " + shift.getDate());
-		System.out.println("Shift: " + shift.getTurn());
-		System.out.println("Room: " + shift.getRoom());
 		
 		// Store the shift in the database
 		// Create entity manager
@@ -55,21 +60,16 @@ public class XMLManager {
 		tx1.begin();
 
 		// Persist
-		em.persist(shift);
+		for (Shift s : shift) {
+			em.persist(s);
+		}
+        
         
 		// End transaction
 		tx1.commit();
 	}
 	
-	private static void printShifts() {
-		Query q1 = em.createNativeQuery("SELECT * FROM shifts", Shift.class);
-		List<Shift> sh = (List<Shift>) q1.getResultList();
-		// Print the shifts
-		for (Shift s : sh) {
-			System.out.println(s);
-		}
-	}
-	public static void java2XmlShift() throws JAXBException {
+	public static void java2XmlShift(Worker medStaff) throws JAXBException {
 		
 		// Get the entity manager
 		em = Persistence.createEntityManagerFactory("ER-provider").createEntityManager();
@@ -86,13 +86,9 @@ public class XMLManager {
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
 		
 		// Choose the worker's shift to turn into an XML
-		printShifts();
-		System.out.print("Choose a worker's shift to turn into an XML file");
-		System.out.println("Introduce the worker's ID: ");
-		int workerId = sc.nextInt(); 
 		Query q2 = em.createNativeQuery("SELECT * FROM shifts WHERE doctor_id = ?", Shift.class);
-		q2.setParameter(1, workerId);
-		Shift s = (Shift) q2.getSingleResult();
+		q2.setParameter(1, medStaff.getWorkerId());
+		List <Shift> s = q2.getResultList();
 				
 		// Use the Marshaller to marshal the Java object to a file
 		File file = new File("./xmls/External-Shift.xml");
@@ -102,22 +98,24 @@ public class XMLManager {
 		marshaller.marshal(s, System.out);
 	} 
 	
-	public static void xml2JavaWorker() throws JAXBException {
+	public static void xml2JavaWorker() throws Exception {
 		//Create the JAXBContext
-		JAXBContext jaxbContext = JAXBContext.newInstance(Worker.class);
+		JAXBContext jaxbContext = JAXBContext.newInstance(Workers.class);
 		// Get the unmarshaller
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
 		// Use the Unmarshaller to unmarshall the XML document from a file
 		File file = new File("./xmls/External-Worker.xml");
-		Worker w = (Worker) unmarshaller.unmarshal(file);
+		Workers workers =   (Workers) unmarshaller.unmarshal(file);
 		
-		// Print the worker
-		System.out.println("Worker:");
-		System.out.println("Name: " + w.getWorkerName());
-		System.out.println("Surname: " + w.getWorkerSurname());
-		System.out.println("Specialty: " + w.getSpecialtyId());
-		System.out.println("Role: " + w.getTypeWorker());
+		if(workers.getWorkers().isEmpty()) {
+			throw new Exception("XML file is empty. Check that there are workers linked to the database and try again.");
+		} else {
+			System.out.println(workers.getWorkers().toString());
+			for (Worker w : workers.getWorkers()) {
+				w = new Worker( w.getWorkerName(),  w.getWorkerSurname(),  w.getSpecialtyId(), w.getTypeWorker());
+			}		
+		}
 		
 		// Store the worker in the database
 		// Create entity manager
@@ -134,7 +132,9 @@ public class XMLManager {
 		tx1.begin();
 
 		// Persist
-		em.persist(w);
+		for (Worker w : workers.getWorkers()) {
+			em.persist(w);
+		}
         
 		// End transaction
 		tx1.commit();
@@ -156,7 +156,7 @@ public class XMLManager {
 		em.getTransaction().commit();
 				
 		// Create the JAXBContext
-		JAXBContext jaxbContext = JAXBContext.newInstance(Worker.class);
+		JAXBContext jaxbContext = JAXBContext.newInstance(Workers.class);
 		// Get the marshaller
 		Marshaller marshaller = jaxbContext.createMarshaller();
 		
@@ -166,18 +166,17 @@ public class XMLManager {
 		// Choose the worker to turn into an XML
 		// Choose his new department
 		printWorkers();
-		System.out.print("Choose a worker (worker id) to turn into an XML file:");
-		int workerId = sc.nextInt();
-		Query q2 = em.createNativeQuery("SELECT * FROM workers WHERE workerId = ?", Worker.class);
-		q2.setParameter(1, workerId);
-		Worker w = (Worker) q2.getSingleResult();
-		System.out.println(w);		
+		Query q2 = em.createNativeQuery("SELECT * FROM workers", Worker.class);
+		List<Worker> lw = q2.getResultList();
+		Workers workers = new Workers();
+		workers.setWorkers(lw);
+		System.out.println(lw);		
 		// Use the Marshaller to marshal the Java object to a file
 		File file = new File("./xmls/External-Worker.xml");
 		// Use the Marshaller to marshal the Java object to a file
-		marshaller.marshal(w, file);
+		marshaller.marshal(workers, file);
 		// Printout
-		marshaller.marshal(w, System.out);
+		marshaller.marshal(workers, System.out);
 	} 
 	
 	/**

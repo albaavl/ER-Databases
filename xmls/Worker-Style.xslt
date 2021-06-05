@@ -12,6 +12,7 @@
 		<p>Specialty:<xsl:value-of select="/worker/@specialtyId"/></p>
 		<p>Role:<xsl:value-of select="/worker/@typeWorker"/></p>
 		<table border="1">
+	<Shifts>
 	  <th>Shift</th>
       <th>Shift Id</th>
       <th>Date</th>
@@ -23,6 +24,7 @@
 	        <td><xsl:value-of select="turn" /></td>
 	        <td><xsl:value-of select="room" /></td>
       </xsl:for-each>
+      </Shifts>
     </table>
 	</body>
 	</html>
