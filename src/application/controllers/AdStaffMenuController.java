@@ -196,7 +196,7 @@ public class AdStaffMenuController implements Initializable {
         userman = userManager;
 
         adStaffMenuWelcomeText.setText("Welcome " + name +  ", thank you for using Quiron's ER database.\n"
-                                      + "On the right side you can find all of your aviable options.");
+                                      + "On the left side you can find all of your avaiable options.");
         hideAll();
         paneWelcomeView.setVisible(true);
         paneWelcomeView.setDisable(false);

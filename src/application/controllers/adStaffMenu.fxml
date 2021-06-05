@@ -123,9 +123,9 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Pane fx:id="paneWelcomeView" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                  <Pane fx:id="paneWelcomeView" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: #ECECE7;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
-                        <Text fx:id="adStaffMenuWelcomeText" layoutX="113.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LogInScreen">
+                        <Text fx:id="adStaffMenuWelcomeText" layoutX="47.0" layoutY="312.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LogInScreen" textAlignment="CENTER">
                            <font>
                               <Font name="Arial" size="24.0" />
                            </font>
@@ -306,7 +306,7 @@
                         <Text layoutX="407.0" layoutY="384.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ChangeWorkerData" />
                      </children>
                   </Pane>
-                  <Pane fx:id="paneChangeShiftView" layoutX="20.0" layoutY="20.0" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                  <Pane fx:id="paneChangeShiftView" layoutX="20.0" layoutY="20.0" prefHeight="648.0" prefWidth="736.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
                         <Label layoutX="334.0" layoutY="54.0" text="Edit Shift">
                            <font>
@@ -426,7 +426,7 @@
                         </Button>
                      </children>
                   </Pane>
-                  <Pane fx:id="paneSelectPatient" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                  <Pane fx:id="paneSelectPatient" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
                         <Label layoutX="151.0" layoutY="43.0" prefHeight="86.0" prefWidth="458.0" text="Please choose the patient :">
                            <font>
@@ -768,7 +768,7 @@
                         <Button layoutX="337.0" layoutY="378.0" mnemonicParsing="false" onAction="#createShift" text="Confirm" />
                      </children>
                   </Pane>
-                  <Pane fx:id="paneCreateMedicalTest" layoutX="10.0" layoutY="10.0" prefHeight="647.3333333333334" prefWidth="736.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                  <Pane fx:id="paneCreateMedicalTest" layoutX="10.0" layoutY="10.0" prefHeight="647.3333333333334" prefWidth="736.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
                         <TableView fx:id="currentCreateMTPatientTableView" layoutX="79.0" layoutY="124.0" prefHeight="86.0" prefWidth="569.0" />
                         <Label layoutX="263.0" layoutY="45.0" prefHeight="27.0" prefWidth="201.0" text="New Medical Test" wrapText="true">
