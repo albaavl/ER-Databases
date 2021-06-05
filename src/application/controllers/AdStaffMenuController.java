@@ -1793,10 +1793,6 @@ public class AdStaffMenuController implements Initializable {
         return userpass;
 	} 
 
-    //TODO -  No he probado absolutamente nada de esto por lo q quizás se me ha olvidado cambiar algo en scenebuilder
-    //         o quizas me he olvidado de cambiar algo al hacer todo esto. Si lo podeis probar me haceis un gran favor.
-    //   Al final no he terminado la parte de Workers -> XML pq no se si al final exportamos todo o solo 1.
-
     @FXML
     private TableView<Patient> currentCreateMTPatientTableView;
 
@@ -1894,8 +1890,8 @@ public class AdStaffMenuController implements Initializable {
         }
 
         Date date = Date.valueOf(medicaltestDatePicker.getValue());
-        if ((date.before(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now()))) { //TODO - not sure bout this (atm esta igual q en el main)
-            ErrorPopup.errorPopup(1);
+        if (!((date.before(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now())))) { //TODO - not sure bout this (atm esta igual q en el main)
+            ErrorPopup.errorPopup(21);
             return;
         } 
 

@@ -366,6 +366,21 @@ public class ErrorPopup {
 			stageError.setTitle("XML error");
 			stageError.show();
 			break;
+		case 21:
+			loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml"));
+			rootError = loaderError.load();
+			errorPopupController = loaderError.getController();
+			errorPopupController.displayErrorText("Date must be today or in the past.");
+			sceneError = new Scene(rootError);
+			stageError = new Stage();
+			stageError.setScene(sceneError);
+
+			icon = new Image("application/images/errorIcon.png");
+			stageError.getIcons().add(icon);
+
+			stageError.setTitle("Wrong Date");
+			stageError.show();
+			break;
 		default:
 			break;
 		}
