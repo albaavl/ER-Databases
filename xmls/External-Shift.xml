@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Worker>
-    <Shifts/>
+    <Shifts>
+        <Shift>
+            <date>2021-06-07</date>
+            <turn>Morning</turn>
+            <room>1</room>
+        </Shift>
+        <Shift>
+            <date>2021-06-09</date>
+            <turn>Morning</turn>
+            <room>1</room>
+        </Shift>
+        <Shift>
+            <date>2021-06-10</date>
+            <turn>Morning</turn>
+            <room>1</room>
+        </Shift>
+        <Shift>
+            <date>2021-06-11</date>
+            <turn>Night</turn>
+            <room>1</room>
+        </Shift>
+    </Shifts>
 </Worker>

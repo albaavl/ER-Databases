@@ -426,6 +426,7 @@ try {
 			SuccessPopup.successPopup(11);
 		}catch(Exception ex) {
 			ErrorPopup.errorPopup(16);
+			ex.printStackTrace();
 		}
 	}
 	

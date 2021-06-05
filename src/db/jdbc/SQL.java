@@ -501,7 +501,7 @@ public class SQL implements SQLInterface{
 		 
 			}if(shift != null){
 
-				sql = "UPDATE shifts SET shift = ? WHERE shiftId = ?";
+				sql = "UPDATE shifts SET turn = ? WHERE shiftId = ?";
 				p = c.prepareStatement(sql);
 				p.setString(1, shift);
 				p.setInt(2, shiftId);

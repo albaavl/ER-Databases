@@ -110,20 +110,20 @@
                         </ScrollPane>
                      </children>
                   </Pane>
-                  <Pane fx:id="addTreatmentView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" visible="false">
+                  <Pane fx:id="addTreatmentView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;">
                      <children>
                         <Label fx:id="titleAddTreatment" layoutX="56.0" layoutY="22.0" prefHeight="83.0" prefWidth="631.0" text="Create Treatment to patient (medCard = ?)">
                            <font>
                               <Font name="Arial Bold" size="27.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="durationCTreatment" layoutX="153.0" layoutY="214.0" prefHeight="25.0" prefWidth="242.0" promptText="Leave it empty if you don't want to edit it" />
+                        <TextField fx:id="durationCTreatment" layoutX="153.0" layoutY="214.0" prefHeight="25.0" prefWidth="242.0" />
                         <Label layoutX="58.0" layoutY="211.0" prefHeight="26.0" prefWidth="63.0" text="Duration">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Label>
-                        <DatePicker fx:id="startDateCTreatment" layoutX="309.0" layoutY="148.0" prefHeight="16.0" prefWidth="267.0" promptText="Leave it empty if you don't want to edit it" />
+                        <DatePicker fx:id="startDateCTreatment" layoutX="309.0" layoutY="148.0" prefHeight="16.0" prefWidth="267.0" />
                         <Label layoutX="169.0" layoutY="144.0" prefHeight="28.0" prefWidth="88.0" text="Start Date">
                            <font>
                               <Font name="Arial" size="14.0" />
@@ -134,13 +134,13 @@
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="medicationCTreatment" layoutX="152.0" layoutY="295.0" prefHeight="25.0" prefWidth="242.0" promptText="Leave it empty if you don't want to edit it" />
+                        <TextField fx:id="medicationCTreatment" layoutX="152.0" layoutY="295.0" prefHeight="25.0" prefWidth="242.0" />
                         <Label layoutX="416.0" layoutY="217.0" prefHeight="31.0" prefWidth="84.0" text="Diagnosis">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Label>
-                        <TextArea fx:id="diagnosisCTreatment" layoutX="495.0" layoutY="209.0" prefHeight="161.0" prefWidth="227.0" promptText="Leave it empty if you don't want to edit it">
+                        <TextArea fx:id="diagnosisCTreatment" layoutX="495.0" layoutY="209.0" prefHeight="161.0" prefWidth="227.0">
                            <font>
                               <Font name="Arial" size="15.0" />
                            </font>
@@ -150,7 +150,7 @@
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Label>
-                        <TextArea fx:id="adviceCTreatment" layoutX="180.0" layoutY="383.0" prefHeight="161.0" prefWidth="285.0" promptText="Leave it empty if you don't want to edit it">
+                        <TextArea fx:id="adviceCTreatment" layoutX="180.0" layoutY="383.0" prefHeight="161.0" prefWidth="285.0">
                            <font>
                               <Font name="Arial" size="15.0" />
                            </font>

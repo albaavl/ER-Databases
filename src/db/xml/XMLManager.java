@@ -33,7 +33,7 @@ public class XMLManager {
 				Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
 				// Use the Unmarshaller to unmarshall the XML document from a file
-				File file = new File("./xmls/External-Worker.xml");
+				File file = new File("./xmls/External-Shift.xml");
 				Worker worker =   (Worker) unmarshaller.unmarshal(file);
 				
 				if(worker.getShift().isEmpty()) {
