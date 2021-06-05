@@ -64,7 +64,7 @@ public class LogInController {
 
 				switchToPatientMenu(aEvent, user.getUserId());
 
-			} else if (user.getRole().getRole().equalsIgnoreCase("medicalStaff")) {
+			} else if (user.getRole().getRole().equalsIgnoreCase("medStaff")) {
 
 				switchToWorkerMenu(aEvent, user.getUserId());
 

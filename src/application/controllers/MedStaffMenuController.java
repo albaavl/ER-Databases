@@ -408,7 +408,7 @@ try {
 
 	}
 	
-	public void displayShiftsToXML(ActionEvent aEvent) {
+	public void displayShiftsToXML(ActionEvent aEvent) throws IOException {
 		resetAll();
 		try{
 			XMLManager.java2XmlShift(medStaff);

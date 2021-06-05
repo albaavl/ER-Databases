@@ -26,52 +26,46 @@ public class XMLManager {
 	private static EntityManager em;
 	static Scanner sc = new Scanner(System.in);
 
-	public static void xml2JavaShift(SQL jdbc) throws Exception {
+	public static void xml2JavaShift() throws Exception {
 		//Create the JAXBContext
-		JAXBContext jaxbContext = JAXBContext.newInstance(Shift.class);
-		// Get the unmarshaller
-		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+				JAXBContext jaxbContext = JAXBContext.newInstance(Worker.class);
+				// Get the unmarshaller
+				Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
-		// Use the Unmarshaller to unmarshall the XML document from a file
-		File file = new File("./xmls/External-Shift.xml");
-		List <Shift> shift =  (List<Shift>) unmarshaller.unmarshal(file);
+				// Use the Unmarshaller to unmarshall the XML document from a file
+				File file = new File("./xmls/External-Worker.xml");
+				Worker worker =   (Worker) unmarshaller.unmarshal(file);
+				
+				if(worker.getShift().isEmpty()) {
+					throw new Exception("XML file is empty. Cannot add shifts to the database. ");
+				} else {
+					System.out.println(worker.getShift().toString());
+					// Store the worker in the database
+								// Create entity manager
+								factory = Persistence.createEntityManagerFactory(PERSISTENCE_PROVIDER);
+								em = factory.createEntityManager();
+								em.getTransaction().begin();
+								em.createNativeQuery("PRAGMA foreign_keys=ON").executeUpdate();
+								em.getTransaction().commit();
 
-		if(shift.isEmpty()) {
-			throw new Exception("XML file is empty. Check that there are shifts linked to this worker and try again.");
-		} else {
-			System.out.println(shift.toString());
-			for (Shift s : shift) {
-				s = new Shift ( s.getDate(), s.getRoom(), s.getTurn(), s.getShiftId());
-				jdbc.addShift(s);
-			}		
-		}
-		
-		
-		// Store the shift in the database
-		// Create entity manager
-		factory = Persistence.createEntityManagerFactory(PERSISTENCE_PROVIDER);
-		em = factory.createEntityManager();
-		em.getTransaction().begin();
-		em.createNativeQuery("PRAGMA foreign_keys=ON").executeUpdate();
-		em.getTransaction().commit();
+								// Create a transaction
+								EntityTransaction tx1 = em.getTransaction();
 
-		// Create a transaction
-		EntityTransaction tx1 = em.getTransaction();
+								// Start transaction
+								tx1.begin();
 
-		// Start transaction
-		tx1.begin();
-
-		// Persist
-		for (Shift s : shift) {
-			em.persist(s);
-		}
-        
-        
-		// End transaction
-		tx1.commit();
+								// Persist
+								//ASSUMING THAT THE SHIFTS ARE NOT ALREADY IN THE DATABASE!!
+								for (Shift s : worker.getShift()) {
+									em.persist(s);
+								}
+						        
+								// End transaction
+								tx1.commit();
+							}	
 	}
 	
-	public static void java2XmlShift(Worker medStaff) throws JAXBException {
+	public static void java2XmlShift(Worker medStaff) throws Exception {
 		
 		// Get the entity manager
 		em = Persistence.createEntityManagerFactory("ER-provider").createEntityManager();
@@ -80,7 +74,7 @@ public class XMLManager {
 		em.getTransaction().commit();
 				
 		// Create the JAXBContext
-		JAXBContext jaxbContext = JAXBContext.newInstance(Shift.class);
+		JAXBContext jaxbContext = JAXBContext.newInstance(Worker.class);
 		// Get the marshaller
 		Marshaller marshaller = jaxbContext.createMarshaller();
 		
@@ -91,16 +85,22 @@ public class XMLManager {
 		Query q2 = em.createNativeQuery("SELECT * FROM shifts WHERE doctor_id = ?", Shift.class);
 		q2.setParameter(1, medStaff.getWorkerId());
 		List <Shift> s = q2.getResultList();
+		if(s.isEmpty()) {
+			throw new Exception("No shifts");
+		}else {
+		Worker w = new Worker();
+		w.setShift(s);
 				
 		// Use the Marshaller to marshal the Java object to a file
 		File file = new File("./xmls/External-Shift.xml");
 		// Use the Marshaller to marshal the Java object to a file
-		marshaller.marshal(s, file);
+		marshaller.marshal(w, file);
 		// Printout
-		marshaller.marshal(s, System.out);
+		marshaller.marshal(w, System.out);
+		}
 	} 
 	
-	public static void xml2JavaWorker(SQL jdbc) throws Exception {
+	public static void xml2JavaWorker() throws Exception {
 		//Create the JAXBContext
 		JAXBContext jaxbContext = JAXBContext.newInstance(Workers.class);
 		// Get the unmarshaller
@@ -114,43 +114,33 @@ public class XMLManager {
 			throw new Exception("XML file is empty. Cannot add workers to the database. ");
 		} else {
 			System.out.println(workers.getWorkers().toString());
-			for (Worker w : workers.getWorkers()) {
-				w = new Worker( w.getWorkerId(), w.getWorkerName(),  w.getWorkerSurname(),  w.getSpecialtyId(), w.getTypeWorker());
-				jdbc.addWorker(w);
-			}		
+			// Store the worker in the database
+						// Create entity manager
+						factory = Persistence.createEntityManagerFactory(PERSISTENCE_PROVIDER);
+						em = factory.createEntityManager();
+						em.getTransaction().begin();
+						em.createNativeQuery("PRAGMA foreign_keys=ON").executeUpdate();
+						em.getTransaction().commit();
+
+						// Create a transaction
+						EntityTransaction tx1 = em.getTransaction();
+
+						// Start transaction
+						tx1.begin();
+
+						// Persist
+						//ASSUMING THAT THE WORKERS ARE NOT ALREADY IN THE DATABASE!!
+						for (Worker w : workers.getWorkers()) {
+							em.persist(w);
+						}
+				        
+						// End transaction
+						tx1.commit();
+					}	
 		}
 		
-		// Store the worker in the database
-		// Create entity manager
-		factory = Persistence.createEntityManagerFactory(PERSISTENCE_PROVIDER);
-		em = factory.createEntityManager();
-		em.getTransaction().begin();
-		em.createNativeQuery("PRAGMA foreign_keys=ON").executeUpdate();
-		em.getTransaction().commit();
-
-		// Create a transaction
-		EntityTransaction tx1 = em.getTransaction();
-
-		// Start transaction
-		tx1.begin();
-
-		// Persist
-		for (Worker w : workers.getWorkers()) {
-			em.persist(w);
-		}
-        
-		// End transaction
-		tx1.commit();
-	}
-	private static void printWorkers() {
-		Query q1 = em.createNativeQuery("SELECT * FROM workers", Worker.class);
-		List<Worker> w = (List<Worker>) q1.getResultList();
-		// Print the workers
-		for (Worker worker : w) {
-			System.out.println(worker);
-		}
-	}
-	public static void java2XmlWorker() throws JAXBException {
+	
+	public static void java2XmlWorker() throws Exception {
 		
 		// Get the entity manager
 		em = Persistence.createEntityManagerFactory("ER-provider").createEntityManager();
@@ -166,11 +156,11 @@ public class XMLManager {
 		// Pretty formatting
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
 		
-		// Choose the worker to turn into an XML
-		// Choose his new department
-		printWorkers();
 		Query q2 = em.createNativeQuery("SELECT * FROM workers", Worker.class);
 		List<Worker> lw = q2.getResultList();
+		if(lw.isEmpty()) {
+			throw new Exception("No workers");
+		}else {
 		Workers workers = new Workers();
 		workers.setWorkers(lw);
 		System.out.println(lw);		
@@ -180,6 +170,7 @@ public class XMLManager {
 		marshaller.marshal(workers, file);
 		// Printout
 		marshaller.marshal(workers, System.out);
+		}
 	} 
 	
 	/**

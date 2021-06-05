@@ -221,6 +221,8 @@ public class AdStaffMenuController implements Initializable {
         paneDeletePatient.setDisable(true);
         paneSelectPatient.setVisible(false);
         paneSelectPatient.setDisable(true);
+        paneCreateMedicalTest.setVisible(false);
+        paneCreateMedicalTest.setDisable(true);
         //WorkerViewOptions
         paneCreateWorkerView.setVisible(false);
         paneCreateWorkerView.setDisable(true);
@@ -1911,10 +1913,9 @@ public class AdStaffMenuController implements Initializable {
 
     @FXML
     public void convertWorkersToXML() throws IOException {
-        //TODO - Al final aqui hago q se pueda elegir el worker o q pille a todos de golpe?
 
         try {
-            // XMLManager.
+            XMLManager.java2XmlWorker();
             SuccessPopup.successPopup(14);
         } catch (Exception e) {
             ErrorPopup.errorPopup(20);
