@@ -1,6 +1,7 @@
 package db.xml;
 
 import java.io.*;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class XMLManager {
 	private static EntityManager em;
 	static Scanner sc = new Scanner(System.in);
 
-	public static void xml2JavaShift() throws Exception {
+	public static void xml2JavaShift(SQL jdbc) throws Exception {
 		//Create the JAXBContext
 		JAXBContext jaxbContext = JAXBContext.newInstance(Shift.class);
 		// Get the unmarshaller
@@ -41,6 +42,7 @@ public class XMLManager {
 			System.out.println(shift.toString());
 			for (Shift s : shift) {
 				s = new Shift ( s.getDate(), s.getRoom(), s.getTurn(), s.getShiftId());
+				jdbc.addShift(s);
 			}		
 		}
 		
@@ -98,7 +100,7 @@ public class XMLManager {
 		marshaller.marshal(s, System.out);
 	} 
 	
-	public static void xml2JavaWorker() throws Exception {
+	public static void xml2JavaWorker(SQL jdbc) throws Exception {
 		//Create the JAXBContext
 		JAXBContext jaxbContext = JAXBContext.newInstance(Workers.class);
 		// Get the unmarshaller
@@ -109,11 +111,12 @@ public class XMLManager {
 		Workers workers =   (Workers) unmarshaller.unmarshal(file);
 		
 		if(workers.getWorkers().isEmpty()) {
-			throw new Exception("XML file is empty. Check that there are workers linked to the database and try again.");
+			throw new Exception("XML file is empty. Cannot add workers to the database. ");
 		} else {
 			System.out.println(workers.getWorkers().toString());
 			for (Worker w : workers.getWorkers()) {
-				w = new Worker( w.getWorkerName(),  w.getWorkerSurname(),  w.getSpecialtyId(), w.getTypeWorker());
+				w = new Worker( w.getWorkerId(), w.getWorkerName(),  w.getWorkerSurname(),  w.getSpecialtyId(), w.getTypeWorker());
+				jdbc.addWorker(w);
 			}		
 		}
 		

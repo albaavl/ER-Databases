@@ -35,7 +35,7 @@ public class Worker implements Serializable{
 	@XmlElement
 	private String typeWorker;
 	//Can be doctor(1), nurse(2), administration staff(3), technician(4)
-	@OneToMany(mappedBy="worker")
+	@OneToMany(mappedBy="worker", cascade = CascadeType.PERSIST)
 	@XmlElement(name = "Shift")
     @XmlElementWrapper(name = "Shifts")
 	private List<Shift> shift = null;

@@ -47,4 +47,184 @@
         <typeWorker>Doctor</typeWorker>
         <Shifts/>
     </Worker>
+    <Worker workerName="admin" workerSurname="admin" userId="1">
+        <specialtyId>none</specialtyId>
+        <typeWorker>adStaff</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Patri" workerSurname="Patri" userId="251">
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Patri" workerSurname="Patri" userId="301">
+        <typeWorker>Nurse</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Enrique" workerSurname="Enrique" userId="351">
+        <specialtyId>Urology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Miguel" workerSurname="Miguel" userId="352">
+        <typeWorker>Nurse</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Angy" workerSurname="Garcia" userId="401">
+        <typeWorker>Technician</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="juan" workerSurname="martinez" userId="451">
+        <specialtyId>oncology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="juan" workerSurname="martinez" userId="452">
+        <specialtyId>oncology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="admin" workerSurname="admin" userId="1">
+        <specialtyId>none</specialtyId>
+        <typeWorker>adStaff</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Patri" workerSurname="Patri" userId="251">
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Patri" workerSurname="Patri" userId="301">
+        <typeWorker>Nurse</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Enrique" workerSurname="Enrique" userId="351">
+        <specialtyId>Urology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Miguel" workerSurname="Miguel" userId="352">
+        <typeWorker>Nurse</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Angy" workerSurname="Garcia" userId="401">
+        <typeWorker>Technician</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="juan" workerSurname="martinez" userId="451">
+        <specialtyId>oncology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="juan" workerSurname="martinez" userId="452">
+        <specialtyId>oncology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="admin" workerSurname="admin" userId="1">
+        <specialtyId>none</specialtyId>
+        <typeWorker>adStaff</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Patri" workerSurname="Patri" userId="251">
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Patri" workerSurname="Patri" userId="301">
+        <typeWorker>Nurse</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Enrique" workerSurname="Enrique" userId="351">
+        <specialtyId>Urology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Miguel" workerSurname="Miguel" userId="352">
+        <typeWorker>Nurse</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Angy" workerSurname="Garcia" userId="401">
+        <typeWorker>Technician</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="juan" workerSurname="martinez" userId="451">
+        <specialtyId>oncology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="juan" workerSurname="martinez" userId="452">
+        <specialtyId>oncology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="admin" workerSurname="admin" userId="1">
+        <specialtyId>none</specialtyId>
+        <typeWorker>adStaff</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Patri" workerSurname="Patri" userId="251">
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Patri" workerSurname="Patri" userId="301">
+        <typeWorker>Nurse</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Enrique" workerSurname="Enrique" userId="351">
+        <specialtyId>Urology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Miguel" workerSurname="Miguel" userId="352">
+        <typeWorker>Nurse</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Angy" workerSurname="Garcia" userId="401">
+        <typeWorker>Technician</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="juan" workerSurname="martinez" userId="451">
+        <specialtyId>oncology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="juan" workerSurname="martinez" userId="452">
+        <specialtyId>oncology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="admin" workerSurname="admin" userId="1">
+        <specialtyId>none</specialtyId>
+        <typeWorker>adStaff</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Patri" workerSurname="Patri" userId="251">
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Patri" workerSurname="Patri" userId="301">
+        <typeWorker>Nurse</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Enrique" workerSurname="Enrique" userId="351">
+        <specialtyId>Urology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Miguel" workerSurname="Miguel" userId="352">
+        <typeWorker>Nurse</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Angy" workerSurname="Garcia" userId="401">
+        <typeWorker>Technician</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="juan" workerSurname="martinez" userId="451">
+        <specialtyId>oncology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="juan" workerSurname="martinez" userId="452">
+        <specialtyId>oncology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
 </Workers>
