@@ -64,6 +64,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("Error 0");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 1:
@@ -79,6 +80,7 @@ public class ErrorPopup {
 
 			stageError.setScene(sceneError);
 			stageError.setTitle("Error: Wrong date");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 2:
@@ -94,6 +96,7 @@ public class ErrorPopup {
 
 			stageError.setScene(sceneError);
 			stageError.setTitle("Error: Fill all the options");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 3:
@@ -109,6 +112,7 @@ public class ErrorPopup {
 
 			stageError.setScene(sceneError);
 			stageError.setTitle("Error: Wrong date");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 4:
@@ -123,6 +127,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 			stageError.setScene(sceneError);
 			stageError.setTitle("Error: Wrong Id");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 5:
@@ -138,6 +143,7 @@ public class ErrorPopup {
 
 			stageError.setScene(sceneError);
 			stageError.setTitle("Error: Wrong username or password");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 6:
@@ -153,6 +159,7 @@ public class ErrorPopup {
 
 			stageError.setScene(sceneError);
 			stageError.setTitle("Error: No shifts");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 
@@ -169,6 +176,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("Error: No treatments");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 8:
@@ -184,6 +192,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("Date error");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 9:
@@ -199,6 +208,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("Patient error");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 10:
@@ -214,6 +224,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("Shift error");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 11:
@@ -229,6 +240,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("Error");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 12:
@@ -244,6 +256,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("Error");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 13:
@@ -259,6 +272,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("Error");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 14:
@@ -274,6 +288,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("Wrong date");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 15:
@@ -289,6 +304,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("XML error");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 16:
@@ -304,6 +320,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("XML error");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 17:
@@ -319,6 +336,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("Password error");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 18:
@@ -334,6 +352,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("XML error");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 19:
@@ -349,6 +368,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("XML error");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 20:
@@ -364,6 +384,7 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("XML error");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
 		case 21:
@@ -379,8 +400,42 @@ public class ErrorPopup {
 			stageError.getIcons().add(icon);
 
 			stageError.setTitle("Wrong Date");
+			stageError.setResizable(false);
 			stageError.show();
 			break;
+			case 22:
+			loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml"));
+			rootError = loaderError.load();
+			errorPopupController = loaderError.getController();
+			errorPopupController.displayErrorText("They're already linked.");
+			sceneError = new Scene(rootError);
+			stageError = new Stage();
+			stageError.setScene(sceneError);
+
+			icon = new Image("application/images/errorIcon.png");
+			stageError.getIcons().add(icon);
+
+			stageError.setTitle("Error");
+			stageError.setResizable(false);
+			stageError.show();
+			break;
+		case 23:
+			loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml"));
+			rootError = loaderError.load();
+			errorPopupController = loaderError.getController();
+			errorPopupController.displayErrorText("Medical Card Id already in use.");
+			sceneError = new Scene(rootError);
+			stageError = new Stage();
+			stageError.setScene(sceneError);
+
+			icon = new Image("application/images/errorIcon.png");
+			stageError.getIcons().add(icon);
+
+			stageError.setTitle("Error");
+			stageError.setResizable(false);
+			stageError.show();
+			break;
+
 		default:
 			break;
 		}

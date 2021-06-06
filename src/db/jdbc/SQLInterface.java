@@ -34,6 +34,7 @@ public interface SQLInterface {
 	public List<Treatment> searchTreatmentsByMedCard( Integer medCard) throws Exception;
 	
 	public List<Worker> selectAllWorkers() throws SQLException, NotBoundException;
+	public List<Worker> selectAllDoctors() throws SQLException, NotBoundException;
 	public List<Patient> selectAllPatients() throws SQLException, NotBoundException;
 	public Patient selectPatient( Integer medCard) throws SQLException, NotBoundException;
 	public Worker selectWorker( Integer workerId) throws SQLException, NotBoundException;

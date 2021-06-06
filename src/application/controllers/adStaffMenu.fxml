@@ -249,7 +249,7 @@
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="640.0" layoutY="251.0" mnemonicParsing="false" style="-fx-background-radius: 10;" text="Clear">
+                        <Button layoutX="640.0" layoutY="251.0" mnemonicParsing="false" onAction="#clearPatientLinkDocPatient" style="-fx-background-radius: 10;" text="Clear">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
@@ -265,7 +265,7 @@
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="640.0" layoutY="397.0" mnemonicParsing="false" style="-fx-background-radius: 10;" text="Clear">
+                        <Button layoutX="640.0" layoutY="397.0" mnemonicParsing="false" onAction="#clearWorkerLinkDocPatient" style="-fx-background-radius: 10;" text="Clear">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
@@ -290,12 +290,12 @@
                               <Font name="Arial" size="18.0" />
                            </font>
                         </Label>
-                        <Button layoutX="245.0" layoutY="544.0" mnemonicParsing="false" onAction="#linkDocPatient" style="-fx-background-radius: 10;" text="Link">
+                        <Button layoutX="281.0" layoutY="544.0" mnemonicParsing="false" onAction="#linkDocPatient" style="-fx-background-radius: 10;" text="Link">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="372.0" layoutY="544.0" mnemonicParsing="false" style="-fx-background-radius: 10;" text="Cancel">
+                        <Button layoutX="372.0" layoutY="544.0" mnemonicParsing="false" onAction="#cancelLinkDocPatient" style="-fx-background-radius: 10;" text="Cancel">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>

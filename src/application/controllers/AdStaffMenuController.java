@@ -428,7 +428,7 @@ public class AdStaffMenuController implements Initializable {
         resetAll();
 
         try {
-            setWorkerTables();
+            setWorkerTablesOnlyDoc(); 
         } catch (Exception e) {
             e.printStackTrace();
             ErrorPopup.errorPopup(0);
@@ -482,6 +482,10 @@ public class AdStaffMenuController implements Initializable {
 
     public void displayAssignANewDoctorView() {
         hideAll();
+        currentLinkDocWorkerTableView.getItems().clear();
+        currentLinkDocWorkerTableView.getColumns().clear();
+        currentLinkDocPatientTableView.getItems().clear();
+        currentLinkDocPatientTableView.getColumns().clear();
         resetAll();
 
         if (currentSelectedPatient != null) {
@@ -753,6 +757,11 @@ public class AdStaffMenuController implements Initializable {
             ErrorPopup.errorPopup(4);
             return;
         }
+        Patient t = jdbc.selectPatient(p.getMedicalCardId());
+        if (t != null) {
+            ErrorPopup.errorPopup(23);
+            return;
+        }
 
         String name = nameTextField.getText();
         if (name == "") {
@@ -920,10 +929,15 @@ public class AdStaffMenuController implements Initializable {
     }
     @FXML
     public void executeDeletePatient() throws IOException{
+        if(currentSelectedPatient == null){
+            ErrorPopup.errorPopup(11);
+            return;
+        }
+
         try {
             jdbc.deletePatientByMedicalCardId(currentSelectedPatient.getMedicalCardId());
-            SuccessPopup.successPopup(7);
-        } catch (SQLException e) {
+            SuccessPopup.successPopup(6);
+        } catch (Exception e) {
             e.printStackTrace();
             return;
         }
@@ -955,7 +969,12 @@ public class AdStaffMenuController implements Initializable {
     }
 
     @FXML
-    public void executeEditPatient(){
+    public void executeEditPatient() throws IOException{
+
+        if(currentSelectedPatient == null){
+            ErrorPopup.errorPopup(11);
+            return;
+        }
 
         hideAll();
         //prepare the editPatientDataView with the current data of the selected patient
@@ -1272,17 +1291,25 @@ public class AdStaffMenuController implements Initializable {
     }
 
     public void linkDocPatient() throws SQLException, IOException{
-        if (currentSelectedWorker == null) { 
-            ErrorPopup.errorPopup(12);
-            return;
-        } else if (currentSelectedPatient == null) {
+        if (currentSelectedPatient == null) { 
             ErrorPopup.errorPopup(11);
             return;
+        } else if (currentSelectedWorker == null) {
+            ErrorPopup.errorPopup(12);
+            return;
         } else {
-            jdbc.createLinkDoctorPatient(currentSelectedPatient.getMedicalCardId(), currentSelectedWorker.getWorkerId());
+
+            try {
+                jdbc.createLinkDoctorPatient(currentSelectedPatient.getMedicalCardId(), currentSelectedWorker.getWorkerId());
+            } catch (Exception e) {
+                ErrorPopup.errorPopup(22);
+                return;
+            }
+
             SuccessPopup.successPopup(3);
             currentSelectedPatient = null;
             currentSelectedWorker = null;
+
             displayAssignANewDoctorView();
         }
     }
@@ -1290,6 +1317,17 @@ public class AdStaffMenuController implements Initializable {
     public void cancelLinkDocPatient(){
         currentSelectedPatient = null;
         currentSelectedWorker = null;
+        displayAssignANewDoctorView();
+    }
+
+    public void clearPatientLinkDocPatient(){
+        currentSelectedPatient = null;
+        displayAssignANewDoctorView();
+    }
+
+    public void clearWorkerLinkDocPatient(){
+        currentSelectedWorker = null;
+        displayAssignANewDoctorView();
     }
 
     //SELECT WORKER
@@ -1306,6 +1344,17 @@ public class AdStaffMenuController implements Initializable {
     private void setWorkerTables() throws SQLException, NotBoundException{
 
         List<Worker> workerList = jdbc.selectAllWorkers();
+        selectWorkerTableView.getItems().clear();
+        selectWorkerTableView.getColumns().clear();
+        selectWorkerTableView.getColumns().addAll(columnWorkerId, columnWorkerName, columnWorkerSurname, columnWorkerType, columnWorkerSpecialtyId);
+        selectWorkerTableView.getItems().addAll(workerList);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    private void setWorkerTablesOnlyDoc() throws SQLException, NotBoundException{
+
+        List<Worker> workerList = jdbc.selectAllDoctors();
         selectWorkerTableView.getItems().clear();
         selectWorkerTableView.getColumns().clear();
         selectWorkerTableView.getColumns().addAll(columnWorkerId, columnWorkerName, columnWorkerSurname, columnWorkerType, columnWorkerSpecialtyId);
@@ -1494,9 +1543,14 @@ public class AdStaffMenuController implements Initializable {
 
     @FXML
     public void executeDeleteWorker() throws IOException{
+        if(currentSelectedWorker == null){
+            ErrorPopup.errorPopup(12);
+            return;
+        }
+
         try {
             jdbc.deleteWorkerById(currentSelectedWorker.getWorkerId());
-            SuccessPopup.successPopup(8);
+            SuccessPopup.successPopup(7);
         } catch (SQLException e) {
             e.printStackTrace();
             return;
@@ -1592,7 +1646,9 @@ public class AdStaffMenuController implements Initializable {
         } 
         Integer roomInt = null;
         try {
-            roomInt = Integer.parseInt(roomER);
+            if(roomER != null) {
+                roomInt = Integer.parseInt(roomER);
+            }
         } catch (Exception e) {
             ErrorPopup.errorPopup(4);
         }
@@ -1626,25 +1682,26 @@ public class AdStaffMenuController implements Initializable {
 
     @FXML
     public void createShift() throws Exception {
-        Shift nShift = new Shift();
         String room = rooomERTextField.getText();
+        Integer roomInt;
         if(room == ""){
             ErrorPopup.errorPopup(2);
             return;
         } else {
             try {
-                nShift.setRoom(Integer.parseInt(room));
+                roomInt = Integer.parseInt(room);
             } catch (Exception e) {
                 ErrorPopup.errorPopup(4);
                 return;
             }
         }
 
+        String turn;
         if(shiftTurnComboBox.getSelectionModel().isEmpty()){
             ErrorPopup.errorPopup(2);
             return;
         } else {
-           nShift.setTurn(shiftTurnComboBox.getSelectionModel().getSelectedItem());
+            turn = shiftTurnComboBox.getSelectionModel().getSelectedItem();
         }
 
         if(shiftDatePicker.getEditor().getText() == ""){
@@ -1657,8 +1714,8 @@ public class AdStaffMenuController implements Initializable {
             ErrorPopup.errorPopup(14);
             return;
         } 
-        nShift.setDate(date);
-        nShift.setWorker(currentSelectedWorker);
+
+        Shift nShift = new Shift(date, roomInt, turn, currentSelectedWorker);
 
         jdbc.addShift(nShift);
         SuccessPopup.successPopup(5);

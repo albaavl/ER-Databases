@@ -62,6 +62,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -78,6 +79,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -94,6 +96,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -110,6 +113,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -126,6 +130,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -133,7 +138,7 @@ public class SuccessPopup {
                 loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
                 rootSuccess = loaderSuccess.load(); 
                 successPopupController = loaderSuccess.getController();
-                successPopupController.displaySuccessText("Deleted Patient Correctly.");
+                successPopupController.displaySuccessText("Patient deleted correctly.");
                 sceneSuccess = new Scene(rootSuccess);
                 stageSuccess = new Stage();
                 stageSuccess.setScene(sceneSuccess);
@@ -142,6 +147,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -149,7 +155,7 @@ public class SuccessPopup {
                 loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
                 rootSuccess = loaderSuccess.load(); 
                 successPopupController = loaderSuccess.getController();
-                successPopupController.displaySuccessText("Delete Worker Correctly.");
+                successPopupController.displaySuccessText("Worker deleted correctly.");
                 sceneSuccess = new Scene(rootSuccess);
                 stageSuccess = new Stage();
                 stageSuccess.setScene(sceneSuccess);
@@ -158,6 +164,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -174,6 +181,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -190,6 +198,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -206,6 +215,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -222,6 +232,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -238,6 +249,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -254,6 +266,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -270,6 +283,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -286,6 +300,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -293,7 +308,7 @@ public class SuccessPopup {
                 loaderSuccess = new FXMLLoader(getClass().getResource("successPopup.fxml")); 
                 rootSuccess = loaderSuccess.load(); 
                 successPopupController = loaderSuccess.getController();
-                successPopupController.displaySuccessText("Treatment successfully saved in the database");
+                successPopupController.displaySuccessText("Medical Test successfully saved in the database");
                 sceneSuccess = new Scene(rootSuccess);
                 stageSuccess = new Stage();
                 stageSuccess.setScene(sceneSuccess);
@@ -302,6 +317,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;
@@ -318,6 +334,7 @@ public class SuccessPopup {
                 stageSuccess.getIcons().add(icon);	        
 
                 stageSuccess.setTitle("Success");
+                stageSuccess.setResizable(false);
                 stageSuccess.show();
 
                 break;

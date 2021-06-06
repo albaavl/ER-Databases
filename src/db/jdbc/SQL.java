@@ -1,5 +1,4 @@
 package db.jdbc;
-import java.io.File;
 import java.rmi.NotBoundException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -251,7 +250,7 @@ public class SQL implements SQLInterface{
 		return shifts;
 	}
 	
-	@Override //TODO - pq coño hay un doctor_id aqui? xD
+	@Override
 	public List<Shift> searchShiftByDate (Integer workerId, Date date) throws SQLException, Exception {
 		String sql = "SELECT * FROM shifts WHERE doctor_id = ? AND date = ? ";
 		PreparedStatement p = c.prepareStatement(sql);
@@ -334,6 +333,21 @@ public class SQL implements SQLInterface{
 		List <Worker> wList = new ArrayList<Worker>();
 		while(rs.next()){ 
 			wList.add( new Worker(rs.getInt("workerId"), rs.getString("workerName"), rs.getString("workerSurname"), rs.getString("specialtyId"), rs.getString("typeWorker")) );
+		}
+		p.close();
+		rs.close();
+		return wList;
+	}
+
+	@Override
+	public List<Worker> selectAllDoctors() throws SQLException, NotBoundException {
+		String sql = "SELECT * FROM workers WHERE typeWorker = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setString(1, "Doctor");
+		ResultSet rs = p.executeQuery();
+		List <Worker> wList = new ArrayList<Worker>();
+		while(rs.next()){ 
+			wList.add( new Worker(rs.getInt("workerId"), rs.getString("workerName"), rs.getString("workerSurname"), rs.getString("specialtyId"), "Doctor") );
 		}
 		p.close();
 		rs.close();

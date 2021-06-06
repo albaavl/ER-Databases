@@ -85,22 +85,22 @@ public class LogInController {
 	private Stage stage;
 	private Scene scene;
 
-	/**
-	 * Used to return to the first log in screen.
-	 * 
-	 * @param aEvent
-	 * @throws IOException
-	 */
-	private void switchToLogIn(ActionEvent aEvent) throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("logInMenu.fxml")); // TODO - need to create the
-																						// patient menu fxml w
-																						// scenebuilder
-		root = loader.load();
-		stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
-		scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
-	}
+	// /**
+	//  * Used to return to the first log in screen.
+	//  * 
+	//  * @param aEvent
+	//  * @throws IOException
+	//  */
+	// private void switchToLogIn(ActionEvent aEvent) throws IOException {
+	// 	FXMLLoader loader = new FXMLLoader(getClass().getResource("logInMenu.fxml")); // TODO - need to create the
+	// 																					// patient menu fxml w
+	// 																					// scenebuilder
+	// 	root = loader.load();
+	// 	stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
+	// 	scene = new Scene(root);
+	// 	stage.setScene(scene);
+	// 	stage.show();
+	// }
 
 	private void switchToPatientMenu(ActionEvent aEvent, Integer userId)
 			throws IOException, SQLException, NotBoundException {

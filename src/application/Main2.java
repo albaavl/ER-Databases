@@ -6,26 +6,8 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
-
-import java.rmi.NotBoundException;
-
-import java.security.*;
-import java.sql.*;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.*;
-
-import db.pojos.*;
-import pojos.users.*;
-import db.jdbc.*;
-import db.jpa.JPAUserManager;
 
 public class Main2 extends Application {
-
-	// static Connection c ;
-	// static SQL jdbc = new SQL();
-	// private static JPAUserManager userman = new JPAUserManager();
 
 	@Override
 	public void start(Stage primaryStage) {
