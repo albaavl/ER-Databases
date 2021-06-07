@@ -110,7 +110,7 @@
                         </ScrollPane>
                      </children>
                   </Pane>
-                  <Pane fx:id="addTreatmentView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;">
+                  <Pane fx:id="addTreatmentView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" visible="false">
                      <children>
                         <Label fx:id="titleAddTreatment" layoutX="56.0" layoutY="22.0" prefHeight="83.0" prefWidth="631.0" text="Create Treatment to patient (medCard = ?)">
                            <font>
@@ -118,7 +118,7 @@
                            </font>
                         </Label>
                         <TextField fx:id="durationCTreatment" layoutX="153.0" layoutY="214.0" prefHeight="25.0" prefWidth="242.0" />
-                        <Label layoutX="58.0" layoutY="211.0" prefHeight="26.0" prefWidth="63.0" text="Duration">
+                        <Label layoutX="41.0" layoutY="211.0" prefHeight="37.0" prefWidth="101.0" text="Duration (days)">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
@@ -170,7 +170,7 @@
                            </font>
                         </Label>
                         <TextField fx:id="durationETreatment" layoutX="153.0" layoutY="214.0" prefHeight="25.0" prefWidth="242.0" promptText="Leave it empty if you don't want to edit it" />
-                        <Label layoutX="58.0" layoutY="211.0" prefHeight="26.0" prefWidth="63.0" text="Duration">
+                        <Label layoutX="35.0" layoutY="211.0" prefHeight="31.0" prefWidth="101.0" text="Duration (days)">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
