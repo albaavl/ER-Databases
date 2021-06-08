@@ -582,8 +582,8 @@ public class Main {
 					fecha = Date.valueOf(date);
 					a = 1;
 				} catch (Exception e) {
-					System.out.println("Please input a valid date format.");    //TODO - not sure about this one
-					System.out.println("Insert date: [dd-mm-yyyy]: ");
+					System.out.println("Please input a valid date format.");    
+					System.out.println("Insert date: [yyyy-mm-dd]: ");
 					date = sc.next();
 				}
 			} while (a==0);
@@ -594,6 +594,8 @@ public class Main {
 	}
 	
 	private static void consultShifts(Worker w) throws Exception { 
+		Boolean validAnswer = true;
+		do {
 		System.out.println("Do you want to see your shifts for an specific date? [YES/NO]");
 		sc = new Scanner (System.in);
 		String answer = sc.next();
@@ -636,7 +638,9 @@ public class Main {
 			}
 		}else {
 			System.out.println("Not valid answer. Insert [YES/NO]");
+			validAnswer=false;
 		}
+		}while(!validAnswer);
 	}
 		
 	
@@ -653,11 +657,17 @@ public class Main {
 		String surname = sc.next();
 		p.setPatientSurname(surname);
 		System.out.print("Medical card number: "); 
-		Integer medCardNumber; 
+		Integer medCardNumber=1; 
+		Boolean validMedNumber = false;
 			do { 
+				try {
 				medCardNumber = sc.nextInt(); 
+				validMedNumber = true;
+				}catch(Exception e) {
+					System.out.println("Please introduce a valid medical card number which only contains numbers");
+				}
 				System.out.print("Error. Please introduce medical card number: "); 
-			} while (jdbc.selectPatient( medCardNumber) != null );
+			} while (jdbc.selectPatient( medCardNumber) != null&&(!validMedNumber) );
 			p.setMedicalCardId(medCardNumber);
 
 		System.out.print("Gender: ");
@@ -1051,8 +1061,8 @@ public class Main {
 	
 	private static void adAccessToPatientsProfile() throws Exception { 
 		sc = new Scanner (System.in);
-		int key;
-		int key2;
+		int key=3;
+		int key2=27;
 		int ctrl1 = 0; //Control para el primer menu.
 		int ctrl2 = 0; //Control para segundo menu.
 		Patient patient; 
@@ -1063,8 +1073,11 @@ public class Main {
 			System.out.println("1. Change patient data.");
 			System.out.println("2. Add a doctor to the patient.");
 			System.out.println("0. Back.");
-	
+	try {
 			key = sc.nextInt();
+			}catch(Exception e) {
+				System.out.println("Not a valid option please choose between 0-2");
+			}
 
 			switch (key) {
 				case 1: //Cambiar cosas del patient
@@ -1091,7 +1104,11 @@ public class Main {
 										);
 						System.out.print("Select one option: ");
 
-						key2 = sc.nextInt();
+						try {
+							key2 = sc.nextInt();
+							}catch(Exception e) {
+								System.out.println("Not a valid option please choose between 0-2");
+							}
 
 						switch (key2) { 
 							case 1: //nombre
@@ -1352,10 +1369,17 @@ public class Main {
 		patientList.addAll(jdbc.searchPatient( surname)); //(connection c, integer id)
 		}
 		while(patient == null) {
+		Integer medCard=null;
 		System.out.println(patientList.toString());  
 		System.out.print("Enter the medical card number of the chosen patient: ");
-		Integer medCard = Integer.parseInt(sc.next());
-		patient = new Patient(jdbc.selectPatient ( medCard)); //(connection c, integer id)
+		try{
+			medCard = Integer.parseInt(sc.next());
+		}catch(Exception ex) {
+			System.out.println("Not a valid medCardNumber ONLY NUMBERS");
+		}
+		if(jdbc.selectPatient(medCard)!=null) {
+			patient = new Patient(jdbc.selectPatient ( medCard)); // integer id
+		}
 		}
 		return patient;
 	}
@@ -1370,9 +1394,16 @@ public class Main {
 		}
 		while(w == null) {
 		System.out.println(wList.toString()); 
+		Integer id=null;
 		System.out.println("Enter the id of the chosen worker:");
-		Integer id = Integer.parseInt(sc.next());
+		try {
+		id = Integer.parseInt(sc.next());
+		}catch(Exception e) {
+			System.out.println("Not a valid id ONLY NUMBERS");
+		}
+		if(jdbc.selectWorker (id)!=null) {
 		w = new Worker(jdbc.selectWorker (id));
+		}
 		}
 		return w;
 	}
