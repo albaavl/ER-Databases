@@ -250,7 +250,7 @@ public class Patient implements Serializable{
 		return hospitalized;
 	}
 	/**
-	 * Used to set the 
+	 * Used to set the hospitalized state of a patient
 	 */
 	public void setHospitalized(boolean hospitalized) {
 		this.hospitalized = hospitalized;
@@ -272,8 +272,8 @@ public class Patient implements Serializable{
 
 	@Override
 	public String toString() {
-		return "MedicalCardNumber: "+this.medical_card_number+ "Name: " + this.patientName + ", Surname: " + this.patientSurname + ", Gender: " + this.gender + ", Blood type: " + this.bloodType
-		+ ", Birthdate:"+this.getbDate().toString()+", Address: "+this.getPatientAddress()+", Check in date: " + this.checkInDate.toString() + ", Allergies: " +  this.allergieType + ", Hospitalized: "+this.getHospitalized();
+		return "MedicalCardNumber: "+this.medical_card_number+ ", Name: " + this.patientName + ", Surname: " + this.patientSurname + ", Gender: " + this.gender + ", Blood type: " + this.bloodType
+		+ ", Birthdate: "+this.getbDate().toString()+", Address: "+this.getPatientAddress()+", Check in date: " + this.checkInDate.toString() + ", Allergies: " +  this.allergieType + ", Hospitalized: "+this.getHospitalized();
 	}
 
 	@Override

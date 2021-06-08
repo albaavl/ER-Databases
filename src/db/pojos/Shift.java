@@ -187,7 +187,7 @@ public class Shift implements Serializable {
 
 	@Override 
 	public String toString() {
-		return "Shift [date=" + this.date + ", shift=" + this.turn + ", room=" + this.room + "]";
+		return "Shift [date= " + this.date + ", shift= " + this.turn + ", room= " + this.room + "]";
 	}
 	
 }

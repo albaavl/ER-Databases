@@ -210,8 +210,8 @@ public class Treatment implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Treatment [treatmentId=" + treatmentId + ", diagnosis=" + diagnosis + ", recommendation="
-				+ recommendation + ", medication=" + medication + ", startDate=" + startDate + ", duration=" + duration
+		return "Treatment [treatmentId= " + treatmentId + ", diagnosis= " + diagnosis + ", recommendation= "
+				+ recommendation + ", medication= " + medication + ", startDate= " + startDate + ", duration= " + duration
 				+ "]";
 	}
 }

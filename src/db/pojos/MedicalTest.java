@@ -65,8 +65,8 @@ public class MedicalTest implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "MedicalTest [medicalTestId=" + id + ", dateMedTest=" + dateMedTest + ", testType=" + type
-				+ ", testResult=" + result + ", patientId=" + id
+		return "MedicalTest [medicalTestId= " + id + ", dateMedTest= " + dateMedTest + ", testType= " + type
+				+ ", testResult= " + result + ", patientId= " + id
 				+ "]";
 	}
 	/**

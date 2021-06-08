@@ -22,9 +22,12 @@ public class Main {
 	static Scanner sc = new Scanner(System.in);
 	static SQL jdbc = new SQL();
 	private static JPAUserManager userman = new JPAUserManager();
-	public static int option = 0;
+	public static Integer option = null;
+	public static String trashcan;
 
 	public static void main(String[] args) throws Exception, SQLException {
+
+		
 		try{
 			jdbc.connect();
 			
@@ -40,32 +43,38 @@ public class Main {
 			
 			userman.connect();
 			do {
-				System.out.println("Welcome to the Quiron's ER");
-				System.out.println("1. Login");
-				System.out.println("2. Change password");
-				System.out.println("0. Exit");
-				int choice = sc.nextInt();
-				switch(choice) {
-				case 1:
-					login();
-					break;
-				case 2:
-					changePassword();
-					break;
-				case 0: 
-					jdbc.disconnect();
-					userman.disconnect();
-					System.exit(0);
-					break;
-				default:
-					System.out.println("Not a valid option.");
-					break;
+				try {
+					System.out.println("Welcome to the Quiron's ER");
+					System.out.println("1. Login");
+					System.out.println("2. Change password");
+					System.out.println("0. Exit");
+					int choice = sc.nextInt();
+					switch(choice) {
+					case 1:
+						login();
+						break;
+					case 2:
+						changePassword();
+						break;
+					case 0: 
+						jdbc.disconnect();
+						userman.disconnect();
+						System.exit(0);
+						break;
+					default:
+						System.out.println("Not a valid option.");
+						break;
+					}	
+				} catch (Exception e) {
+					trashcan = sc.next();
+					System.out.println("Please introduce a valid option.");
 				}
 			}while(true);
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
 	}
+
 	private static void register(String name, String surname, Integer idUser) throws Exception {
 		//autogenerateID
 		String username = ""+name.charAt(0)+"."+surname+""+Integer.parseInt(surname.substring(0, 1));
@@ -84,7 +93,18 @@ public class Main {
 		System.out.println(userman.getRoles());
 		//ask the user for a role
 		System.out.println("Type the chosen role ID: ");
-		int id = sc.nextInt();
+		Integer id = null;
+		int a=0;
+		do {
+			try {
+				id = sc.nextInt();
+				a=1;
+			} catch (Exception e) {
+				trashcan = sc.next();
+				System.out.println("Not a valid role id. Try again.");
+			}
+		} while (a==0);
+
 		Role role = userman.getRole(id);
 		//generate the hash
 		MessageDigest md = MessageDigest.getInstance("MD5");
@@ -120,19 +140,31 @@ public class Main {
 			adStaffMenu(user.getUserId());
 		}
 	}
-
 	
 	public static void patientMenu(Integer userID) throws Exception{
 		sc = new Scanner (System.in);
-		Patient patient = new Patient(jdbc.selectPatientByUserId(userID));
-		System.out.println("Hello Mr/Ms "+patient.getPatientSurname());
-		System.out.println("Consult my treatment");
-		System.out.println("Would you like to order your treatments by[0-4]:"
-				+ "\n0.Exit \n1. Date \n2. Medication \n3. Duration \n4. Search for a treatment by the name of the medication");
-		int option = sc.nextInt();                                                 
-		List<Treatment> treatments = new ArrayList<>();
 		
 		do{
+
+			int a = 0;
+
+			Patient patient = new Patient(jdbc.selectPatientByUserId(userID));
+			System.out.println("Hello Mr/Ms "+patient.getPatientSurname());
+			System.out.println("Consult my treatment");
+			System.out.println("How would you like to order your treatments by[0-4]:"
+					+ "\n1. Date \n2. Medication \n3. Duration \n4. Search for a treatment by the name of the medication \n0.Exit");
+			List<Treatment> treatments = new ArrayList<>();	
+
+			do {
+				try {
+					option = sc.nextInt();
+					a = 1;
+				} catch (Exception e) {
+					trashcan = sc.next();
+					System.out.println("Please input a valid option.");
+				}
+			} while (a==0);
+
 			switch (option) {
 				case 0:
 					System.out.println("Thank you for using our system");
@@ -187,7 +219,17 @@ public class Main {
 			System.out.println("Hello Mr/Ms "+medStaff.getWorkerSurname());
 			System.out.println("Choose an option[0-2]:");
 			System.out.println(" 1. Access to a patient's profile \n 2. Consult my shifts  \n 3. Convert to XML file \n 4. Convert from XML to Shift \n 5.  Convert the XML file to HTML \n 0. Exit");
-			option = sc.nextInt();	
+
+			int a = 0;
+			do {
+				try {
+					option = sc.nextInt();
+					a = 1;
+				} catch (Exception e) {
+					trashcan = sc.next();
+					System.out.println("Please input a valid option.");
+				}
+			} while (a==0);
 
 			switch(option) {
 				case 0:
@@ -230,9 +272,19 @@ public class Main {
 
 			System.out.println("Hello Mr/Ms "+adStaff.getWorkerSurname());
 			System.out.println("Choose an option[0-10]:");
-			System.out.println(" 1. Register new worker\n 2. Register new patient \n  3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n6. Delete Worker \n 7. Delete Patient \n 8. Convert Worker to XML file \n 9. Convert from XML to Worker \n 10.  Convert the XML file to HTML \n 0. Exit");
-			option = sc.nextInt();
+			System.out.println(" 1. Register new worker\n 2. Register new patient \n 3. Acces to a patient's profile\n 4. Request new medical test\n 5. Edit shifts \n 6. Delete Worker \n 7. Delete Patient \n 8. Convert Worker to XML file \n 9. Convert from XML to Worker \n 10.  Convert the XML file to HTML \n 0. Exit");
 	
+			int a = 0;
+			do {
+				try {
+					option = sc.nextInt();
+					a = 1;
+				} catch (Exception e) {
+					trashcan = sc.next();
+					System.out.println("Please input a valid option.");
+				}
+			} while (a==0);
+
 			switch (option) {
 				case 0:
 					System.out.println("Thank you for using our system");
@@ -292,7 +344,18 @@ public class Main {
 		do {
 			System.out.println("Choose an option[0-3]:");
 			System.out.println("\n1. Consult medical test \n2. Add treatment and diagnosis \n3. Edit treatment and diagnosis \\n 0. Exit");
-			option = sc.nextInt();
+
+			int a = 0;
+			do {
+				try {
+					option = sc.nextInt();
+					a = 1;
+				} catch (Exception e) {
+					trashcan = sc.next();
+					System.out.println("Please input a valid option.");
+				}
+			} while (a==0);
+
 			switch(option) {
 			case 0:
 				System.out.println("Thank you for using our system");
@@ -370,11 +433,25 @@ public class Main {
 			Treatment t = null;
 			Integer id = null;
 			sc = new Scanner (System.in);
-			while (t == null) {
-			System.out.println("Enter the id of the treatment that you want to edit:");
-			id = sc.nextInt();
-			t = new Treatment(jdbc.selectTreatment(id));//Connection c, Integer id
-			}
+
+			int a = 0;
+
+			do {
+				do {
+					try {
+						System.out.println("Enter the id of the treatment that you want to edit:");
+						id = sc.nextInt();
+						a = 1;
+					} catch (Exception e) {
+						a=0;
+						trashcan = sc.next();
+						System.out.println("Please input a valid option.");
+					}
+				} while (a==0);
+
+				t = new Treatment(jdbc.selectTreatment(id));//Connection c, Integer id
+			} while (t == null);
+			
 			System.out.println("This is the selected treatment:");
 			System.out.println(t.toString());
 			System.out.println("Enter the new diagnosis, if you don't want to edit it enter a 0:");
@@ -426,15 +503,42 @@ public class Main {
 		System.out.println("These are the shifts associated to worker "+worker.getWorkerName()+ " " +worker.getWorkerSurname()+ " ordered by date: ");
 		consultShifts(worker);
 		Shift shift = new Shift();
-		while (shift == null) {
-			System.out.println("Enter the ID of the shift that you want to edit:");
-			Integer id = sc.nextInt();
+		Integer id = null;
+
+		int a = 0;
+
+		do {
+			do {
+				try {
+					System.out.println("Enter the ID of the shift that you want to edit:");
+					option = sc.nextInt();
+					a = 1;
+				} catch (Exception e) {
+					a = 0;
+					trashcan = sc.next();
+					System.out.println("Please input a valid option.");
+				}
+			} while (a==0);
+
 			shift = jdbc.selectShift (id);
-			}
+		} while (shift == null);
+
 		System.out.println("This is the selected shift:");
 		System.out.println(shift.toString());
-		System.out.println("Enter the new shift[1-3], if you don't want to edit it enter a 0: \n1.Morning \n2.Afternoon \n3.Night");
-		Integer s = sc.nextInt();
+
+		Integer s = null; 
+		do {
+			try {
+				System.out.println("Enter the new shift[1-3], if you don't want to edit it enter a 0: \n1.Morning \n2.Afternoon \n3.Night");
+				s = sc.nextInt();
+				a = 1;
+			} catch (Exception e) {
+				a = 0;
+				trashcan = sc.next();
+				System.out.println("Please input a valid option.");
+			}
+		} while (a==0);
+
 		String time =null;
 		switch(s) {
 		case 0:
@@ -450,33 +554,64 @@ public class Main {
 			time = "Night";
 			break;
 		}
-		System.out.println("Enter the new room, if you don't want to edit it enter a 0:");
-		Integer room = sc.nextInt();
+
+		Integer room = null; 
+		do {
+			try {
+				System.out.println("Enter the new room, if you don't want to edit it enter a 0:");
+				room = sc.nextInt();
+				a = 1;
+			} catch (Exception e) {
+				a = 0;
+				trashcan = sc.next();
+				System.out.println("Please input a valid option.");
+			}
+		} while (a==0);
+
+
 		if(room == 0) {
 			room=null;
 		}
 		System.out.println("Enter the new date, if you don't want to edit it enter a 0:"); 
 		String date = sc.next();
-		Date fecha;
-		if(date.equals("0")) {
-			fecha=null;
-		}else {
-			fecha = Date.valueOf(date);
+		Date fecha = null;
+		if(!date.equals("0")) {
+			a=0;
+			do {
+				try {
+					fecha = Date.valueOf(date);
+					a = 1;
+				} catch (Exception e) {
+					System.out.println("Please input a valid date format.");    //TODO - not sure about this one
+					System.out.println("Insert date: [dd-mm-yyyy]: ");
+					date = sc.next();
+				}
+			} while (a==0);
 		}
 		Shift newShift = new Shift(jdbc.editShift(shift.getShiftId(),worker.getWorkerId(), time,room, fecha));//Connection c, int workerId, String shift, int room, Date date
 		System.out.println("This is the edited shift:");
 		System.out.println(newShift.toString());
 	}
 	
-	private static void consultShifts(Worker w) throws Exception {
+	private static void consultShifts(Worker w) throws Exception { 
 		System.out.println("Do you want to see your shifts for an specific date? [YES/NO]");
 		sc = new Scanner (System.in);
 		String answer = sc.next();
 		//para que busque el turno del trabajador para x dia
 		if(answer.equalsIgnoreCase("YES")) {
-			System.out.println("Insert date: [dd/mm/yyyy]");
-			String date = sc.next();
-			Date shiftDate = Date.valueOf(date);
+			String date = null;
+			Date shiftDate = null;
+			int a=0;
+			do {
+				try {
+					System.out.println("Insert date: [dd-mm-yyyy]: ");
+					date = sc.next();
+					shiftDate = Date.valueOf(date);
+					a = 1;
+				} catch (Exception e) {
+					System.out.println("Please input a valid date format.");
+				}
+			} while (a==0);
 			List<Shift> s = new ArrayList<>();
 			s.addAll( jdbc.searchShiftByDate (w.getWorkerId(), shiftDate)); //Connection c, Integer workerId
 			if (s.isEmpty()) {
@@ -506,7 +641,7 @@ public class Main {
 		
 	
 	public static void createPatient () throws NotBoundException, Exception {
-		//System.out.flush();
+
 		sc = new Scanner (System.in);
 		Patient p = new Patient();
 
@@ -528,6 +663,12 @@ public class Main {
 		System.out.print("Gender: ");
 		String gender = sc.next();   
 		try {
+			if (gender.equalsIgnoreCase("male")) {
+				gender = "Male";
+			} else {
+				gender = "Female";
+			}
+
 			p.setGender(gender);		
 		} catch (Exception e) {
 			do{
@@ -910,42 +1051,46 @@ public class Main {
 	
 	private static void adAccessToPatientsProfile() throws Exception { 
 		sc = new Scanner (System.in);
-		System.out.println("Access to patient profile.");
-		System.out.println("Please, select one of the following option[0-2]");
-		System.out.println("1. Change patient data.");
-		System.out.println("2. Add a doctor to the patient.");
-		System.out.println("0. Back.");
 		int key;
 		int key2;
 		int ctrl1 = 0; //Control para el primer menu.
 		int ctrl2 = 0; //Control para segundo menu.
 		Patient patient; 
 		do {
+
+			System.out.println("Access to patient profile.");
+			System.out.println("Please, select one of the following option[0-2]");
+			System.out.println("1. Change patient data.");
+			System.out.println("2. Add a doctor to the patient.");
+			System.out.println("0. Back.");
+	
 			key = sc.nextInt();
 
 			switch (key) {
 				case 1: //Cambiar cosas del patient
 
-					sc = new Scanner (System.in);
-					System.out.println("Change Patient data.");
-					patient = selectPatient();
-					System.out.println("The selected patient is:");
-					System.out.println(patient.toString());
-					System.out.println("What would you like to change?");
-					System.out.println("1. Name.\n" +
-									   "2. Surname.\n" +
-									   "3. Gender.\n" +
-									   "4. Blood type.\n" +
-									   "5. Allergies.\n" +
-									   "6. Birth date.\n" +
-									   "7. Check-in date.\n" +
-									   "8. Address.\n" +
-									   "9. Hospitalization.\n" + 
-									   "0. Exit."
-									);
-					System.out.print("Select one option: ");
 
 					do {
+
+						sc = new Scanner (System.in);
+						System.out.println("Change Patient data.");
+						patient = selectPatient();
+						System.out.println("The selected patient is:");
+						System.out.println(patient.toString());
+						System.out.println("What would you like to change?");
+						System.out.println("1. Name.\n" +
+										"2. Surname.\n" +
+										"3. Gender.\n" +
+										"4. Blood type.\n" +
+										"5. Allergies.\n" +
+										"6. Birth date.\n" +
+										"7. Check-in date.\n" +
+										"8. Address.\n" +
+										"9. Hospitalization.\n" + 
+										"0. Exit."
+										);
+						System.out.print("Select one option: ");
+
 						key2 = sc.nextInt();
 
 						switch (key2) { 
@@ -953,13 +1098,13 @@ public class Main {
 								System.out.print("Introduce the new name: ");
 								String newName = sc.next();
 								jdbc.updatePatientName( patient.getMedicalCardId(), newName);
-								// ctrl2 = 1; 
+								ctrl2 = 1; 
 								break;			
 							case 2: //apellidos
 								System.out.print("Introduce the new surname: ");
 								String newSurname = sc.next();
 								jdbc.updatePatientSurname( patient.getMedicalCardId(), newSurname);
-								// ctrl2 = 1; 
+								ctrl2 = 1; 
 								break;
 							case 3: //genero
 								System.out.print("Introduce the new gender: ");
@@ -972,16 +1117,16 @@ public class Main {
 										newGender = sc.next();
 									} while (!(newGender.equalsIgnoreCase("male") || newGender.equalsIgnoreCase("female")));
 						
-									if (newGender.equalsIgnoreCase("male")) {
-										newGender = "Male";
-									} else {
-										newGender = "Female";
-									}						
 								}
+								if (newGender.equalsIgnoreCase("male")) {
+									newGender = "Male";
+								} else {
+									newGender = "Female";
+								}						
 
 								jdbc.updatePatientGender( patient.getMedicalCardId(), newGender);
 								
-								// ctrl2 = 1; 
+								ctrl2 = 1; 
 								break;
 							case 4: //sangre
 								System.out.print("Introduce the new blood type (A+, A-, B+, B-, AB+, AB-, O+, O-): ");
@@ -1039,7 +1184,7 @@ public class Main {
 										case "0-":
 											bloodtypecontrol = 1;
 											break;
-															default:
+										default:
 										bloodtypefailcount++;
 										bloodtypecontrol = 0;
 
@@ -1056,13 +1201,13 @@ public class Main {
 					
 
 								jdbc.updatePatientBloodType( patient.getMedicalCardId(), newBloodType);
-								// ctrl2 = 1; 
+								ctrl2 = 1; 
 								break;
 							case 5: //alergias
 								System.out.print("Introduce the new allergies (none - if patient doesnt have): ");
 								String newAllergies = sc.next();
 								jdbc.updatePatientAllergies( patient.getMedicalCardId(), newAllergies);
-								// ctrl2 = 1; 
+								ctrl2 = 1; 
 								break;
 							case 6: // bdate
 								System.out.print("Introduce the new birthdate [yyyy-mm-dd]: "); 
@@ -1103,7 +1248,7 @@ public class Main {
 										}
 									} while (b==0);
 								}
-								// ctrl2 = 1; 
+								ctrl2 = 1; 
 								break;
 							case 7: //check in
 								System.out.print("Introduce the new check-in date [yyyy-mm-dd]: ");
@@ -1145,19 +1290,19 @@ public class Main {
 									} while (b==0);
 								}
 
-								// ctrl2 = 1; 
+								ctrl2 = 1; 
 								break;
 							case 8: //direccion
 								System.out.print("Introduce the new address: ");
 								String newAddress = sc.next();
 								jdbc.updatePatientAddress( patient.getMedicalCardId(), newAddress);
-								// ctrl2 = 1; 
+								ctrl2 = 1; 
 								break;
 							case 9: //hospitalizado
 								System.out.print("Does the patient need to be hospitalized?: ");
 								boolean hosp = sc.nextBoolean();
 								jdbc.updatePatientHospitalization( patient.getMedicalCardId(), hosp);
-								// ctrl2 = 1; 
+								ctrl2 = 1; 
 								break;
 							case 0:  //Exit
 								ctrl2 = 1;
