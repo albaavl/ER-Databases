@@ -2,11 +2,6 @@ package db.pojos;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.Month;
-import java.util.*;
-import javax.persistence.*;
-
-import org.eclipse.persistence.jaxb.xmlmodel.XmlAccessType;
 
 import java.io.*;
 
@@ -29,7 +24,7 @@ public class MedicalTest implements Serializable{
 
 	public MedicalTest(Date date, String tType, String tResult, int patientId) {
 		super();
-
+		this.dateMedTest = date;
 		this.type = tType;
 		this.result = tResult;
 		this.patient_id = patientId;
@@ -120,28 +115,28 @@ public class MedicalTest implements Serializable{
 	 * Used to get the type of the medical test.
 	 * @return [String] The medical test's type.
 	 */
-	public String getTestType() {
+	public String getType() {
 		return type;
 	}
 	/**
 	 * Used to set the type of medical test.
 	 * @param testType - The name of the medical test requested.
 	 */
-	public void setTestType(String testType) {
+	public void setType(String testType) {
 		this.type = testType;
 	}
 	/**
 	 * Used to get the result of the medical test
 	 * @return [Blob] The result obtained from the medical test
 	 */
-	public String getTestResult() {
+	public String getResult() {
 		return result;
 	}
 	/**
 	 * Used to set the result of the medical test
 	 * @param testResult - The result from the medical test
 	 */
-	public void setTestResult(String testResult) {
+	public void setResult(String testResult) {
 		this.result = testResult;
 	}
 

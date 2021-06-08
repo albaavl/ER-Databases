@@ -92,14 +92,14 @@
                         <Button fx:id="selectPatient3" layoutX="491.0" layoutY="552.0" mnemonicParsing="false" onAction="#displaySelectTreatmentView" prefHeight="32.0" prefWidth="67.0" style="-fx-background-color: darkred;" text="Select" textFill="WHITE" visible="false" />
                      </children>
                   </Pane>
-                  <Pane fx:id="consultMedicalTestsView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;" visible="false">
+                  <Pane fx:id="consultMedicalTestsView" prefHeight="647.3333333333334" prefWidth="744.0" style="-fx-background-color: white;">
                      <children>
-                        <Label fx:id="titleMedicalTest" layoutX="109.0" layoutY="26.0" prefHeight="67.0" prefWidth="545.0" text="Medical tests of Mr/Ms Surname">
+                        <Label fx:id="titleMedicalTest" layoutX="109.0" layoutY="26.0" prefHeight="118.0" prefWidth="545.0" text="Medical tests of Mr/Ms Surname">
                            <font>
                               <Font name="Arial Bold" size="35.0" />
                            </font>
                         </Label>
-                        <ScrollPane layoutX="96.0" layoutY="135.0" prefHeight="399.0" prefWidth="563.0">
+                        <ScrollPane layoutX="100.0" layoutY="150.0" prefHeight="399.0" prefWidth="563.0">
                            <content>
                               <AnchorPane>
                                  <children>

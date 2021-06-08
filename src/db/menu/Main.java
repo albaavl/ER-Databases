@@ -914,10 +914,10 @@ public class Main {
 		}
 		System.out.print("Type of medical test: ");
 		String type = sc.next();
-		medTest.setTestType(type);
+		medTest.setType(type);
 		System.out.print("Result of the medical test: ");
 		String result = sc.next();
-		medTest.setTestResult(result);
+		medTest.setResult(result);
 		jdbc.addMedicalTest(medTest);
 		System.out.println("Medical test added");
 	}

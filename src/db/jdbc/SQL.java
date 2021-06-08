@@ -159,9 +159,9 @@ public class SQL implements SQLInterface{
 		String sq1 = "INSERT INTO medical_tests (patient_id, type, date, result) VALUES (?, ?, ?, ?)";
 		PreparedStatement preparedStatement = c.prepareStatement(sq1);
 		preparedStatement.setInt(1, medtest.getPatientId());
-		preparedStatement.setString(2, medtest.getTestType());
-		preparedStatement.setString(3, medtest.getTestResult());
-		preparedStatement.setDate(4, medtest.getDateMedTest());
+		preparedStatement.setString(2, medtest.getType());
+		preparedStatement.setDate(3, medtest.getDateMedTest());
+		preparedStatement.setString(4, medtest.getResult());
 		preparedStatement.executeUpdate();
 		preparedStatement.close();
     }

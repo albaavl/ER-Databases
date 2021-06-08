@@ -707,21 +707,17 @@ try {
 		}
 	}
 	private void consultMedicalTests() throws IOException {
+		medicalTestsTable.getItems().clear();
+		medicalTestsTable.getColumns().clear();
 		List<MedicalTest> medTests = new ArrayList<>();
 		try {
 		medTests.addAll(jdbc.searchMedicalTestByMedCardNumber(currentPatient.getMedicalCardId()));
 		titleMedicalTest.setText("These are the medical tests of \nMr/Ms"+currentPatient.getPatientSurname());
-		}catch(Exception e) {
-			ErrorPopup.errorPopup(0);
-			e.printStackTrace();
-			return;
-		}
+		
 		if(medTests.isEmpty()) {
 			ErrorPopup.errorPopup(13);
 			return;
 		}
-		medicalTestsTable.getItems().clear();
-		medicalTestsTable.getColumns().clear();
 		medicalTestId.setCellValueFactory(
 				data -> new SimpleStringProperty(Integer.toString(data.getValue().getMedicalTestId())));
 		medicalTestDate
@@ -730,6 +726,11 @@ medicalTestType.setCellValueFactory(new PropertyValueFactory<>("type"));
 medicalTestResult.setCellValueFactory(new PropertyValueFactory<>("result"));
 medicalTestsTable.getColumns().addAll(medicalTestId,medicalTestDate,medicalTestType,medicalTestResult);
 medicalTestsTable.getItems().addAll(medTests);
+		}catch(Exception e) {
+			ErrorPopup.errorPopup(0);
+			e.printStackTrace();
+			return;
+		}
 		
 	}
 
