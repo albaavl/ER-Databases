@@ -16,7 +16,7 @@ public class Patient implements Serializable{
 	private String gender;
 		//Can be either Male or female, nothing else.
 	private String bloodType;
-		//Can be A+,A-,B+,B-,AB+,AB-,O+,O-
+		//Can be  "A+", "A-", "B+", "B-", "AB+", "AB-", "0+", "0-"
 	private String allergieType;
 	private Date bDate; 
 		//Birthday of the patient.
@@ -39,7 +39,7 @@ public class Patient implements Serializable{
 	 * @param pnam - Name of the patient (String)
 	 * @param psnam - Surname of the patient (String)
 	 * @param pgen - Gender of the patient [Must be Male or Female] (String)
-	 * @param btype - Blood type of the patient [Must be: A+,A-,B+,B-,AB+,AB-,O+,O-] (String)
+	 * @param btype - Blood type of the patient [Must be:  "A+", "A-", "B+", "B-", "AB+", "AB-", "0+", "0-"] (String)
 	 * @param allerg - String with the allergies of the patient. 
 	 * @param paddress - String with the home address of the patient.
 	 * @param bdat - Birthday of the patient (SQL Date)
@@ -168,29 +168,29 @@ public class Patient implements Serializable{
 		return bloodType;
 	}
 	/**
-	 * Sets the blood type of the patient.
+	 * Sets the blood type of the patient. 
 	 * 
-	 * @param bloodType Must be one of the following: A+,A-,B+,B-,AB+,AB-,O+,O-
+	 * @param bloodType Must be one of the following: "A+", "A-", "B+", "B-", "AB+", "AB-", "0+", "0-"
 	 * @throws NotBoundException if blood type doesnt exist
 	 */
 	public void setBloodType(String bloodType) throws NotBoundException {
 
 		if(bloodType.equalsIgnoreCase("A+")){
-			this.bloodType = bloodType;
+			this.bloodType = "A+";
 		} else if (bloodType.equalsIgnoreCase("A-")){
-			this.bloodType = bloodType;
+			this.bloodType = "A-";
 		} else if (bloodType.equalsIgnoreCase("B+")) {
-			this.bloodType = bloodType;
+			this.bloodType = "B+";
 		} else if (bloodType.equalsIgnoreCase("B-")) {
-			this.bloodType = bloodType;
+			this.bloodType = "B-";
 		} else if (bloodType.equalsIgnoreCase("AB+")) {
-			this.bloodType = bloodType;
+			this.bloodType = "AB+";
 		} else if (bloodType.equalsIgnoreCase("AB-")) {
-			this.bloodType = bloodType;
+			this.bloodType = "AB-";
 		} else if (bloodType.equalsIgnoreCase("O+") || bloodType.equalsIgnoreCase("0+")) {
-			this.bloodType = bloodType;
+			this.bloodType = "0+";
 		} else if (bloodType.equalsIgnoreCase("O-") || bloodType.equalsIgnoreCase("0-")) {
-			this.bloodType = bloodType;
+			this.bloodType = "0-";
 		} else {
 			throw new NotBoundException("Incorrect blood type");
 		}

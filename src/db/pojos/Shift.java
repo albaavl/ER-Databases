@@ -106,20 +106,24 @@ public class Shift implements Serializable {
 	public String getTurn() {
 		return turn;
 	}
+
 	/**
-	 * @param shift the shift to set
+	 * @param shift the shift to set ["Morning", "Afternoon", "Night"]
 	 * @throws Exception 
 	 */
-	
-	
 	public void setTurn(String t) throws Exception {
-		if(t.equalsIgnoreCase("morning")||t.equalsIgnoreCase("afternoon")||t.equalsIgnoreCase("night")){
-			this.turn = t;
-		}
-		else {
-			throw new Exception("Shift not valid, choose between 'morning','afternoon or 'night'");
+
+		if(t.equalsIgnoreCase("Morning")){
+			turn = "Morning";
+		} else if (t.equalsIgnoreCase("Afternoon")) {
+			turn = "Afternoon";
+		} else if (t.equalsIgnoreCase("Night")) {
+			turn = "Night";
+		} else {
+			throw new Exception("Not a valid Shift");
 		}
 	}
+	
 	/**
 	 * @return the room
 	 */

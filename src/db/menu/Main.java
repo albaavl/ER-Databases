@@ -534,6 +534,13 @@ public class Main {
 				System.out.print("Not a valid gender. Please introduce a gender (Male or Female): ");
 				gender = sc.next();
 			} while (!(gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female")));
+
+			if (gender.equalsIgnoreCase("male")) {
+				gender = "Male";
+			} else {
+				gender = "Female";
+			}
+
 			p.setGender(gender);
 		}
 
@@ -568,19 +575,37 @@ public class Main {
 					bloodtypecontrol = 1;
 					break;
 				case "A+":
+				case "a+":
+					bloodType = "A+";
+					bloodtypecontrol = 1;
+					break;
 				case "A-":
+				case "a-":
+					bloodType = "A-";
+					bloodtypecontrol = 1;
+					break;
 				case "B+":
+				case "b+":
+					bloodType = "B+";
+					bloodtypecontrol = 1;
+					break;
 				case "B-":
+				case "b-":
+					bloodType = "B-";
+					bloodtypecontrol = 1;
+					break;
 				case "AB+":
+				case "ab+":
+					bloodType = "AB+";
+					bloodtypecontrol = 1;
+					break;
 				case "AB-":
+				case "ab-":
+					bloodType = "AB-";
+					bloodtypecontrol = 1;
+					break;
 				case "0+":
 				case "0-":
-				case "a+":
-				case "a-":
-				case "b+":
-				case "b-":
-				case "ab+":
-				case "ab-":
 					bloodtypecontrol = 1;
 					break;
 				default:
@@ -717,16 +742,16 @@ public class Main {
 		String surname = sc.next();
 		w.setWorkerSurname(surname);
 
-		System.out.print("Type of worker (doctor, nurse, adstaff, technician): ");
+		System.out.print("Type of worker (doctor, nurse, Administration Staff, technician): ");
 		int ctrltypeworker = 0;
 		do {
 			String type = sc.next();
 
-			if (type.equalsIgnoreCase("doctor") || type.equalsIgnoreCase("nurse") || type.equalsIgnoreCase("adstaff") || type.equalsIgnoreCase("technician")) {
+			if (type.equalsIgnoreCase("doctor") || type.equalsIgnoreCase("nurse") || type.equalsIgnoreCase("Administration Staff") || type.equalsIgnoreCase("technician")) {
 				w.setTypeWorker(type);
 				ctrltypeworker = 1;
 			} else {
-				System.out.print("Please introduce a valid type of worker (doctor, nurse, adstaff, technician): ");
+				System.out.print("Please introduce a valid type of worker (doctor, nurse, Administration Staff, technician): ");
 			}
 		} while (ctrltypeworker == 0);
 
@@ -947,6 +972,11 @@ public class Main {
 										newGender = sc.next();
 									} while (!(newGender.equalsIgnoreCase("male") || newGender.equalsIgnoreCase("female")));
 						
+									if (newGender.equalsIgnoreCase("male")) {
+										newGender = "Male";
+									} else {
+										newGender = "Female";
+									}						
 								}
 
 								jdbc.updatePatientGender( patient.getMedicalCardId(), newGender);
@@ -965,33 +995,51 @@ public class Main {
 									newBloodType = sc.next();
 					
 									switch (newBloodType) {
-									case "o+":
-									case "O+":
-										newBloodType = "0+";
-										bloodtypecontrol = 1;
-										break;
-									case "O-":
-									case "o-":
-										newBloodType = "0-";
-										bloodtypecontrol = 1;
-										break;
-									case "A+":
-									case "A-":
-									case "B+":
-									case "B-":
-									case "AB+":
-									case "AB-":
-									case "0+":
-									case "0-":
-									case "a+":
-									case "a-":
-									case "b+":
-									case "b-":
-									case "ab+":
-									case "ab-":
-										bloodtypecontrol = 1;
-										break;
-									default:
+										case "o+":
+										case "O+":
+											newBloodType = "0+";
+											bloodtypecontrol = 1;
+											break;
+										case "O-":
+										case "o-":
+											newBloodType = "0-";
+											bloodtypecontrol = 1;
+											break;
+										case "A+":
+										case "a+":
+											newBloodType = "A+";
+											bloodtypecontrol = 1;
+											break;
+										case "A-":
+										case "a-":
+											newBloodType = "A-";
+											bloodtypecontrol = 1;
+											break;
+										case "B+":
+										case "b+":
+											newBloodType = "B+";
+											bloodtypecontrol = 1;
+											break;
+										case "B-":
+										case "b-":
+											newBloodType = "B-";
+											bloodtypecontrol = 1;
+											break;
+										case "AB+":
+										case "ab+":
+											newBloodType = "AB+";
+											bloodtypecontrol = 1;
+											break;
+										case "AB-":
+										case "ab-":
+											newBloodType = "AB-";
+											bloodtypecontrol = 1;
+											break;
+										case "0+":
+										case "0-":
+											bloodtypecontrol = 1;
+											break;
+															default:
 										bloodtypefailcount++;
 										bloodtypecontrol = 0;
 

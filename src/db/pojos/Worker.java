@@ -229,17 +229,17 @@ public class Worker implements Serializable{
 	
 	/**
 	 * Used to set the type of worker
-	 * @param typeWorker - Must be doctor, nurse, adStaff or technician.
+	 * @param typeWorker - Must be Doctor, Nurse, Administration Staff, Technician
 	 */
 	public void setTypeWorker(String typeWorker) throws NotBoundException {
 		if(typeWorker.equalsIgnoreCase("DOCTOR")){
-			this.typeWorker = typeWorker;
+			this.typeWorker = "Doctor";
 		} else if (typeWorker.equalsIgnoreCase("NURSE")){
-			this.typeWorker = typeWorker;
-		} else if (typeWorker.equalsIgnoreCase("ADMINISTRATION STAFF")|| typeWorker.equalsIgnoreCase("ADSTAFF")|| typeWorker.equalsIgnoreCase("AD STAFF")){
-			this.typeWorker = typeWorker;
+			this.typeWorker = "Nurse";
+		} else if (typeWorker.equalsIgnoreCase("ADMINISTRATION STAFF")){
+			this.typeWorker = "Administration Staff";
 		} else if (typeWorker.equalsIgnoreCase("TECHNICIAN")){
-			this.typeWorker = typeWorker;
+			this.typeWorker = "Technician";
 		} else {
 			throw new NotBoundException("Incorrect type of worker");
 		}

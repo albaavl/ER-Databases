@@ -38,6 +38,7 @@ public interface SQLInterface {
 	public List<Patient> selectAllPatients() throws SQLException, NotBoundException;
 	public Patient selectPatient( Integer medCard) throws SQLException, NotBoundException;
 	public Worker selectWorker( Integer workerId) throws SQLException, NotBoundException;
+	public Worker selectDoctor( Integer workerId) throws SQLException, NotBoundException;
 	public Shift selectShift( Integer shiftId) throws SQLException, Exception;
 	public Treatment selectTreatment( Integer id) throws Exception;
 	

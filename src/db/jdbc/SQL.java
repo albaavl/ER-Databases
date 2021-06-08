@@ -397,6 +397,22 @@ public class SQL implements SQLInterface{
 		rs.close();
 		return worker;	
 	}
+
+	@Override
+	public Worker selectDoctor(Integer workerId) throws SQLException, NotBoundException {
+		String sql = "SELECT * FROM workers WHERE workerId = ? AND typeWorker = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1,workerId);
+		p.setString(2, "Doctor");
+		ResultSet rs = p.executeQuery();
+		Worker worker = null;
+		if(rs.next()){
+			worker = new Worker(rs.getInt("workerId"), rs.getString("workerName"), rs.getString("workerSurname"), rs.getString("specialtyId"), rs.getString("typeWorker"));
+		}
+		p.close();
+		rs.close();
+		return worker;	
+	}
 	
 	@Override
 	public Shift selectShift(Integer shiftId) throws SQLException, Exception {

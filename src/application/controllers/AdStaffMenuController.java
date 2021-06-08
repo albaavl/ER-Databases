@@ -1434,7 +1434,7 @@ public class AdStaffMenuController implements Initializable {
 
         try {
             workerId = Integer.parseInt(selectWorkerTextField.getText()); 
-            currentSelectedWorker = jdbc.selectWorker(workerId);        
+            currentSelectedWorker = jdbc.selectDoctor(workerId);        
         } catch (Exception e) {
             ErrorPopup.errorPopup(4);
             return;
