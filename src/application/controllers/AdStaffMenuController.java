@@ -1486,41 +1486,6 @@ public class AdStaffMenuController implements Initializable {
         paneEditWorkerDataView.setDisable(false);
     }
 
-    // @FXML
-    // public void editWorker() throws IOException {
-    //     String name = workerEditNameTextField.getText();
-    //     if(name == ""){
-    //         name = null;
-    //     }
-        
-    //     String surName = workerEditSurnameTextField.getText();
-    //     if(surName == ""){
-    //         surName = null;
-    //     }
-
-    //     String specialty = workerEditSpecialtyTextField.getText();
-    //     if(specialty == ""){
-    //         specialty = null;
-    //     }
-
-    //     String workerType;
-    //     if(!workerEditRoleComboBox.getSelectionModel().isEmpty()){
-    //         workerType = workerTypeComboBox.getSelectionModel().getSelectedItem();
-    //     } else {
-    //         workerType = null;
-    //     }
-
-    //     //todo - edit worker on db here.
-        
-    //     SuccessPopup.successPopup(2);
-
-    //     resetEditWorkerScene();
-    //     hideAll();
-    //     currentSelectedWorker = null;
-    //     displayChangeWorkerDataView();
-
-    // }
-
     @FXML
     public void cancelEditWorker(){
         currentEditWorkerTableView.getItems().clear();
@@ -1564,7 +1529,7 @@ public class AdStaffMenuController implements Initializable {
         displayDeleteWorker();
     }
 
-    //SHIFT BS Edit 
+    //SHIFT Edit 
 
     private static Shift currentSelectedShift = null;
 
@@ -1910,6 +1875,9 @@ public class AdStaffMenuController implements Initializable {
         hideAll();
         resetAll();
 
+        currentCreateMTPatientTableView.getItems().clear();
+        currentCreateMTPatientTableView.getColumns().clear();
+
         if(currentSelectedPatient != null){
             setCurrentCreateMTPatientTable();
         }
@@ -1947,7 +1915,7 @@ public class AdStaffMenuController implements Initializable {
         }
 
         Date date = Date.valueOf(medicaltestDatePicker.getValue());
-        if (!((date.before(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now())))) { //TODO - not sure bout this (atm esta igual q en el main)
+        if (!((date.before(Date.valueOf(LocalDate.now()))) || date.equals(Date.valueOf(LocalDate.now())))) { 
             ErrorPopup.errorPopup(21);
             return;
         } 

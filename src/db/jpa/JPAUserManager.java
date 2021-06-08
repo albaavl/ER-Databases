@@ -5,8 +5,6 @@ import java.security.*;
 import java.util.List;
 import javax.persistence.*;
 
-import db.pojos.Patient;
-import db.pojos.Worker;
 import pojos.users.*;
 
 public class JPAUserManager implements UMInterface {
@@ -88,6 +86,7 @@ public class JPAUserManager implements UMInterface {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<Role> getRoles() {
 		Query q = em.createNativeQuery("SELECT * FROM roles", Role.class);
 		return (List<Role>) q.getResultList();

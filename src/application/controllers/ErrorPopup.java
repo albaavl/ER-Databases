@@ -1,6 +1,5 @@
 package application.controllers;
 
-//.
 import java.io.IOException;
 
 import javafx.fxml.FXMLLoader;
@@ -14,31 +13,31 @@ public class ErrorPopup {
 	/**
 	 * When called it displays a new window with an error msg in function of the int
 	 * passed to the function
-	 * <p>
-	 * {@code 0} General error (unspecified)
-	 * <p>
-	 * {@code 1} ur birthdate cant be tomorrow nor on any future date bruh
-	 * <p>
-	 * {@code 2} Please fill all the values lmao.
-	 * <p>
-	 * {@code 3} Bruh u cant check in on the future.
-	 * <p>
-	 * {@code 4} Numeros, no letras ffs aint that hard + #noteinventescosasbro(El id
-	 * no existe).
-	 * <p>
-	 * {@code 5} Wrong Username or password.
-	 * <p>
-	 * {@code 6} No shift to display bruh.
-	 * <p>
-	 * {@code 7} No treatment to display.
-	 * <p>
-	 * {@code 11} No patient selected
-	 * <p>
-	 * {@code 12} No worker selected
-	 * <p>
-	 * {@code 14} Date needs to be on future/today
-	 * <p>
-	 * {@code X} idk keep adding stuff here...
+	 * <p> {@code 0} General error (unspecified)
+	 * <p> {@code 1} Not a valid birhtdate (future birthdate)
+	 * <p> {@code 2} Please fill all the options
+	 * <p> {@code 3} Not a valid check-in date (future date)
+	 * <p> {@code 4} Id doesnt exist (no match found/not valid format)
+	 * <p> {@code 5} Wrong username or password.
+	 * <p> {@code 6} No shifts to display
+	 * <p> {@code 7} No treatment to display
+	 * <p> {@code 8} Shift date cannot be on the past
+	 * <p> {@code 9} No patients to display
+	 * <p> {@code 10} No shifts for the selected date
+	 * <p> {@code 11} No patient selected
+	 * <p> {@code 12} No worker selected
+	 * <p> {@code 13} No medical tests for the selected patient
+	 * <p> {@code 14} Date cannot be on the past
+	 * <p> {@code 15} XML - Shifts - cannot export to file
+	 * <p> {@code 16} XML - Shifts - cannot import from file
+	 * <p> {@code 17} New password == Old password
+	 * <p> {@code 18} XML - cannot convert xml to html
+	 * <p> {@code 19} XML - Worker - cannot import from file
+	 * <p> {@code 20} XML - Worker - cannot export to file
+	 * <p> {@code 21} Date must be today or in the past
+	 * <p> {@code 22} Patient and doctor already linked
+	 * <p> {@code 23} Conflict MedCardId
+	 * <p> {@code X} idk keep adding stuff here...
 	 * 
 	 * @param errorType - int
 	 * @throws IOException
@@ -343,7 +342,7 @@ public class ErrorPopup {
 			loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml"));
 			rootError = loaderError.load();
 			errorPopupController = loaderError.getController();
-			errorPopupController.displayErrorText("XML file cannot be converted into HTML");
+			errorPopupController.displayErrorText("XML file cannot be converted into HTML"); 
 			sceneError = new Scene(rootError);
 			stageError = new Stage();
 			stageError.setScene(sceneError);
@@ -403,7 +402,7 @@ public class ErrorPopup {
 			stageError.setResizable(false);
 			stageError.show();
 			break;
-			case 22:
+		case 22:
 			loaderError = new FXMLLoader(getClass().getResource("errorPopup.fxml"));
 			rootError = loaderError.load();
 			errorPopupController = loaderError.getController();

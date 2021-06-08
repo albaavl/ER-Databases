@@ -2,9 +2,6 @@ package db.xml;
 
 import java.io.*;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,10 +11,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.sqlite.JDBC;
-
 import db.pojos.*;
-import db.jdbc.*;
 
 public class XMLManager {
 	
@@ -65,6 +59,7 @@ public class XMLManager {
 							}	
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static void java2XmlShift(Worker medStaff) throws Exception {
 		
 		// Get the entity manager
@@ -139,7 +134,7 @@ public class XMLManager {
 					}	
 		}
 		
-	
+	@SuppressWarnings("unchecked")
 	public static void java2XmlWorker() throws Exception {
 		
 		// Get the entity manager
