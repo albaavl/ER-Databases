@@ -265,13 +265,19 @@ public class MedStaffMenuController {
 
 	public void displayAddTreatmentView(ActionEvent aEvent) throws IOException {
 		try {
-			currentPatient = new Patient(jdbc.selectPatient(Integer.parseInt(chosenPatientId.getText())));
+			if (jdbc.selectPatientWithDoctor(Integer.parseInt(chosenPatientId.getText()),
+					medStaff.getWorkerId()) == null) {
+				ErrorPopup.errorPopup(4);
+				return;
+			}
+			currentPatient = new Patient(
+					jdbc.selectPatientWithDoctor(Integer.parseInt(chosenPatientId.getText()), medStaff.getWorkerId()));
 		} catch (Exception e) {
 			ErrorPopup.errorPopup(0);
 			e.printStackTrace();
 			return;
 		}
-		titleAddTreatment.setText("Create treatment for patient(medCard ="+currentPatient.getMedicalCardId()+")");
+		titleAddTreatment.setText("Create treatment for patient(medCard =" + currentPatient.getMedicalCardId() + ")");
 		hideAll();
 		resetAll();
 		addTreatmentView.setDisable(false);
@@ -281,11 +287,12 @@ public class MedStaffMenuController {
 
 	public void displayConsultMedicalTestsView(ActionEvent aEvent)
 			throws NumberFormatException, NotBoundException, SQLException, IOException {
-		currentPatient = new Patient(jdbc.selectPatient(Integer.parseInt(chosenPatientId.getText())));
-		if (currentPatient == null) {
+		if (jdbc.selectPatientWithDoctor(Integer.parseInt(chosenPatientId.getText()), medStaff.getWorkerId()) == null) {
 			ErrorPopup.errorPopup(4);
 			return;
 		}
+		currentPatient = new Patient(
+				jdbc.selectPatientWithDoctor(Integer.parseInt(chosenPatientId.getText()), medStaff.getWorkerId()));
 		hideAll();
 		resetAll();
 		consultMedicalTestsView.setDisable(false);
@@ -294,20 +301,24 @@ public class MedStaffMenuController {
 
 	}
 
-	
-
 	public void displayEditTreatmentView(ActionEvent aEvent) throws IOException {
-		try{
-			currentTreatment = new Treatment(jdbc.selectTreatment(Integer.parseInt(chosenTreatmentId.getText())));
-		}catch(Exception e) {
+		try {
+			if (jdbc.selectTreatmentWithPatient(Integer.parseInt(chosenTreatmentId.getText()),
+					currentPatient.getMedicalCardId()) == null) {
+				ErrorPopup.errorPopup(4);
+				return;
+			} else {
+				currentTreatment = new Treatment(jdbc.selectTreatmentWithPatient(
+						Integer.parseInt(chosenTreatmentId.getText()), currentPatient.getMedicalCardId()));
+			}
+		} catch (Exception e) {
 			ErrorPopup.errorPopup(0);
 			e.printStackTrace();
 			return;
 		}
 		hideAll();
 		resetAll();
-		titleEditTreatment.setText("Edit treatment \n"
-				+ "(ID =" + currentTreatment.getTreatmentId() + ")");
+		titleEditTreatment.setText("Edit treatment \n" + "(ID =" + currentTreatment.getTreatmentId() + ")");
 		editTreatmentView.setDisable(false);
 		editTreatmentView.setVisible(true);
 
@@ -366,7 +377,13 @@ public class MedStaffMenuController {
 
 	public void displaySelectTreatmentView(ActionEvent aEvent) throws IOException {
 		try {
-			currentPatient = new Patient(jdbc.selectPatient(Integer.parseInt(chosenPatientId.getText())));
+			if (jdbc.selectPatientWithDoctor(Integer.parseInt(chosenPatientId.getText()),
+					medStaff.getWorkerId()) == null) {
+				ErrorPopup.errorPopup(4);
+				return;
+			}
+			currentPatient = new Patient(
+					jdbc.selectPatientWithDoctor(Integer.parseInt(chosenPatientId.getText()), medStaff.getWorkerId()));
 		} catch (Exception e) {
 			ErrorPopup.errorPopup(0);
 			e.printStackTrace();
@@ -376,13 +393,13 @@ public class MedStaffMenuController {
 		resetAll();
 		selectTreatmentView.setDisable(false);
 		selectTreatmentView.setVisible(true);
-try {
-	selectTreatment();
-} catch (Exception e) {
-	ErrorPopup.errorPopup(0);
-	e.printStackTrace();
-	return;
-}
+		try {
+			selectTreatment();
+		} catch (Exception e) {
+			ErrorPopup.errorPopup(0);
+			e.printStackTrace();
+			return;
+		}
 	}
 
 	public void displayAllShiftsView(ActionEvent aEvent) throws IOException {
@@ -407,36 +424,36 @@ try {
 		specificShiftView.setVisible(true);
 
 	}
-	
+
 	public void displayShiftsToXML(ActionEvent aEvent) throws IOException {
 		resetAll();
-		try{
+		try {
 			XMLManager.java2XmlShift(medStaff);
 			SuccessPopup.successPopup(10);
-		}catch(Exception ex) {
+		} catch (Exception ex) {
 			ErrorPopup.errorPopup(15);
 		}
 
 	}
-	
+
 	public void displayXMLToShifts(ActionEvent aEvent) throws IOException {
 		resetAll();
-		try{
+		try {
 			XMLManager.xml2JavaShift();
 			SuccessPopup.successPopup(11);
-		}catch(Exception ex) {
+		} catch (Exception ex) {
 			ErrorPopup.errorPopup(16);
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void displayXMLToHTML(ActionEvent aEvent) throws IOException {
 		resetAll();
-		try{
+		try {
 			XMLManager.simpleTransform("./xmls/External-Shift.xml", "./xmls/Shift-Style.xslt", "./xmls/Shift.html");
 
 			SuccessPopup.successPopup(13);
-		}catch(Exception ex) {
+		} catch (Exception ex) {
 			ErrorPopup.errorPopup(17);
 		}
 	}
@@ -480,8 +497,8 @@ try {
 			userName.setText(w.getWorkerSurname());
 		} catch (Exception e) {
 			ErrorPopup.errorPopup(0);
-		e.printStackTrace();
-		return;
+			e.printStackTrace();
+			return;
 		}
 	}
 
@@ -523,44 +540,44 @@ try {
 
 	public void editTreatment(ActionEvent aE) throws Exception {
 		try {
-		if(currentTreatment == null) {
-			ErrorPopup.errorPopup(4);
-			return;
-		}
-		Date startDate;
-		String diagnosis;
-		String medication;
-		Integer duration;
-		String advice;
-		if(startDateETreatment.getEditor().getText()=="") {
-		startDate = null;
-		}else {
-			startDate = Date.valueOf(startDateETreatment.getValue());
-		}
-		if(diagnosisETreatment.getText()=="") {
-			diagnosis = null;
-		}else {
-		diagnosis = diagnosisETreatment.getText();
-		}
-		if(medicationETreatment.getText()=="") {
-			medication = null;
-		}else {
-		medication = medicationETreatment.getText();
-		}
-		if(durationETreatment.getText()=="") {
-			duration = null;
-		}else {
-		duration = Integer.parseInt(durationETreatment.getText());
-		}
-		if(adviceETreatment.getText()=="") {
-			advice=null;
-		}else {
-		advice = adviceETreatment.getText();
-		}
-		jdbc.editTreatment(currentTreatment.getTreatmentId(), diagnosis, medication, startDate, duration, advice);
-		
-		SuccessPopup.successPopup(9);
-		} catch(Exception e) {
+			if (currentTreatment == null) {
+				ErrorPopup.errorPopup(4);
+				return;
+			}
+			Date startDate;
+			String diagnosis;
+			String medication;
+			Integer duration;
+			String advice;
+			if (startDateETreatment.getEditor().getText() == "") {
+				startDate = null;
+			} else {
+				startDate = Date.valueOf(startDateETreatment.getValue());
+			}
+			if (diagnosisETreatment.getText() == "") {
+				diagnosis = null;
+			} else {
+				diagnosis = diagnosisETreatment.getText();
+			}
+			if (medicationETreatment.getText() == "") {
+				medication = null;
+			} else {
+				medication = medicationETreatment.getText();
+			}
+			if (durationETreatment.getText() == "") {
+				duration = null;
+			} else {
+				duration = Integer.parseInt(durationETreatment.getText());
+			}
+			if (adviceETreatment.getText() == "") {
+				advice = null;
+			} else {
+				advice = adviceETreatment.getText();
+			}
+			jdbc.editTreatment(currentTreatment.getTreatmentId(), diagnosis, medication, startDate, duration, advice);
+
+			SuccessPopup.successPopup(9);
+		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorPopup.errorPopup(0);
 			return;
@@ -568,61 +585,65 @@ try {
 	}
 
 	private void allShifts() throws IOException {
-		try{
+		try {
 			List<Shift> shiftsList = new ArrayList<>();
-		shiftsList.addAll(jdbc.searchShiftByWorkerId(medStaff.getWorkerId()));
-		if (shiftsList.isEmpty()) {
-			ErrorPopup.errorPopup(6);// no shifts for this worker
-			displayWelcomeText(medStaff, jdbc, userman);
-		} else {
-			shiftsTable.getItems().clear();
-			shiftsTable.getColumns().clear();
-			shiftsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-			shiftId.setCellValueFactory(
-					data -> new SimpleStringProperty(Integer.toString(data.getValue().getShiftId())));
-			DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
-			shiftDate.setCellValueFactory(
-					data -> new SimpleStringProperty(dateformat.format(data.getValue().getDate())));
-			shiftTurn.setCellValueFactory(new PropertyValueFactory<>("turn"));
-			shiftRoom
-					.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getRoom())));
-			shiftsTable.getColumns().addAll(shiftId, shiftDate, shiftTurn, shiftRoom);
-			shiftsTable.getItems().addAll(jdbc.searchShiftByWorkerId(medStaff.getWorkerId()));
-		}
-		}catch(Exception e) {
+			shiftsList.addAll(jdbc.searchShiftByWorkerId(medStaff.getWorkerId()));
+			if (shiftsList.isEmpty()) {
+				ErrorPopup.errorPopup(6);// no shifts for this worker
+				displayWelcomeText(medStaff, jdbc, userman);
+			} else {
+				shiftsTable.getItems().clear();
+				shiftsTable.getColumns().clear();
+				shiftsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+				shiftId.setCellValueFactory(
+						data -> new SimpleStringProperty(Integer.toString(data.getValue().getShiftId())));
+				DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
+				shiftDate.setCellValueFactory(
+						data -> new SimpleStringProperty(dateformat.format(data.getValue().getDate())));
+				shiftTurn.setCellValueFactory(new PropertyValueFactory<>("turn"));
+				shiftRoom.setCellValueFactory(
+						data -> new SimpleStringProperty(Integer.toString(data.getValue().getRoom())));
+				shiftsTable.getColumns().addAll(shiftId, shiftDate, shiftTurn, shiftRoom);
+				shiftsTable.getItems().addAll(jdbc.searchShiftByWorkerId(medStaff.getWorkerId()));
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorPopup.errorPopup(0);
 			return;
 		}
 	}
 
-	public void selectedShift(ActionEvent aE) throws IOException{
-		try{
+	public void selectedShift(ActionEvent aE) throws IOException {
+		try {
 			ssShiftTable.getItems().clear();
-		ssShiftTable.getColumns().clear();
-		if(ssSelectedDate.getEditor().getText()=="") {
-			return;
-		}
-			Date shiftDate = Date.valueOf(ssSelectedDate.getValue());
-		if (!shiftDate.before(Date.valueOf(LocalDate.now()))) {
-			List<Shift> shiftsList = new ArrayList<>();
-			shiftsList.addAll(jdbc.searchShiftByDate(medStaff.getWorkerId(), shiftDate));
-			if (shiftsList.isEmpty()) {
-				ErrorPopup.errorPopup(10);
+			ssShiftTable.getColumns().clear();
+			if (ssSelectedDate.getEditor().getText() == "") {
 				return;
 			}
-			ssShiftTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-			ssId.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getShiftId())));
-			DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
-			ssDate.setCellValueFactory(data -> new SimpleStringProperty(dateformat.format(data.getValue().getDate())));
-			ssTurn.setCellValueFactory(new PropertyValueFactory<>("turn"));
-			ssRoom.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().getRoom())));
-			ssShiftTable.getColumns().addAll(ssId, ssDate, ssTurn, ssRoom);
-			ssShiftTable.getItems().addAll(shiftsList);
-		} else {
-			ErrorPopup.errorPopup(8);
-			//POPUP EXCEPTION se pueden seleccionar solo turnos futuros
-		}}catch(Exception e) {
+			Date shiftDate = Date.valueOf(ssSelectedDate.getValue());
+			if (!shiftDate.before(Date.valueOf(LocalDate.now()))) {
+				List<Shift> shiftsList = new ArrayList<>();
+				shiftsList.addAll(jdbc.searchShiftByDate(medStaff.getWorkerId(), shiftDate));
+				if (shiftsList.isEmpty()) {
+					ErrorPopup.errorPopup(10);
+					return;
+				}
+				ssShiftTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+				ssId.setCellValueFactory(
+						data -> new SimpleStringProperty(Integer.toString(data.getValue().getShiftId())));
+				DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
+				ssDate.setCellValueFactory(
+						data -> new SimpleStringProperty(dateformat.format(data.getValue().getDate())));
+				ssTurn.setCellValueFactory(new PropertyValueFactory<>("turn"));
+				ssRoom.setCellValueFactory(
+						data -> new SimpleStringProperty(Integer.toString(data.getValue().getRoom())));
+				ssShiftTable.getColumns().addAll(ssId, ssDate, ssTurn, ssRoom);
+				ssShiftTable.getItems().addAll(shiftsList);
+			} else {
+				ErrorPopup.errorPopup(8);
+				// POPUP EXCEPTION se pueden seleccionar solo turnos futuros
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorPopup.errorPopup(0);
 			return;
@@ -630,38 +651,40 @@ try {
 	}
 
 	private void selectPatient() throws IOException, SQLException, NotBoundException {
-		try{List<Patient> patients = new ArrayList<>();
-		patients.addAll(jdbc.searchPatientByDoctor(medStaff.getWorkerId()));
-		if (patients.isEmpty()) {
-			ErrorPopup.errorPopup(9);
-			displayWelcomeText(medStaff, jdbc, userman);
-		} else {
-			patientsTable.getItems().clear();
-			patientsTable.getColumns().clear();
-			patientName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
-			patientSurname.setCellValueFactory(new PropertyValueFactory<>("patientSurname"));
-			patientAllergies.setCellValueFactory(new PropertyValueFactory<>("allergieType"));
-			patientGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
-			patientBlood.setCellValueFactory(new PropertyValueFactory<>("bloodType"));
-			patientAddress.setCellValueFactory(new PropertyValueFactory<>("patientAddress"));
-			medicalCard.setCellValueFactory(
-					data -> new SimpleStringProperty(Integer.toString(data.getValue().getMedicalCardId())));
-			patientBirthdate
-					.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getbDate().toString()));
-			patientCheckIn
-					.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCheckInDate().toString()));
-			patientHospitalized.setCellValueFactory(
-					data -> new SimpleStringProperty(Boolean.toString(data.getValue().getHospitalized())));
-			patientsTable.getColumns().addAll(medicalCard, patientName, patientSurname, patientBirthdate, patientGender,
-					patientBlood, patientCheckIn, patientAddress, patientAllergies, patientHospitalized);
+		try {
+			List<Patient> patients = new ArrayList<>();
+			patients.addAll(jdbc.searchPatientByDoctor(medStaff.getWorkerId()));
+			if (patients.isEmpty()) {
+				ErrorPopup.errorPopup(9);
+				displayWelcomeText(medStaff, jdbc, userman);
+			} else {
+				patientsTable.getItems().clear();
+				patientsTable.getColumns().clear();
+				patientName.setCellValueFactory(new PropertyValueFactory<>("patientName"));
+				patientSurname.setCellValueFactory(new PropertyValueFactory<>("patientSurname"));
+				patientAllergies.setCellValueFactory(new PropertyValueFactory<>("allergieType"));
+				patientGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
+				patientBlood.setCellValueFactory(new PropertyValueFactory<>("bloodType"));
+				patientAddress.setCellValueFactory(new PropertyValueFactory<>("patientAddress"));
+				medicalCard.setCellValueFactory(
+						data -> new SimpleStringProperty(Integer.toString(data.getValue().getMedicalCardId())));
+				patientBirthdate
+						.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getbDate().toString()));
+				patientCheckIn.setCellValueFactory(
+						data -> new SimpleStringProperty(data.getValue().getCheckInDate().toString()));
+				patientHospitalized.setCellValueFactory(
+						data -> new SimpleStringProperty(Boolean.toString(data.getValue().getHospitalized())));
+				patientsTable.getColumns().addAll(medicalCard, patientName, patientSurname, patientBirthdate,
+						patientGender, patientBlood, patientCheckIn, patientAddress, patientAllergies,
+						patientHospitalized);
 
-			patientsTable.getItems().addAll(patients);
-		}}catch(Exception e) {
+				patientsTable.getItems().addAll(patients);
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorPopup.errorPopup(0);
 			return;
 		}
-		// TODO probarlo
 	}
 
 	private void selectTreatment() throws IOException, NumberFormatException, NotBoundException, SQLException {
@@ -706,32 +729,33 @@ try {
 			}
 		}
 	}
+
 	private void consultMedicalTests() throws IOException {
 		medicalTestsTable.getItems().clear();
 		medicalTestsTable.getColumns().clear();
 		List<MedicalTest> medTests = new ArrayList<>();
 		try {
-		medTests.addAll(jdbc.searchMedicalTestByMedCardNumber(currentPatient.getMedicalCardId()));
-		titleMedicalTest.setText("These are the medical tests of \nMr/Ms"+currentPatient.getPatientSurname());
-		
-		if(medTests.isEmpty()) {
-			ErrorPopup.errorPopup(13);
-			return;
-		}
-		medicalTestId.setCellValueFactory(
-				data -> new SimpleStringProperty(Integer.toString(data.getValue().getMedicalTestId())));
-		medicalTestDate
-		.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateMedTest().toString()));
-medicalTestType.setCellValueFactory(new PropertyValueFactory<>("type"));
-medicalTestResult.setCellValueFactory(new PropertyValueFactory<>("result"));
-medicalTestsTable.getColumns().addAll(medicalTestId,medicalTestDate,medicalTestType,medicalTestResult);
-medicalTestsTable.getItems().addAll(medTests);
-		}catch(Exception e) {
+			medTests.addAll(jdbc.searchMedicalTestByMedCardNumber(currentPatient.getMedicalCardId()));
+			titleMedicalTest.setText("These are the medical tests of \nMr/Ms" + currentPatient.getPatientSurname());
+
+			if (medTests.isEmpty()) {
+				ErrorPopup.errorPopup(13);
+				return;
+			}
+			medicalTestId.setCellValueFactory(
+					data -> new SimpleStringProperty(Integer.toString(data.getValue().getMedicalTestId())));
+			medicalTestDate
+					.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateMedTest().toString()));
+			medicalTestType.setCellValueFactory(new PropertyValueFactory<>("type"));
+			medicalTestResult.setCellValueFactory(new PropertyValueFactory<>("result"));
+			medicalTestsTable.getColumns().addAll(medicalTestId, medicalTestDate, medicalTestType, medicalTestResult);
+			medicalTestsTable.getItems().addAll(medTests);
+		} catch (Exception e) {
 			ErrorPopup.errorPopup(0);
 			e.printStackTrace();
 			return;
 		}
-		
+
 	}
 
 }
