@@ -382,6 +382,21 @@ public class SQL implements SQLInterface{
 		rs.close();
 		return patient;	
 	}
+	
+	public Patient selectPatientWithDoctor(Integer medCard, Integer id) throws SQLException, NotBoundException {
+		String sql = "SELECT * FROM patients AS p JOIN doctor_patient AS dp ON dp.patient_id= p.medical_card_number WHERE dp.patient_id = ? AND dp.doctor_id =?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1,medCard);
+		p.setInt(2,id);
+		ResultSet rs = p.executeQuery();
+		Patient patient = null;
+		if(rs.next()){
+			patient = new Patient(rs.getString("name"), rs.getString("surname"), rs.getString("gender"), rs.getString("blood_type"), rs.getString("allergies"), rs.getString("address"), rs.getDate("birthdate"), rs.getDate("check_in"), rs.getBoolean("hospitalized"), rs.getInt("medical_card_number"));
+		}
+		p.close();
+		rs.close();
+		return patient;	
+	}
 
 	@Override
 	public Worker selectWorker(Integer workerId) throws SQLException, NotBoundException {
@@ -443,6 +458,21 @@ public class SQL implements SQLInterface{
 		p.close();
 		rs.close();
 		return treatment;	
+	}
+	
+	public Treatment selectTreatmentWithPatient(Integer id, Integer medCard) throws Exception {
+		String sql = "SELECT * FROM treatments WHERE id = ? AND patient_id=?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1,id);
+		p.setInt(2,medCard);
+		ResultSet rs = p.executeQuery();
+		Treatment treatment = null;
+		if(rs.next()){
+			treatment =  new Treatment(id, rs.getString("diagnosis"), rs.getString("medication"), rs.getDate("start_date"), rs.getString("advice"), rs.getInt("duration"));
+		}
+		p.close();
+		rs.close();
+		return treatment;
 	}
 
 	@Override
