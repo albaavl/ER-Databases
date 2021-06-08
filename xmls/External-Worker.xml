@@ -8,6 +8,67 @@
     <Worker workerName="Angy" workerSurname="Garcia" userId="51">
         <specialtyId>Urology</specialtyId>
         <typeWorker>Doctor</typeWorker>
+        <Shifts>
+            <Shift>
+                <date>2021-06-07</date>
+                <turn>Morning</turn>
+                <room>1</room>
+            </Shift>
+            <Shift>
+                <date>2021-06-09</date>
+                <turn>Morning</turn>
+                <room>1</room>
+            </Shift>
+            <Shift>
+                <date>2021-06-10</date>
+                <turn>Morning</turn>
+                <room>1</room>
+            </Shift>
+            <Shift>
+                <date>2021-06-11</date>
+                <turn>Night</turn>
+                <room>1</room>
+            </Shift>
+            <Shift>
+                <date>2021-06-22</date>
+                <turn>Morning</turn>
+                <room>7</room>
+            </Shift>
+        </Shifts>
+    </Worker>
+    <Worker workerName="admin" workerSurname="admin" userId="1">
+        <specialtyId>none</specialtyId>
+        <typeWorker>adStaff</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Angy" workerSurname="Garcia" userId="51">
+        <specialtyId>Urology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Alba" workerSurname="Vargas" userId="152">
+        <specialtyId>None</specialtyId>
+        <typeWorker>Administration Staff</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="admin" workerSurname="admin" userId="1">
+        <specialtyId>none</specialtyId>
+        <typeWorker>adStaff</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Angy" workerSurname="Garcia" userId="51">
+        <specialtyId>Urology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="admin" workerSurname="admin" userId="1">
+        <specialtyId>none</specialtyId>
+        <typeWorker>adStaff</typeWorker>
+        <Shifts/>
+    </Worker>
+    <Worker workerName="Angy" workerSurname="Garcia" userId="51">
+        <specialtyId>Urology</specialtyId>
+        <typeWorker>Doctor</typeWorker>
         <Shifts/>
     </Worker>
 </Workers>
