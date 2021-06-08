@@ -3,8 +3,6 @@ package db.pojos;
 import java.io.*;
 import java.rmi.*;
 import java.sql.Date;
-import java.util.*;
-import javax.persistence.*;
 
 
 public class Patient implements Serializable{
@@ -32,9 +30,6 @@ public class Patient implements Serializable{
 
 //builder
 
-	/**
-	 * Empty builder - shouldn't be used for anything.
-	 */
 	public Patient() {
 	}
 	
@@ -119,7 +114,7 @@ public class Patient implements Serializable{
 	}
 	/**
 	 * Used to set the patient's surname.
-	 * @param patientSurename - The surname of the patient
+	 * @param patientSurname - The surname of the patient
 	 */
 	public void setPatientSurname(String patientSurname) {
 		this.patientSurname = patientSurname;
@@ -175,7 +170,7 @@ public class Patient implements Serializable{
 	/**
 	 * Sets the blood type of the patient.
 	 * 
-	 * @param bloodType Must be one of the following: 
+	 * @param bloodType Must be one of the following: A+,A-,B+,B-,AB+,AB-,O+,O-
 	 * @throws NotBoundException if blood type doesnt exist
 	 */
 	public void setBloodType(String bloodType) throws NotBoundException {

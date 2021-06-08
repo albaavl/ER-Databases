@@ -1,7 +1,4 @@
 package db.menu;
- 
-
-// import java.io.File;
 
 import java.rmi.NotBoundException;
 
@@ -11,9 +8,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
-// import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-// import javax.xml.bind.Unmarshaller;
 
 import db.pojos.*;
 import db.xml.XMLManager;
@@ -181,40 +176,6 @@ public class Main {
 					break;
 			}		
 		}while(true);
-
-
-		// do{
-		// 	switch (option) {
-		// 		case 0:
-		// 			System.out.println("Thank you for using our system");
-		// 			jdbc.disconnect(c);
-		// 			userman.disconnect();
-		// 			System.exit(0);
-		// 		case 1:
-		// 			order = "date";
-		// 			System.out.println("Here you can see all your treatments ordered by date");
-		// 			treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
-		// 			break;
-		// 		case 2:
-		// 			order = "med";
-		// 			System.out.println("Here you can see all your treatments ordered by medication");
-		// 			treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
-		// 			break;
-		// 		case 3:
-		// 			order = "duration";
-		// 			System.out.println("Here you can see all your treatments ordered by duration");
-		// 			treatments.addAll(jdbc.searchPatientsTreatment(c,patient, order));
-		// 			break;
-		// 		case 4:
-		// 			System.out.println("Please, enter the name of the medication:");
-		// 			String med = sc.next();
-		// 			treatments.addAll(jdbc.searchTreatmentByMed(c,patient, med));
-		// 			break;
-		// 	}		
-		// 	for (Treatment treatment : treatments) {  
-		// 		System.out.println(treatment.toString());
-		// 	}
-		// }while(true); //TODO dafuck q coño es este menu
 	}
 	
 	public static void medStaffMenu(Integer userID) throws Exception{
@@ -494,7 +455,7 @@ public class Main {
 		if(room == 0) {
 			room=null;
 		}
-		System.out.println("Enter the new date, if you don't want to edit it enter a 0:"); //TODO - fecha hace kaboom xD @me to @me 
+		System.out.println("Enter the new date, if you don't want to edit it enter a 0:"); 
 		String date = sc.next();
 		Date fecha;
 		if(date.equals("0")) {
@@ -560,7 +521,7 @@ public class Main {
 		Integer medCardNumber; 
 			do { 
 				medCardNumber = sc.nextInt(); 
-				System.out.print("Error. Please introduce medical card number: "); //Ns si poner esto o si poner q el paciente ya existe. Creo q es mejor lo de q el paciente ya existe.
+				System.out.print("Error. Please introduce medical card number: "); 
 			} while (jdbc.selectPatient( medCardNumber) != null );
 			p.setMedicalCardId(medCardNumber);
 
@@ -843,27 +804,11 @@ public class Main {
 			}
 		} while (scount == 0);
 
-		System.out.print("Room: "); //TODO - Deberíamos limitar esto. (como lo q he hecho debajo)
+		System.out.print("Room: "); 
 		Integer roomER = sc.nextInt();
 		s.setRoom(roomER);
-
-		// System.out.print("Room: "); 
-		// Integer roomER = sc.nextInt();
-		// int MAXRoomEr = 100; //Poner un limite cualquiera.
-		// if (roomER <= MAXRoomEr) { 
-		// 	s.setRoom(roomER);
-		// } else {
-		// 	int roomcontrol = 0;
-		// 	do {
-		// 		System.out.print("That room doesnt exist, please introduce a valid room: ");
-		// 		roomER = sc.nextInt();
-		// 		if (roomER <= MAXRoomEr) { 
-		// 			s.setRoom(roomER);
-		// 			roomcontrol = 1;
-		// 		}
-		// 	} while (roomcontrol == 0);
-		// }
 		s.setWorker(worker);
+
 		jdbc.addShift(s);
 		worker.addShift(s);
 		System.out.println("The shift was succesfully added.");
@@ -983,13 +928,13 @@ public class Main {
 								System.out.print("Introduce the new name: ");
 								String newName = sc.next();
 								jdbc.updatePatientName( patient.getMedicalCardId(), newName);
-								// ctrl2 = 1; //TODO - ns si dejar esto o si quitarlo para q se quede en el menu hasta q no le de a exit (por si quiere seguir haciendo cosas)
-								break;			//por favor puede alguien decir si si/no a esto? o se va a quedar aqui hasta el fin de los tiempos xD
+								// ctrl2 = 1; 
+								break;			
 							case 2: //apellidos
 								System.out.print("Introduce the new surname: ");
 								String newSurname = sc.next();
 								jdbc.updatePatientSurname( patient.getMedicalCardId(), newSurname);
-								// ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; 
 								break;
 							case 3: //genero
 								System.out.print("Introduce the new gender: ");
@@ -1006,7 +951,7 @@ public class Main {
 
 								jdbc.updatePatientGender( patient.getMedicalCardId(), newGender);
 								
-								// ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; 
 								break;
 							case 4: //sangre
 								System.out.print("Introduce the new blood type (A+, A-, B+, B-, AB+, AB-, O+, O-): ");
@@ -1063,13 +1008,13 @@ public class Main {
 					
 
 								jdbc.updatePatientBloodType( patient.getMedicalCardId(), newBloodType);
-								// ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; 
 								break;
 							case 5: //alergias
 								System.out.print("Introduce the new allergies (none - if patient doesnt have): ");
 								String newAllergies = sc.next();
 								jdbc.updatePatientAllergies( patient.getMedicalCardId(), newAllergies);
-								// ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; 
 								break;
 							case 6: // bdate
 								System.out.print("Introduce the new birthdate [yyyy-mm-dd]: "); 
@@ -1110,7 +1055,7 @@ public class Main {
 										}
 									} while (b==0);
 								}
-								// ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; 
 								break;
 							case 7: //check in
 								System.out.print("Introduce the new check-in date [yyyy-mm-dd]: ");
@@ -1152,19 +1097,19 @@ public class Main {
 									} while (b==0);
 								}
 
-								// ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; 
 								break;
 							case 8: //direccion
 								System.out.print("Introduce the new address: ");
 								String newAddress = sc.next();
 								jdbc.updatePatientAddress( patient.getMedicalCardId(), newAddress);
-								// ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; 
 								break;
 							case 9: //hospitalizado
 								System.out.print("Does the patient need to be hospitalized?: ");
 								boolean hosp = sc.nextBoolean();
 								jdbc.updatePatientHospitalization( patient.getMedicalCardId(), hosp);
-								// ctrl2 = 1; // lo mismo q arriba
+								// ctrl2 = 1; 
 								break;
 							case 0:  //Exit
 								ctrl2 = 1;
@@ -1177,7 +1122,7 @@ public class Main {
 	
 					} while (ctrl2 == 0);
 
-					// ctrl1 = 1; //mismo q arriba
+					// ctrl1 = 1; 
 					break;
 				case 2: //Añadir un doctor al patient
 
@@ -1189,7 +1134,7 @@ public class Main {
 					Worker doctor = new Worker(selectWorker());
 					jdbc.createLinkDoctorPatient( doctor.getWorkerId(), patient.getMedicalCardId());
 		
-					// ctrl1 = 1; //mismo q arriba
+					// ctrl1 = 1; 
 					break;
 				case 0:
 					ctrl1 = 1;

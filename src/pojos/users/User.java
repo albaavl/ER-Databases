@@ -1,7 +1,6 @@
 package pojos.users;
 
 import java.io.*;
-import java.util.*;
 import javax.persistence.*;
 
 

@@ -3,7 +3,6 @@ package application.controllers;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 
-//JavaFX imports
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,13 +11,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-// import javafx.scene.text.Text;
 import javafx.stage.Stage;
-//Stuff
 import java.security.*;
 import java.sql.*;
-// import java.time.LocalDate;
-// import java.util.*;
 
 //DB imports
 import db.pojos.*;
@@ -85,23 +80,6 @@ public class LogInController {
 	private Stage stage;
 	private Scene scene;
 
-	// /**
-	//  * Used to return to the first log in screen.
-	//  * 
-	//  * @param aEvent
-	//  * @throws IOException
-	//  */
-	// private void switchToLogIn(ActionEvent aEvent) throws IOException {
-	// 	FXMLLoader loader = new FXMLLoader(getClass().getResource("logInMenu.fxml")); // TODO - need to create the
-	// 																					// patient menu fxml w
-	// 																					// scenebuilder
-	// 	root = loader.load();
-	// 	stage = (Stage) ((Node) aEvent.getSource()).getScene().getWindow();
-	// 	scene = new Scene(root);
-	// 	stage.setScene(scene);
-	// 	stage.show();
-	// }
-
 	private void switchToPatientMenu(ActionEvent aEvent, Integer userId)
 			throws IOException, SQLException, NotBoundException {
 
@@ -145,7 +123,6 @@ public class LogInController {
 		try {
 			medStaffMenuController.displayWelcomeText(jdbc.selectWorkerByUserId(userId), jdbc, userman);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
