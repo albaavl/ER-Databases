@@ -4,7 +4,7 @@ package db.jpa;
 import java.security.*;
 import java.util.List;
 import javax.persistence.*;
-import db.interfaces.UMInterface;
+
 import db.pojos.Patient;
 import db.pojos.Worker;
 import pojos.users.*;

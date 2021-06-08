@@ -1,4 +1,4 @@
-package db.interfaces;
+package db.jpa;
 
 import java.util.*;
 import pojos.users.*;
